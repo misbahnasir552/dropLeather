@@ -1,92 +1,171 @@
-# ops_frontend_merchant_onboarding
+<p align="center">
+  <a href="https://creativedesignsguru.com/demo/nextjs-landing-page/"><img src="public/assets/images/nextjs-landing-page-banner.png?raw=true" alt="Next js starter banner"></a>
+</p>
 
+🚀 Landing Page theme written in Next.js, Tailwind CSS and TypeScript ⚡️ Made with developer experience first: Next.js, TypeScript, ESLint, Prettier, Husky, Lint-Staged, VSCode, Netlify, PostCSS, Tailwind CSS.
 
+Clone this project and use it to create your own [Next.js](https://nextjs.org) project. You can check a [Next js templates demo](https://creativedesignsguru.com/demo/nextjs-landing-page/).
 
-## Getting started
+### DEMO
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+[![Nextjs Landing Page Template Screenshot](public/assets/images/nextjs-landing-page-screenshot.png?raw=true)](https://creativedesignsguru.com/demo/nextjs-landing-page/)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Check out our [live demo](https://creativedesignsguru.com/demo/nextjs-landing-page/).
 
-## Add your files
+### Features
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Developer experience first:
+
+- 🔥 [Next.js](https://nextjs.org) for Static Site Generator
+- 🎨 Integrate with [Tailwind CSS](https://tailwindcss.com)
+- 💅 PostCSS for processing Tailwind CSS and integrated to `styled-jsx`
+- 🎉 Type checking [TypeScript](https://www.typescriptlang.org)
+- ✅ Strict Mode for TypeScript and React 18
+- ✏️ Linter with [ESLint](https://eslint.org) (default NextJS, NextJS Core Web Vitals and Airbnb configuration)
+- 🛠 Code Formatter with [Prettier](https://prettier.io)
+- 🦊 Husky for Git Hooks
+- 🚫 Lint-staged for running linters on Git staged files
+- 🗂 VSCode configuration: Debug, Settings, Tasks and extension for PostCSS, ESLint, Prettier, TypeScript
+- 🤖 SEO metadata, JSON-LD and Open Graph tags with Next SEO
+- ⚙️ [Bundler Analyzer](https://www.npmjs.com/package/@next/bundle-analyzer)
+- 🖱️ One click deployment with Vercel or Netlify (or manual deployment to any hosting services)
+- 🌈 Include a FREE theme
+- 💯 Maximize lighthouse score
+
+Built-in feature from Next.js:
+
+- ☕ Minify HTML & CSS
+- 💨 Live reload
+- ✅ Cache busting
+
+### Included Components
+
+- Navbar
+- Hero
+- Features
+- CTA banner
+- Footer
+
+Find more components in our [premium NextJS themes](https://creativedesignsguru.com/category/nextjs/).
+
+### Philosophy
+
+- Minimal code
+- SEO-friendly
+- 🚀 Production-ready
+
+## Sponsors
+
+[![React SaaS Boilerplate Next.js](https://creativedesignsguru.com/assets/images/themes/nextlessjs-github-banner.png)](https://nextlessjs.com)
+
+### Requirements
+
+- Node.js and npm
+
+### Getting started
+
+Run the following command on your local environment:
 
 ```
-cd existing_repo
-git remote add origin http://10.172.2.30/online-payments-system/ops_frontend_merchant_onboarding.git
-git branch -M main
-git push -uf origin main
+git clone http://10.172.2.30/online-payments-system/ops-frontend.git ops-frontend
+cd ops-frontend
+npm install
 ```
 
-## Integrate with your tools
+Then, you can run locally in development mode with live reload:
 
-- [ ] [Set up project integrations](http://10.172.2.30/online-payments-system/ops_frontend_merchant_onboarding/-/settings/integrations)
+```
+npm run dev
+```
 
-## Collaborate with your team
+Open http://localhost:3000 with your favorite browser to see your project. For your information, Next JS need to take some time to compile the project for your first time.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+```
+.
+├── README.md            # README file
+├── next.config.js       # Next JS configuration
+├── public               # Public folder
+│   └── assets
+│       └── images       # Image used by default template
+├── src
+│   ├── background       # Atomic background component
+│   ├── button           # Atomic button component
+│   ├── cta              # Atomic cta component
+│   ├── feature          # Atomic feature component
+│   ├── footer           # Atomic footer component
+│   ├── hero             # Atomic hero component
+│   ├── layout           # Atomic layout component
+│   ├── navigation       # Atomic navigation component
+│   ├── pages            # Next JS pages
+│   ├── styles           # PostCSS style folder with Tailwind
+│   ├── templates        # Default template
+│   └── utils            # Utility folder
+├── tailwind.config.js   # Tailwind CSS configuration
+└── tsconfig.json        # TypeScript configuration
+```
 
-## Test and Deploy
+### Customization
 
-Use the built-in continuous integration in GitLab.
+You can easily configure the theme. Please change the following file:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+- `public/apple-touch-icon.png`, `public/favicon.ico`, `public/favicon-16x16.png` and `public/favicon-32x32.png`: your favicon, you can generate from https://favicon.io/favicon-converter/
+- `src/styles/global.css`: your CSS file using Tailwind CSS
+- `utils/AppConfig.ts`: configuration file
+- `src/pages/index.tsx`: the index page of the theme that uses the `Base` component
+- `src/template/Base.tsx`: the `Base` component using component blocks
+- `src/templates/*`: the list of component blocks
+- `src/*`: other folders in src are the atomic components used by components blocks
 
-***
+Here is the layer:
 
-# Editing this README
+- the entry point: `index.tsx` in `src/pages`
+- the `Base` template: `Base.tsx` in `src/templates`
+- use component blocks from `src/templates/*`
+- use atomic components from `src/*`
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### Deploy to production
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+You can see the results locally in production mode with:
 
-## Name
-Choose a self-explaining name for your project.
+```
+$ npm run build
+$ npm run start
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+The generated HTML and CSS files are minified (built-in feature from Next js). It will also removed unused CSS from [Tailwind CSS](https://tailwindcss.com).
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+You can create an optimized production build with:
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+```
+npm run build-prod
+```
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Now, your theme is ready to be deployed. All generated files are located at `out` folder, which you can deploy with any hosting service.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+### Deploy to Netlify
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Clone this repository on own GitHub account and deploy to Netlify:
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+[![Netlify Deploy button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=http://10.172.2.30/online-payments-system/ops-frontend.git)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Deploy to Vercel
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Deploy this Next JS Boilerplate on Vercel in one click:
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=http://10.172.2.30/online-payments-system/ops-frontend.git)
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+### VSCode information (optional)
 
-## License
-For open source projects, say how it is licensed.
+If you are VSCode users, you can have a better integration with VSCode by installing the suggested extension in `.vscode/extension.json`. The starter code comes up with Settings for a seamless integration with VSCode. The Debug configuration is also provided for frontend and backend debugging experience.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Pro tips: if you need a project wide type checking with TypeScript, you can run a build with <kbd>Cmd</kbd> + <kbd>Shift</kbd> + <kbd>B</kbd> on Mac.
+
+### Contributions
+
+Everyone is welcome to contribute to this project. Feel free to open an issue if you have question or found a bug.
+
+### License
+
+Licensed under the MIT License, Copyright © 2023
+
+See [LICENSE](LICENSE) for more information.

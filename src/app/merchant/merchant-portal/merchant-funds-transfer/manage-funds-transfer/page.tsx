@@ -1,0 +1,274 @@
+'use client';
+
+import { Form, Formik } from 'formik';
+import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
+
+import apiClient from '@/api/apiClient';
+import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+import Button from '@/components/UI/Button/PrimaryButton';
+import H4 from '@/components/UI/Headings/H4';
+import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import Input from '@/components/UI/Inputs/Input';
+import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import type { IManageFundsTransfer } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/interfaces';
+import {
+  manageFundsTransferInitialValues,
+  manageFundsTransferSchema,
+} from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/manage-funds-transfer';
+
+function ManageFundsTransfer() {
+  const [allRecords, setAllRecords] = useState<any[]>([]);
+  const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
+    [],
+  );
+  const [loading, setLoading] = useState(false);
+
+  const fetchRecords = async () => {
+    try {
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+      }, 2000);
+      const response = await apiClient.get(
+        '/merchant/getAllFundsTransferRecords',
+      );
+      console.log(response?.data?.fundsTransferReportRecords, 'RESPONSE');
+      setAllRecords(response?.data?.fundsTransferReportRecords);
+      const filteredValues = response?.data?.fundsTransferReportRecords.map(
+        ({ msisdn, failureReason, accountType, ...rest }: any) => rest,
+      );
+      setBeneficiaryFilteredData(filteredValues);
+      // setLoading(false);
+    } catch (e) {
+      console.log('Error in fetching dynamic QR list', e);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecords();
+  }, []);
+
+  const tableHeadings: string[] = [
+    'Beneficiary Name',
+    'Transfer Date',
+    'Transaction Id',
+    'Transfer Amount',
+    'Account Closing Balance',
+    // 'Failure Reason',
+    'Status',
+    // 'OPS ID',
+    // 'Merchant Name',
+    // 'Order ID',
+    // 'Order Date',
+    // 'Amount (Rs.)',
+    // 'Pyment Mode',
+    // 'Transaction ID',
+    // 'Channel',
+  ];
+  // const onSubmit = (values: IManageFundsTransfer) => {
+  //   console.log(values);
+  //   // Using map to process records
+  //   const mappedRecords = allRecords.map(record => {
+  //     const matchesAccountType = values.accountType ? record.accountType === values.accountType : true;
+  //     const matchesMsisdn = values.msisdn ? record.msisdn.includes(values.msisdn) : true;
+  //     const matchesBeneficiaryName = values.beneficiaryName ? record.beneficiaryName.includes(values.beneficiaryName) : true;
+  //     const matchesPaymentStatus = values.paymentStatus ? record.paymentStatus === values.paymentStatus : true;
+  //     const matchesDate = values.dateBetween ? record.transferDate >= values.dateBetween[0] && record.transferDate <= values.dateBetween[1] : true;
+
+  //     // Only return records that match all conditions
+  //     if (matchesAccountType && matchesMsisdn && matchesBeneficiaryName && matchesPaymentStatus && matchesDate) {
+  //       // Return the record without msisdn and accountType
+  //       const { msisdn, accountType, ...filteredRecord } = record;
+  //       return filteredRecord;
+  //     }
+  //     return null; // Return null for records that don't match
+  //   }).filter(record => record !== null); // Remove null entries
+
+  //   // Update filtered data for the table
+  //   setBeneficiaryFilteredData(mappedRecords);
+
+  // };
+  const onSubmit = (values: IManageFundsTransfer) => {
+    const filteredData = allRecords
+      .map((record: any) => {
+        const matchesAccountType = values.accountType
+          ? record.accountType === values.accountType
+          : true;
+        const matchesMsisdn = values.msisdn
+          ? record.msisdn === values.msisdn
+          : true;
+        const matchesBeneficiaryName = values.beneficiaryName
+          ? record.beneficiaryName
+              .toLowerCase()
+              .includes(values.beneficiaryName.toLowerCase())
+          : true;
+        const matchesPaymentStatus = values.paymentStatus
+          ? record.paymentStatus === values.paymentStatus
+          : true;
+        // const matchesDate = values.dateBetween ? record.transferDate >= values.dateBetween[0] && record.transferDate <= values.dateBetween[1] : true;
+        const matchesTransferAmount = values.transferAmount
+          ? record.transferAmount === values.transferAmount
+          : true; // Filter for transferAmount
+
+        // Only keep records that match all filters
+        if (
+          matchesAccountType &&
+          matchesMsisdn &&
+          matchesBeneficiaryName &&
+          matchesPaymentStatus &&
+          matchesTransferAmount
+        ) {
+          const { msisdn, accountType, failureReason, ...rest } = record; // Exclude msisdn, accountType, and failureReason
+          return {
+            ...rest, // Return only the necessary fields
+          };
+        }
+
+        return null;
+      })
+      .filter(Boolean); // Remove null entries from the array
+
+    setBeneficiaryFilteredData(filteredData);
+  };
+
+  return (
+    <div className="flex flex-col gap-6 pb-[120px] pt-9">
+      <HeaderWrapper
+        heading="Manage Funds Transfer"
+        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+      />
+      <MerchantFormLayout>
+        <Formik
+          initialValues={manageFundsTransferInitialValues}
+          validationSchema={manageFundsTransferSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <Form className="">
+              <div className="mb-9 grid grid-cols-3 gap-5">
+                <DropdownInput
+                  formik={formik}
+                  label="Account Type"
+                  name={'accountType'}
+                  options={[
+                    { value: 'Savings', label: 'Savings' },
+                    { value: 'Current', label: 'Current' },
+                  ]}
+                  error={formik.errors.accountType}
+                  touched={formik.touched.accountType}
+                />
+                <Input
+                  label="MSISDN"
+                  name={'msisdn'}
+                  type="text"
+                  error={'hi'}
+                  touched={false}
+                />
+                <Input
+                  label="Available Balance"
+                  name={'availableBalance'}
+                  type="text"
+                  error={'hi'}
+                  touched={false}
+                />
+                <Input
+                  label="Current Balance"
+                  name={'currentBalance'}
+                  type="text"
+                  error={'hi'}
+                  touched={false}
+                />
+                <Input
+                  label="Transfer Amount"
+                  name={'transferAmount'}
+                  type="number"
+                  error={'hi'}
+                  touched={false}
+                />
+                <Input
+                  label="Beneficiary Name"
+                  name={'beneficiaryName'}
+                  type="text"
+                  error={'hi'}
+                  touched={false}
+                />
+                <DateInputNew
+                  formik={formik}
+                  label="Date"
+                  name={'dateBetween'}
+                />
+                <DropdownInput
+                  formik={formik}
+                  label="Payment Status"
+                  name={'paymentStatus'}
+                  options={[
+                    { label: 'Success', value: 'Success' },
+                    { label: 'Failed', value: 'Failed' },
+                  ]}
+                />
+              </div>
+              <div className="flex w-full justify-start gap-6">
+                <Button
+                  label="Search"
+                  type="submit"
+                  // routeName="/login"
+                  className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="Manage Beneficiary"
+                  routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+                  type="submit"
+                  className="button-secondary h-9 w-[160px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="View Scheduled Transactions"
+                  type="submit"
+                  className="button-secondary h-9 w-[250px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="Bulk Transfer"
+                  routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/bulk-upload/"
+                  type="submit"
+                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="Export"
+                  type="submit"
+                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="Reset"
+                  type="submit"
+                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                />
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </MerchantFormLayout>
+      {loading ? (
+        <>
+          <BarLoader color="#21B25F" />
+        </>
+      ) : (
+        <>
+          {beneficiaryFilteredData.length > 0 ? (
+            <div>
+              <SearchTransactionTable
+                tableHeadings={tableHeadings}
+                tableData={beneficiaryFilteredData}
+              />
+            </div>
+          ) : (
+            <H4>No Records Found</H4>
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+export default ManageFundsTransfer;

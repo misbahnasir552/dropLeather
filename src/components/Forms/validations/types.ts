@@ -1,0 +1,35 @@
+export type ValidationRules = {
+  required?: boolean;
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  errorMessage: string;
+  options?: string[];
+};
+
+export type Field = {
+  type: string;
+  label: string;
+  name: string;
+  placeholder: string;
+  priority: number;
+  validation: ValidationRules;
+};
+
+export type Category = {
+  categoryName: string;
+  fields: Field[];
+};
+
+export type Page = {
+  name: string;
+  categories: Category[];
+};
+
+export interface Pages {
+  page: Page[];
+}
+
+export type FieldsData = {
+  pages: Pages;
+};

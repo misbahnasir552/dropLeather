@@ -1,0 +1,103 @@
+'use client';
+
+import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
+
+import apiClient from '@/api/apiClient';
+import OTP from '@/components/OTP/OTP';
+import Button from '@/components/UI/Button/PrimaryButton';
+import SuccessModal from '@/components/UI/Modal/CustomModal';
+import FormLayout from '@/components/UI/Wrappers/FormLayout';
+import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { useAppSelector } from '@/hooks/redux';
+import { generateMD5Hash } from '@/utils/helper';
+
+function MerchantFundsTransfer() {
+  const userData = useAppSelector((state) => state.auth);
+  const [otp, setOtp] = useState(new Array(6).fill(''));
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchOTP = async () => {
+    try {
+      setIsLoading(true);
+      const additionalValues = {
+        managerMobile: userData?.managerMobile,
+        email: userData?.email,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = {
+        request: additionalValues,
+        signature: md5Hash,
+      };
+      const response = await apiClient.post(
+        'merchant/sendOtpMerchant',
+        requestBody,
+        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+      );
+      setShowModal(true);
+      console.log(response);
+
+      if (response.data.responseCode === '009') {
+        setTitle(response.data.responseCode);
+        setDescription(response.data.responseDescription);
+        setShowModal(false);
+      } else {
+        setTitle(response.data.errorDescription);
+        setDescription(response.data.errorDescription);
+        setShowModal(false);
+      }
+    } catch (e: any) {
+      console.log(e);
+      setTitle(e.code);
+      setDescription(e.message);
+    } finally {
+      setIsLoading(false);
+      setShowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    fetchOTP();
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-6 pt-9">
+      <SuccessModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName="/login"
+      />
+      <HeaderWrapper
+        heading="Enter One Time Password (OTP)"
+        description={`We have sent the OTP Verification number to +(${userData?.managerMobile})`}
+      />
+      <FormLayout>
+        {isLoading && <BarLoader color="#21B25F" />}
+        <div className="flex flex-col items-center justify-center gap-12">
+          <OTP
+            otp={otp}
+            setOtp={setOtp}
+            medium="sms"
+            description="OTP Verification Code"
+            numberOfDigits={6}
+          />
+          <Button
+            label="Login"
+            className="button-primary w-[270px] px-3 py-[19px]"
+          />
+        </div>
+      </FormLayout>
+    </div>
+  );
+}
+
+export default MerchantFundsTransfer;
