@@ -2,6 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
@@ -134,6 +135,11 @@ const OtpInputWithValidation = () => {
               const res = await apiClient.post(
                 '/merchant/onboard/register',
                 signUpForm,
+                {
+                  params: {
+                    channel: 'merchant',
+                  },
+                },
               );
               // merchant register success
               if (res.data.responseCode == '009') {
@@ -154,6 +160,9 @@ const OtpInputWithValidation = () => {
             } catch (e) {
               // merchant register request failure
               console.log(e, 'Merchant registration failed');
+              setShowModal(true);
+              setTitle('Network Error');
+              setDescription('Merchant registration failed. Please try again!');
             }
           } else {
             // merchant verify otp failure
@@ -164,7 +173,10 @@ const OtpInputWithValidation = () => {
           }
         } catch (e) {
           // merchant verify otp request failure
-          console.log(e, 'Merchant verification Failed');
+          console.log(e, 'Merchant OTP Verification Failed');
+          setShowModal(true);
+          setTitle('Network Error');
+          setDescription('Merchant OTP Verification Failed');
         }
       }
     } catch (e: any) {
@@ -180,7 +192,8 @@ const OtpInputWithValidation = () => {
   return (
     <>
       {isLoading && (
-        <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
+        <BarLoader color="#21B25F" />
+        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
       )}
       <SuccessModal
         title={title}

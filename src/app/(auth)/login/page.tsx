@@ -234,11 +234,24 @@ const NewLogin = () => {
           `merchant/getdetails/${email}`,
         );
         console.log('getDetailResponse', getDetailResponse);
-        router.push('/merchant/home');
+        if (getDetailResponse?.data?.responseCode === '009') {
+          router.push('/merchant/home');
+        } else if (getDetailResponse?.data?.responseCode === '000') {
+          setTitle('Failed to fetch records');
+          setDescription('Unable to get positive response');
+          setShowModal(true);
+        } else {
+          setTitle('Failed to fetch records');
+          setDescription('Some Network Issue');
+          setShowModal(true);
+        }
       }
     } catch (error) {
       console.error('Error fetching details:', error);
-      router.push('/login');
+      setTitle('Network Error');
+      setDescription('Error fetching merchant details. Please try again!');
+      setShowModal(true);
+      // router.push('/login');
     }
   };
 
@@ -269,6 +282,9 @@ const NewLogin = () => {
     setIsSubmitting(true); // Disable the button immediately after submission
     try {
       const loginResponse: any = await apiClient.get('auth/sendLoginOtp', {
+        params: {
+          channel: 'merchant',
+        },
         headers: {
           username: values.Username,
           password: values.Password,

@@ -85,7 +85,7 @@ const ActivityInformation = () => {
   if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
       <div className="flex w-full flex-col justify-center">
-        <BarLoader color="#21B25F" height={25} />
+        <BarLoader color="#21B25F" />
       </div>
     );
   }

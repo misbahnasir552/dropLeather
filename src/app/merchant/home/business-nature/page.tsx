@@ -7,8 +7,8 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
-import H7 from '@/components/UI/Headings/H7';
-import CheckboxInput from '@/components/UI/Inputs/CheckboxRadioInput';
+// import H7 from '@/components/UI/Headings/H7';
+// import CheckboxInput from '@/components/UI/Inputs/CheckboxRadioInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -49,62 +49,62 @@ const BusinessNature = () => {
   //   console.log('uploadsss', uploads);
   // }, [uploads]);
 
-  const corporateProducts = [
-    {
-      label: 'Current Account',
-      value: 'currentAccount',
-    },
-    {
-      label: 'Savings Account',
-      value: 'savingAccount',
-    },
-  ];
-  const selfServeProducts = [
-    {
-      label: 'Salary Disbursement',
-      value: 'self_salaryDisbursement',
-    },
-    {
-      label: 'Bulk Transactions',
-      value: 'self_bulkTransactions',
-    },
-  ];
-  const managedDisbursementProducts = [
-    {
-      label: 'Salary Disbursement',
-      value: 'managed_salaryDisbursement',
-    },
-    {
-      label: 'Bulk Transactions',
-      value: 'managed_bulkTransactions',
-    },
-  ];
-  const othersProducts = [
-    {
-      label: 'Payment Collection',
-      value: 'Payment Collection',
-    },
-    {
-      label: 'Disbursement API',
-      value: 'Disbursement API',
-    },
-    {
-      label: 'Online Payment Gateway',
-      value: 'Payment Gateway',
-    },
-    {
-      label: 'In-App Integration',
-      value: 'In-App Integration',
-    },
-    {
-      label: 'Easypaisa QR ',
-      value: 'Easypaisa QR ',
-    },
-    {
-      label: 'Easypaisa Till Payment',
-      value: 'Easypaisa Till Payment',
-    },
-  ];
+  // const corporateProducts = [
+  //   {
+  //     label: 'Current Account',
+  //     value: 'currentAccount',
+  //   },
+  //   {
+  //     label: 'Savings Account',
+  //     value: 'savingAccount',
+  //   },
+  // ];
+  // const selfServeProducts = [
+  //   {
+  //     label: 'Salary Disbursement',
+  //     value: 'self_salaryDisbursement',
+  //   },
+  //   {
+  //     label: 'Bulk Transactions',
+  //     value: 'self_bulkTransactions',
+  //   },
+  // ];
+  // const managedDisbursementProducts = [
+  //   {
+  //     label: 'Salary Disbursement',
+  //     value: 'managed_salaryDisbursement',
+  //   },
+  //   {
+  //     label: 'Bulk Transactions',
+  //     value: 'managed_bulkTransactions',
+  //   },
+  // ];
+  // const othersProducts = [
+  //   {
+  //     label: 'Payment Collection',
+  //     value: 'Payment Collection',
+  //   },
+  //   {
+  //     label: 'Disbursement API',
+  //     value: 'Disbursement API',
+  //   },
+  //   {
+  //     label: 'Online Payment Gateway',
+  //     value: 'Payment Gateway',
+  //   },
+  //   {
+  //     label: 'In-App Integration',
+  //     value: 'In-App Integration',
+  //   },
+  //   {
+  //     label: 'Easypaisa QR ',
+  //     value: 'Easypaisa QR ',
+  //   },
+  //   {
+  //     label: 'Easypaisa Till Payment',
+  //     value: 'Easypaisa Till Payment',
+  //   },
+  // ];
 
   // const products = [
   //   {
@@ -126,10 +126,10 @@ const BusinessNature = () => {
   // ];
 
   // const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(Array(5).fill(null))
-  const [selectedCheckValue, setSelectedCheckValue] = useState<
-    string | undefined | string[]
-  >(undefined);
-  console.log(selectedCheckValue, 'MULTI SELECT OPTION');
+  // const [selectedCheckValue, setSelectedCheckValue] = useState<
+  //   string | undefined | string[]
+  // >(undefined);
+  // console.log(selectedCheckValue, 'MULTI SELECT OPTION');
 
   // const dispatch = useAppDispatch();
   const options = [
@@ -366,7 +366,7 @@ const BusinessNature = () => {
                       options={options}
                     />
                   </>
-                  <>
+                  {/* <>
                     <H6>Products (Select All that are required)</H6>
                     <H6>Corporate Account</H6>
                     <div className="grid w-full grid-cols-1 gap-4">
@@ -444,7 +444,7 @@ const BusinessNature = () => {
                         setSelectedCheckValue={setSelectedCheckValue}
                       />
                     </div>
-                  </>
+                  </> */}
                 </div>
               </FormWrapper>
               <div className="flex flex-col justify-center gap-6 sm:items-center sm:px-5 sm:max-md:pt-[12px] md:items-end">
