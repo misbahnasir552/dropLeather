@@ -8,7 +8,7 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
-import FileInput from '@/components/UI/Inputs/FileInput';
+// import FileInput from '@/components/UI/Inputs/FileInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setAttachmentForm } from '@/redux/features/formSlices/onBoardingForms';
@@ -16,6 +16,8 @@ import {
   AttachmentFormInfoInitialValues,
   AttachmentFormInfoSchema,
 } from '@/validations/merchant/onBoarding/attachmentInfo';
+
+import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 
 const AttachmentsStatic = () => {
   // const userData = useAppSelector((state: any) => state.auth);
@@ -125,7 +127,7 @@ const AttachmentsStatic = () => {
                     </H6>
                     {attachmentsData.map((item, index) => {
                       return (
-                        <FileInput
+                        <BulkRegisterInput
                           key={index}
                           selectedFiles={selectedFiles}
                           setSelectedFiles={setSelectedFiles}

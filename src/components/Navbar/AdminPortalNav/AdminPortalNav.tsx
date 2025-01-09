@@ -2,17 +2,25 @@
 
 import Cookies from 'js-cookie';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+import apiClient from '@/api/apiClient';
 import Logo from '@/assets/icons/logo.svg';
 import B2 from '@/components/UI/Body/B2';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setAdminLogout } from '@/redux/features/adminSlices/adminLoginSlice';
+import { setcorporateAccountDetailEmpty } from '@/redux/features/adminSlices/corporateSlices/corporateAccountDetailsSlice';
+import { clearCredentials } from '@/redux/features/adminSlices/corporateSlices/loginCredentials';
 
 function AdminPortalNav() {
-  const [clickedItem, setClickedItem] = useState(null);
+  // const [clickedItem, setClickedItem] = useState(null);
+  const [clickedItem, setClickedItem] = useState<string | null>(null);
+
   const adminData = useAppSelector((state: any) => state.adminAuth);
+  const pathname = usePathname();
+  //  const pathAfterAdmin = pathname.replace('/admin', '');
+
   // const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
   // const [capitalLetter, setCapitalLetter]=useState<string | null>('')
 
@@ -49,9 +57,14 @@ function AdminPortalNav() {
       title: 'Manage Merchants',
       link: '/admin/home',
     },
+
     {
       title: 'Manage Profiles',
       link: '/admin/admin-portal/manage-profiles',
+    },
+    {
+      title: 'Corporate',
+      link: '/admin/corporate',
     },
     {
       title: 'Bulk Registration',
@@ -75,11 +88,49 @@ function AdminPortalNav() {
     },
   ];
 
-  const handleAdminLogout = () => {
+  // useEffect(() => {
+  //   const pathAfterAdmin = pathname.replace('/admin', '');
+  //   console.log(pathAfterAdmin, "pathAfterAdmin")
+  //   setClickedItem(pathAfterAdmin);
+  //   console.log(clickedItem, "clicked item")
+  // }, []);
+
+  // useEffect(() => {
+  //   const pathAfterAdmin = pathname.split('/admin/')[1]?.replace(/\/$/, '') || '';
+  //   // Splits the path at "/admin/", takes the part after it, and removes any trailing "/"
+  //   console.log(pathAfterAdmin, "pathAfterAdmin")
+  //   setClickedItem(pathAfterAdmin); // Update state
+  //   console.log(clickedItem, "clicked item")
+  // }, [pathname]);
+
+  useEffect(() => {
+    const pathAfterAdmin =
+      pathname.split('/admin/')[1]?.replace(/\/$/, '') || '';
+    // Capitalize the first letter
+    const formattedPath = pathAfterAdmin
+      ? pathAfterAdmin.charAt(0).toUpperCase() + pathAfterAdmin.slice(1)
+      : '';
+    console.log(formattedPath, 'Formatted Path');
+    setClickedItem(formattedPath); // Update state
+    console.log(clickedItem, 'Clicked Item');
+  }, [pathname]);
+
+  const handleAdminLogout = async () => {
+    if (adminData.email) {
+      await apiClient.get(`auth/expireJwt?email=${adminData.email}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+
     dispatch(setAdminLogout());
-    Cookies.remove('jwt', { path: '/admin' });
-    Cookies.remove('adminRole', { path: '/admin' });
-    router.push('/admin/admin-portal/auth/login');
+    dispatch(setcorporateAccountDetailEmpty());
+    dispatch(clearCredentials());
+    Cookies.remove('jwt', { path: '/' });
+    Cookies.remove('username', { path: '/' });
+    Cookies.remove('browser_number', { path: '/' });
+    router.push('/admin-auth/login');
   };
 
   const handleAdminNav = (title: any, link: any) => {
@@ -100,7 +151,9 @@ function AdminPortalNav() {
         </div>
         {adminJwt !== '' ? (
           <div className="flex flex-row items-center gap-6">
-            <div onClick={handleAdminLogout}>Logout</div>
+            <div className="cursor-pointer" onClick={handleAdminLogout}>
+              Logout
+            </div>
             <div
               className="flex h-9 w-9  items-center justify-center rounded-full bg-secondary-base"
               onClick={handleAdminDetails}

@@ -31,6 +31,7 @@ interface IDualListTable {
 
 const DualListTable = ({
   // initialData,
+  title,
   headingLeft,
   headingRight, //  title
   selectedItems,
@@ -46,25 +47,79 @@ const DualListTable = ({
   useEffect(() => {
     const getForms = async () => {
       try {
-        const response = await apiClient.get(
-          `merchant/getPageInfo/soleProprietor`,
-        );
-        console.log('Get Forms', response);
-        const responseData = response?.data?.page;
-        const initialItems = responseData?.flatMap((item: any) =>
-          item.categories.flatMap((category: any) =>
-            category.fields.map((field: any) => ({
-              name: category.categoryName,
-              category: field.label,
-            })),
-          ),
-        );
+        if (title === 'corporateAdmin') {
+          const response = await apiClient.get(
+            `corporate/getPageInfo/soleProprietor`,
+          );
+          console.log('Get Forms', response);
+          const responseData = response?.data?.page;
+          // const initialItems = responseData?.flatMap((item: any) =>
+          //   item.categories.flatMap((category: any) =>
+          //     category.fields.map((field: any) => ({
+          //       name: category.categoryName,
+          //       category: field.label,
+          //     })),
+          //   ),
+          // );
 
-        if (initialItems) {
-          setInitialData(initialItems);
+          const initialItems = responseData
+            ?.filter(
+              (item: any) => item.name !== 'Corporate Sole Sample Attachments',
+            )
+            .flatMap((item: any) =>
+              item.categories.flatMap((category: any) =>
+                category.fields.map((field: any) => ({
+                  name: category.categoryName,
+                  category: field.label,
+                })),
+              ),
+            );
+
+          if (initialItems) {
+            setInitialData(initialItems);
+          }
+          console.log('Initial items:', initialItems);
+          console.log('initial data', initialData);
+        } else {
+          const response = await apiClient.get(
+            `merchant/getPageInfo/soleProprietor`,
+          );
+          console.log('Get Forms', response);
+          const responseData = response?.data?.page;
+          const initialItems = responseData?.flatMap((item: any) =>
+            item.categories.flatMap((category: any) =>
+              category.fields.map((field: any) => ({
+                name: category.categoryName,
+                category: field.label,
+              })),
+            ),
+          );
+
+          if (initialItems) {
+            setInitialData(initialItems);
+          }
+          console.log('Initial items:', initialItems);
+          console.log('initial data', initialData);
         }
-        console.log('Initial items:', initialItems);
-        console.log('initial data', initialData);
+        // const response = await apiClient.get(
+        //   `merchant/getPageInfo/soleProprietor`,
+        // );
+        // console.log('Get Forms', response);
+        // const responseData = response?.data?.page;
+        // const initialItems = responseData?.flatMap((item: any) =>
+        //   item.categories.flatMap((category: any) =>
+        //     category.fields.map((field: any) => ({
+        //       name: category.categoryName,
+        //       category: field.label,
+        //     })),
+        //   ),
+        // );
+
+        // if (initialItems) {
+        //   setInitialData(initialItems);
+        // }
+        // console.log('Initial items:', initialItems);
+        // console.log('initial data', initialData);
       } catch (e) {
         console.log(e, 'error fetching');
       }

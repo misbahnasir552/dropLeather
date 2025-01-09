@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { ClockLoader } from 'react-spinners';
 
 import type { IButton } from '@/interfaces/interface';
 
@@ -31,13 +32,17 @@ const Button = ({
       type={type}
       className={`${
         isDisabled
-          ? 'hover:none cursor-default bg-neutral-black-300'
+          ? 'hover:none cursor-not-allowed bg-neutral-black-300'
           : 'cursor-pointer bg-primary-base'
       } ${className}`}
       disabled={isDisabled}
       onClick={handleClick}
     >
-      <div className="w-full">{label}</div>
+      <div className="flex w-full items-center justify-center gap-2">
+        {label}
+        {/* <B1 textColor='text-screen-white'>{label}</B1> */}
+        {isDisabled && <ClockLoader color="#FFFFFF" size={14} />}
+      </div>
     </button>
   );
 };

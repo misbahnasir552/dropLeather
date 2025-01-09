@@ -6,8 +6,9 @@ import React, { useState } from 'react';
 import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
+import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-import FileInput from '@/components/UI/Inputs/FileInput';
+// import FileInput from '@/components/UI/Inputs/FileInput';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
@@ -208,7 +209,7 @@ function AddOutlet() {
                   error={'hi'}
                   touched={false}
                 />
-                <FileInput
+                <BulkRegisterInput
                   key="OutletImage"
                   selectedFiles={selectedFiles}
                   setSelectedFiles={setSelectedFiles}

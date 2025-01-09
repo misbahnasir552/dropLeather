@@ -71,6 +71,8 @@ const dataSlice = createSlice({
   initialState,
   reducers: {
     setPageData: (state, action: PayloadAction<Page[]>) => {
+      console.log('SET PAGE DATA', action.payload);
+
       state.pages = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -79,8 +81,12 @@ const dataSlice = createSlice({
     setSuccess: (state, action: PayloadAction<boolean>) => {
       state.success = action.payload;
     },
+    resetFields: () => {
+      return { ...initialState };
+    },
   },
 });
 
-export const { setPageData, setLoading, setSuccess } = dataSlice.actions;
+export const { setPageData, setLoading, setSuccess, resetFields } =
+  dataSlice.actions;
 export default dataSlice.reducer;

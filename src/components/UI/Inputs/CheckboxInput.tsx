@@ -159,6 +159,7 @@ interface ICheckboxInput {
   options: any;
   error?: string;
   form?: FormikProps<any>;
+  layout?: string;
   isMulti?: boolean;
   setSelectedCheckValue: React.Dispatch<
     React.SetStateAction<string | undefined | string[]>
@@ -170,8 +171,10 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   options,
   form,
   error,
+  layout,
   setSelectedCheckValue,
-  isMulti = false,
+  isMulti,
+  // isMulti = false,
 }) => {
   // Handle checkbox change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -197,8 +200,13 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
     }
   };
 
+  console.log('setSelectedCheckValue herere ', setSelectedCheckValue);
+  console.log('CheckboxInput --- ', options, name, form);
+
+  console.log('form?.values[name] ', form?.values[name]);
+
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className={`flex w-full ${layout || 'flex-col'} gap-4`}>
       {options?.map(
         (option: {
           value: Key | null | undefined;
@@ -214,49 +222,124 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
             | null
             | undefined;
         }) => (
+          // <label
+          //   // className="flex w-full flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
+
+          //   className="flex w-full flex-row items-center justify-between gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
+          //   key={option.value}
+          // >
+          //   {/* <div className="flex flex-col gap-2"> */}
+          //   <div className=' items-center justify-between gap-4'>
+          //   <div className="flex items-center gap-4">
+          //     {option?.logo && (
+          //       <Image
+          //         width={24}
+          //         height={24}
+          //         src={option?.logo}
+          //         alt="left-icon"
+          //       />
+          //     )}
+          //     <Field
+          //       className="hidden"
+          //       type="checkbox"
+          //       name={name}
+          //       value={option.value}
+          //       checked={
+          //         isMulti
+          //           ? form?.values[name]?.includes(option.value)
+          //           : form?.values[name] === option.value
+          //       }
+          //       onChange={handleChange}
+          //     />
+          //     <H7 medium={true}>{option.label}</H7>
+          //   </div>
+          //   </div>
+          //   {form?.values[name]?.includes(option.value) ? (
+          //     <div className="flex h-6 w-6 justify-center rounded-full bg-primary-base px-[7px] py-2">
+          //       <div className="h-[8px] w-[10px]">
+          //         <Image
+          //           src={TickIcon}
+          //           width={100}
+          //           height={100}
+          //           alt="tick-icon"
+          //         />
+          //       </div>
+          //     </div>
+
+          //   ) : (
+          //     <div className="flex h-6 w-6 justify-center rounded-full border-2 border-border-dark px-[7px] py-2">
+          //       <div className="h-[8px] w-[10px]"></div>
+          //     </div>
+          //   )}
+          // </label>
+
           <label
-            className="flex w-full flex-row items-center justify-between gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
+            className="flex w-full flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
             key={option.value}
           >
-            <div className="flex items-center gap-4">
-              {option?.logo && (
-                <Image
-                  width={24}
-                  height={24}
-                  src={option?.logo}
-                  alt="left-icon"
-                />
-              )}
-              <Field
-                className="hidden"
-                type="checkbox"
-                name={name}
-                value={option.value}
-                checked={
-                  isMulti
-                    ? form?.values[name]?.includes(option.value)
-                    : form?.values[name] === option.value
-                }
-                onChange={handleChange}
-              />
-              <H7 medium={true}>{option.label}</H7>
-            </div>
-            {form?.values[name]?.includes(option.value) ? (
-              <div className="flex h-6 w-6 justify-center rounded-full bg-primary-base px-[7px] py-2">
-                <div className="h-[8px] w-[10px]">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                {option?.logo && (
                   <Image
-                    src={TickIcon}
-                    width={100}
-                    height={100}
-                    alt="tick-icon"
+                    width={24}
+                    height={24}
+                    src={option?.logo}
+                    alt="left-icon"
                   />
+                )}
+                <Field
+                  className="hidden"
+                  type="checkbox"
+                  name={name}
+                  value={option.value}
+                  checked={
+                    isMulti
+                      ? form?.values[name]?.includes(option.value)
+                      : form?.values[name] === option.value
+                  }
+                  onChange={handleChange}
+                />
+                <H7 medium={true}>{option.label}</H7>
+              </div>
+
+              {form?.values[name]?.includes(option.value) ? (
+                <div className="flex h-6 w-6 justify-center rounded-full bg-primary-base px-[7px] py-2">
+                  <div className="h-[8px] w-[10px]">
+                    <Image
+                      src={TickIcon}
+                      width={100}
+                      height={100}
+                      alt="tick-icon"
+                    />
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex h-6 w-6 justify-center rounded-full border-2 border-border-dark px-[7px] py-2">
-                <div className="h-[8px] w-[10px]"></div>
-              </div>
-            )}
+              ) : (
+                <div className="flex h-6 w-6 justify-center rounded-full border-2 border-border-dark px-[7px] py-2">
+                  <div className="h-[8px] w-[10px]"></div>
+                </div>
+              )}
+            </div>
+
+            {form?.values[name] === 'corporatePortal' &&
+              option.value === 'corporatePortal' && (
+                <>
+                  <div className="my-2 w-full border-t-[0.5px] border-border-dark"></div>
+
+                  <p className="text-sm font-medium text-secondary-base">
+                    An easypaisa Corporate Account is required to get access to
+                    the following easypaisa Corporate Products and Services:
+                  </p>
+                  <ol className="ml-5 list-decimal text-sm font-medium text-secondary-base ">
+                    <li>Self-Serve Salary & Bulk Disbursement Portal</li>
+                    <li>Managed Salary & Bulk Disbursements</li>
+                    <li>Corporate Current Account</li>
+                    <li>Corporate Savings Account</li>
+                    <li>Payment Collection from Easypaisa App</li>
+                    <li>Bulk Disbursement API</li>
+                    <li>Online Payment Gateway</li>
+                  </ol>
+                </>
+              )}
           </label>
         ),
       )}

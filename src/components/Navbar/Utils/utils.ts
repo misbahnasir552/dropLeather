@@ -15,14 +15,14 @@ export const getNavMenu = () => [
   { title: 'FAQs', link: '/faq', name: 'faq' },
 ];
 export const getOnBoardingNavMenu = () => [
-  { title: 'Home', link: '/', name: '' },
+  { title: 'Home', link: '/merchant/home', name: '' },
   {
     title: 'Dashboard',
-    link: '/merchant/merchant-portal/home',
+    link: '/merchant/home',
     name: 'merchant-portal',
   },
-  { title: 'Developer', link: '/developer', name: 'developer' },
-  { title: 'FAQs', link: '/faq', name: 'faq' },
+  // { title: 'Developer', link: '/developer', name: 'developer' },
+  // { title: 'FAQs', link: '/faq', name: 'faq' },
 ];
 
 export const getDropDownMenu = () => [

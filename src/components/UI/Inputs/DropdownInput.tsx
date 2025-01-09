@@ -12,6 +12,7 @@ import B3 from '../Body/B3';
 import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const DropdownInput = ({
+  asterik,
   name,
   options,
   error,
@@ -95,15 +96,15 @@ const DropdownInput = ({
             onClick={handleToggle}
             tabIndex={0}
           >
-            {formik?.values[name] ? (
+            {formik?.values?.[name] ? (
               <div className="flex w-full flex-col justify-center text-sm  font-medium text-secondary-base">
-                <B3>{label}</B3>
-
+                {/* <B3>{label}</B3> */}
+                <B3>{`${label}${asterik ? '*' : ''} `}</B3>
                 <div> {formik?.values[name]}</div>
               </div>
             ) : (
               <div className="flex w-full items-center align-middle text-sm font-medium text-secondary-base">
-                {label}
+                {`${label}${asterik ? '*' : ''} `}
               </div>
             )}
 

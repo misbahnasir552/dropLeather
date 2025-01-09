@@ -9,7 +9,7 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 // import AttachmentsIcon from "@/assets/icons/Attachments.svg";
 import Button from '@/components/UI/Button/PrimaryButton';
-import FileInput from '@/components/UI/Inputs/FileInput';
+// import FileInput from '@/components/UI/Inputs/FileInput';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import { setAttachmentForm } from "@/redux/features/formSlices/onBoardingForms";
@@ -20,6 +20,7 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 
+import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import DropdownInput from '../UI/Inputs/DropdownInput';
 // import ImageInput from "../UI/Inputs/ImageInput";
 import Input from '../UI/Inputs/Input';
@@ -256,7 +257,7 @@ const Attachments = () => {
                                     }
                                     if (field?.type === 'file') {
                                       return (
-                                        <FileInput
+                                        <BulkRegisterInput
                                           key={field.name}
                                           selectedFiles={selectedFiles}
                                           setSelectedFiles={setSelectedFiles}

@@ -43,8 +43,9 @@ const SearchTransaction = () => {
   }, [filteredData]);
 
   const options = [
-    { value: 'hi', label: 'hi' },
-    { value: 'Bye', label: 'Bye' },
+    { value: 'Missing Document', label: 'Missing Document' },
+    { value: 'Missing Field', label: 'Missing Field' },
+    { value: 'CNIC Mismatched', label: 'CNIC Mismatched' },
   ];
 
   // interface TableData {
@@ -344,11 +345,11 @@ const SearchTransaction = () => {
                 type="submit"
                 className="button-primary h-9 w-[120px] px-3 py-[19px] text-xs"
               />
-              <Button
+              {/* <Button
                 label="Export"
                 routeName="/login"
                 className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
-              />
+              /> */}
               <Button
                 label="Send IPN"
                 routeName="/sign-up"

@@ -1,5 +1,5 @@
 // import { renderCustomAxisTick } from '@/utils/graph/helper';
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -13,29 +13,35 @@ import {
 
 import CustomTick from './custom/CustomTick';
 
-const data = [
-  { name: 'Page A', uv: 1500, amt: 2400 },
-  { name: 'Page B', uv: 3000, amt: 2210 },
-  { name: 'Page C', uv: 1000, amt: 2210 },
-  { name: 'Page D', uv: 2000, amt: 2210 },
-  { name: 'Page E', uv: 8200, amt: 2210 },
+// const data = [
+//   { name: '1', uv: 1500, },
+//   { name: '2', uv: 3000,  },
+//   { name: '3', uv: 1000,  },
+//   { name: '4', uv: 2000,  },
+//   { name: '5', uv: 8200,  },
+//   { name: '6', uv: 8200,  },
+//   { name: '7', uv: 8200,  },
 
-  // More data points...
-];
+//   // More data points...
+// ];
 
-const LineChartGraph = () => (
-  <ResponsiveContainer>
-    <LineChart data={data}>
-      <XAxis dataKey="name" tick={<CustomTick />} />
-      <YAxis />
-      <CartesianGrid strokeDasharray="2 3" />
-      <Tooltip />
-      <Legend />
-      <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-      <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-      {/* <Line type="monotone" dataKey="pv" stroke="#82ca0p" /> */}
-    </LineChart>
-  </ResponsiveContainer>
-);
+const LineChartGraph = (filteredGraphData: any) => {
+  console.log(filteredGraphData, 'LINECHART');
+  useEffect(() => {}, [filteredGraphData]);
+  return (
+    <ResponsiveContainer width={1200} height={500}>
+      <LineChart data={filteredGraphData}>
+        <XAxis dataKey="name" tick={<CustomTick />} />
+        <YAxis />
+        <CartesianGrid strokeDasharray="7 3" />
+        <Tooltip />
+        <Legend />
+        {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" /> */}
+        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+        {/* <Line type="monotone" dataKey="pv" stroke="#82ca0p" /> */}
+      </LineChart>
+    </ResponsiveContainer>
+  );
+};
 
 export default LineChartGraph;

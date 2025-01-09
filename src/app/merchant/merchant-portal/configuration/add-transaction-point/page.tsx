@@ -7,8 +7,9 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
+import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-import FileInput from '@/components/UI/Inputs/FileInput';
+// import FileInput from '@/components/UI/Inputs/FileInput';s
 import Input from '@/components/UI/Inputs/Input';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -139,7 +140,7 @@ function AddTransactionPoint() {
                     error={'hi'}
                     touched={false}
                   />
-                  <FileInput
+                  <BulkRegisterInput
                     key="LetterHeadImage"
                     selectedFiles={selectedFiles}
                     setSelectedFiles={setSelectedFiles}

@@ -35,6 +35,8 @@ const Navbar = () => {
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isMobileSubMenu, setIsMobileSubMenu] = useState<boolean>(false);
   const [istoggle, setIstoggle] = useState<boolean>(false);
+  console.log(istoggle);
+
   // const [isVisible, setIsVisible] = useState(true);
   // const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -223,7 +225,13 @@ const Navbar = () => {
                     onClick={showLogout}
                   />
                 </div>
-                {istoggle ? <div onClick={logOut}>Logout</div> : null}
+                {/* {istoggle ? <div onClick={logOut}>Logout</div> : null} */}
+                <Button
+                  label="Logout"
+                  // routeName="/login"
+                  onClickHandler={logOut}
+                  className="button-secondary w-24 px-2 py-[11px] text-xs leading-tight"
+                />
               </div>
             ) : (
               <>

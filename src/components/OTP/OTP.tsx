@@ -163,11 +163,13 @@ function OTP({
   otp,
   setOtp,
   medium,
+  admin,
 }: {
   numberOfDigits?: number;
   description: string;
   otp: any[];
   medium: string;
+  admin?: boolean;
   setOtp: Dispatch<SetStateAction<any[]>>;
 }) {
   const [otpError] = useState<string | null>(null);
@@ -177,6 +179,7 @@ function OTP({
     initialCount: expiryTime,
   });
   const signupForm = useAppSelector((state: any) => state.signup);
+  const credentials = useAppSelector((state: any) => state.loginCredentials);
 
   useEffect(() => {
     const expiryQueryParam = searchParams.get('expiry');
@@ -188,11 +191,32 @@ function OTP({
   }, [expiryTime]);
 
   const otpBoxReference = useRef<HTMLInputElement[]>([]);
+  const option = searchParams.get('option');
 
   const handleResendOTP = async () => {
     resetCounter();
     try {
-      if (medium === 'sms') {
+      if (option === 'corporatePortal') {
+        console.log('CORPORATE OPTION');
+
+        const response = await apiClient.post(
+          `/corporate/send-otp`,
+          {},
+          {
+            params: { email: signupForm.email },
+          },
+        );
+        console.log('corporate otp response is', response);
+      } else if (option === 'loginCorporatePortal' || admin === true) {
+        console.log('CORPORATE OPTION LOGIN CASE');
+        const response = await apiClient.get('auth/sendLoginOtp', {
+          headers: {
+            username: credentials.email,
+            password: credentials.password,
+          },
+        });
+        console.log('corporate otp response is', response);
+      } else if (medium === 'sms') {
         const response = await apiClient.post('merchant/mobileotp', {
           managerMobile: signupForm.managerMobile,
         });

@@ -9,6 +9,7 @@ import GlobalIcon from '@/assets/icons/global.svg';
 import QrIcon from '@/assets/icons/scanning.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
+// import H7 from '@/components/UI/Headings/H7';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 // import BreadCrumbLayout from '@/components/UI/Wrappers/BreadCrumbLayout';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
@@ -16,10 +17,15 @@ import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import type { BusinessNatureForm, ICheckboxData } from '@/interfaces/interface';
 import {
   businessNatureInitialValues,
-  businessNatureSchema,
+  // businessNatureSchema,
 } from '@/validations/merchant/onBoarding/businessNatureSchema';
 
 const checkboxData: ICheckboxData[] = [
+  {
+    value: 'corporatePortal',
+    label: 'Corporate Account',
+    logo: CartIcon,
+  },
   {
     value: 'onlinePayments',
     label: 'Online Payments',
@@ -33,11 +39,6 @@ const checkboxData: ICheckboxData[] = [
   {
     value: 'miniApps',
     label: 'Mini Apps',
-    logo: CartIcon,
-  },
-  {
-    value: 'corporatePortal',
-    label: 'Corporate Portal',
     logo: CartIcon,
   },
 ];
@@ -55,19 +56,19 @@ const AccountOptions = () => {
     setSubmitting(false);
   };
   console.log('selected value checkbox input', selectedCheckValue);
+  console.log('setSelectedCheckValue ', setSelectedCheckValue);
 
   return (
     <div className="flex flex-col gap-6 py-[76px]">
       {/* <div className=""> */}
       <HeaderWrapper
-        heading="What would you like to Sign up for?"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-        //   eiusmodtempor incididunt ut labore et dolore"
+        heading="What would you like to sign up for?"
+        description="Select the easypaisa products you are interested in."
       />
       {/* </div> */}
       <Formik
         initialValues={businessNatureInitialValues}
-        validationSchema={businessNatureSchema}
+        // validationSchema={businessNatureSchema}
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -83,6 +84,7 @@ const AccountOptions = () => {
                     form={formik}
                   />
                 </div>
+
                 {/* <div className="flex justify-center"> */}
                 <Button
                   label="Next"

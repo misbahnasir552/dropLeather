@@ -57,11 +57,11 @@ function page() {
                   routeName="/login"
                   className="button-secondary w-[270px] py-[19px] text-xs leading-tight"
                 />
-                <Button
+                {/* <Button
                   label="Export"
                   type="submit"
                   className="button-primary w-[270px] py-[19px] text-sm leading-tight"
-                />
+                /> */}
                 <Button
                   label="Reset"
                   type="submit"

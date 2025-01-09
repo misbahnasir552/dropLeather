@@ -20,8 +20,15 @@ const CustomModal = ({
 }: ICustomModalProps) => {
   const router = useRouter();
   const handleClose = () => {
+    setShowModal(false);
+  };
+
+  const handleContinue = () => {
     if (routeName) {
+      // router.push(routeName);
+      // router.push('');
       router.push(routeName);
+      // router.push('');
       setShowModal(!show);
     } else {
       setShowModal(!show);
@@ -73,7 +80,7 @@ const CustomModal = ({
                   <div className="flex justify-center">
                     <Button
                       label="Continue"
-                      onClickHandler={handleClose}
+                      onClickHandler={handleContinue}
                       className="button-primary w-[270px] px-3 py-[19px] text-sm leading-tight"
                     />
                   </div>

@@ -5,12 +5,14 @@ import B3 from '@/components/UI//Body/B3';
 import H6 from '@/components/UI/Headings/H6';
 
 export interface IReviewInput {
-  label: string;
-  value: string;
+  label?: string;
+  value?: string;
   image?: string;
 }
 
 function ReviewInput({ label, value, image }: IReviewInput) {
+  // console.log("LLL ", label, value);
+
   return (
     <div className="flex gap-4">
       {image && <Image src={image} alt="icon" height={24} width={24} />}

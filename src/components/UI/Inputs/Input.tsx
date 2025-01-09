@@ -12,6 +12,7 @@ import type { IInput } from '@/interfaces/interface';
 // import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const Input = ({
+  asterik,
   label,
   formik,
   type,
@@ -23,17 +24,17 @@ const Input = ({
   image,
   eyeinput,
   isDisabled = false,
-  value,
+  // value,
+  placeholder = '',
 }: IInput) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [showPlaceholder, setShowPlaceholder] = useState(false);
   // const [isHovered, setIsHovered] = useState(false);
 
   const handleImageClick = () => {
     setIsPasswordVisible((prev) => !prev);
-    console.log(value);
+    console.log(formik);
   };
-
-  // console.log("touched is", touched)
 
   return (
     <div className="flex w-full flex-col gap-[6px]">
@@ -44,32 +45,41 @@ const Input = ({
       >
         <Field
           // value={value}
-          // value={formik?.values[name]}
-          value={formik?.values[name] || ''}
+          // value={applicationFormData[name] || formik?.values[name]}
+          // value={formik?.values[name] || ''}
           name={name}
           type={isPasswordVisible ? 'text' : type}
           id={label}
           className={`font-medium ${
             eyeinput ? 'w-[95%]' : 'w-full'
-          } h-[60px] rounded-lg p-5 focus:outline-none ${
+          } h-[60px] rounded-lg p-5 pr-[48px] focus:outline-none ${
             touched && error ? 'border-danger-base' : ''
           }`}
-          placeholder=""
+          placeholder={showPlaceholder ? placeholder : ''}
           autoComplete="off"
           disabled={isDisabled}
+          onFocus={() => setShowPlaceholder(true)}
+          onBlur={() => setShowPlaceholder(false)}
         />
-        <label
+        {/* <label
           htmlFor={label}
           className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-tight text-secondary-base transition-all duration-100 ease-in-out"
         >
           {`${label} ${subString || ''}`}
+        </label> */}
+
+        <label
+          htmlFor={label}
+          className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-tight text-secondary-base transition-all duration-100 ease-in-out"
+        >
+          {` ${label} ${subString || ''}${asterik ? '*' : ''}`}
         </label>
         {hasImage && image && (
-          <div className="absolute right-5 top-[55%] z-20 -translate-y-1/2">
+          <div className="pointer-events-auto absolute right-5 top-[50%] z-10 -translate-y-1/2 will-change-transform">
             <Image
               src={image}
               alt="Image"
-              className="h-6 w-6 "
+              className="h-6 w-6"
               onMouseDown={handleImageClick}
               onMouseUp={() => setIsPasswordVisible(false)}
             />

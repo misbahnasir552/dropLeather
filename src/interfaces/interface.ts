@@ -8,6 +8,7 @@ import type {
   TMerchantNavDropdown,
   // TSelect,
 } from '@/types/static/static';
+// import exp from 'constants';
 
 export default interface IHome {
   image: {
@@ -30,6 +31,17 @@ export default interface IHome {
 
 export interface ILayouts {
   children: React.ReactNode;
+}
+
+export interface ChangeAccountRequest {
+  typeOfRequest: string;
+  requestLabel: string;
+  uploads: Array<File | null>; // Accepts an array of nullable File objects
+  corporateProducts: string;
+  managedDisbursementProducts: string;
+  othersProducts: string;
+  selfServeProducts: string;
+  chequeBookRequired: string;
 }
 
 export interface IButton {
@@ -72,6 +84,7 @@ export interface IInputPrimary {
 }
 
 export interface IInput {
+  asterik?: boolean;
   name: string;
   label: string;
   subString?: string;
@@ -86,6 +99,7 @@ export interface IInput {
   value?: any;
   onBlur?: any;
   formik?: FormikProps<any>;
+  placeholder?: any;
 }
 
 export interface IComment {
@@ -98,6 +112,7 @@ export interface IComment {
 }
 
 export interface IDate {
+  asterik?: boolean;
   name: string;
   label: string;
   type?: string;
@@ -119,7 +134,7 @@ export interface ICheckboxInput {
 export interface ICheckboxData {
   value: string;
   label: string;
-  logo?: string;
+  logo?: string | boolean | any;
 }
 
 export interface ISuccessModalProps {
@@ -196,6 +211,8 @@ export interface ILoginCard {
   title: string;
   description: string;
   routeName: string;
+  isDisabled?: boolean;
+  type?: string;
 }
 
 export interface IHeaderProps {
@@ -244,6 +261,12 @@ export interface AttachmentFormInfo {
   cnicFront: File | null;
   cnicBack: File | null;
   // status?: string;
+}
+
+export interface CorporateDocumentsInfo {
+  boForm: File | null;
+  cddForm: File | null;
+  eddForm: File | null;
 }
 
 export interface BusinessFormInfo {
@@ -331,21 +354,29 @@ export interface IntegrationFormInfo {
 }
 
 export interface IDropdownInput {
+  asterik?: boolean;
   name: string;
   options: any;
   error?: string | undefined;
   touched?: boolean | undefined;
   label: string;
   formik?: FormikProps<any>;
+  onClick?: any;
 }
 
 export interface BusinessNatureForm {
   businessNature: string;
+  corporateProducts: string;
+  managedDisbursementProducts: string;
+  othersProducts: string;
+  selfServeProducts: string;
+  chequeBookRequired: string;
 }
 
 export interface ApprovalDecisionForm {
   approvalDecision: string;
   reason: string;
+  comment?: string;
 }
 
 export interface IHeadingElementProps {
@@ -432,3 +463,170 @@ export interface MerchantPortalHomePage {
   from: string;
   to: string;
 }
+
+export interface ApplicationFormInfo {
+  // accountTitle: string;
+  // businessNtnNumber: string;
+  // requiredBusiness: string;
+  // applicantFullName: string;
+  // fatherFullName: string;
+  // dateOfBirth: string;
+  // gender: string;
+  // typeOfIdentification: string;
+  // identificationNumber: string;
+  // mobileAccountNumber: string;
+  // contactNumber: string;
+  // city: string;
+  // mailingAddress: string;
+  // relationship: string;
+  // fullName: string;
+  // typeOfIdentificationNextOfKin: string;
+  // identificationNumberNextOfKin: string;
+  // contactNumberNextOfKin: string;
+  // addressNextOfKin: string;
+  // primaryNationality: string;
+  // secondaryNationality: string;
+  // passportNumber: string;
+  // taxpayerIdentificationNumber: string;
+  // residentStatusInPakistan: string;
+  // isUsCitizen: string;
+  // bornCityUs: string;
+  // haveUsAddress: string;
+  // hasAssigningAuthorityForSignatory: string;
+  // hasAssigningAuthorityForStandingInstructions: string;
+  // taxResidencyCountry: string;
+  // taxJurisdictionForResidency: string;
+  // taxJurisdictionForTin: string;
+  // taxIdentificationNumber: string;
+  // noTinReason: string;
+  // status: string;
+  // countryCode: string;
+  // hasAssigningAuthority: string;
+  // hasStandingInstructions: string;
+  // homeAddressOther: string;
+  // taxJurisdiction: string;
+  // taxTinJurisdiction: string;
+  // homeAddress: string;
+  // identificationNumberCnic: string;
+  // address: string;
+
+  applicantFullName: string;
+  fatherFullName: string;
+  dateOfBirth: string;
+  gender: string;
+  identificationNumberCnic: string;
+  mobileAccountNumber: string;
+  contactNumber: string;
+  city: string;
+  mailingAddress: string;
+  relationship: string;
+  fullName: string;
+  identificationNumberNextOfKin: string;
+  contactNumberNextOfKin: string;
+  addressNextOfKin: string;
+  primaryNationality: string;
+  secondaryNationality: string;
+  // passportNumber: string;
+  taxpayerIdentificationNumber: string;
+  residentStatusInPakistan: string;
+  isUsCitizen: string;
+  bornCityUs: string;
+  haveUsAddress: string;
+  hasAssigningAuthorityForSignatory: string;
+  hasAssigningAuthorityForStandingInstructions: string;
+  taxResidencyCountry: string;
+  taxJurisdictionForResidency: string;
+  taxJurisdictionForTin: string;
+  taxIdentificationNumber: string;
+  noTinReason: string;
+  accountTitle: string;
+  businessNtnNumber: string;
+  requiredBusiness: string;
+  homeAddressOther: string;
+  contactNumberOtherThanPakistan: string;
+}
+
+export interface CorporateAttachmentFormInfo {
+  photograph: File | null;
+  tenancyAgreement: File | null;
+  utilityBill: File | null;
+  cnicPassport: File | null;
+  salesTaxCertificate: File | null;
+  status?: string;
+}
+
+export interface CorporateChecklistForm {
+  cddForm: File | null;
+  kycForm: File | null;
+  crsEntityOrganization: File | null;
+  beneficialOwnerCertificateForCorporate: File | null;
+  fatcaW8benE: File | null;
+  corporateAccountRequestLetter?: File | null;
+  undertaking: File | null;
+  fw8ben: File | null;
+  operatingAuthorityDocument: File | null;
+  crsIndividualTaxResidencySelfCertificate: File | null;
+}
+
+export interface StepType {
+  title: string;
+  content: string;
+  status: string;
+  active: boolean;
+}
+
+export const stepsData: StepType[] = [
+  {
+    title: 'Shipping Information',
+    content:
+      'Enter your shipping address to ensure prompt delivery of your items.',
+    status: 'Complete',
+    active: true,
+  },
+  {
+    title: 'Request Submitted',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore',
+
+    status: 'In-Progress',
+    active: false,
+  },
+  {
+    title: 'Verification In-Progress',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore',
+    status: 'Pending',
+    active: false,
+  },
+  {
+    title: 'Lorem ipsum dolor',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore',
+
+    status: 'Pending',
+    active: false,
+  },
+  {
+    title: 'Lorem ipsum dolor',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore',
+
+    status: 'Pending',
+    active: false,
+  },
+  {
+    title: 'Lorem ipsum dolor',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore',
+
+    status: 'Pending',
+    active: false,
+  },
+];
+
+// export interface checklistStatusInfo {
+//   corporateChecklistStatus: string;
+// }
+// export interface attachmentStatusInfo {
+//   corporateAttachmentStatus: string;
+// }

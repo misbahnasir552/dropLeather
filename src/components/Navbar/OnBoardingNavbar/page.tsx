@@ -5,17 +5,20 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
+import apiClient from '@/api/apiClient';
 import bellIcon from '@/assets/icons/bell-icon.svg';
 import ChevronLeft from '@/assets/icons/chevron-left.svg';
 import CloseIcon from '@/assets/icons/close-icon-nav.svg';
-import downSmall from '@/assets/icons/downSmall.svg';
+// import downSmall from '@/assets/icons/downSmall.svg';
 import Logo from '@/assets/icons/logo.svg';
 import Menu from '@/assets/icons/menu-button.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setLogout } from '@/redux/features/authSlice';
-import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
+import { clearCredentials } from '@/redux/features/corporateSlices/loginCredentials';
+import { resetFields } from '@/redux/features/formSlices/fieldSlice';
+import { setLogoutOnboarding } from '@/redux/features/formSlices/onBoardingForms';
 
 import NavMobileMenu from '../MobileView/NavMobileMenu';
 import NavMobileSubMenu from '../MobileView/NavMobileSubMenu';
@@ -27,7 +30,7 @@ import {
 
 const Navbar = () => {
   const userData = useAppSelector((state: any) => state.auth);
-  console.log('USER DATA2: ', userData);
+  // console.log('USER DATA2: ', userData);
 
   // const signUpForm = useAppSelector((state: any) => state.signup);
   const dispatch = useAppDispatch();
@@ -47,6 +50,8 @@ const Navbar = () => {
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isMobileSubMenu, setIsMobileSubMenu] = useState<boolean>(false);
   const [istoggle, setIstoggle] = useState<boolean>(false);
+  console.log(istoggle);
+
   // const [isVisible, setIsVisible] = useState(true);
   // const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -86,16 +91,31 @@ const Navbar = () => {
   };
 
   // console.log ("userdata from navvvvvvvvvvvvvv",userData)
-  const logOut = () => {
-    console.log("here i'm to log out");
-    dispatch(setLogout());
-    dispatch(resetForms());
-    router.push('/login');
+  const logOut = async () => {
+    console.log("here i'm to log out >");
+
+    try {
+      const response = await apiClient.get(
+        `/auth/expireJwt?email=${userData.email}`,
+        { headers: { Authorization: `Bearer ${userData.jwt}` } },
+      );
+
+      if (response.data.responseCode === '000') {
+        dispatch(setLogout());
+        router.push('/login');
+
+        setTimeout(() => {
+          dispatch(clearCredentials());
+          dispatch(setLogoutOnboarding());
+          dispatch(resetFields());
+        }, 5000);
+      } else {
+        console.error('logout Error:', response);
+      }
+    } catch (error) {
+      console.error('logout Error:', error);
+    }
   };
-  //   ${
-  //      // isVisible ? 'translate-y-full' :
-  //    // }`
-  //  }
 
   return (
     <nav
@@ -195,7 +215,7 @@ const Navbar = () => {
                       {userData.email}
                     </div>
                   </div>
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <Image
                       src={downSmall}
                       alt={'arrow down'}
@@ -203,7 +223,7 @@ const Navbar = () => {
                       // width={24}
                       // onClick={() => handleToggle(index)}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div className="relative flex items-center rounded-2xl border-[1px] border-border-light px-2 py-3">
                   {/* <div className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-danger-base text-[10px] leading-tight text-neutral-white-base">
@@ -218,7 +238,13 @@ const Navbar = () => {
                     onClick={showLogout}
                   />
                 </div>
-                {istoggle ? <div onClick={logOut}>Logout</div> : null}
+                {/* {istoggle ? <div onClick={logOut}>Logout</div> : null} */}
+                <Button
+                  label="Logout"
+                  // routeName="/login"
+                  onClickHandler={logOut}
+                  className="button-secondary w-24 px-2 py-[11px] text-xs leading-tight"
+                />
               </div>
             ) : (
               <>

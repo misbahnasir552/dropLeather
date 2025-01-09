@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
-import FileInput from '@/components/UI/Inputs/FileInput';
+import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
+// import FileInput from '@/components/UI/Inputs/FileInput';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 // import Input from '@/components/UI/Inputs/Input';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
@@ -91,7 +92,7 @@ function BulkFileUpload() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Upload File">
               <div className="flex flex-col gap-4">
-                <FileInput
+                <BulkRegisterInput
                   key="bulkFile"
                   selectedFiles={selectedFiles}
                   setSelectedFiles={setSelectedFiles}

@@ -172,11 +172,11 @@ function ViewProductQR() {
                       type="submit"
                       className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
-                    <Button
+                    {/* <Button
                       label="Export"
                       routeName="/login"
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
-                    />
+                    /> */}
                     <Button
                       label="Reset"
                       routeName="/login"

@@ -12,9 +12,13 @@ type TLogin = {
   managerMobile: string | undefined;
   loading: boolean;
   success: boolean;
-
+  expiry: string | undefined;
+  temp: boolean | undefined;
   isAuthenticated: boolean;
   name: string | undefined;
+  userType: string | undefined | null;
+  ticketId: string | undefined;
+  isrequestRevision: boolean | undefined;
 };
 
 type TAdminLogin = {
@@ -33,6 +37,11 @@ type TAdminLogin = {
   pages: [] | undefined;
   adminRole: string | undefined;
 };
+type TCredentialsLogin = {
+  username: string | undefined;
+  password: string | undefined;
+  email: string | undefined;
+};
 
 type TMerchantDetails = {
   cnic: null | undefined | string;
@@ -40,6 +49,19 @@ type TMerchantDetails = {
   merchantName: string | undefined;
   mobileNumber: string | undefined;
   requestStatus: string | undefined;
+  loading: boolean;
+  success: boolean;
+  isAuthenticated: boolean;
+};
+
+type TCorporateAccountDetails = {
+  accountTitle: null | undefined | string;
+  applicantName: null | undefined | string;
+  corporateEntity: null | undefined | string;
+  emailAddress: null | undefined | string;
+  mobileNumber: string | undefined;
+  requestStatus: string | undefined;
+  ticketId: string | undefined;
   loading: boolean;
   success: boolean;
   isAuthenticated: boolean;

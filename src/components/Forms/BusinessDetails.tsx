@@ -23,9 +23,10 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setBusinessForm } from '@/redux/features/formSlices/onBoardingForms';
 import { generateMD5Hash } from '@/utils/helper';
 
+import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
-import FileInput from '../UI/Inputs/FileInput';
+// import FileInput from '../UI/Inputs/FileInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import AddStore from './AddStore';
 import { buildValidationSchema } from './validations/helper';
@@ -304,7 +305,7 @@ const BusinessInformation = () => {
                                     }
                                   />
                                 ) : field?.type === 'file' ? (
-                                  <FileInput
+                                  <BulkRegisterInput
                                     key={field.name}
                                     selectedFiles={selectedFiles}
                                     setSelectedFiles={setSelectedFiles}

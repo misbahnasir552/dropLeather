@@ -101,21 +101,9 @@ function convertObjectToUpperCase(obj: MyObject) {
 
 export const generateMD5Hash = (bodyRequest: any) => {
   const body = convertObjectToUpperCase(bodyRequest);
-  // console.log('CAPITAL BODY', body);
   const bodyString = JSON.stringify(body);
   console.log(bodyString, 'BODYSTRING MD5');
-
-  // console.log(body, 'BODYJSON MD5');
-
-  // const hashBODY = CryptoJS.MD5(bodyString).toString();
-  // console.log(hashBODY, 'JSON MD5 HAshhhhhh');
-
-  // Combine body with API secret
-  // const combinedData = bodyString;
-
-  // Generate MD5 hash
   const hash = CryptoJS.MD5(bodyString).toString();
-  // console.log(hash, 'MD5 HASHhhhhh');
 
   return hash;
 };
@@ -129,3 +117,9 @@ export function replaceCountryCodeWithZero(phoneNumber: string) {
 
   return updatedPhoneNumber;
 }
+
+export const generateExpiryTime = (timeInMinutes: number) => {
+  const jwtExpirationTime = timeInMinutes * 60 * 1000; // 15 minutes in milliseconds
+  const expirationDate = new Date(Date.now() + jwtExpirationTime);
+  return expirationDate;
+};

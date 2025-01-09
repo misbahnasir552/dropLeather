@@ -33,7 +33,7 @@ const Partners = (): JSX.Element => {
 
   return (
     <>
-      <div className="sm:max-md:gap-[20px] sm:max-md:px-[24px] grid w-full flex-col gap-9 px-[150px] align-middle">
+      <div className="grid w-full flex-col gap-9 px-[150px] align-middle sm:max-md:gap-[20px] sm:max-md:px-[24px]">
         {/* <div className="flex flex-col justify-center gap-9 align-middle">
           <h1 className="text-center text-5xl font-semibold sm:max-md:text-start sm:max-md:text-[32px]">
             We power Pakistan’s biggest{' '}
@@ -46,9 +46,9 @@ const Partners = (): JSX.Element => {
           centerTitle={true}
         />
 
-        <div className="sm:max-md:grid-cols-4 sm:max-md:gap-[24px]  grid w-full grid-cols-6 gap-5">
+        <div className="grid w-full  grid-cols-6 gap-5 sm:max-md:grid-cols-4 sm:max-md:gap-[24px]">
           {partnersImages.map((item, index) => (
-            <div key={index} className="sm:max-md:p-[0px] flex aspect-[3/4]">
+            <div key={index} className="flex aspect-[3/4] sm:max-md:p-[0px]">
               {/* <div key={index} className="flex h-[173px] w-full sm:max-md:px-[0px] sm:max-md:py-[0px]"> */}
 
               {/* <div key={index} className="flex justify-center align-middle px-5 py-9 sm:max-md:px-[0px] sm:max-md:py-[0px]"> */}

@@ -8,22 +8,19 @@ import apiClient from '@/api/apiClient';
 import arrowDown from '@/assets/icons/arrow-down.svg';
 import CrossIconDark from '@/assets/icons/crossIconDark.svg';
 import EditIcon from '@/assets/icons/Edit-Table-Icon.svg';
-import EyeIcon from '@/assets/icons/eye.svg';
 import TickIcon from '@/assets/icons/tick-icon-table-checkbox.svg';
 import TickIconDark from '@/assets/icons/tickIconDark.svg';
-import TrashIcon from '@/assets/icons/trash-icon.svg';
 import B3 from '@/components/UI/Body/B3';
 import H7 from '@/components/UI/Headings/H7';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { userUpdateSuccess } from '@/redux/features/adminSlices/updateUserSlice/updateUserSlice';
-import { merchantSuccess } from '@/redux/features/merchantSlice/merchantDetails';
 import { generateMD5Hash } from '@/utils/helper';
 
 // import arrowUp from '@/assets/icons/arrow-up.svg';
 import {
-  adminTableHeadings,
+  // adminTableHeadings,
   manageProfilesHeadings,
-  tableHeadings,
+  // tableHeadings,
 } from './TableHeadings/tableHeadings';
 
 function MerchantRecordTable({
@@ -50,31 +47,6 @@ function MerchantRecordTable({
 
   // const merchantData = useAppSelector((state: any) => state.merchantDetails);
   const dispatch = useAppDispatch();
-
-  const viewMerchantDetail = (email: any, status: any, index: any) => {
-    console.log('index is', index, email, status);
-    // const selectedMerchantData = response?.response[index];
-    const selectedMerchantData = response[index];
-    console.log('Selected merchant data:', selectedMerchantData);
-
-    dispatch(merchantSuccess(selectedMerchantData));
-    // console.log("Redux state after dispatch:", merchantData);
-    router.push(`view-detail`);
-    // router.push(`view-detail?email=${email}&status=${status}`);
-  };
-
-  const deleteMerchant = async (email: any) => {
-    try {
-      const response = await apiClient.delete(
-        `/merchant/deleteOnboardingMerchant/${email}`,
-      );
-      if (response?.data?.responseCode) {
-        console.log(response?.data?.responseMessage);
-      }
-    } catch {
-      console.log('error');
-    }
-  };
 
   const updateUser = (email: any, status: any, index: any) => {
     console.log('index is', index, email, status);
@@ -274,16 +246,15 @@ function MerchantRecordTable({
                   )}
                 </div>
               </th> */}
-              {adminTableHeadings.map((heading, i) => (
+              {/* {adminTableHeadings.map((heading, i) => (
                 <th
                   key={i}
-                  className={`${
-                    heading === '#' ? 'w-1/8' : 'w-1/2'
-                  } py-[17px] text-center`}
+                  className={`${heading === '#' ? 'w-1/8' : 'w-1/2'
+                    } py-[17px] text-center`}
                 >
                   <H7>{heading}</H7>
                 </th>
-              ))}
+              ))} */}
             </tr>
           </thead>
           <tbody>
@@ -507,20 +478,6 @@ function MerchantRecordTable({
           </tbody>
         </table>
       ) : (
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
-        // ...............................................................................................................................
         <table className="flex w-full flex-col">
           <thead>
             <tr className="flex w-full items-center justify-between rounded-lg  bg-screen-grey px-6">
@@ -536,11 +493,6 @@ function MerchantRecordTable({
                   )}
                 </div>
               </th>
-              {tableHeadings.map((heading, i) => (
-                <th key={i} className="w-1/2 py-[17px] text-center">
-                  <H7>{heading}</H7>
-                </th>
-              ))}
             </tr>
           </thead>
           <tbody>
@@ -561,26 +513,7 @@ function MerchantRecordTable({
                     )}
                   </div>
                 </td>
-                <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">{item.merchantName}</B3>
-                </td>
-                <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">{item.webstoreName}</B3>
-                </td>
-                <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">{item.emailAddress}</B3>
-                </td>
-                <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">{item.mobileNumber}</B3>
-                </td>
-                {/* <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">{item.turnaroundTime}</B3>
-                </td> */}
-                <td className="w-1/2 py-[18px] text-center">
-                  <B3 textColor="text-secondary-base">
-                    {item.registrationDate}
-                  </B3>
-                </td>
+
                 <td className="w-1/2 py-[18px] text-center">
                   <B3
                     textColor={`${
@@ -593,22 +526,6 @@ function MerchantRecordTable({
                   >
                     {item.requestStatus}
                   </B3>
-                </td>
-                <td className="flex w-1/2 items-center justify-center gap-4 py-[18px]">
-                  <div
-                    onClick={() =>
-                      viewMerchantDetail(
-                        item.emailAddress,
-                        item.requestStatus,
-                        i,
-                      )
-                    }
-                  >
-                    <Image src={EyeIcon} height={20} width={20} alt="eye" />
-                  </div>
-                  <div onClick={() => deleteMerchant(item.emailAddress)}>
-                    <Image src={TrashIcon} height={20} width={20} alt="trash" />
-                  </div>
                 </td>
               </tr>
             ))}

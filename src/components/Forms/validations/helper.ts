@@ -43,54 +43,84 @@ export function toCamelCase(str: string) {
 }
 
 export const buildValidationSchema = (responseFields: Page[]) => {
-  //   : {
-  //     [key: string]: Yup.StringSchema<string | undefined, Yup.AnyObject, undefined, "">;
-  // }
-  const validationSchema: any = {};
-  // console.log(responseFields, 'RESPONSE FIELDS');
+  const validationSchema: Record<string, Yup.AnySchema> = {};
 
   responseFields?.forEach((page) => {
-    // if (page.name === "Activity Information") {
     page.categories.forEach((category) => {
       category.fields.forEach((field) => {
-        let fieldValidation;
+        let fieldValidation: Yup.AnySchema;
+
+        // Determine field validation schema type
         if (field.type === 'checkItem') {
-          return;
+          return; // Skip 'checkItem' type fields
         }
+
         if (field.type === 'checkBoxInputMulti') {
           fieldValidation = Yup.array().of(Yup.string());
+        } else if (field.type === 'file') {
+          // Custom validation for file type
+          fieldValidation = Yup.array()
+            .min(1, 'You must upload at least one file') // Ensure at least one file is selected
+            .of(
+              Yup.mixed().test(
+                'fileType',
+                'Only jpg, png, jpeg, or pdf files are allowed',
+                (value) => {
+                  // if (!value) return false; // Ensure file exists
+                  if (
+                    !value ||
+                    typeof value !== 'object' ||
+                    !('name' in value) ||
+                    typeof value.name !== 'string'
+                  ) {
+                    return false; // Ensure value exists and has a 'name' property
+                  }
+                  const allowedExtensions = ['jpg', 'png', 'jpeg', 'pdf'];
+                  const fileExtension = value?.name
+                    ?.split('.')
+                    .pop()
+                    ?.toLowerCase();
+                  // return fileExtension && allowedExtensions.includes(fileExtension);
+                  return (
+                    !!fileExtension && allowedExtensions.includes(fileExtension)
+                  );
+                },
+              ),
+            );
         } else {
           fieldValidation = Yup.string(); // Default to string validation
         }
+
+        // Apply validation rules
         if (field.validation.required) {
           fieldValidation = fieldValidation.required('Please fill this field');
         }
         if (field.validation.minLength) {
-          fieldValidation = fieldValidation.min(
+          fieldValidation = (fieldValidation as Yup.StringSchema).min(
             field.validation.minLength,
             field.validation.errorMessage,
           );
         }
         if (field.validation.maxLength) {
-          fieldValidation = fieldValidation.max(
+          fieldValidation = (fieldValidation as Yup.StringSchema).max(
             field.validation.maxLength,
             field.validation.errorMessage,
           );
         }
-        // if (field.validation.pattern) {
-        //   fieldValidation = fieldValidation.matches(
-        //     new RegExp(field.validation.pattern),
-        //     field.validation.errorMessage
-        //   );
-        // }
+        if (
+          field.validation.pattern &&
+          fieldValidation instanceof Yup.string().constructor
+        ) {
+          fieldValidation = (fieldValidation as Yup.StringSchema).matches(
+            new RegExp(field.validation.pattern),
+            field.validation.errorMessage,
+          );
+        }
 
         validationSchema[field.name] = fieldValidation;
       });
     });
-    // }
   });
 
-  // console.log(validationSchema, 'VALIDATION SCHEMA');
   return Yup.object().shape(validationSchema);
-  // return validationSchema;
 };

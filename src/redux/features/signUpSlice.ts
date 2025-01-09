@@ -21,6 +21,14 @@ const signupSlice = createSlice({
 
       Object.assign(state, action.payload);
     },
+    addCorporateFormData: (
+      state,
+      action: PayloadAction<Partial<SignupForm>>,
+    ) => {
+      console.log('ACTION ADD FORM COrporate: ', action.payload);
+
+      Object.assign(state, action.payload);
+    },
     resetFormData: (state) => {
       console.log('dispatch workingggg');
       console.log(state);
@@ -29,6 +37,7 @@ const signupSlice = createSlice({
   },
 });
 
-export const { addFormData, resetFormData } = signupSlice.actions;
+export const { addFormData, resetFormData, addCorporateFormData } =
+  signupSlice.actions;
 export const selectFormData = (state: { signup: SignupForm }) => state.signup;
 export default signupSlice.reducer;

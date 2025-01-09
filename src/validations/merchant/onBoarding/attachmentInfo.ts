@@ -22,12 +22,3 @@ export const AttachmentFormInfoSchema = Yup.object().shape({
   cnicFront: Yup.mixed().required('CNIC Front is required'),
   cnicBack: Yup.mixed().required('CNIC Back is required'),
 });
-
-// accountMaintananceCertificate: Yup.mixed()
-//   .required('Please select a file') // Required validation
-//   .test('fileType', 'Unsupported file format', (value) => {
-//     if (!value) return true; // Allow null (no file selected)
-
-//     const supportedFormats = ['image/jpeg', 'image/png', 'application/pdf']; // Add more supported formats as needed
-//     return supportedFormats.includes(value.type);
-//   }),

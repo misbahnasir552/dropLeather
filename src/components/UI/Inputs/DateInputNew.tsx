@@ -5,7 +5,14 @@ import React from 'react';
 import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
 import type { IDate } from '@/interfaces/interface';
 
-const DateInputNew = ({ label, name, formik, error, touched }: IDate) => {
+const DateInputNew = ({
+  label,
+  name,
+  formik,
+  error,
+  touched,
+  asterik,
+}: IDate) => {
   const handleDateChange = (event: any) => {
     const selectedDate = event.target.value;
     console.log('Selected Date:', selectedDate);
@@ -22,7 +29,7 @@ const DateInputNew = ({ label, name, formik, error, touched }: IDate) => {
   };
 
   return (
-    <div>
+    <div className="flex w-full flex-col gap-[6px]">
       <div
         className={`floating-input relative w-full rounded-lg border border-border-light
           focus-within:border-primary-base hover:border-primary-base
@@ -31,9 +38,9 @@ const DateInputNew = ({ label, name, formik, error, touched }: IDate) => {
           }`}
       >
         <input
-          type="text"
+          type="date"
           name={name}
-          value={formik?.values[name] || ''}
+          value={formik?.values?.[name] || ''}
           placeholder=" "
           onClick={handleDateClick}
           onChange={handleDateChange}
@@ -44,7 +51,8 @@ const DateInputNew = ({ label, name, formik, error, touched }: IDate) => {
           htmlFor={name}
           className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-[18px] text-secondary-base transition-all duration-100 ease-in-out"
         >
-          {label}
+          {` ${label}${asterik ? '*' : ''}`}
+          {/* {label} */}
         </label>
       </div>
       <FormikErrorMessage name={name} />
