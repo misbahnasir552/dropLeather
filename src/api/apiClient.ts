@@ -3,8 +3,8 @@ import axios from 'axios';
 import Router from 'next/router';
 // import { useRouter } from 'next/navigation';
 
-export const baseURL = '/api'; // Replace with your API's base URL
-// export const baseURL = 'http://api-gateway-opsdev.telenorbank.pk/';
+// export const baseURL = '/api'; // Replace with your API's base URL
+export const baseURL = 'http://api-gateway-opsdev.telenorbank.pk/';
 // export const baseURL = 'http://http://merchant-service-opsdev.telenorbank.pk/';
 // const csrf = Cookies.get('csrfToken');
 // console.log('CSRF token apiclient', csrf);

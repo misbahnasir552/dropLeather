@@ -303,10 +303,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     // Handle Axios errors
     if (axios.isAxiosError(error) && error.response) {
-      if (error.status === 401) {
-        Cookies.remove('jwt', { path: '/admin-auth/login' });
-        Cookies.remove('username', { path: '/admin-auth/login' });
-        Cookies.remove('browser_number', { path: '/admin-auth/login' });
+      if (error.response.status === 401) {
+        Cookies.remove('jwt', { path: '/login' });
+        Cookies.remove('username', { path: '/login' });
+        Cookies.remove('browser_number', { path: '/login' });
       }
       return NextResponse.json(
         {
