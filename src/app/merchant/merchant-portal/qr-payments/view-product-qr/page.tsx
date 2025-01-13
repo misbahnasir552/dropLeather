@@ -9,6 +9,7 @@ import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import type { IViewProductQr } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
@@ -22,6 +23,9 @@ function ViewProductQR() {
   const [filteredParams, setFilteredParams] = useState();
   const [loading, setLoading] = useState(false);
 
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -64,14 +68,26 @@ function ViewProductQR() {
     console.log('Delete row with id:', id);
     try {
       const response = await apiClient.delete(
-        '/merchantportal/deleteDynamicQr',
+        '/merchantportal/removeDynamicQr',
         {
           params: { storeId: id },
         },
       );
       console.log(response, 'Deleted response');
-      fetchRecords();
-    } catch (e) {
+      if (response?.data?.responseCode === '009') {
+        setTitle('Deleted Successfully');
+        setDescription(response?.data?.responseMessage);
+        fetchRecords();
+      } else if (response?.data?.responseCode === '000') {
+        setTitle('Failure!');
+        setDescription(response?.data?.responseMessage);
+      } else {
+        setTitle('Failure!');
+        setDescription(response?.data?.responseMessage);
+      }
+    } catch (e: any) {
+      setTitle('Network Failure!');
+      setDescription(e.message);
       console.log('Error in fetching dynamic QR list', e);
     }
 
@@ -134,6 +150,13 @@ function ViewProductQR() {
     <div>
       <>
         <div className="flex flex-col gap-6">
+          <CustomModal
+            title={title}
+            description={description}
+            show={showModal}
+            setShowModal={setShowModal}
+            // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+          />
           <HeaderWrapper
             heading="View Product QR"
             description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"

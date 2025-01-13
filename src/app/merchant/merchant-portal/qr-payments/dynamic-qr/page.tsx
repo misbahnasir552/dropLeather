@@ -8,6 +8,7 @@ import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 // import H2 from '@/components/UI/Headings/H2';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -20,10 +21,13 @@ import {
 import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 
 function AddDynamicQR() {
-  const [showModal, setShowModal] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -100,13 +104,37 @@ function AddDynamicQR() {
         },
       );
       console.log(response, 'Dynamic QR Added');
-      base64ToJpg(response?.data.qrCode);
-    } catch (e) {
-      console.log('error adding a new outlet', e);
+      if (response?.data.responseCode === '009') {
+        base64ToJpg(response?.data.qrCode);
+        // setTitle("Success");
+        // setDescription(response?.data.responseDescription);
+      } else if (response?.data.responseCode === '000') {
+        setTitle('Failure');
+        setDescription(response?.data.responseDescription);
+        setImageUrl('');
+        setShowModal(true);
+      }
+      // else {
+      //   setTitle("Failure");
+      //   setDescription(response.data.errorDescription);
+      // }
+    } catch (e: any) {
+      console.log('Network Failure!', e);
+      setTitle(e.code);
+      setDescription(e.message);
+      setImageUrl('');
+      setShowModal(true);
     }
   };
   return (
     <div className="flex flex-col gap-6">
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+      />
       <HeaderWrapper
         heading="Dynamic QR"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -172,9 +200,9 @@ function AddDynamicQR() {
           </Form>
         )}
       </Formik>
-      {imageUrl && (
+      {imageUrl && showModal && (
         <DynamicQRModal
-          title="YOUR DYNAMIC QR"
+          title="DYNAMIC QR"
           description="Scan this QR code to proceed."
           show={showModal}
           setShowModal={setShowModal}

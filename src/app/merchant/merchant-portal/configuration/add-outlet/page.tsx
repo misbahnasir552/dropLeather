@@ -69,17 +69,20 @@ function AddOutlet() {
           },
         });
         console.log(response);
-        if (response?.data.responseCode === '00') {
-          setTitle(response?.data.responseCode);
+        if (response?.data.responseCode === '009') {
+          setTitle('Outlet created successfully');
           setDescription(response?.data.responseDescription);
           resetForm();
+        } else if (response?.data.responseCode === '000') {
+          setTitle('Failed to create an Outlet.');
+          setDescription(response?.data.responseDescription);
         } else {
-          setTitle(response.data.errorDescription);
+          setTitle('Failed to create an Outlet.');
           setDescription(response.data.errorDescription);
         }
       }
     } catch (e: any) {
-      setTitle(e.code);
+      setTitle('Network Failure!');
       setDescription(e.message);
     } finally {
       // setIsLoading(false);

@@ -11,6 +11,7 @@ import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 // import FileInput from '@/components/UI/Inputs/FileInput';s
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -25,6 +26,10 @@ import {
 function AddTransactionPoint() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(1).fill(null),
@@ -59,14 +64,35 @@ function AddTransactionPoint() {
           },
         );
         console.log(response);
+        if (response?.data.responseCode === '009') {
+          setTitle('Success');
+          setDescription(response?.data.responseDescription);
+        } else if (response?.data.responseCode === '000') {
+          setTitle('Failure');
+          setDescription(response?.data.responseDescription);
+        } else {
+          setTitle('Failure');
+          setDescription(response.data.errorDescription);
+        }
       }
-    } catch (e) {
-      console.log('error adding a new outlet', e);
+    } catch (e: any) {
+      console.log('Network Failure!', e);
+      setTitle(e.code);
+      setDescription(e.message);
+    } finally {
+      setShowModal(true);
     }
   };
   return (
     <>
       <div className="flex flex-col gap-6">
+        <CustomModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+        />
         <HeaderWrapper
           heading="Add Transaction Point"
           description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -89,6 +115,7 @@ function AddTransactionPoint() {
                     error={'payment method is false'}
                     touched={false}
                     options={[
+                      { value: 'Uzair Store', label: 'Uzair Store' },
                       { value: 'asdsad', label: 'asdsad' },
                       { value: 'US', label: 'US' },
                       { value: 'Afghanistan', label: 'Afghanistan' },

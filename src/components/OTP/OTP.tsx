@@ -157,13 +157,14 @@ import apiClient from '@/api/apiClient';
 import { useAppSelector } from '@/hooks/redux';
 import useCounter from '@/hooks/useCounter';
 
+import H7 from '../UI/Headings/H7';
+
 function OTP({
   numberOfDigits = 6,
   description,
   otp,
   setOtp,
   medium,
-  admin,
 }: {
   numberOfDigits?: number;
   description: string;
@@ -172,14 +173,16 @@ function OTP({
   admin?: boolean;
   setOtp: Dispatch<SetStateAction<any[]>>;
 }) {
-  const [otpError] = useState<string | null>(null);
+  const [otpError, setOtpError] = useState<string | null>(null);
+  const [otpSuccess, setOtpSuccess] = useState<string | null>(null);
+
   const searchParams = useSearchParams();
   const [expiryTime, setExpiryTime] = useState<number>();
   const { formattedCount, count, resetCounter } = useCounter({
     initialCount: expiryTime,
   });
   const signupForm = useAppSelector((state: any) => state.signup);
-  const credentials = useAppSelector((state: any) => state.loginCredentials);
+  // const credentials = useAppSelector((state: any) => state.loginCredentials);
 
   useEffect(() => {
     const expiryQueryParam = searchParams.get('expiry');
@@ -191,35 +194,22 @@ function OTP({
   }, [expiryTime]);
 
   const otpBoxReference = useRef<HTMLInputElement[]>([]);
-  const option = searchParams.get('option');
+  // const option = searchParams.get('option');
 
   const handleResendOTP = async () => {
     resetCounter();
     try {
-      if (option === 'corporatePortal') {
-        console.log('CORPORATE OPTION');
-
-        const response = await apiClient.post(
-          `/corporate/send-otp`,
-          {},
-          {
-            params: { email: signupForm.email },
-          },
-        );
-        console.log('corporate otp response is', response);
-      } else if (option === 'loginCorporatePortal' || admin === true) {
-        console.log('CORPORATE OPTION LOGIN CASE');
-        const response = await apiClient.get('auth/sendLoginOtp', {
-          headers: {
-            username: credentials.email,
-            password: credentials.password,
-          },
-        });
-        console.log('corporate otp response is', response);
-      } else if (medium === 'sms') {
+      if (medium === 'sms') {
         const response = await apiClient.post('merchant/mobileotp', {
           managerMobile: signupForm.managerMobile,
         });
+        if (response.data.responseCode === '000') {
+          setOtpError(response.data.responseDescription);
+        } else if (response.data.responseCode === '009') {
+          setOtpSuccess(response.data.responseDescription);
+        } else {
+          setOtpError(response.data.responseDescription);
+        }
         console.log('sms otp response is', response);
       } else {
         const response = await apiClient.post('merchant/emailotp', {
@@ -227,9 +217,17 @@ function OTP({
           email: signupForm.email,
         });
         console.log('email otp response is', response);
+        if (response.data.responseCode === '000') {
+          setOtpError(response.data.responseDescription);
+        } else if (response.data.responseCode === '009') {
+          setOtpSuccess(response.data.responseDescription);
+        } else {
+          setOtpError(response.data.responseDescription);
+        }
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
+      setOtpError(e.message);
     }
   };
 
@@ -287,17 +285,10 @@ function OTP({
         ))}
       </div>
 
-      {otpError ? (
-        <p
-          className={`mt-4 text-lg text-neutral-white-base ${
-            otpError ? 'error-show' : ''
-          }`}
-        >
-          {otpError}
-        </p>
-      ) : null}
+      {otpError ? <H7 textColor="text-danger-base">{otpError}</H7> : null}
+      {otpSuccess ? <H7 textColor="text-primary-base">{otpSuccess}</H7> : null}
 
-      {count > 0 ? (
+      {count > 0 && !otpError ? (
         <div className="text-xs font-normal text-secondary-600">
           Resend OTP in {formattedCount}
         </div>

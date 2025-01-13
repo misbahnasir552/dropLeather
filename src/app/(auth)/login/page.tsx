@@ -299,7 +299,7 @@ const NewLogin = () => {
         };
         dispatch(setLoginCredentials(credentials));
 
-        router.push(`/loginOtp/?expiry=${'2'}&&option=loginCorporatePortal`);
+        router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         setTitle(loginResponse?.data?.responseMessage);
         setDescription(loginResponse?.data?.responseDescription);

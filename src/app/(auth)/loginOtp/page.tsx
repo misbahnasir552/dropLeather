@@ -18,6 +18,7 @@ import { clearApplicants } from '@/redux/features/formSlices/onBoardingForms';
 
 const OtpLogin = () => {
   const [apierror, setApierror] = useState('');
+  const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const router = useRouter();
 
@@ -31,25 +32,25 @@ const OtpLogin = () => {
 
   const isOtpComplete = () => {
     const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
+    const isSmsOtpFilled = smsOtp.every((digit) => digit !== '');
 
-    return isEmailOtpFilled;
+    return isEmailOtpFilled && isSmsOtpFilled;
   };
 
   const handleVerify = async () => {
     try {
-      console.log('HERERRRR ', credentials, emailOtp);
-      console.log('HERERRRR333>>>>>>>>> ', emailOtp.join(''));
-
       setIsLoading(true);
-
       const response: any = await apiClient.post(
         'auth/login',
         {},
         {
+          params: {
+            channel: 'merchant',
+          },
           headers: {
             username: credentials.username,
             password: credentials.password,
-            // otp: emailOtp.join(''),
+            otp: emailOtp.join(''),
           },
         },
       );
@@ -142,6 +143,13 @@ const OtpLogin = () => {
               setOtp={setEmailOtp}
               otp={emailOtp}
               medium="email"
+            />
+
+            <OTP
+              description="Enter SMS OTP here"
+              setOtp={setSmsOtp}
+              otp={smsOtp}
+              medium="sms"
             />
 
             <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">

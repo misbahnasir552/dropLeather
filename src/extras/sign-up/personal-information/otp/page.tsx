@@ -2,6 +2,7 @@
 
 // import axios from 'axios';
 import React, { useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
@@ -56,11 +57,16 @@ const OtpInputWithValidation = () => {
             );
             dispatch(resetFormData);
           } else if (res.data.responseCode == '000') {
+            setTitle('Error in Registration');
+            setDescription(res.data.responseDescription);
+          } else {
             setTitle(res.data.responseCode);
             setDescription(res.data.responseDescription);
           }
-        } catch (e) {
+        } catch (e: any) {
           console.log(e);
+          setTitle(e.status);
+          setDescription(e.message);
         }
       } else {
         setTitle(response.data.errorDescription);
@@ -79,7 +85,8 @@ const OtpInputWithValidation = () => {
   return (
     <>
       {isLoading && (
-        <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
+        <BarLoader color="#21B25F" />
+        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
       )}
       <SuccessModal
         title={title}

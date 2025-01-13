@@ -20,6 +20,13 @@ function MerchantFundsTransfer() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
+  const isOtpComplete = () => {
+    // const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
+    const isSmsOtpFilled = otp.every((digit) => digit !== '');
+
+    return isSmsOtpFilled;
+  };
+
   const fetchOTP = async () => {
     try {
       setIsLoading(true);
@@ -69,6 +76,7 @@ function MerchantFundsTransfer() {
 
   return (
     <div className="flex flex-col gap-6 pt-9">
+      {isLoading && <BarLoader color="#21B25F" />}
       <SuccessModal
         title={title}
         description={description}
@@ -81,7 +89,6 @@ function MerchantFundsTransfer() {
         description={`We have sent the OTP Verification number to +(${userData?.managerMobile})`}
       />
       <FormLayout>
-        {isLoading && <BarLoader color="#21B25F" />}
         <div className="flex flex-col items-center justify-center gap-12">
           <OTP
             otp={otp}
@@ -91,6 +98,7 @@ function MerchantFundsTransfer() {
             numberOfDigits={6}
           />
           <Button
+            isDisabled={!isOtpComplete() || isLoading}
             label="Login"
             className="button-primary w-[270px] px-3 py-[19px]"
           />
