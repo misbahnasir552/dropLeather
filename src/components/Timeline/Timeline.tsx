@@ -558,11 +558,12 @@
 
 import Link from 'next/link';
 import React, {
+  useEffect,
   // useEffect,
   useState,
 } from 'react';
 
-// import apiClient from '@/api/apiClient';
+import apiClient from '@/api/apiClient';
 import ActivityInformation from '@/components/Forms/ActivityInformation';
 import AttachmentsForm from '@/components/Forms/Attachments';
 import BusinessInformation from '@/components/Forms/BusinessDetails';
@@ -577,7 +578,7 @@ import {
   ReviewFormIcon,
   SettlementDetailsIcon,
 } from '@/components/Timeline/TimelineIcons/Timelineicons';
-// import { useAppSelector } from '@/hooks/redux';
+import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 
 interface Tab {
@@ -588,10 +589,10 @@ interface Tab {
   svg: JSX.Element;
 }
 
-// interface UserData {
-//   email: string;
-//   // Add other properties if needed
-// }
+interface UserData {
+  email: string;
+  // Add other properties if needed
+}
 
 interface MerchantData {
   activityInformation?: { status: string };
@@ -603,14 +604,43 @@ interface MerchantData {
 }
 
 const Timeline: React.FC = () => {
-  // const userData = useAppSelector((state: { auth: UserData }) => state.auth);
-  const [
-    data,
-    // setData
-  ] = useState<MerchantData | null>(null);
+  const userData = useAppSelector((state: { auth: UserData }) => state.auth);
+  const [data, setData] = useState<MerchantData | null>(null);
   const { currentTab } = useCurrentTab();
   const activeTab = currentTab;
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    const getDetails = async () => {
+      try {
+        console.log('Fetching details...');
+        const response = await apiClient.get(
+          `merchant/getdetails/${userData?.email}`,
+        );
+        console.log('Response received:', response?.data);
 
+        if (response?.data) {
+          setData(response?.data); // Call setData only after receiving a response
+          console.log('Data set successfully.');
+        } else {
+          console.error('Empty response data.');
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setIsLoading(false); // End loading
+      }
+    };
+
+    getDetails();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>; // Render a loader while waiting for the response
+  }
+
+  if (!data) {
+    return <div>No data available.</div>; // Handle case where data is null
+  }
   // useEffect(() => {
   //   const getDetails = async () => {
   //     try {
@@ -618,12 +648,13 @@ const Timeline: React.FC = () => {
   //         `merchant/getdetails/${userData?.email}`,
   //       );
   //       console.log('GET DETAILS CHECKINGG:', response?.data);
+  //       //debugger
   //       setData(response?.data);
   //     } catch (error) {
   //       console.log(error, 'error from onboarding forms');
   //     }
   //   };
-  //   // getDetails();
+  //   getDetails();
   // }, []);
 
   const tabs: Tab[] = [
@@ -737,68 +768,40 @@ const Timeline: React.FC = () => {
     },
   ];
 
-  // Function to check if a tab is accessible based on previous tab statuses
-  const isAccessible = (tabIndex: number): boolean => {
-    // Review form should only be accessible if all other tabs are completed
-    if (tabs[tabIndex]?.name === 'review-form') {
-      return tabs.every((tab) => tab.status === 'Completed');
-    }
-
-    // Check if all previous tabs are completed
-    for (let i = 0; i < tabIndex; i + 1) {
-      if (tabs[i]?.status !== 'Completed') {
-        return false;
-      }
-    }
-    return true;
-  };
-
   return (
     <div className="flex flex-col justify-between py-2">
       <div className="flex w-full justify-between">
-        {tabs.map((tab, index) => (
+        {tabs?.map((tab, index) => (
           <React.Fragment key={index}>
             <div className="flex flex-col">
-              {isAccessible(index) ? (
-                <Link
-                  key={index}
-                  href={`/merchant/home/business-nature/${tab.name}`}
-                  className={
-                    tab.name === activeTab
-                      ? 'text-primary-base'
-                      : 'text-danger-base'
-                  }
-                >
-                  <div className="flex justify-center px-[14px] pb-[8px]">
-                    <div
-                      key={index}
-                      className={`flex w-max rounded-lg border-[1px] ${
-                        tab.name === activeTab
-                          ? 'border-border-green'
-                          : tab.status === 'Completed'
-                          ? 'border-secondary-base bg-screen-grey'
-                          : 'border-border-light'
-                      } p-[12px]`}
-                    >
-                      {tab.svg}
-                    </div>
-                  </div>
-                  <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
-                    {tab.label}
-                  </div>
-                </Link>
-              ) : (
-                <div className="cursor-not-allowed" key={index}>
-                  <div className="flex cursor-not-allowed justify-center px-[14px] pb-[8px]">
-                    <div className="flex w-max rounded-lg border-[1px] border-border-light p-[12px]">
-                      {tab.svg}
-                    </div>
-                  </div>
-                  <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
-                    {tab.label}
+              {/* {isAccessible(index) ? ( */}
+              <Link
+                key={index}
+                href={`/merchant/home/business-nature/${tab.name}`}
+                className={
+                  tab.name === activeTab
+                    ? 'text-primary-base'
+                    : 'text-danger-base'
+                }
+              >
+                <div className="flex justify-center px-[14px] pb-[8px]">
+                  <div
+                    key={index}
+                    className={`flex w-max rounded-lg border-[1px] ${
+                      tab.name === activeTab
+                        ? 'border-border-green'
+                        : tab.status === 'Completed'
+                        ? 'border-secondary-base bg-screen-grey'
+                        : 'border-border-light'
+                    } p-[12px]`}
+                  >
+                    {tab.svg}
                   </div>
                 </div>
-              )}
+                <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
+                  {tab.label}
+                </div>
+              </Link>
             </div>
             {index < tabs.length - 1 && (
               <div className="w-full py-[24px]">
