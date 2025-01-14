@@ -557,9 +557,12 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, {
+  // useEffect,
+  useState,
+} from 'react';
 
-import apiClient from '@/api/apiClient';
+// import apiClient from '@/api/apiClient';
 import ActivityInformation from '@/components/Forms/ActivityInformation';
 import AttachmentsForm from '@/components/Forms/Attachments';
 import BusinessInformation from '@/components/Forms/BusinessDetails';
@@ -574,7 +577,7 @@ import {
   ReviewFormIcon,
   SettlementDetailsIcon,
 } from '@/components/Timeline/TimelineIcons/Timelineicons';
-import { useAppSelector } from '@/hooks/redux';
+// import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 
 interface Tab {
@@ -585,10 +588,10 @@ interface Tab {
   svg: JSX.Element;
 }
 
-interface UserData {
-  email: string;
-  // Add other properties if needed
-}
+// interface UserData {
+//   email: string;
+//   // Add other properties if needed
+// }
 
 interface MerchantData {
   activityInformation?: { status: string };
@@ -600,26 +603,28 @@ interface MerchantData {
 }
 
 const Timeline: React.FC = () => {
-  const userData = useAppSelector((state: { auth: UserData }) => state.auth);
-  const [data, setData] = useState<MerchantData | null>(null);
+  // const userData = useAppSelector((state: { auth: UserData }) => state.auth);
+  const [
+    data,
+    // setData
+  ] = useState<MerchantData | null>(null);
   const { currentTab } = useCurrentTab();
   const activeTab = currentTab;
 
-  const getDetails = async () => {
-    try {
-      const response = await apiClient.get(
-        `merchant/getdetails/${userData.email}`,
-      );
-      setData(response.data);
-      console.log('GET DETAILS:', response.data);
-    } catch (error) {
-      console.log(error, 'error from onboarding forms');
-    }
-  };
-
-  useEffect(() => {
-    getDetails();
-  }, []);
+  // useEffect(() => {
+  //   const getDetails = async () => {
+  //     try {
+  //       const response = await apiClient.get(
+  //         `merchant/getdetails/${userData?.email}`,
+  //       );
+  //       console.log('GET DETAILS CHECKINGG:', response?.data);
+  //       setData(response?.data);
+  //     } catch (error) {
+  //       console.log(error, 'error from onboarding forms');
+  //     }
+  //   };
+  //   // getDetails();
+  // }, []);
 
   const tabs: Tab[] = [
     {

@@ -25,7 +25,6 @@ function ReviewForm() {
         console.log(e, 'error fetching');
       }
     };
-
     fetchData();
   }, []);
   return (

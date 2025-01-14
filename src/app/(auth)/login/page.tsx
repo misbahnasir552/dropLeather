@@ -261,16 +261,17 @@ const NewLogin = () => {
 
   const AccessFormikValues = () => {
     const { values, errors } = useFormikContext<LoginForm>();
-
     useEffect(() => {
       if (Object.keys(errors).length !== 0) {
         setApierror('');
       }
+      console.log('USER DATA CHECK1: ', userData);
 
       if (loginResponse) {
         dispatch(loginSuccess(loginResponse));
       }
       if (userData.email && userData.userType !== 'Corporate') {
+        console.log('GET DETAILS TEST 1');
         fetchUserDetails(userData.email);
       }
     }, [values, errors, loginResponse, dispatch, userData.email]);
@@ -296,16 +297,20 @@ const NewLogin = () => {
           username: values.Username,
           password: values.Password,
           email: loginResponse?.data?.email,
+          mobileNumber: loginResponse?.data?.mobileNumber,
         };
         dispatch(setLoginCredentials(credentials));
 
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         setTitle(loginResponse?.data?.responseMessage);
-        setDescription(loginResponse?.data?.responseDescription);
+        setDescription(loginResponse?.data?.responseMessage);
         setShowModal(true);
       } else {
         console.log('LOGIN OTP FAIL ');
+        setTitle(loginResponse?.data?.responseMessage);
+        setDescription(loginResponse?.data?.responseMessage);
+        setShowModal(true);
       }
     } catch (error: any) {
       console.error('Error in onSubmit:', error);

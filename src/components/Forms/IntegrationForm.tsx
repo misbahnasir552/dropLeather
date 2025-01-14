@@ -305,7 +305,9 @@ import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
+import { endpointArray } from '@/utils/merchantForms/helper';
 
+import CustomModal from '../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import { buildValidationSchema } from './validations/helper';
@@ -324,6 +326,10 @@ function IntegrationForm() {
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const router = useRouter();
   const { currentTab } = useCurrentTab();
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
@@ -364,26 +370,6 @@ function IntegrationForm() {
     values: { [key: string]: any },
     { setSubmitting }: any,
   ) => {
-    const endpointArray = [
-      {
-        tab: 'activity-information',
-        endpoint: `/merchant/activity/${userData.email}`,
-      },
-      {
-        tab: 'business-details',
-        endpoint: `/merchant/businessdetails/${userData.email}`,
-      },
-      {
-        tab: 'settlement-details',
-        endpoint: `/merchant/settlementdetails/${userData.email}`,
-      },
-      {
-        tab: 'integration',
-        endpoint: `/merchant/integration/${userData.email}`,
-      },
-      { tab: 'attachments', endpoint: `/merchant/upload/${userData.email}` },
-    ];
-
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
@@ -411,20 +397,45 @@ function IntegrationForm() {
               signature: md5Hash,
             },
             {
+              params: {
+                username: userData?.email,
+              },
               headers: { Authorization: `Bearer ${userData.jwt}` },
             },
           );
           console.log(response);
+          if (response?.data?.responseCode === '009') {
+            // Navigate to the next tab after successful submission
+            const nextTab = endpointArray[currentIndex + 1]?.tab;
+            if (nextTab) {
+              router.push(`/merchant/home/business-nature/${nextTab}`);
+            } else {
+              console.log(
+                'Form submission completed, no more tabs to navigate.',
+              );
+            }
+          } else if (response?.data?.responseCode === '000') {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          } else {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
         }
 
-        const nextTab = endpointArray[currentIndex + 1]?.tab;
-        if (nextTab) {
-          router.push(`/merchant/home/business-nature/${nextTab}`);
-        } else {
-          console.log('Form submission completed, no more tabs to navigate.');
-        }
+        // const nextTab = endpointArray[currentIndex + 1]?.tab;
+        // if (nextTab) {
+        //   router.push(`/merchant/home/business-nature/${nextTab}`);
+        // } else {
+        //   console.log('Form submission completed, no more tabs to navigate.');
+        // }
       } catch (e) {
         console.log('Error in submitting dynamic form', e);
+        setTitle('Network Failed');
+        setDescription('Network failed! Please try again later.');
+        setShowModal(true);
       } finally {
         setSubmitting(false);
       }
@@ -433,6 +444,14 @@ function IntegrationForm() {
 
   return (
     <div>
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
+      />
       <Formik
         initialValues={initialValuesState}
         validationSchema={validationSchemaState}

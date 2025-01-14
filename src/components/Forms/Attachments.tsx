@@ -19,11 +19,13 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 // } from "@/validations/merchant/onBoarding/attachmentInfo";
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
+import { endpointArray } from '@/utils/merchantForms/helper';
 
 import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import DropdownInput from '../UI/Inputs/DropdownInput';
 // import ImageInput from "../UI/Inputs/ImageInput";
 import Input from '../UI/Inputs/Input';
+import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import { buildValidationSchema } from './validations/helper';
 
@@ -33,7 +35,7 @@ const Attachments = () => {
   const [filteredData, setFilteredData] = useState<any>();
   const [pageTitle, setPageTitle] = useState<any>();
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
 
   // const userData = useAppSelector((state: any) => state.auth);
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
@@ -43,6 +45,10 @@ const Attachments = () => {
   const router = useRouter();
   // const dispatch = useAppDispatch();
   const userData = useAppSelector((state: any) => state.auth);
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const formData = new FormData();
   console.log(filteredData, 'filtered data from attachmentsssssssssss');
@@ -73,7 +79,7 @@ const Attachments = () => {
       const validationSchema = buildValidationSchema(fData);
       console.log('Vaidation schema result', validationSchema);
 
-      setValidationSchemaState(validationSchema);
+      // setValidationSchemaState(validationSchema);
     }
   }, [currentTab]);
 
@@ -90,25 +96,6 @@ const Attachments = () => {
     values: any,
     { setSubmitting }: any,
   ) => {
-    const endpointArray = [
-      {
-        tab: 'activity-information',
-        endpoint: `/merchant/activity/${userData.email}`,
-      },
-      {
-        tab: 'business-details',
-        endpoint: `/merchant/businessdetails/${userData.email}`,
-      },
-      {
-        tab: 'settlement-details',
-        endpoint: `/merchant/settlementdetails/${userData.email}`,
-      },
-      {
-        tab: 'integration',
-        endpoint: `/merchant/integration/${userData.email}`,
-      },
-      { tab: 'attachments', endpoint: `/merchant/upload/${userData.email}` },
-    ];
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
@@ -125,9 +112,10 @@ const Attachments = () => {
         console.log('FORM DATAA', formData);
 
         const response: any = await apiClient.post(
-          `merchant/upload/${userData.email}`,
+          `merchant/upload`,
           formData,
           {
+            params: { username: userData?.email },
             headers: { Authorization: `Bearer ${userData.jwt}` },
           },
         );
@@ -156,21 +144,38 @@ const Attachments = () => {
               signature: md5Hash,
             },
             {
+              params: {
+                username: userData?.email,
+              },
               headers: { Authorization: `Bearer ${userData?.jwt}` },
             },
           );
           console.log(response);
-        }
-
-        // Navigate to the next tab after successful submission
-        const nextTab = endpointArray[currentIndex + 1]?.tab;
-        if (nextTab) {
-          router.push(`/merchant/home/business-nature/${nextTab}`);
-        } else {
-          console.log('Form submission completed, no more tabs to navigate.');
+          if (response?.data?.responseCode === '009') {
+            // Navigate to the next tab after successful submission
+            const nextTab = endpointArray[currentIndex + 1]?.tab;
+            if (nextTab) {
+              router.push(`/merchant/home/business-nature/${nextTab}`);
+            } else {
+              console.log(
+                'Form submission completed, no more tabs to navigate.',
+              );
+            }
+          } else if (response?.data?.responseCode === '000') {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          } else {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
         }
       } catch (e) {
         console.log('Error in submitting dynamic form', e);
+        setTitle('Network Failed');
+        setDescription('Network failed! Please try again later.');
+        setShowModal(true);
       } finally {
         setSubmitting(false);
       }
@@ -179,9 +184,17 @@ const Attachments = () => {
 
   return (
     <div>
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
+      />
       <Formik
         initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (

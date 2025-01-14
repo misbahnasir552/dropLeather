@@ -72,13 +72,15 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
   const getDetails = async () => {
     try {
       const response: any = await apiClient.get(
-        `merchant/getdetails/${userData.email}`,
+        `merchant/getdetails/${userData?.email}`,
       );
+      console.log('RESPONSIVE USEEFFECT GET DEATILS CHECK:', response?.data);
+
       setData(response.data);
-      return null;
+      // return null;
     } catch (error) {
       console.log(error, 'error from onboarding forms');
-      return null;
+      // return null;
     }
   };
 

@@ -5,6 +5,7 @@ const initialState: TCredentialsLogin = {
   username: '',
   password: '',
   email: '',
+  mobileNumber: '',
 };
 
 const credentialSlice = createSlice({
@@ -17,6 +18,7 @@ const credentialSlice = createSlice({
       state.username = action.payload.username;
       state.password = action.payload.password;
       state.email = action.payload.email;
+      state.mobileNumber = action.payload.mobileNumber;
     },
     clearCredentials: () => {
       return { ...initialState };

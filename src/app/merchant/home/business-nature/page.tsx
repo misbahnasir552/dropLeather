@@ -1,7 +1,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -28,7 +28,7 @@ import {
 import SuccessModal from '../../../../components/UI/Modal/CustomModal';
 
 const BusinessNature = () => {
-  // const router = useRouter();
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useAppDispatch();
   // const [selectedOption, setSelectedOption] = useState('');
@@ -39,11 +39,8 @@ const BusinessNature = () => {
   const corporateJourneyType = useAppSelector(
     (state: any) => state.corporateJourneyType,
   );
-  // const { journeyType } = corporateJourneyType;
-  // const [uploads, setUploads] = useState<Array<File | null>>([null]);
   console.log('business nature type', corporateJourneyType);
   const userData = useAppSelector((state) => state.auth);
-  // const formData = new FormData();
 
   // useEffect(() => {
   //   console.log('uploadsss', uploads);
@@ -132,28 +129,65 @@ const BusinessNature = () => {
   // console.log(selectedCheckValue, 'MULTI SELECT OPTION');
 
   // const dispatch = useAppDispatch();
+  // corporate Options business nature
+  // const options = [
+  //   {
+  //     value: 'soleProprietor',
+  //     label: 'Sole-Proprietorship',
+  //     endpoint: 'soleBusinessDetails'
+  //   },
+  //   {
+  //     value: 'publicAndPrivateLtd',
+  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
+  //     endpoint: 'pnpBusinessDetails'
+
+  //   },
+  //   {
+  //     value: 'partnership',
+  //     label:
+  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+  //     endpoint: 'partnershipBusinessDetails'
+  //   },
+  //   {
+  //     value: 'g2p',
+  //     label: 'Government Accounts / Autonomous Body',
+  //     endpoint: 'otherBusinessDetails'
+  //   },
+  //   {
+  //     value: 'ngoNpoCharities',
+  //     label:
+  //     'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+  //     endpoint: 'nncBusinessDetails',
+  //   },
+  // ];
+
   const options = [
     {
       value: 'soleProprietor',
       label: 'Sole-Proprietorship',
+      endpoint: 'soleBusinessDetails',
     },
     {
       value: 'publicAndPrivateLtd',
       label: 'Private Limited / Public Limited / SMC - Private Limited',
+      endpoint: 'pnpBusinessDetails',
     },
     {
       value: 'partnership',
       label:
         'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+      endpoint: 'partnershipBusinessDetails',
     },
     {
       value: 'g2p',
       label: 'Government Accounts / Autonomous Body',
+      endpoint: 'otherBusinessDetails',
     },
     {
       value: 'ngoNpoCharities',
       label:
         'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+      endpoint: 'nncBusinessDetails',
     },
   ];
   const [windowSize, setWindowSize] = useState({
@@ -221,8 +255,10 @@ const BusinessNature = () => {
     );
 
     const businessType = selectedOption?.value;
+    const businessEndpoint = selectedOption?.endpoint;
 
     values.businessTypeNature = businessType;
+    values.businessEndpoint = businessEndpoint;
 
     // if (values.typeOfRequest) {
     dispatch(setBusinessNature(values));
@@ -233,45 +269,56 @@ const BusinessNature = () => {
 
       if (userData?.userType) {
         const response = await apiClient.get(
-          `/corporate/getPageInfo/${businessType}`,
+          `/merchant/getPageInfo/${businessType}`,
         );
         console.log('FIELDS DATA Corporate: ', response);
         dispatch(setPageData(response.data));
-
-        if (
-          values?.selfServeProducts.includes('self_salaryDisbursement') ||
-          values?.selfServeProducts.includes('self_bulkTransactions') ||
-          values?.othersProducts.includes('Disbursement API')
-        ) {
-          setTitle('Account Type Confirmation');
-          setDescription(
-            'Based on your product(s) selection, Easypaisa Branchless Banking and Telenor Bank Account will be created.',
-          );
-          // setDescription('T24 account & EWP high contention account creation.');
-          setShowModal(true);
-        } else if (
-          values?.corporateProducts.includes('currentAccount') ||
-          values?.corporateProducts.includes('savingAccount') ||
-          values?.managedDisbursementProducts.includes(
-            'managed_salaryDisbursement',
-          ) ||
-          values?.managedDisbursementProducts.includes(
-            'managed_bulkTransactions',
-          ) ||
-          values?.othersProducts.includes('Payment Collection')
-        ) {
-          setTitle('Account Type Confirmation');
-          setDescription(
-            'Based on your product(s) selection, Telenor Bank Account will be created.',
-          );
+        if (response?.data?.responseCode === '009') {
+          router.push('/merchant/home/business-nature/activity-information');
+        } else if (response?.data?.responseCode === '000') {
+          setTitle('Error Occured');
+          setDescription(response?.data?.responseDescription);
           setShowModal(true);
         } else {
-          setTitle('Account Type Confirmation');
-          setDescription(
-            'Based on your product(s) selection, Easypaisa Branchless Banking Account will be created.',
-          );
+          setTitle('Error Occured');
+          setDescription(response?.data?.responseDescription);
           setShowModal(true);
         }
+
+        // if (
+        //   values?.selfServeProducts.includes('self_salaryDisbursement') ||
+        //   values?.selfServeProducts.includes('self_bulkTransactions') ||
+        //   values?.othersProducts.includes('Disbursement API')
+        // ) {
+        //   setTitle('Account Type Confirmation');
+        //   setDescription(
+        //     'Based on your product(s) selection, Easypaisa Branchless Banking and Telenor Bank Account will be created.',
+        //   );
+        //   // setDescription('T24 account & EWP high contention account creation.');
+        //   setShowModal(true);
+        // } else if (
+        //   values?.corporateProducts.includes('currentAccount') ||
+        //   values?.corporateProducts.includes('savingAccount') ||
+        //   values?.managedDisbursementProducts.includes(
+        //     'managed_salaryDisbursement',
+        //   ) ||
+        //   values?.managedDisbursementProducts.includes(
+        //     'managed_bulkTransactions',
+        //   ) ||
+        //   values?.othersProducts.includes('Payment Collection')
+        // ) {
+        //   setTitle('Account Type Confirmation');
+        //   setDescription(
+        //     'Based on your product(s) selection, Telenor Bank Account will be created.',
+        //   );
+        //   setShowModal(true);
+        // } else {
+        //   setTitle('Account Type Confirmation');
+        //   setDescription(
+        //     'Based on your product(s) selection, Easypaisa Branchless Banking Account will be created.',
+        //   );
+        //   setShowModal(true);
+        // }
         // router.push('/merchant/home/business-nature/application-form');
       }
       //  else {
@@ -323,7 +370,10 @@ const BusinessNature = () => {
         // router.push('/merchant/home/business-nature/application-form');
         // }
       }
-    } catch (e) {
+    } catch (e: any) {
+      setTitle('Network Error!');
+      setDescription(e.errorMessage);
+      setShowModal(true);
       console.log('Error fetching fields Data:', e);
     } finally {
       setIsSubmitting(false);

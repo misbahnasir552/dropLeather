@@ -6,7 +6,7 @@ import React from 'react';
 import CorporateTimeline from '@/components/Timeline/CorporateTimeline/Timeline';
 // import Navbar from '@/components/Navbar/Navbar';
 import Timeline from '@/components/Timeline/Timeline';
-import H7 from '@/components/UI/Headings/H7';
+// import H7 from '@/components/UI/Headings/H7';
 import { useAppSelector } from '@/hooks/redux';
 
 const Layout = ({ children }: any) => {
@@ -23,7 +23,7 @@ const Layout = ({ children }: any) => {
           <Timeline />
         )}
 
-        <H7 textColor="text-secondary-600">Ticket ID: {userData?.ticketId}</H7>
+        {/* <H7 textColor="text-secondary-600">Ticket ID: {userData?.ticketId}</H7> */}
         {/* <Timeline /> */}
         {children}
       </div>

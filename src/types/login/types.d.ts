@@ -41,6 +41,7 @@ type TCredentialsLogin = {
   username: string | undefined;
   password: string | undefined;
   email: string | undefined;
+  mobileNumber?: string | undefined;
 };
 
 type TMerchantDetails = {

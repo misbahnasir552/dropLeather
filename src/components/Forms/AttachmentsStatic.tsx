@@ -83,13 +83,12 @@ const AttachmentsStatic = () => {
       // const jsonBody = JSON.stringify(bodyData);
       // formData.append("managerMobile", userData.managerMobile);
 
-      const response: any = await apiClient.post(
-        `merchant/upload/${userData.email}`,
-        formData,
-        {
-          headers: { Authorization: `Bearer ${userData.jwt}` },
+      const response: any = await apiClient.post(`merchant/upload`, formData, {
+        params: {
+          username: userData?.email,
         },
-      );
+        headers: { Authorization: `Bearer ${userData.jwt}` },
+      });
 
       if (response.data.responseCode === '009') {
         console.log('ATTACHMENT SUCCESS');

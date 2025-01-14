@@ -51,6 +51,7 @@ const OtpLogin = () => {
             username: credentials.username,
             password: credentials.password,
             otp: emailOtp.join(''),
+            messageOtp: smsOtp.join(''),
           },
         },
       );
@@ -133,7 +134,7 @@ const OtpLogin = () => {
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper
           heading={'Enter One Time Password (OTP)'}
-          description={`We've sent verification to your email address (${credentials?.email})`}
+          description={`We've sent verification to your email address (${credentials?.username}) and mobile number (${credentials?.mobileNumber})`}
           show={true}
         />
         <FormLayout>

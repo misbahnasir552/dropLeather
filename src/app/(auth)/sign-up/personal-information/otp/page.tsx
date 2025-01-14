@@ -153,9 +153,13 @@ const OtpInputWithValidation = () => {
               } else if (res.data.responseCode == '000') {
                 // merchant register failure
                 setShowModal(true);
-                setTitle(res.data.responseCode);
+                setTitle('Failure!');
                 setDescription(res.data.responseDescription);
                 setRoute('/sign-up/personal-information/');
+              } else {
+                setShowModal(true);
+                setTitle('Failure!');
+                setDescription(res.data.responseDescription);
               }
             } catch (e) {
               // merchant register request failure
@@ -167,7 +171,7 @@ const OtpInputWithValidation = () => {
           } else {
             // merchant verify otp failure
             setShowModal(true);
-            setTitle(response.data.errorDescription);
+            setTitle('Failure!');
             setDescription(response.data.errorDescription);
             // setRoute('/sign-up/personal-information/otp/');
           }

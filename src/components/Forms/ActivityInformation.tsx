@@ -23,8 +23,10 @@ import type { ActivityFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
 import { generateMD5Hash } from '@/utils/helper';
+import { endpointArray } from '@/utils/merchantForms/helper';
 
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import { buildValidationSchema } from './validations/helper';
 import type { FieldsData } from './validations/types';
@@ -43,6 +45,10 @@ const ActivityInformation = () => {
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const { apiSecret } = userData;
   const router = useRouter();
@@ -142,25 +148,6 @@ const ActivityInformation = () => {
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('activity valuesssssssssssss', values);
     // router.push('?activeTab=additional-information');
-    const endpointArray = [
-      {
-        tab: 'activity-information',
-        endpoint: `/merchant/activity/${userData.email}`,
-      },
-      {
-        tab: 'business-details',
-        endpoint: `/merchant/businessdetails/${userData.email}`,
-      },
-      {
-        tab: 'settlement-details',
-        endpoint: `/merchant/settlementdetails/${userData.email}`,
-      },
-      {
-        tab: 'integration',
-        endpoint: `/merchant/integration/${userData.email}`,
-      },
-      { tab: 'attachments', endpoint: `/merchant/upload/${userData.email}` },
-    ];
 
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
@@ -188,9 +175,31 @@ const ActivityInformation = () => {
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(currentEndpoint, requestBody, {
+            params: {
+              username: userData?.email,
+            },
             headers: { Authorization: `Bearer ${userData.jwt}` },
           });
-          console.log(response);
+          // console.log(response);
+          if (response?.data?.responseCode === '009') {
+            // Navigate to the next tab after successful submission
+            const nextTab = endpointArray[currentIndex + 1]?.tab;
+            if (nextTab) {
+              router.push(`/merchant/home/business-nature/${nextTab}`);
+            } else {
+              console.log(
+                'Form submission completed, no more tabs to navigate.',
+              );
+            }
+          } else if (response?.data?.responseCode === '000') {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          } else {
+            setTitle('Error Occured');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
         }
 
         // Navigate to the next tab after successful submission
@@ -202,65 +211,13 @@ const ActivityInformation = () => {
         }
       } catch (e) {
         console.log('Error in submitting dynamic form', e);
+        setTitle('Network Failed');
+        setDescription('Network failed! Please try again later.');
+        setShowModal(true);
       } finally {
         setSubmitting(false);
       }
     }
-    // const req = {
-    //   businessNature: 'option1',
-    //   managerMobile: userData.managerMobile,
-    //   fatherName: values.fatherName,
-    //   businessName: values.businessName,
-    //   nameOfBusinessOwner: values.businessOwner,
-    //   legalNameOfBusiness: values.legalName,
-    //   dateOfIncorporation: values.incorporationDate,
-    //   ntnNumber: values.ntnNumber,
-    //   purposeOfAccount: values.purposeOfAccount,
-    //   emailAddress: values.emailAddress,
-    //   city: values.city,
-    //   businessAddress: values.businessAddress,
-    //   correspondenceAddress: values.correspondenceAddress,
-    //   primaryPhoneNumber: values.primaryPhoneNumber,
-    //   otherPhoneNumber: values.otherPhoneNumber,
-    //   status: 'Completed',
-    //   terrorFinancing: values.terrorFinancing,
-    //   politicallyExposed: values.politicallyExposed,
-    //   accountHolder: values.accountHolder,
-    //   gender: values.gender,
-    //   citizenship: values.citizenship,
-    //   countryOfResidency: values.residency,
-    // };
-    // const mdRequest = {
-    //   ...req,
-    //   apisecret: apiSecret,
-    // };
-
-    // const md5Hash = generateMD5Hash(mdRequest);
-
-    // try {
-    //   dispatch(setActivityForm(values));
-    //   const response: any = await apiClient.post(
-    //     `merchant/activity/${userData.email}`,
-    //     {
-    //       request: req,
-    //       signature: md5Hash,
-    //     },
-    //     {
-    //       headers: { Authorization: `Bearer ${userData.jwt}` },
-    //     },
-    //   );
-    //   console.log('response activity info', response);
-    //   if (response.data.responseCode === '009') {
-    //     console.log(response, 'Activity Information');
-    //     router.push('/on-boarding/business-details');
-    //   } else {
-    //     console.log('Data submission failure');
-    //   }
-    // } catch (e) {
-    //   console.log(e, 'Error');
-    // }
-
-    // setSubmitting(false);
   };
 
   const handleCheckboxChange = () => {
@@ -269,6 +226,14 @@ const ActivityInformation = () => {
 
   return (
     <>
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
+      />
       <Formik
         initialValues={initialValuesState}
         validationSchema={validationSchemaState}

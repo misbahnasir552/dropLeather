@@ -302,6 +302,7 @@ import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/sett
 
 import DropdownInput from '../UI/Inputs/DropdownInput';
 import ImageInput from '../UI/Inputs/ImageInput';
+import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 
 interface Field {
@@ -365,6 +366,10 @@ const SettlementDetails = () => {
     string | undefined | string[]
   >(undefined);
 
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+
   useEffect(() => {
     const initialValues: InitialValues = {};
     if (currentTab) {
@@ -417,18 +422,29 @@ const SettlementDetails = () => {
     const md5Hash = generateMD5Hash(mdRequest);
     try {
       const response: any = await apiClient.post(
-        `merchant/settlementdetails/${userData.email}`,
+        `merchant/settlementdetails`,
         {
           request: req,
           signature: md5Hash,
         },
-        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+        {
+          params: {
+            username: userData?.email,
+          },
+          headers: { Authorization: `Bearer ${userData?.jwt}` },
+        },
       );
       if (response.data.responseCode === '009') {
         dispatch(setSettlementForm(values));
         router.push('/merchant/home/business-nature/integration');
+      } else if (response?.data?.responseCode === '000') {
+        setTitle('Error Occured');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
       } else {
-        console.log('Data submission failure');
+        setTitle('Error Occured');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
       }
     } catch (e) {
       console.log(e, 'Error');
@@ -438,6 +454,14 @@ const SettlementDetails = () => {
 
   return (
     <div>
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
+      />
       <Formik
         initialValues={initialValuesState}
         validationSchema={SettlementFormInfoSchema}

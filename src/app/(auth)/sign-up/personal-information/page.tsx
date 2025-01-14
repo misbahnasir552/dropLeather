@@ -497,15 +497,13 @@ const PersonalInfo = () => {
       {isLoading && (
         <p className="bg-primary-600 p-4 text-screen-white">LOADING.......</p>
       )}
-      {showModal && (
-        <CustomModal
-          title={title}
-          description={description}
-          show={showModal}
-          setShowModal={setShowModal}
-          // image={displayIcon}
-        />
-      )}
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // image={displayIcon}
+      />
       {option === 'corporatePortal' ? (
         <Formik
           initialValues={corporateSignUpInitialValues}

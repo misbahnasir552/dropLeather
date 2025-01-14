@@ -1,0 +1,19 @@
+export const endpointArray = [
+  {
+    tab: 'activity-information',
+    endpoint: `/merchant/activity`,
+  },
+  {
+    tab: 'business-details',
+    endpoint: `/merchant/`,
+  },
+  {
+    tab: 'settlement-details',
+    endpoint: `/merchant/settlementdetails`,
+  },
+  {
+    tab: 'integration',
+    endpoint: `/merchant/integration`,
+  },
+  { tab: 'attachments', endpoint: `/merchant/upload` },
+];
