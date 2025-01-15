@@ -31,6 +31,18 @@ type Page = {
 //   page: Page;
 // };
 
+const today = new Date();
+// const minAgeDate = new Date(
+//   today.getFullYear() - 18,
+//   today.getMonth(),
+//   today.getDate(),
+// );
+const maxAgeDate = new Date(
+  today.getFullYear() - 120,
+  today.getMonth(),
+  today.getDate(),
+);
+
 export function toCamelCase(str: string) {
   return str
     .toLowerCase() // Ensure all characters are lowercase
@@ -89,6 +101,14 @@ export const buildValidationSchema = (responseFields: Page[]) => {
             );
         } else {
           fieldValidation = Yup.string(); // Default to string validation
+        }
+
+        if (field.type === 'date') {
+          fieldValidation = Yup.date()
+            .required('Please fill the field')
+            .max(new Date(), 'Date cannot be in the future')
+            .min(maxAgeDate, 'Date cannot be more than 120 years ago');
+          // .max(minAgeDate, 'You must be at least 18 years old')
         }
 
         // Apply validation rules

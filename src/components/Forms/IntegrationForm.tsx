@@ -340,6 +340,7 @@ function IntegrationForm() {
         return convertSlugToTitle(item.name) === title;
       });
       setFilteredData(fData);
+      console.log('FDATAAA:', fData);
 
       fData?.forEach((item) => {
         item.categories.forEach((category) => {
@@ -465,11 +466,11 @@ function IntegrationForm() {
               </div>
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
-                  {filteredData?.map((pageItem) => (
-                    <React.Fragment key={pageItem.name}>
+                  {filteredData?.map((pageItem, index) => (
+                    <React.Fragment key={`${pageItem.name}-${index}`}>
                       {pageItem.categories.map((item, itemIndex) => (
                         <FormLayoutDynamic
-                          key={itemIndex}
+                          key={`${pageItem.name}-${itemIndex}`}
                           heading={item.categoryName}
                         >
                           {[...item.fields]
@@ -481,11 +482,13 @@ function IntegrationForm() {
                                   label={field.label}
                                   name={field.name}
                                   type={field.type}
+                                  formik={formik}
+                                  asterik={field.validation.required}
                                   error={field.validation?.errorMessage}
                                 />
-                              ) : // <p>hi</p>
-                              field?.type === 'checkBoxInputMulti' ? (
+                              ) : field?.type === 'checkBoxInputMulti' ? (
                                 <CheckboxInput
+                                  key={fieldIndex}
                                   isMulti
                                   name={field.name}
                                   options={field.validation?.options?.map(

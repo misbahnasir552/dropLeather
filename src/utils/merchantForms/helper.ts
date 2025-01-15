@@ -16,4 +16,5 @@ export const endpointArray = [
     endpoint: `/merchant/integration`,
   },
   { tab: 'attachments', endpoint: `/merchant/upload` },
+  { tab: 'review-form', endpoint: null },
 ];

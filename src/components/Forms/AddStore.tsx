@@ -24,7 +24,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
       prevStores.filter((_: any, i: number) => i !== index),
     );
   };
-  const onSubmit = (values: AddStoreInfo, resetForm: any) => {
+  const onSubmit = (values: AddStoreInfo, { resetForm }: any) => {
     console.log('i am add store component', values);
     setAddStoresValues((prevStores: any) => [...prevStores, values]);
     resetForm();

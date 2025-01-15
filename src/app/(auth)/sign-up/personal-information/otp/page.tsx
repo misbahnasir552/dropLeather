@@ -170,17 +170,17 @@ const OtpInputWithValidation = () => {
             }
           } else {
             // merchant verify otp failure
-            setShowModal(true);
             setTitle('Failure!');
             setDescription(response.data.errorDescription);
+            setShowModal(true);
             // setRoute('/sign-up/personal-information/otp/');
           }
         } catch (e) {
           // merchant verify otp request failure
           console.log(e, 'Merchant OTP Verification Failed');
-          setShowModal(true);
           setTitle('Network Error');
           setDescription('Merchant OTP Verification Failed');
+          setShowModal(true);
         }
       }
     } catch (e: any) {

@@ -22,6 +22,7 @@ import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/add-beneficiary';
+// import ImageInput from '@/components/UI/Inputs/ImageInput';
 
 function AddBeneficiary() {
   const router = useRouter();
@@ -178,6 +179,7 @@ function AddBeneficiary() {
                 <div className="flex w-full justify-end">
                   <Button
                     label="Fetch Title"
+                    isDisabled={!!formik.values.mobileNumber}
                     className="button-secondary h-[14px] w-[120px] px-3 py-[19px] text-xs"
                     onClickHandler={() => handleFetchTitle(formik)}
                   />

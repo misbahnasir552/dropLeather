@@ -752,14 +752,14 @@ const Timeline: React.FC = () => {
       name: 'review-form',
       label: 'Review Form',
       component: <ReviewForm />,
-      status: data?.reviewForm?.status,
+      status: data?.documents?.status,
       svg: (
         <ReviewFormIcon
           color={
             activeTab === 'review-form'
               ? '#21B25F'
               : activeTab !== 'review-form' &&
-                data?.reviewForm?.status === 'Completed'
+                data?.documents?.status === 'Completed'
               ? '#000000'
               : '#6F6B76'
           }

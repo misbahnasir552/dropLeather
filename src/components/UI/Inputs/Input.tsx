@@ -12,7 +12,7 @@ import type { IInput } from '@/interfaces/interface';
 // import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const Input = ({
-  asterik,
+  asterik = false,
   label,
   formik,
   type,
@@ -72,7 +72,7 @@ const Input = ({
           htmlFor={label}
           className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-tight text-secondary-base transition-all duration-100 ease-in-out"
         >
-          {` ${label} ${subString || ''}${asterik ? '*' : ''}`}
+          {`${label} ${subString || ''}${asterik ? '*' : ''}`}
         </label>
         {hasImage && image && (
           <div className="pointer-events-auto absolute right-5 top-[50%] z-10 -translate-y-1/2 will-change-transform">

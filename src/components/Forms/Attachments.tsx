@@ -18,7 +18,7 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 //   AttachmentFormInfoSchema,
 // } from "@/validations/merchant/onBoarding/attachmentInfo";
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
-import { generateMD5Hash } from '@/utils/helper';
+// import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
 import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
@@ -111,46 +111,16 @@ const Attachments = () => {
         formData.append('status', 'Completed');
         console.log('FORM DATAA', formData);
 
-        const response: any = await apiClient.post(
-          `merchant/upload`,
-          formData,
-          {
-            params: { username: userData?.email },
-            headers: { Authorization: `Bearer ${userData.jwt}` },
-          },
-        );
-        console.log(response, 'Attachments');
-        return;
-      }
-      const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      const additionalValues = {
-        ...values,
-        managerMobile: userData?.managerMobile,
-        // businessNature: 'partnership',
-        status: 'Completed',
-      };
-      const mdRequest = {
-        ...additionalValues,
-        apisecret: userData?.apiSecret,
-      };
-      const md5Hash = generateMD5Hash(mdRequest);
-
-      try {
-        if (currentEndpoint) {
-          const response = await apiClient.post(
-            currentEndpoint,
+        try {
+          const response: any = await apiClient.post(
+            `merchant/upload`,
+            formData,
             {
-              request: additionalValues,
-              signature: md5Hash,
-            },
-            {
-              params: {
-                username: userData?.email,
-              },
-              headers: { Authorization: `Bearer ${userData?.jwt}` },
+              params: { username: userData?.email },
+              headers: { Authorization: `Bearer ${userData.jwt}` },
             },
           );
-          console.log(response);
+          console.log(response, 'Attachments');
           if (response?.data?.responseCode === '009') {
             // Navigate to the next tab after successful submission
             const nextTab = endpointArray[currentIndex + 1]?.tab;
@@ -170,15 +140,73 @@ const Attachments = () => {
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
           }
+          // return;
+        } catch (e: any) {
+          console.log('Error in submitting dynamic form', e);
+          setTitle('Network Failed');
+          setDescription('Network failed! Please try again later.');
+          setShowModal(true);
+        } finally {
+          setSubmitting(false);
         }
-      } catch (e) {
-        console.log('Error in submitting dynamic form', e);
-        setTitle('Network Failed');
-        setDescription('Network failed! Please try again later.');
-        setShowModal(true);
-      } finally {
-        setSubmitting(false);
       }
+      // const currentEndpoint = endpointArray[currentIndex]?.endpoint;
+      // const additionalValues = {
+      //   ...values,
+      //   managerMobile: userData?.managerMobile,
+      //   // businessNature: 'partnership',
+      //   status: 'Completed',
+      // };
+      // const mdRequest = {
+      //   ...additionalValues,
+      //   apisecret: userData?.apiSecret,
+      // };
+      // const md5Hash = generateMD5Hash(mdRequest);
+
+      // try {
+      //   if (currentEndpoint) {
+      //     const response = await apiClient.post(
+      //       currentEndpoint,
+      //       {
+      //         request: additionalValues,
+      //         signature: md5Hash,
+      //       },
+      //       {
+      //         params: {
+      //           username: userData?.email,
+      //         },
+      //         headers: { Authorization: `Bearer ${userData?.jwt}` },
+      //       },
+      //     );
+      //     console.log(response);
+      //     if (response?.data?.responseCode === '009') {
+      //       // Navigate to the next tab after successful submission
+      //       const nextTab = endpointArray[currentIndex + 1]?.tab;
+      //       if (nextTab) {
+      //         router.push(`/merchant/home/business-nature/${nextTab}`);
+      //       } else {
+      //         console.log(
+      //           'Form submission completed, no more tabs to navigate.',
+      //         );
+      //       }
+      //     } else if (response?.data?.responseCode === '000') {
+      //       setTitle('Error Occured');
+      //       setDescription(response?.data?.responseDescription);
+      //       setShowModal(true);
+      //     } else {
+      //       setTitle('Error Occured');
+      //       setDescription(response?.data?.responseDescription);
+      //       setShowModal(true);
+      //     }
+      //   }
+      // } catch (e) {
+      //   console.log('Error in submitting dynamic form', e);
+      //   setTitle('Network Failed');
+      //   setDescription('Network failed! Please try again later.');
+      //   setShowModal(true);
+      // } finally {
+      //   setSubmitting(false);
+      // }
     }
   };
 

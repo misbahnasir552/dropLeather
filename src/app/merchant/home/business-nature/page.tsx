@@ -190,10 +190,10 @@ const BusinessNature = () => {
       endpoint: 'nncBusinessDetails',
     },
   ];
-  const [windowSize, setWindowSize] = useState({
-    width: 0,
-    height: 0,
-  });
+  // const [windowSize, setWindowSize] = useState({
+  //   width: 0,
+  //   height: 0,
+  // });
 
   // const fetchData = async () => {
   //   try {
@@ -233,10 +233,10 @@ const BusinessNature = () => {
     // fetchData();
 
     const handleResize = () => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      // setWindowSize({
+      //   width: window.innerWidth,
+      //   height: window.innerHeight,
+      // });
     };
 
     handleResize();
@@ -263,17 +263,16 @@ const BusinessNature = () => {
     // if (values.typeOfRequest) {
     dispatch(setBusinessNature(values));
     dispatch(setCorporateEntity(values?.businessNature));
-    console.log('window size is', windowSize);
     try {
-      console.log('CORPORATE USER ', userData);
+      console.log('<Merchant> USER ', userData);
 
-      if (userData?.userType) {
+      if (userData?.email && businessType) {
         const response = await apiClient.get(
           `/merchant/getPageInfo/${businessType}`,
         );
         console.log('FIELDS DATA Corporate: ', response);
-        dispatch(setPageData(response.data));
         if (response?.data?.responseCode === '009') {
+          dispatch(setPageData(response.data));
           router.push('/merchant/home/business-nature/activity-information');
         } else if (response?.data?.responseCode === '000') {
           setTitle('Error Occured');
@@ -284,91 +283,6 @@ const BusinessNature = () => {
           setDescription(response?.data?.responseDescription);
           setShowModal(true);
         }
-
-        // if (
-        //   values?.selfServeProducts.includes('self_salaryDisbursement') ||
-        //   values?.selfServeProducts.includes('self_bulkTransactions') ||
-        //   values?.othersProducts.includes('Disbursement API')
-        // ) {
-        //   setTitle('Account Type Confirmation');
-        //   setDescription(
-        //     'Based on your product(s) selection, Easypaisa Branchless Banking and Telenor Bank Account will be created.',
-        //   );
-        //   // setDescription('T24 account & EWP high contention account creation.');
-        //   setShowModal(true);
-        // } else if (
-        //   values?.corporateProducts.includes('currentAccount') ||
-        //   values?.corporateProducts.includes('savingAccount') ||
-        //   values?.managedDisbursementProducts.includes(
-        //     'managed_salaryDisbursement',
-        //   ) ||
-        //   values?.managedDisbursementProducts.includes(
-        //     'managed_bulkTransactions',
-        //   ) ||
-        //   values?.othersProducts.includes('Payment Collection')
-        // ) {
-        //   setTitle('Account Type Confirmation');
-        //   setDescription(
-        //     'Based on your product(s) selection, Telenor Bank Account will be created.',
-        //   );
-        //   setShowModal(true);
-        // } else {
-        //   setTitle('Account Type Confirmation');
-        //   setDescription(
-        //     'Based on your product(s) selection, Easypaisa Branchless Banking Account will be created.',
-        //   );
-        //   setShowModal(true);
-        // }
-        // router.push('/merchant/home/business-nature/application-form');
-      }
-      //  else {
-      //   const response = await apiClient.get(
-      //     `/merchant/getPageInfo/${businessType}`,
-      //   );
-      //   console.log('FIELDS DATA Merchant: ', response);
-      //   dispatch(setPageData(response.data));
-      //   router.push('/merchant/home/business-nature/activity-information');
-      // }
-      else {
-        console.log('ELSE CORPORATE USER ', userData);
-
-        // if (userData?.userType) {
-        const response = await apiClient.get(
-          `/corporate/getPageInfo/${businessType}`,
-        );
-        console.log('FIELDS DATA Corporate: ', response);
-        dispatch(setPageData(response.data));
-
-        if (
-          values?.corporateProducts.includes('currentAccount') ||
-          values?.corporateProducts.includes('savingAccount') ||
-          values?.managedDisbursementProducts.includes(
-            'managed_salaryDisbursement',
-          ) ||
-          values?.managedDisbursementProducts.includes(
-            'managed_bulkTransactions',
-          ) ||
-          values?.othersProducts.includes('Payment Collection')
-        ) {
-          setTitle('Account Type');
-          setDescription('Only T24 account creation.');
-          setShowModal(true);
-        } else if (
-          values?.selfServeProducts.includes('self_salaryDisbursement') ||
-          values?.selfServeProducts.includes('self_bulkTransactions') ||
-          values?.othersProducts.includes('Disbursement API')
-        ) {
-          setTitle('Account Type');
-          setDescription('T24 account & EWP high contention account creation.');
-          setShowModal(true);
-        } else {
-          setTitle('Account Type');
-          setDescription('Only Merchant account creation.');
-          setShowModal(true);
-        }
-        // router.push('/merchant/home/business-nature/application-form');
-        // router.push('/merchant/home/business-nature/application-form');
-        // }
       }
     } catch (e: any) {
       setTitle('Network Error!');
@@ -387,7 +301,7 @@ const BusinessNature = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/home/business-nature/application-form"
+        // routeName="/merchant/home/business-nature/application-form"
       />
       <Formik
         initialValues={businessNatureInitialValues}
@@ -416,85 +330,6 @@ const BusinessNature = () => {
                       options={options}
                     />
                   </>
-                  {/* <>
-                    <H6>Products (Select All that are required)</H6>
-                    <H6>Corporate Account</H6>
-                    <div className="grid w-full grid-cols-1 gap-4">
-                      <CheckboxInput
-                        isMulti={true}
-                        name={'corporateProducts'}
-                        options={corporateProducts?.map((option: any) => ({
-                          label: option.label,
-                          value: option.value,
-                          // value: option.label.toLowerCase().replace(/\s+/g, ''),
-                        }))}
-                        form={formik}
-                        error={formik.errors.corporateProducts}
-                        setSelectedCheckValue={setSelectedCheckValue}
-                      />
-                    </div>
-
-                    <H7>Self Serve Portal</H7>
-                    <div className="grid w-full grid-cols-1 gap-4">
-                      <CheckboxInput
-                        isMulti={true}
-                        name={'selfServeProducts'}
-                        options={selfServeProducts?.map((option: any) => ({
-                          label: option.label,
-                          value: option.value,
-                        }))}
-                        form={formik}
-                        error={formik.errors.selfServeProducts}
-                        setSelectedCheckValue={setSelectedCheckValue}
-                      />
-                    </div>
-
-                    <H7>Managed Disbursement</H7>
-                    <div className="grid w-full grid-cols-1 gap-4">
-                      <CheckboxInput
-                        isMulti={true}
-                        name={'managedDisbursementProducts'}
-                        options={managedDisbursementProducts?.map(
-                          (option: any) => ({
-                            label: option.label,
-                            value: option.value,
-                          }),
-                        )}
-                        form={formik}
-                        error={formik.errors.managedDisbursementProducts}
-                        setSelectedCheckValue={setSelectedCheckValue}
-                      />
-                    </div>
-                    <H7>Others</H7>
-                    <div className="grid w-full grid-cols-1 gap-4">
-                      <CheckboxInput
-                        isMulti={true}
-                        name={'othersProducts'}
-                        options={othersProducts?.map((option: any) => ({
-                          label: option.label,
-                          value: option.value,
-                          // value: option.label.toLowerCase().replace(/\s+/g, ''),
-                        }))}
-                        form={formik}
-                        error={formik.errors.othersProducts}
-                        setSelectedCheckValue={setSelectedCheckValue}
-                      />
-                    </div>
-                    <H7>Do you require Cheque Book or RTGS services?</H7>
-                    <div className="grid w-full grid-cols-1 gap-4">
-                      <CheckboxInput
-                        isMulti={false}
-                        name={'chequeBookRequired'}
-                        options={[
-                          { label: 'Yes', value: 'Yes' },
-                          { label: 'No', value: 'No' },
-                        ]}
-                        form={formik}
-                        error={formik.errors.chequeBookRequired}
-                        setSelectedCheckValue={setSelectedCheckValue}
-                      />
-                    </div>
-                  </> */}
                 </div>
               </FormWrapper>
               <div className="flex flex-col justify-center gap-6 sm:items-center sm:px-5 sm:max-md:pt-[12px] md:items-end">

@@ -10,7 +10,7 @@ import Button from '@/components/UI/Button/PrimaryButton';
 // import H6 from "@/components/UI/Headings/H6";
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
-import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 // import FormWrapper from "@/components/UI/Wrappers/FormLayout";
 import { useAppSelector } from '@/hooks/redux';
@@ -26,6 +26,7 @@ import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import { buildValidationSchema } from './validations/helper';
@@ -58,6 +59,7 @@ const ActivityInformation = () => {
   // const ActivityFormInfoInitialValues = GetActivityInfoDetails();
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
+    console.log('Field DATA:::', fieldData);
     if (currentTab) {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
@@ -67,6 +69,7 @@ const ActivityInformation = () => {
         return convertSlugToTitle(item.name) === title;
       });
       setFilteredData(fData);
+      console.log('FDATAAAA:', fData);
 
       fData?.forEach((item) => {
         // if (item.name === "Activity Information") {
@@ -220,8 +223,35 @@ const ActivityInformation = () => {
     }
   };
 
-  const handleCheckboxChange = () => {
-    setChecked(!isChecked);
+  // const handleCheckboxChange = (name: string, formik: any) => {
+  //   setChecked((prevChecked) => {
+  //     const newChecked = !prevChecked;
+
+  //     // Log for debugging
+  //     console.log('AZKA ISSUE 1:', name, formik.values.businessAddress);
+
+  //     // Handle business logic based on the updated state
+  //     if (newChecked && formik.values.businessAddress) {
+  //       formik.setFieldValue(name, formik.values.businessAddress);
+  //     } else {
+  //       formik.setFieldValue(name, '');
+  //     }
+
+  //     return newChecked; // Update the state
+  //   });
+  // };
+
+  const handleCheckboxChange = (name: string, formik: any) => {
+    const newChecked = !isChecked;
+    console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
+    if (formik.values.businessAddress) {
+      setChecked(newChecked);
+    }
+    if (newChecked && formik.values.businessAddress) {
+      formik.setFieldValue(name, formik.values.businessAddress);
+    } else {
+      formik.setFieldValue(name, '');
+    }
   };
 
   return (
@@ -267,11 +297,13 @@ const ActivityInformation = () => {
                                   key={fieldIndex}
                                   label={field.label}
                                   name={field.name}
+                                  placeholder={field.placeholder}
                                   type={field.type}
                                   error={field.validation.errorMessage}
+                                  asterik={field.validation.required}
                                 />
                               ) : field?.type === 'dropDown' ? (
-                                <DropdownInput
+                                <DropdownNew
                                   key={fieldIndex} // Add a key prop to DropdownInput as well
                                   label={field.label}
                                   name={field.name}
@@ -299,7 +331,12 @@ const ActivityInformation = () => {
                                   key={fieldIndex}
                                   description={field.label}
                                   isChecked={isChecked}
-                                  handleCheckboxChange={handleCheckboxChange}
+                                  handleCheckboxChange={() =>
+                                    handleCheckboxChange(
+                                      'correspondenceAddress',
+                                      formik,
+                                    )
+                                  }
                                 />
                               ) : field?.type === 'checkBoxInput' ? (
                                 <CheckboxInput
