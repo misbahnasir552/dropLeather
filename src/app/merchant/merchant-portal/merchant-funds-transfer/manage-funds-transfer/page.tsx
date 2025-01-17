@@ -11,6 +11,7 @@ import H4 from '@/components/UI/Headings/H4';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import type { IManageFundsTransfer } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/interfaces';
@@ -25,6 +26,9 @@ function ManageFundsTransfer() {
     [],
   );
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const fetchRecords = async () => {
     try {
@@ -35,15 +39,26 @@ function ManageFundsTransfer() {
       const response = await apiClient.get(
         '/merchant/getAllFundsTransferRecords',
       );
-      console.log(response?.data?.fundsTransferReportRecords, 'RESPONSE');
-      setAllRecords(response?.data?.fundsTransferReportRecords);
-      const filteredValues = response?.data?.fundsTransferReportRecords.map(
-        ({ msisdn, failureReason, accountType, ...rest }: any) => rest,
-      );
-      setBeneficiaryFilteredData(filteredValues);
+      if (response.data.responseCode === '009') {
+        setAllRecords(response?.data?.fundsTransferReportRecords);
+        console.log(response?.data?.fundsTransferReportRecords, 'RESPONSE');
+        const filteredValues = response?.data?.fundsTransferReportRecords.map(
+          ({ msisdn, failureReason, accountType, ...rest }: any) => rest,
+        );
+        setBeneficiaryFilteredData(filteredValues);
+      } else {
+        setTitle('Error Occured');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
+      }
       // setLoading(false);
-    } catch (e) {
+    } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
+      setTitle('Network Failed');
+      setDescription(e.message);
+      setShowModal(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,6 +151,14 @@ function ManageFundsTransfer() {
 
   return (
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
+      {loading && <BarLoader color="#21B25F" />}
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName="/login"
+      />
       <HeaderWrapper
         heading="Manage Funds Transfer"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"

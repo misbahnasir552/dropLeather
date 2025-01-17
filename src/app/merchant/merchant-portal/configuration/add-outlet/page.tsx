@@ -101,7 +101,7 @@ function AddOutlet() {
       />
       <HeaderWrapper
         heading="Add Outlet"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
         initialValues={addOutletsInitialValues}
@@ -116,7 +116,7 @@ function AddOutlet() {
                   label="Outlet Name"
                   name="outletName"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletName}
                   touched={false}
                 />
                 <DropdownInput
@@ -151,43 +151,43 @@ function AddOutlet() {
                   label="Address"
                   name="address"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.address}
                   touched={false}
                 />
                 <Input
                   label="Manager Name"
                   name="managerName"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.managerName}
                   touched={false}
                 />
 
                 <Input
-                  label="Mangaer Mobile Number"
+                  label="Manager Mobile Number"
                   name="managerMobile"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.managerMobile}
                   touched={false}
                 />
                 <Input
                   label="Outlet POC Name"
                   name="outletPocName"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletPocName}
                   touched={false}
                 />
                 <Input
                   label="Outlet POC Contact Number"
                   name="outletPocContactNumber"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletPocContactNumber}
                   touched={false}
                 />
                 <Input
                   label="Outlet POC Email"
                   name="outletPocEmail"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletPocEmail}
                   touched={false}
                 />
                 {/* <CheckboxInput
@@ -202,14 +202,14 @@ function AddOutlet() {
                   label="Outlet Longitude"
                   name="outletLongitude"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletLongitude}
                   touched={false}
                 />
                 <Input
                   label="Outlet Latitude"
                   name="outletLatitude"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.outletLatitude}
                   touched={false}
                 />
                 <BulkRegisterInput
@@ -229,7 +229,7 @@ function AddOutlet() {
                   label="Number of Tills/QRs/NFC Machines Required"
                   name="numberOfTillsRequired"
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.numberOfTillsRequired}
                   touched={false}
                 />
               </div>

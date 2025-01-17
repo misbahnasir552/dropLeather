@@ -59,7 +59,9 @@ function ViewProductQR() {
       );
       setQrFilteredData(filteredValues);
       // setLoading(false);
-    } catch (e) {
+    } catch (e: any) {
+      setTitle('Network Failure!');
+      setDescription(e.message);
       console.log('Error in fetching dynamic QR list', e);
     }
   };
@@ -67,12 +69,9 @@ function ViewProductQR() {
   const handleDelete = async (id: any) => {
     console.log('Delete row with id:', id);
     try {
-      const response = await apiClient.delete(
-        '/merchantportal/removeDynamicQr',
-        {
-          params: { storeId: id },
-        },
-      );
+      const response = await apiClient.get('/merchantportal/removeDynamicQr', {
+        params: { storeId: id },
+      });
       console.log(response, 'Deleted response');
       if (response?.data?.responseCode === '009') {
         setTitle('Deleted Successfully');
@@ -89,9 +88,9 @@ function ViewProductQR() {
       setTitle('Network Failure!');
       setDescription(e.message);
       console.log('Error in fetching dynamic QR list', e);
+    } finally {
+      setShowModal(true);
     }
-
-    // setRows(rows.filter((row) => row.id !== id));
   };
 
   useEffect(() => {
@@ -159,7 +158,7 @@ function ViewProductQR() {
           />
           <HeaderWrapper
             heading="View Product QR"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+            // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
           />
           <MerchantFormLayout>
             <Formik

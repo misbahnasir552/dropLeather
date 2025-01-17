@@ -14,7 +14,7 @@ export const addTransactionPointInitialValues: AddTransactionPointForm = {
 };
 
 export const addTransactionPointSchema = Yup.object().shape({
-  OutletName: Yup.string(),
+  outletName: Yup.string().required('Please add store'),
   transactionPointNumber: Yup.string(),
   SMSNotificationNumber1: Yup.string(),
   SMSNotificationNumber2: Yup.string(),

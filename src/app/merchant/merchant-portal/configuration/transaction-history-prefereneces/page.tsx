@@ -34,7 +34,7 @@ export default function TransactionHistoryPreferences() {
     <div className="flex flex-col gap-6">
       <HeaderWrapper
         heading="Transaction History Preferences"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <div className="flex flex-col rounded-lg border-[0.5px] border-border-light bg-screen-grey p-[60px]">
         <DualListTable

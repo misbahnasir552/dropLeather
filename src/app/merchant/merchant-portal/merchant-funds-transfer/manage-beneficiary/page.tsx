@@ -7,6 +7,7 @@ import apiClient from '@/api/apiClient';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 // import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 
@@ -15,6 +16,10 @@ function ManageBeneficiary() {
     [],
   );
   const [loading, setLoading] = useState(false);
+
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   // const [filteredParams, setFilteredParams] = useState();
 
   const fetchRecords = async () => {
@@ -25,29 +30,49 @@ function ManageBeneficiary() {
       }, 2000);
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
       console.log(response.data.beneficiaryList, 'RESPONSE');
-      const filteredValues = response?.data?.beneficiaryList.map(
-        ({ ...rest }) => rest,
-      );
-      setBeneficiaryFilteredData(filteredValues);
-      // setLoading(false);
-    } catch (e) {
+      if (response?.data.responseCode === '009') {
+        const filteredValues = response?.data?.beneficiaryList.map(
+          ({ ...rest }) => rest,
+        );
+        setBeneficiaryFilteredData(filteredValues);
+      } else {
+        setTitle('Failure');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      }
+    } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
+      setTitle('Network Failure');
+      setDescription(e.message);
+      setShowModal(true);
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleDelete = async (id: any) => {
     console.log('Delete row with id:', id);
     try {
-      const response = await apiClient.delete('/merchant/deleteBeneficiary', {
+      const response = await apiClient.get('/merchant/removeBeneficiary', {
         params: { beneficiaryId: id },
       });
       console.log(response, 'Deleted response');
-      fetchRecords();
-    } catch (e) {
+      if (response?.data?.responseCode === '009') {
+        setTitle('Successfully Deleted');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
+        fetchRecords();
+      } else {
+        setTitle('Failure');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
+      }
+    } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
+      setTitle('Network Failure');
+      setDescription(e.message);
+      setShowModal(true);
     }
-
-    // setRows(rows.filter((row) => row.id !== id));
   };
 
   useEffect(() => {
@@ -63,14 +88,18 @@ function ManageBeneficiary() {
   ];
   return (
     <div className="flex flex-col gap-6">
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+      />
       <HeaderWrapper
         heading="Manage Beneficiary"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       {loading ? (
-        <>
-          <BarLoader color="#21B25F" />
-        </>
+        <BarLoader color="#21B25F" />
       ) : (
         <>
           {beneficiaryFilteredData.length > 0 ? (

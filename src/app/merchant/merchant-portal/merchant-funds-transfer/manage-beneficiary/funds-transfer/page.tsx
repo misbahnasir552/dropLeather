@@ -22,9 +22,6 @@ import {
 
 function FundsTranfer() {
   const userData = useAppSelector((state: any) => state.auth);
-  // const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
-  //   [],
-  // );
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');

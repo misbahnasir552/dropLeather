@@ -29,7 +29,7 @@ function page() {
       <div className="flex flex-col gap-6">
         <HeaderWrapper
           heading="Capture/Void Transaction"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+          // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
         />
 
         <MerchantFormLayout>

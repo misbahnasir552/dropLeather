@@ -151,7 +151,7 @@ function AddTransactionPoint() {
         />
         <HeaderWrapper
           heading="Add Transaction Point"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+          // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
         />
         <H6>Transaction Point Details</H6>
         <Formik
@@ -168,9 +168,18 @@ function AddTransactionPoint() {
                     label="Outlet Name"
                     name="outletName"
                     formik={formik}
-                    error={'payment method is false'}
-                    touched={false}
-                    options={stores}
+                    error={formik.errors.outletName}
+                    touched={formik.touched.outletName}
+                    options={
+                      stores.length > 1
+                        ? stores
+                        : [
+                            {
+                              value: '',
+                              label: '',
+                            },
+                          ]
+                    }
                   />
 
                   <Input
@@ -246,6 +255,7 @@ function AddTransactionPoint() {
                 />
                 <Button
                   label="Save"
+                  isDisabled={stores.length > 1}
                   type="submit"
                   className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />

@@ -28,7 +28,7 @@ function page() {
       <div className="flex flex-col gap-6">
         <HeaderWrapper
           heading="De-Link Account Report"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+          // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
         />
         <MerchantFormLayout>
           {/* <H6>Transaction Point Details</H6> */}

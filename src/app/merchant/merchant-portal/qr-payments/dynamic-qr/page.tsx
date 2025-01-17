@@ -137,7 +137,7 @@ function AddDynamicQR() {
       />
       <HeaderWrapper
         heading="Dynamic QR"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
         initialValues={dynamicQRInitialValues}

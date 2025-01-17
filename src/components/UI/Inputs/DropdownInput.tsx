@@ -123,7 +123,7 @@ const DropdownInput = ({
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
             // style={{ top: "-100%" }}
           >
-            {options.map(
+            {options?.map(
               (
                 item: {
                   value: string;
