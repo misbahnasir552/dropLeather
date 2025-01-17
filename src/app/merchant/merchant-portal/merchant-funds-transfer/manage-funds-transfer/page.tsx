@@ -138,7 +138,7 @@ function ManageFundsTransfer() {
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
       <HeaderWrapper
         heading="Manage Funds Transfer"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <MerchantFormLayout>
         <Formik

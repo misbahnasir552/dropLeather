@@ -36,14 +36,18 @@ function FundsTranfer() {
     try {
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
       console.log(response.data.beneficiaryList, 'RESPONSE');
-      setRecords(response.data.beneficiaryList);
-      // const filteredValues = response?.data?.beneficiaryList.map(
-      //   ({ ...rest }) => rest,
-      // );
-      // setBeneficiaryFilteredData(filteredValues);
-      // setLoading(false);
-    } catch (e) {
+      if (response?.data.responseCode === '009') {
+        setRecords(response.data.beneficiaryList);
+      } else {
+        setTitle('Failure');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      }
+    } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
+      setTitle('Network Failure');
+      setDescription(e.message);
+      setShowModal(true);
     }
   };
 
@@ -55,9 +59,15 @@ function FundsTranfer() {
     console.log('Fund transfer values: ', values);
     const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
     console.log('RECORDS', records);
+    // const splitStringLastPart = values.beneficiaryAccountNumber?.split('-').pop();
+    const splitStringLastPart = values.beneficiaryAccountNumber
+      ?.split('-')
+      .pop()
+      ?.trim();
+    console.log('splitStringLastPart', `${splitStringLastPart}`);
 
     const selectedOption: any = records?.find(
-      (option: any) => option.value === values.mobileNumber,
+      (option: any) => option.mobileNumber === splitStringLastPart,
     );
     console.log(selectedOption, 'SELECTED OPTION');
 
@@ -86,16 +96,16 @@ function FundsTranfer() {
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
       console.log('Added Successfully', response);
-      if (response?.data.responseCode === '00') {
-        setTitle(response?.data.responseCode);
+      if (response?.data.responseCode === '009') {
+        setTitle('Transfered Successfully!');
         setDescription(response?.data.responseDescription);
         resetForm();
       } else {
-        setTitle(response.data.responseCode);
+        setTitle('Failure');
         setDescription(response.data.responseDescription);
       }
     } catch (e: any) {
-      setTitle(e.code);
+      setTitle('Network Failure');
       setDescription(e.message);
     } finally {
       setIsLoading(false);
@@ -110,7 +120,7 @@ function FundsTranfer() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
       />
       <HeaderWrapper
         heading="Funds Transfer"

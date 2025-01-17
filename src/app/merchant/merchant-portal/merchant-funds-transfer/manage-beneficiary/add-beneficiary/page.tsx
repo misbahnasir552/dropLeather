@@ -110,7 +110,8 @@ function AddBeneficiary() {
       if (response?.data.responseCode === '009') {
         formik?.setFieldValue('accountTitle', response?.data?.accountTitle);
       } else {
-        setTitle('Error fetching OTP');
+        setTitle('Error fetching Title');
+        setDescription(response.data.responseDescription);
         setShowModal(true);
       }
     } catch (e) {
@@ -181,7 +182,7 @@ function AddBeneficiary() {
 
       <HeaderWrapper
         heading="Add Beneficiary"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
         initialValues={addBeneficiaryInitialValues}

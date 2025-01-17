@@ -65,7 +65,7 @@ function ManageBeneficiary() {
     <div className="flex flex-col gap-6">
       <HeaderWrapper
         heading="Manage Beneficiary"
-        description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       {loading ? (
         <>
