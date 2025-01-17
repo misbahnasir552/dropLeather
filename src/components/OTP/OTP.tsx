@@ -182,6 +182,8 @@ function OTP({
     initialCount: expiryTime,
   });
   const signupForm = useAppSelector((state: any) => state.signup);
+  const userData = useAppSelector((state: any) => state.auth);
+
   // const credentials = useAppSelector((state: any) => state.loginCredentials);
 
   useEffect(() => {
@@ -201,7 +203,7 @@ function OTP({
     try {
       if (medium === 'sms') {
         const response = await apiClient.post('merchant/mobileotp', {
-          managerMobile: signupForm.managerMobile,
+          managerMobile: signupForm.managerMobile || userData?.managerMobile,
         });
         if (response.data.responseCode === '000') {
           setOtpError(response.data.responseDescription);
@@ -212,9 +214,11 @@ function OTP({
         }
         console.log('sms otp response is', response);
       } else {
+        console.log('userdata email', userData.email);
+
         const response = await apiClient.post('merchant/emailotp', {
-          managerMobile: signupForm.managerMobile,
-          email: signupForm.email,
+          managerMobile: signupForm.managerMobile || userData?.managerMobile,
+          email: signupForm.email || userData?.email,
         });
         console.log('email otp response is', response);
         if (response.data.responseCode === '000') {

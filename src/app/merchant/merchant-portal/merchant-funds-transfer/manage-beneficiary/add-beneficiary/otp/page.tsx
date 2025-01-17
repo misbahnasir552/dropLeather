@@ -1,7 +1,8 @@
 'use client';
 
 // import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
@@ -17,6 +18,7 @@ import { generateMD5Hash } from '@/utils/helper';
 const OtpInputWithValidation = () => {
   const userData = useAppSelector((state) => state.auth);
   const addBeneficiaryForm = useAppSelector((state) => state.addBeneficiary);
+  const [route, setRoute] = useState('');
 
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
@@ -25,46 +27,46 @@ const OtpInputWithValidation = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchOTP = async () => {
-    try {
-      const additionalValues = {
-        managerMobile: userData?.managerMobile,
-        email: userData?.email,
-      };
-      const mdRequest = {
-        ...additionalValues,
-        apisecret: userData?.apiSecret,
-      };
-      const md5Hash = generateMD5Hash(mdRequest);
-      const requestBody = { request: additionalValues, signature: md5Hash };
-      const response = await apiClient.post(
-        'merchant/sendOtpMerchant',
-        requestBody,
-        {
-          headers: { Authorization: `Bearer ${userData?.jwt}` },
-        },
-      );
-      console.log(response, 'FETCH OTP RESPONSE');
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  // const fetchOTP = async () => {
+  //   try {
+  //     const additionalValues = {
+  //       managerMobile: userData?.managerMobile,
+  //       email: userData?.email,
+  //     };
+  //     const mdRequest = {
+  //       ...additionalValues,
+  //       apisecret: userData?.apiSecret,
+  //     };
+  //     const md5Hash = generateMD5Hash(mdRequest);
+  //     const requestBody = { request: additionalValues, signature: md5Hash };
+  //     const response = await apiClient.post(
+  //       'merchant/sendOtpMerchant',
+  //       requestBody,
+  //       {
+  //         headers: { Authorization: `Bearer ${userData?.jwt}` },
+  //       },
+  //     );
+  //     console.log(response, 'FETCH OTP RESPONSE');
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchOTP();
-  }, []);
+  // useEffect(() => {
+  //   fetchOTP();
+  // }, []);
 
   const handleVerify = async () => {
     try {
       setIsLoading(true);
 
       const response = await apiClient.post('merchant/verifyotp', {
-        rewuest: {
-          managerMobile: userData.managerMobile,
-          email: userData?.email,
-          numberOtp: smsOtp.join(''),
-          emailOtp: emailOtp.join(''),
-        },
+        // rewuest: {
+        managerMobile: userData?.managerMobile,
+        // email: userData?.email,
+        numberOtp: smsOtp.join(''),
+        emailOtp: emailOtp.join(''),
+        // },
       });
       console.log(response);
 
@@ -90,15 +92,19 @@ const OtpInputWithValidation = () => {
             },
           );
           console.log('Added Successfully', response);
-          if (response?.data.responseCode === '00') {
-            setTitle(response?.data.responseCode);
+          if (response?.data.responseCode === '009') {
+            setTitle('Beneficiary Added Successfully');
             setDescription(response?.data.responseDescription);
+            setRoute(
+              '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
+            );
+            // router.push("")
           } else {
-            setTitle(response.data.errorDescription);
+            setTitle('Failed to add Beneficiary');
             setDescription(response.data.errorDescription);
           }
         } catch (e: any) {
-          setTitle(e.code);
+          setTitle('Network Failed');
           setDescription(e.message);
         } finally {
           setIsLoading(false);
@@ -124,12 +130,12 @@ const OtpInputWithValidation = () => {
         //   console.log(e);
         // }
       } else {
-        setTitle(response.data.errorDescription);
+        setTitle('Failed');
         setDescription(response.data.errorDescription);
       }
     } catch (e: any) {
       console.log(e);
-      setTitle(e.code);
+      setTitle('Network Failed');
       setDescription(e.message);
     } finally {
       setIsLoading(false);
@@ -140,13 +146,15 @@ const OtpInputWithValidation = () => {
   return (
     <>
       {isLoading && (
-        <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
+        <BarLoader color="#21B25F" />
+        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
       )}
       <SuccessModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        routeName={route}
       />
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper

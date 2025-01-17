@@ -18,7 +18,7 @@ export const getOnBoardingNavMenu = () => [
   { title: 'Home', link: '/merchant/home', name: '' },
   {
     title: 'Dashboard',
-    link: '/merchant/home',
+    link: '/merchant/merchant-portal/home',
     name: 'merchant-portal',
   },
   // { title: 'Developer', link: '/developer', name: 'developer' },

@@ -1,7 +1,9 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
@@ -26,14 +28,51 @@ import {
 function AddTransactionPoint() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
+  const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [stores, setStores] = useState([]);
 
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(1).fill(null),
   );
+
+  const fetchStores = async () => {
+    try {
+      const response = await apiClient.get('/merchant/stores', {
+        headers: { Authorization: `Bearer ${userData?.jwt}` },
+        params: { merchantEmail: userData?.email },
+      });
+      // setTitle('merchantPortalProfile');
+
+      console.log('STORESS', response?.data);
+      if (response.data.responseCode === '009') {
+        setStores(response?.data);
+      } else if (response.data.responseCode === '000') {
+        setTitle('Error');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      } else {
+        setTitle('Error');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      }
+    } catch (error: any) {
+      console.error('Error fetching merchant stores:', error);
+      setTitle('Network Error');
+      setDescription(error.message);
+      setShowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    if (userData?.email) {
+      fetchStores();
+    }
+  }, [userData?.email]);
+
   const onSubmit = async (values: AddTransactionPointForm) => {
     console.log('i am add transaction point AddTransactionPoint', values);
     const { letterHeadImage, outletName, ...restValues } = values;
@@ -67,6 +106,7 @@ function AddTransactionPoint() {
         if (response?.data.responseCode === '009') {
           setTitle('Success');
           setDescription(response?.data.responseDescription);
+          router.push('/merchant/merchant-portal/qr-payments/dynamic-qr/');
         } else if (response?.data.responseCode === '000') {
           setTitle('Failure');
           setDescription(response?.data.responseDescription);
@@ -77,12 +117,28 @@ function AddTransactionPoint() {
       }
     } catch (e: any) {
       console.log('Network Failure!', e);
-      setTitle(e.code);
+      setTitle('Network Failure');
       setDescription(e.message);
     } finally {
       setShowModal(true);
     }
   };
+
+  if (stores.length < 1) {
+    return (
+      <div className="flex items-center justify-center">
+        <CustomModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+        />
+        <BarLoader color="#21B25F" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex flex-col gap-6">
@@ -114,14 +170,7 @@ function AddTransactionPoint() {
                     formik={formik}
                     error={'payment method is false'}
                     touched={false}
-                    options={[
-                      { value: 'Uzair Store', label: 'Uzair Store' },
-                      { value: 'asdsad', label: 'asdsad' },
-                      { value: 'US', label: 'US' },
-                      { value: 'Afghanistan', label: 'Afghanistan' },
-                      { value: 'Belgium', label: 'Belgium' },
-                      { value: 'Greece', label: 'Greece' },
-                    ]}
+                    options={stores}
                   />
 
                   <Input

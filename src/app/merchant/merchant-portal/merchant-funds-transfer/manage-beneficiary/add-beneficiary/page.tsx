@@ -3,14 +3,16 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
-// import SuccessModal from '@/components/UI/Modal/CustomModal';
+import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -32,17 +34,58 @@ function AddBeneficiary() {
   // const { apiSecret } = userData;
   const [isChecked, setIsChecked] = useState(false);
 
-  // const [showModal, setShowModal] = useState(false);
-  // const [title, setTitle] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [isLoading, setIsLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
 
-  const handleFetchTitle = async (formik: any) => {
+  const fetchOTP = async () => {
     try {
+      setIsLoading(true);
+      const additionalValues = {
+        managerMobile: userData?.managerMobile,
+        email: userData?.email,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = { request: additionalValues, signature: md5Hash };
+      const response = await apiClient.post(
+        'merchant/sendOtpMerchant',
+        requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData?.jwt}` },
+        },
+      );
+      console.log(response, 'FETCH OTP RESPONSE');
+      if (response.data.responseCode === '009') {
+        return true;
+      }
+      setTitle('Error fetching OTP');
+      setShowModal(true);
+      return false;
+    } catch (e: any) {
+      console.log(e);
+      setTitle('Network Failed');
+      setDescription(e.message);
+      setShowModal(true);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFetchTitle = async (formik: any) => {
+    console.log('FETCH TITLEeeee');
+
+    try {
+      setIsLoading(true);
       const additionalValues = {
         bankName: formik.values.bankName,
         accNumber: formik.values.accountNumber,
@@ -64,11 +107,18 @@ function AddBeneficiary() {
       );
       console.log(response, 'FETCH OTHER BANK TITLE');
       console.log(response?.data?.accountTitle, 'accountTitle');
-
-      formik?.setFieldValue('accountTitle', response?.data?.accountTitle);
-      console.log(formik.values, 'After values');
+      if (response?.data.responseCode === '009') {
+        formik?.setFieldValue('accountTitle', response?.data?.accountTitle);
+      } else {
+        setTitle('Error fetching OTP');
+        setShowModal(true);
+      }
     } catch (e) {
       console.log('Fetch details failed', e);
+      setTitle('Network Failed');
+      setShowModal(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,8 +126,10 @@ function AddBeneficiary() {
     console.log('Add beneficiary values', values);
 
     dispatch(addBeneficiaryData(values));
-
-    router.push('otp');
+    const res = await fetchOTP();
+    if (res) {
+      router.push('otp');
+    }
 
     // const additionalValues = {
     //   ...values,
@@ -118,13 +170,14 @@ function AddBeneficiary() {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* <SuccessModal
+      {isLoading && <BarLoader color="#21B25F" />}
+      <SuccessModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
-      /> */}
+        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+      />
 
       <HeaderWrapper
         heading="Add Beneficiary"
@@ -165,7 +218,7 @@ function AddBeneficiary() {
                   error={'hi'}
                   touched={false}
                 /> */}
-                <DropdownInput
+                <DropdownNew
                   label="Bank Name"
                   name={'bankName'}
                   error={formik.errors.bankName}
@@ -179,7 +232,7 @@ function AddBeneficiary() {
                 <div className="flex w-full justify-end">
                   <Button
                     label="Fetch Title"
-                    isDisabled={!!formik.values.mobileNumber}
+                    // isDisabled={!!formik.values.mobileNumber}
                     className="button-secondary h-[14px] w-[120px] px-3 py-[19px] text-xs"
                     onClickHandler={() => handleFetchTitle(formik)}
                   />

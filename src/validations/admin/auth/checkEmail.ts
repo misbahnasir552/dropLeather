@@ -5,7 +5,7 @@ export const checkEmailInitialValues = {
 };
 
 const checkEmailSchema = Yup.object().shape({
-  email: Yup.string().required('Email is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
 });
 
 export default checkEmailSchema;

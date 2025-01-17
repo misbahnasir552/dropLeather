@@ -32,7 +32,7 @@ const Button = ({
       type={type}
       className={`${
         isDisabled
-          ? 'hover:none cursor-not-allowed bg-neutral-black-300'
+          ? 'hover:none bg-neutral-black-300'
           : 'cursor-pointer bg-primary-base'
       } ${className}`}
       disabled={isDisabled}

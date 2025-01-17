@@ -52,21 +52,22 @@ function MerchantFundsTransfer() {
       console.log(response);
 
       if (response.data.responseCode === '009') {
-        setTitle(response.data.responseCode);
+        setTitle('Success');
         setDescription(response.data.responseDescription);
-        setShowModal(false);
+        setShowModal(true);
       } else {
-        setTitle(response.data.errorDescription);
+        setTitle('Failure');
         setDescription(response.data.errorDescription);
-        setShowModal(false);
+        setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);
-      setTitle(e.code);
+      setTitle('Network Failure');
       setDescription(e.message);
+      setShowModal(true);
     } finally {
       setIsLoading(false);
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -99,7 +100,7 @@ function MerchantFundsTransfer() {
           />
           <Button
             isDisabled={!isOtpComplete() || isLoading}
-            label="Login"
+            label="Verify"
             className="button-primary w-[270px] px-3 py-[19px]"
           />
         </div>

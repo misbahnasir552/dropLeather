@@ -34,7 +34,7 @@ export default function CheckEmail() {
         try {
           // send otp call
           const otpResponse = await apiClient.post(
-            `/corporate/send-otp?email=${values.email}`,
+            `/merchant/send-otp?email=${values.email}`,
             {},
             {
               headers: {
@@ -44,21 +44,23 @@ export default function CheckEmail() {
           );
           if (otpResponse?.data.success) {
             router.push(
-              `otp/?expiry=${'2'}&email=${values.email}&option=corporatePortal`,
+              `otp/?expiry=${otpResponse?.data.expirationTime ?? '2'}&email=${
+                values.email
+              }&option=merchant`,
             );
           } else {
             // send otp failure
             setShowModal(true);
-            setTitle(otpResponse?.data.responseCode);
+            setTitle('Error');
             setDescription(otpResponse?.data.responseDescription);
           }
         } catch (e: any) {
           // send otp request failure
           setShowModal(true);
-          setTitle(e.code);
+          setTitle('Network Error');
           setDescription(e.message);
         }
-      } else if (inquiryResponse.data.responseCode === '009') {
+      } else if (inquiryResponse?.data.responseCode === '009') {
         // account doesn't exist flow
         setShowModal(true);
         setTitle('Error!');
@@ -66,13 +68,13 @@ export default function CheckEmail() {
       } else {
         // account doesn't exist flow
         setShowModal(true);
-        setTitle(inquiryResponse.data.responseCode);
+        setTitle("Account doesn't exist");
         setDescription(inquiryResponse.data.responseDescription);
       }
     } catch (e: any) {
       // email inquiry request failure
       setShowModal(true);
-      setTitle(e.code);
+      setTitle('Network Failed');
       setDescription(e.message);
     } finally {
       setIsLoading(false);
@@ -110,7 +112,7 @@ export default function CheckEmail() {
                 <Input
                   label="Email Address"
                   name="email"
-                  type="text"
+                  type="email"
                   error={formik.errors.email}
                   touched={formik.touched.email}
                 />

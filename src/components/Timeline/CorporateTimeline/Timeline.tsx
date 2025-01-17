@@ -69,15 +69,10 @@ const Timeline: React.FC = () => {
 
   const getDetails = async () => {
     try {
-      // const response = await apiClient.get(
-      //   `corporate/corporateFormReview/${userData.email}`,
-      // );
       const response = await apiClient.get(`corporate/corporateFormReview`, {
-        // params: { email: `iqbal.ch@telenorbank.pk` },
         params: { email: userData?.email },
       });
       setData(response.data);
-      // console.log('GET DETAILS:', response.data);
     } catch (error) {
       console.log(error, 'error from onboarding forms');
     }
@@ -97,19 +92,7 @@ const Timeline: React.FC = () => {
       'Application Form': 'Application Form',
       Documents: 'Attachments',
       'Corporate Sole Attachments': 'Attachments',
-      // Add other mappings as needed
     };
-
-    // return fetchedPages
-    //   .map((page) => {
-    //     console.log('IN MAP ', page.name);
-
-    //     const labelToMatch = nameToLabelMapping[page.name];
-    //     console.log('TTTTTT ', tabs);
-
-    //     return tabs.find((tab) => tab.label === labelToMatch);
-    //   })
-    //   .filter((tab) => tab !== undefined) as Tab[];
 
     return fetchedPages
       .map((page) => {
@@ -323,23 +306,8 @@ const Timeline: React.FC = () => {
                       </div>
                     </Link>
                   ) : (
-                    // <div className="cursor-not-allowed" key={index}>
-                    //   <div className="flex cursor-not-allowed justify-center px-[14px] pb-[8px]">
-                    //     <div className="flex w-max rounded-lg border-[1px] border-border-light p-[12px]">
-                    //       {tab.svg}
-                    //     </div>
-                    //   </div>
-                    //   <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
-                    //     {tab.label}
-                    //   </div>
-                    // </div>
-
                     <div className="cursor-not-allowed" key={index}>
                       <div className="flex cursor-not-allowed justify-center px-[14px] pb-[8px]">
-                        {/* <div className="flex w-max rounded-lg border-[1px] border-border-light p-[12px]">
-                      {tab.svg}
-                    </div> */}
-
                         <div
                           key={index}
                           className={`flex w-max rounded-lg border-[1px] ${
