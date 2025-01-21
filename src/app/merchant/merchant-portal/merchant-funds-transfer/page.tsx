@@ -1,5 +1,6 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -14,7 +15,10 @@ import { generateMD5Hash } from '@/utils/helper';
 
 function MerchantFundsTransfer() {
   const userData = useAppSelector((state) => state.auth);
+  const router = useRouter();
   const [otp, setOtp] = useState(new Array(6).fill(''));
+  const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
+
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -23,8 +27,37 @@ function MerchantFundsTransfer() {
   const isOtpComplete = () => {
     // const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
     const isSmsOtpFilled = otp.every((digit) => digit !== '');
+    const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
 
-    return isSmsOtpFilled;
+    return isSmsOtpFilled && isEmailOtpFilled;
+  };
+
+  const handleVerify = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.post('merchant/verifyotp', {
+        managerMobile: userData?.managerMobile,
+        numberOtp: otp.join(''),
+        emailOtp: emailOtp.join(''),
+      });
+      console.log(response);
+      if (response.data.responseCode === '009') {
+        router.push(
+          '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
+        );
+      } else {
+        setTitle('Failed');
+        setDescription(response.data.errorDescription);
+        setShowModal(true);
+      }
+    } catch (e: any) {
+      console.log(e);
+      setTitle('Network Failed');
+      setDescription(e.message);
+      setShowModal(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const fetchOTP = async () => {
@@ -87,21 +120,29 @@ function MerchantFundsTransfer() {
       />
       <HeaderWrapper
         heading="Enter One Time Password (OTP)"
-        description={`We have sent the OTP Verification number to +(${userData?.managerMobile})`}
+        description={`We have sent the OTP Verification number to email ${userData?.email} and mobile number +(${userData?.managerMobile})`}
       />
       <FormLayout>
         <div className="flex flex-col items-center justify-center gap-12">
           <OTP
+            otp={emailOtp}
+            setOtp={setEmailOtp}
+            medium="email"
+            description="Email OTP Verification Code"
+            numberOfDigits={6}
+          />
+          <OTP
             otp={otp}
             setOtp={setOtp}
             medium="sms"
-            description="OTP Verification Code"
+            description="Mobile Number OTP Verification Code"
             numberOfDigits={6}
           />
           <Button
             isDisabled={!isOtpComplete() || isLoading}
             label="Verify"
             className="button-primary w-[270px] px-3 py-[19px]"
+            onClickHandler={handleVerify}
           />
         </div>
       </FormLayout>

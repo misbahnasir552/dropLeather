@@ -53,14 +53,14 @@ export default function ChangePasswordPage() {
       );
       console.log('Added Successfully', response);
       if (response?.data.responseCode === '000') {
-        setTitle(response?.data.responseCode);
+        setTitle('Failure');
         setDescription(response?.data.responseMessage);
       } else {
-        setTitle(response.data.responseCode);
-        setDescription(response.data.responseMessage);
+        setTitle('Success');
+        setDescription(response?.data.responseMessage);
       }
     } catch (e: any) {
-      setTitle(e.code);
+      setTitle('Network Failed');
       setDescription(e.message);
     } finally {
       setIsLoading(false);

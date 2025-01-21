@@ -9,8 +9,8 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { resetFormData } from '@/redux/features/signUpSlice';
+// import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+// import { resetFormData } from '@/redux/features/signUpSlice';
 // import { replaceCountryCodeWithZero } from '@/utils/helper';
 // import apiClient from "@/api/apiClient";
 
@@ -24,121 +24,38 @@ const OtpInputWithValidation = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [route, setRoute] = useState('');
 
-  const signUpForm = useAppSelector((state: any) => state.signup);
-  const dispatch = useAppDispatch();
+  // const signUpForm = useAppSelector((state: any) => state.signup);
+  // const dispatch = useAppDispatch();
 
-  const option = useSearchParams().get('option');
+  // const option = useSearchParams().get('option');
   const emailAddress = useSearchParams().get('email');
 
   const handleVerify = async () => {
     try {
+      // merchant verify otp
       setIsLoading(true);
-      if (option === 'corporatePortal') {
-        // corporate verify otp
-        try {
-          const response = await apiClient.post(
-            `corporate/verify`,
-            {},
-            {
-              params: {
-                email: emailAddress,
-                otp: emailOtp.join(''),
-              },
-            },
-          );
-          console.log(response, 'Verify Corporate');
-          // corporate verify otp success
-          if (response.data.success) {
-            try {
-              const response = await apiClient.get(
-                `/corporate/verifyEmailAddress`,
-                {
-                  params: {
-                    email: emailAddress,
-                  },
-                },
-              );
-              if (response?.data?.responseCode === '009') {
-                setShowModal(true);
-                // setTitle(response?.data.responseCode);
-                setTitle('OTP Verified');
-                setDescription(response?.data.responseMessage);
-                console.log('SUCCESSFULLY VERIFIED');
-                setRoute('/login');
-              } else {
-                setShowModal(true);
-                setTitle('Try Another Password');
-                setDescription(response?.data.responseMessage);
-              }
-            } catch (e: any) {
-              // corporate register request failure
-              setTitle(e.code);
-              setDescription(e.message);
-              console.log(e, 'Failed Corporate registraion!');
-            }
-          }
-          // corporate verify otp failure
-          else {
-            setTitle('Incorrect OTP');
-            setDescription(response.data.responseDescription);
-            // setRoute('/sign-up/personal-information/otp/');
-          }
-        } catch (e) {
-          // corporate verify otp request failure
-          console.log(e, 'Corporate verification failed');
-        }
+      const response = await apiClient.post('merchant/verifyEmailOtpMerchant', {
+        email: emailAddress,
+        emailOtp: emailOtp.join(''),
+      });
+      setShowModal(true);
+      console.log(response);
+      // merchant verify otp success
+      if (response.data.responseCode === '009') {
+        setTitle(response.data.responseMessage);
+        setDescription(response.data.responseDescription);
+        setRoute('/login');
       } else {
-        try {
-          // merchant verify otp
-          const response = await apiClient.post('merchant/verifyotp', {
-            managerMobile: signUpForm.managerMobile,
-            // numberOtp: smsOtp.join(''),
-            emailOtp: emailOtp.join(''),
-          });
-          setShowModal(true);
-          console.log(response);
-          // merchant verify otp success
-          if (response.data.responseCode === '009') {
-            try {
-              // merchant register
-              const res = await apiClient.post(
-                '/merchant/onboard/register',
-                signUpForm,
-              );
-              // merchant register success
-              if (res.data.responseCode == '009') {
-                setTitle(res.data.responseDescription);
-                setDescription(
-                  'Congratulations! You have signed up successfully for the Sandbox account.',
-                );
-                dispatch(resetFormData);
-                setRoute('/login');
-              } else if (res.data.responseCode == '000') {
-                // merchant register failure
-                setShowModal(true);
-                setTitle(res.data.responseCode);
-                setDescription(res.data.responseDescription);
-                setRoute('/sign-up/personal-information/');
-              }
-            } catch (e) {
-              // merchant register request failure
-              console.log(e, 'Merchant registration failed');
-            }
-          } else {
-            // merchant verify otp failure
-            setTitle(response.data.errorDescription);
-            setDescription(response.data.errorDescription);
-            // setRoute('/sign-up/personal-information/otp/');
-          }
-        } catch (e) {
-          // merchant verify otp request failure
-          console.log(e, 'Merchant verification Failed');
-        }
+        // merchant verify otp failure
+        setTitle(response.data.responseMessage);
+        setDescription(response.data.responseDescription);
+        // setRoute('/sign-up/personal-information/otp/');
       }
     } catch (e: any) {
-      console.log(e);
-      setTitle(e.code);
-      setDescription(e.message);
+      // merchant verify otp request failure
+      setTitle('Network Failed');
+      setDescription(e.responseDescription);
+      console.log(e, 'Merchant verification Failed');
     } finally {
       setIsLoading(false);
       setShowModal(true);

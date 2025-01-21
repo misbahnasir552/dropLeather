@@ -53,17 +53,17 @@ function BulkFileUpload() {
           },
         );
         console.log(response);
-        if (response?.data.responseCode === '00') {
-          setTitle(response?.data.responseCode);
+        if (response?.data.responseCode === '009') {
+          setTitle('Success');
           setDescription(response?.data.responseDescription);
           resetForm();
         } else {
-          setTitle(response.data.errorDescription);
+          setTitle('Failed');
           setDescription(response.data.errorDescription);
         }
       }
     } catch (e: any) {
-      setTitle(e.code);
+      setTitle('Network Failed');
       setDescription(e.message);
     } finally {
       setShowModal(true);

@@ -199,6 +199,8 @@ function OTP({
   // const option = searchParams.get('option');
 
   const handleResendOTP = async () => {
+    const paramEmail = searchParams.get('email');
+    const paramNumber = searchParams.get('number');
     resetCounter();
     try {
       if (medium === 'sms') {
@@ -217,8 +219,9 @@ function OTP({
         console.log('userdata email', userData.email);
 
         const response = await apiClient.post('merchant/emailotp', {
-          managerMobile: signupForm.managerMobile || userData?.managerMobile,
-          email: signupForm.email || userData?.email,
+          managerMobile:
+            signupForm.managerMobile || userData?.managerMobile || paramNumber,
+          email: signupForm.email || userData?.email || paramEmail,
         });
         console.log('email otp response is', response);
         if (response.data.responseCode === '000') {

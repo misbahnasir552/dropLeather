@@ -31,7 +31,6 @@ function BulkRegisterInput({
   item,
   selectedFiles,
   setSelectedFiles,
-
   formik,
 }: IFileInput) {
   const [file, setFile] = useState<any>();
@@ -86,7 +85,7 @@ function BulkRegisterInput({
           ) : (
             <label>
               <input
-                className="hidden w-full bg-primary-300 text-warning-300 "
+                className="hidden w-full bg-primary-300 text-danger-base "
                 type="file"
                 multiple
                 name={item.name}

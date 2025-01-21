@@ -119,6 +119,12 @@ function ManageBeneficiary() {
               className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
             />
             <Button
+              label={`Transfer Funds`}
+              // type="submit"
+              routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/funds-transfer"
+              className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+            />
+            <Button
               label={`Add Beneficiary`}
               // type="submit"
               routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/add-beneficiary"

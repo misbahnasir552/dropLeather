@@ -2,10 +2,11 @@
 
 import { Form, Formik } from 'formik';
 // import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 // import H2 from '@/components/UI/Headings/H2';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
@@ -23,6 +24,8 @@ import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payme
 function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
   const userData = useAppSelector((state: any) => state.auth);
+  const [stores, setStores] = useState([]);
+
   const { apiSecret } = userData;
 
   const [showModal, setShowModal] = useState(false);
@@ -77,15 +80,59 @@ function AddDynamicQR() {
     setShowModal(true);
   };
 
+  const fetchStores = async () => {
+    try {
+      const response = await apiClient.get('/merchant/stores', {
+        headers: { Authorization: `Bearer ${userData?.jwt}` },
+        params: { merchantEmail: userData?.email },
+      });
+      // setTitle('merchantPortalProfile');
+
+      console.log('STORESS', response?.data);
+      if (response.data.responseCode === '009') {
+        const filterValues = response?.data?.merchantStores.map(
+          (item: any) => ({
+            label: item.storeName,
+            value: item.storeId,
+          }),
+        );
+        setStores(filterValues);
+      } else if (response.data.responseCode === '000') {
+        setTitle('Error');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      } else {
+        setTitle('Error');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      }
+    } catch (error: any) {
+      console.error('Error fetching merchant stores:', error);
+      setTitle('Network Error');
+      setDescription(error.message);
+      setShowModal(true);
+    }
+  };
+
+  useEffect(() => {
+    if (userData?.email) {
+      fetchStores();
+    }
+  }, [userData?.email]);
+
   // useEffect(() => {
   //   base64ToJpg(base64String);
   //   console.log('Image URL', imageUrl);
   // }, []);
   const onSubmit = async (values: IDynamicQR) => {
     console.log('i am dynamic qr AddDynamicQR', values);
+    const { storeId, ...rest } = values;
+
+    const outlet: any = stores.find((store: any) => store.label === storeId);
 
     const additionalValues = {
-      ...values,
+      ...rest,
+      storeId: outlet.value,
       managerMobile: userData?.managerMobile,
     };
     const mdRequest = {
@@ -144,7 +191,7 @@ function AddDynamicQR() {
         validationSchema={dynamicQRSchema}
         onSubmit={onSubmit}
       >
-        {() => (
+        {(formik) => (
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
@@ -152,36 +199,46 @@ function AddDynamicQR() {
                   label="Product Name"
                   name="productName"
                   type="text"
-                  error={'hi'}
-                  touched={false}
+                  error={formik.errors.productName}
+                  touched={formik.touched.productName}
                 />
                 <Input
                   label="Amount"
                   name="amount"
                   type="text"
-                  error={'hi'}
-                  touched={false}
+                  error={formik.errors.amount}
+                  touched={formik.touched.amount}
                 />
                 <Input
                   label="Product Details"
                   name="productDetails"
                   type="text"
-                  error={'hi'}
-                  touched={false}
+                  error={formik.errors.productDetails}
+                  touched={formik.touched.productDetails}
                 />
                 <Input
                   label="Product Number"
                   name="productNumber"
                   type="text"
-                  error={'hi'}
-                  touched={false}
+                  error={formik.errors.productNumber}
+                  touched={formik.touched.productNumber}
                 />
-                <Input
-                  label="Store Name/ID"
+                <DropdownInput
+                  label="Store Name"
                   name="storeId"
-                  type="text"
-                  error={'hi'}
-                  touched={false}
+                  formik={formik}
+                  error={formik.errors.storeId}
+                  touched={formik.touched.storeId}
+                  options={
+                    stores.length > 0
+                      ? stores
+                      : [
+                          {
+                            value: '',
+                            label: '',
+                          },
+                        ]
+                  }
                 />
               </div>
             </FormLayout>

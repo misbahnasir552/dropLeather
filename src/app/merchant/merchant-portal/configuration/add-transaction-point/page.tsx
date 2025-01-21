@@ -1,7 +1,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -25,15 +25,24 @@ import {
 } from '@/validations/merchant/transactions/addTransactionPoint';
 // import MerchantRecordTable from '@/components/Table/MerchantRecordTable';
 
+// interface Store  {
+//   storeId: string;
+//   storeName: string;
+//   webSiteUrl: string;
+//   paymentEnabled: string;
+//   status: string;
+// }
+
 function AddTransactionPoint() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
-  const router = useRouter();
+  // const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [stores, setStores] = useState([]);
+  const [route, setRoute] = useState('');
 
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(1).fill(null),
@@ -49,7 +58,13 @@ function AddTransactionPoint() {
 
       console.log('STORESS', response?.data);
       if (response.data.responseCode === '009') {
-        setStores(response?.data);
+        const filterValues = response?.data?.merchantStores.map(
+          (item: any) => ({
+            label: item.storeName,
+            value: item.storeId,
+          }),
+        );
+        setStores(filterValues);
       } else if (response.data.responseCode === '000') {
         setTitle('Error');
         setDescription(response.data.responseDescription);
@@ -74,8 +89,13 @@ function AddTransactionPoint() {
   }, [userData?.email]);
 
   const onSubmit = async (values: AddTransactionPointForm) => {
-    console.log('i am add transaction point AddTransactionPoint', values);
+    // console.log('i am add transaction point AddTransactionPoint', values);
     const { letterHeadImage, outletName, ...restValues } = values;
+    console.log('DROPDOWN VAL', outletName, stores);
+
+    const outlet: any = stores.find((store: any) => store.label === outletName);
+    console.log('OUTLET', outlet);
+
     const additionalValues = {
       ...restValues,
       managerMobile: userData?.managerMobile,
@@ -91,8 +111,8 @@ function AddTransactionPoint() {
 
     const formData = new FormData();
     try {
-      if (letterHeadImage) {
-        formData.append('outletName', outletName);
+      if (letterHeadImage && outlet?.value) {
+        formData.append('outletId', outlet?.value);
         formData.append('letterHeadImage', letterHeadImage);
         formData.append('transactionPointDetailsRequestDTO', stringifyRequest);
         const response = await apiClient.post(
@@ -106,7 +126,8 @@ function AddTransactionPoint() {
         if (response?.data.responseCode === '009') {
           setTitle('Success');
           setDescription(response?.data.responseDescription);
-          router.push('/merchant/merchant-portal/qr-payments/dynamic-qr/');
+          setRoute('/merchant/merchant-portal/qr-payments/dynamic-qr/');
+          // router.push();
         } else if (response?.data.responseCode === '000') {
           setTitle('Failure');
           setDescription(response?.data.responseDescription);
@@ -132,7 +153,7 @@ function AddTransactionPoint() {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
-          // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+          routeName={route}
         />
         <BarLoader color="#21B25F" />
       </div>
@@ -171,7 +192,7 @@ function AddTransactionPoint() {
                     error={formik.errors.outletName}
                     touched={formik.touched.outletName}
                     options={
-                      stores.length > 1
+                      stores.length > 0
                         ? stores
                         : [
                             {
@@ -255,7 +276,7 @@ function AddTransactionPoint() {
                 />
                 <Button
                   label="Save"
-                  isDisabled={stores.length > 1}
+                  isDisabled={stores.length > 2}
                   type="submit"
                   className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />

@@ -555,6 +555,15 @@ const SettlementDetails = () => {
                                     formik={formik}
                                     selectedCheckValue={selectedCheckValue}
                                   />
+                                  // <Input
+                                  //   label={field.label}
+                                  //   name={field.name}
+                                  //   type={field.type}
+                                  //   value={formik.values.accountTitle}
+                                  //   // error={formik.errors.accountTitle}
+                                  //   // touched={formik.touched.accountTitle}
+                                  //   isDisabled
+                                  // />
                                 );
                               }
                               return null;

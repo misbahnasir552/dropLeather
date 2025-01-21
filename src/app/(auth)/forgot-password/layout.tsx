@@ -9,7 +9,7 @@ function layout({ children }: ILayouts) {
       <div className="sm:max-md:hidden">
         <BreadCrumb />
       </div>
-      <div className="">{children}</div>;
+      <div className="">{children}</div>
     </div>
   );
 }

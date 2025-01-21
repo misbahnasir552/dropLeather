@@ -468,7 +468,7 @@ const PersonalInfo = () => {
           `/sign-up/personal-information/otp/?expiry=${response.data.expirationTime}`,
         );
       } else {
-        showErrorModal('Failed', response.data.responseMessage);
+        showErrorModal('Failed', response.data.responseDescription);
         setIsSubmitted(false); // Allow retry on failure
       }
     } catch (e: any) {
@@ -543,6 +543,7 @@ const PersonalInfo = () => {
                     name="managerMobile"
                     type="text"
                     asterik
+                    placeholder="92XXXXXXXXXX"
                     error={formik.errors.managerMobile}
                     touched={formik.touched.managerMobile}
                   />

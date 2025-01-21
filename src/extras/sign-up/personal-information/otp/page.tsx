@@ -65,7 +65,7 @@ const OtpInputWithValidation = () => {
           }
         } catch (e: any) {
           console.log(e);
-          setTitle(e.status);
+          setTitle('Network Failed');
           setDescription(e.message);
         }
       } else {
@@ -74,7 +74,7 @@ const OtpInputWithValidation = () => {
       }
     } catch (e: any) {
       console.log(e);
-      setTitle(e.code);
+      setTitle('Network Failed');
       setDescription(e.message);
     } finally {
       setIsLoading(false);

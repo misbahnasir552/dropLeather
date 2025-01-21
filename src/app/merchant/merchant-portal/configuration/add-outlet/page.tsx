@@ -7,7 +7,8 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
-import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
+// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 // import FileInput from '@/components/UI/Inputs/FileInput';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
@@ -117,34 +118,89 @@ function AddOutlet() {
                   name="outletName"
                   type="text"
                   error={formik.errors.outletName}
-                  touched={false}
+                  touched={formik.touched.outletName}
                 />
-                <DropdownInput
+                <DropdownNew
                   label="Region"
                   name="region"
                   formik={formik}
-                  error={'payment method is false'}
-                  touched={false}
+                  error={formik.errors.region}
+                  touched={formik.touched.region}
                   options={[
-                    { value: 'Pakistani', label: 'Pakistani' },
-                    { value: 'US', label: 'US' },
-                    { value: 'Afghanistan', label: 'Afghanistan' },
-                    { value: 'Belgium', label: 'Belgium' },
-                    { value: 'Greece', label: 'Greece' },
+                    { value: 'Punjab', label: 'Punjab' },
+                    { value: 'Sindh', label: 'Sindh' },
+                    {
+                      value: 'Khyber Pakhtunkhwa',
+                      label: 'Khyber Pakhtunkhwa',
+                    },
+                    { value: 'Balochistan', label: 'Balochistan' },
+                    { value: 'Gilgit-Baltistan', label: 'Gilgit-Baltistan' },
+                    {
+                      value: 'Azad Jammu and Kashmir',
+                      label: 'Azad Jammu and Kashmir',
+                    },
+                    {
+                      value: 'Islamabad Capital Territory',
+                      label: 'Islamabad Capital Territory',
+                    },
                   ]}
                 />
-                <DropdownInput
+                <DropdownNew
                   label="City"
                   name="city"
                   formik={formik}
-                  error={'payment method is false'}
-                  touched={false}
+                  error={formik.errors.city}
+                  touched={formik.touched.city}
                   options={[
-                    { value: 'Pakistani', label: 'Pakistani' },
-                    { value: 'US', label: 'US' },
-                    { value: 'Afghanistan', label: 'Afghanistan' },
-                    { value: 'Belgium', label: 'Belgium' },
-                    { value: 'Greece', label: 'Greece' },
+                    { value: 'Islamabad', label: 'Islamabad' },
+                    { value: 'Karachi', label: 'Karachi' },
+                    { value: 'Lahore', label: 'Lahore' },
+                    { value: 'Rawalpindi', label: 'Rawalpindi' },
+                    { value: 'Peshawar', label: 'Peshawar' },
+                    { value: 'Quetta', label: 'Quetta' },
+                    { value: 'Faisalabad', label: 'Faisalabad' },
+                    { value: 'Multan', label: 'Multan' },
+                    { value: 'Hyderabad', label: 'Hyderabad' },
+                    { value: 'Sialkot', label: 'Sialkot' },
+                    { value: 'Bahawalpur', label: 'Bahawalpur' },
+                    { value: 'Gujranwala', label: 'Gujranwala' },
+                    { value: 'Sargodha', label: 'Sargodha' },
+                    { value: 'Sheikhupura', label: 'Sheikhupura' },
+                    { value: 'Mardan', label: 'Mardan' },
+                    { value: 'Kasur', label: 'Kasur' },
+                    { value: 'Rahim Yar Khan', label: 'Rahim Yar Khan' },
+                    { value: 'Jhelum', label: 'Jhelum' },
+                    { value: 'Abbottabad', label: 'Abbottabad' },
+                    { value: 'Okara', label: 'Okara' },
+                    { value: 'Wah Cantt', label: 'Wah Cantt' },
+                    { value: 'Mingora', label: 'Mingora' },
+                    { value: 'Mirpur', label: 'Mirpur' },
+                    { value: 'Nowshera', label: 'Nowshera' },
+                    { value: 'Swabi', label: 'Swabi' },
+                    { value: 'Muzaffarabad', label: 'Muzaffarabad' },
+                    { value: 'Gujrat', label: 'Gujrat' },
+                    { value: 'Dera Ghazi Khan', label: 'Dera Ghazi Khan' },
+                    { value: 'Chiniot', label: 'Chiniot' },
+                    { value: 'Kamoke', label: 'Kamoke' },
+                    { value: 'Toba Tek Singh', label: 'Toba Tek Singh' },
+                    { value: 'Khuzdar', label: 'Khuzdar' },
+                    { value: 'Mansehra', label: 'Mansehra' },
+                    { value: 'Kohat', label: 'Kohat' },
+                    { value: 'Pakpattan', label: 'Pakpattan' },
+                    { value: 'Dera Ismail Khan', label: 'Dera Ismail Khan' },
+                    { value: 'Sahiwal', label: 'Sahiwal' },
+                    { value: 'Chakwal', label: 'Chakwal' },
+                    { value: 'Vehari', label: 'Vehari' },
+                    { value: 'Ghotki', label: 'Ghotki' },
+                    { value: 'Larkana', label: 'Larkana' },
+                    { value: 'Jacobabad', label: 'Jacobabad' },
+                    { value: 'Shikarpur', label: 'Shikarpur' },
+                    { value: 'Khairpur', label: 'Khairpur' },
+                    { value: 'Bannu', label: 'Bannu' },
+                    { value: 'Hafizabad', label: 'Hafizabad' },
+                    { value: 'Sukkur', label: 'Sukkur' },
+                    { value: 'Jamshoro', label: 'Jamshoro' },
+                    { value: 'Narowal', label: 'Narowal' },
                   ]}
                 />
                 <Input
@@ -152,14 +208,14 @@ function AddOutlet() {
                   name="address"
                   type="text"
                   error={formik.errors.address}
-                  touched={false}
+                  touched={formik.touched.address}
                 />
                 <Input
                   label="Manager Name"
                   name="managerName"
                   type="text"
                   error={formik.errors.managerName}
-                  touched={false}
+                  touched={formik.touched.managerName}
                 />
 
                 <Input
@@ -167,28 +223,28 @@ function AddOutlet() {
                   name="managerMobile"
                   type="text"
                   error={formik.errors.managerMobile}
-                  touched={false}
+                  touched={formik.touched.managerMobile}
                 />
                 <Input
                   label="Outlet POC Name"
                   name="outletPocName"
                   type="text"
                   error={formik.errors.outletPocName}
-                  touched={false}
+                  touched={formik.touched.outletPocName}
                 />
                 <Input
                   label="Outlet POC Contact Number"
                   name="outletPocContactNumber"
                   type="text"
                   error={formik.errors.outletPocContactNumber}
-                  touched={false}
+                  touched={formik.touched.outletPocContactNumber}
                 />
                 <Input
                   label="Outlet POC Email"
                   name="outletPocEmail"
                   type="text"
                   error={formik.errors.outletPocEmail}
-                  touched={false}
+                  touched={formik.touched.outletPocEmail}
                 />
                 {/* <CheckboxInput
                   setSelectedCheckValue={setSelectedCheckValue}
@@ -203,14 +259,14 @@ function AddOutlet() {
                   name="outletLongitude"
                   type="text"
                   error={formik.errors.outletLongitude}
-                  touched={false}
+                  touched={formik.touched.outletLongitude}
                 />
                 <Input
                   label="Outlet Latitude"
                   name="outletLatitude"
                   type="text"
                   error={formik.errors.outletLatitude}
-                  touched={false}
+                  touched={formik.touched.outletLatitude}
                 />
                 <BulkRegisterInput
                   key="OutletImage"
@@ -230,7 +286,7 @@ function AddOutlet() {
                   name="numberOfTillsRequired"
                   type="text"
                   error={formik.errors.numberOfTillsRequired}
-                  touched={false}
+                  touched={formik.touched.numberOfTillsRequired}
                 />
               </div>
             </FormLayout>

@@ -43,7 +43,7 @@ export default function ResetPassword() {
       };
       // Replace with actual API call for resetting the password
       const response = await apiClient.post(
-        `/corporate/reset-password`,
+        `/auth/changePasswordMerchant`,
         requestBody,
         {
           headers: { Authorization: `Bearer ${userData.jwt}` },

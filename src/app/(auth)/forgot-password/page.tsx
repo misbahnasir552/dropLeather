@@ -30,30 +30,30 @@ export default function CheckEmail() {
         `/merchant/inquireAllRegisteredUsers?username=${values.email}`,
       );
       // account exist flow
-      if (inquiryResponse.data.responseCode === '000') {
+      if (inquiryResponse?.data.responseCode === '000') {
         try {
           // send otp call
-          const otpResponse = await apiClient.post(
-            `/merchant/send-otp?email=${values.email}`,
-            {},
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            },
+          // const otpResponse = await apiClient.post(
+          //   `/merchant/send-otp?email=${values.email}`,
+          //   {},
+          //   {
+          //     headers: {
+          //       'Content-Type': 'application/json',
+          //     },
+          //   },
+          // );
+          // if (otpResponse?.data.success) {
+          router.push(
+            `otp/?expiry=${inquiryResponse?.data.expirationTime ?? '2'}&email=${
+              values.email
+            }&number=${inquiryResponse?.data.managerMobile}`,
           );
-          if (otpResponse?.data.success) {
-            router.push(
-              `otp/?expiry=${otpResponse?.data.expirationTime ?? '2'}&email=${
-                values.email
-              }&option=merchant`,
-            );
-          } else {
-            // send otp failure
-            setShowModal(true);
-            setTitle('Error');
-            setDescription(otpResponse?.data.responseDescription);
-          }
+          // } else {
+          //   // send otp failure
+          //   setShowModal(true);
+          //   setTitle('Error');
+          //   setDescription(otpResponse?.data.responseDescription);
+          // }
         } catch (e: any) {
           // send otp request failure
           setShowModal(true);
@@ -62,20 +62,20 @@ export default function CheckEmail() {
         }
       } else if (inquiryResponse?.data.responseCode === '009') {
         // account doesn't exist flow
-        setShowModal(true);
         setTitle('Error!');
         setDescription(inquiryResponse.data.responseDescription);
+        setShowModal(true);
       } else {
         // account doesn't exist flow
-        setShowModal(true);
         setTitle("Account doesn't exist");
         setDescription(inquiryResponse.data.responseDescription);
+        setShowModal(true);
       }
     } catch (e: any) {
       // email inquiry request failure
-      setShowModal(true);
       setTitle('Network Failed');
       setDescription(e.message);
+      setShowModal(true);
     } finally {
       setIsLoading(false);
     }
