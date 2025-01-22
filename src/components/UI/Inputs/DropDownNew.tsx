@@ -156,7 +156,7 @@ const DropdownNew = ({
               ) => (
                 <div
                   key={index}
-                  className="dropdown-option flex bg-screen-white px-5 py-[10px] text-base font-normal hover:bg-neutral-white-100 hover:text-base hover:font-medium"
+                  className="dropdown-option flex cursor-pointer bg-screen-white px-5 py-[10px] text-base font-normal hover:bg-neutral-white-100 hover:text-base hover:font-medium"
                   data-value={item.value.split('-')[0]}
                   onClick={() => handleOptionClick(item)}
                 >

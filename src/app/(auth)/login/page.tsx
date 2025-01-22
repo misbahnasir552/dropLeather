@@ -197,6 +197,7 @@
 'use client';
 
 import { Form, Formik, useFormikContext } from 'formik';
+import Cookies from 'js-cookie';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -225,11 +226,12 @@ const NewLogin = () => {
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); // Added state to track button state
   const session = null;
+  const jwt = Cookies.get('jwt');
 
   const fetchUserDetails = async (email: string) => {
     console.log(setLoginResponse);
     try {
-      if (userData?.userType !== 'Corporate') {
+      if (userData?.email && jwt) {
         const getDetailResponse = await apiClient.get(
           `merchant/getdetails/${email}`,
         );

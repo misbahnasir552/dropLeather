@@ -320,7 +320,7 @@ const BusinessNature = () => {
               <FormWrapper>
                 <div className="flex w-full flex-col gap-4">
                   <>
-                    <H6>Type of corporate entities</H6>
+                    <H6>Nature of your business</H6>
                     <DropdownInput
                       label="Select from menu"
                       name="businessNature"

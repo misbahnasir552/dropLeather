@@ -20,6 +20,8 @@ import {
   ipnConfigurationInitialValues,
   ipnConfigurationSchema,
 } from '@/validations/merchant/merchant-portal/account-settings/IPNConfiguration';
+// import { useRouter } from 'next/navigation';
+// import { setLogout } from '@/redux/features/authSlice';
 
 // interface IInitialData {
 //   // id: number;
@@ -34,6 +36,8 @@ export default function IPNConfig() {
   const [selectedItems, setSelectedItems] = useState<IInitialDataMerchant[]>(
     [],
   );
+  // const router = useRouter();
+  // const dispatch = useAppDispatch()
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -92,8 +96,13 @@ export default function IPNConfig() {
         setDescription(response.data.errorDescription);
       }
     } catch (e: any) {
+      console.log('errorrrrrr', e);
       setTitle(e.code);
-      setDescription(e.message);
+      setDescription(e.response.data.responseMessage);
+      // if (e.responseCode === 401) {
+      //   dispatch(setLogout());
+      //   router.push('/login');
+      // }
     } finally {
       setIsLoading(false);
       setShowModal(true);

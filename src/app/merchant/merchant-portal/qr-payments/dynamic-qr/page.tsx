@@ -21,6 +21,9 @@ import {
 } from '@/validations/merchant/merchant-portal/qr-payments/dynamic-qr';
 import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 
+// import DropdownNew from '@/components/UI/Inputs/DropDownNew';
+import { categories } from '../utils/utils';
+
 function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
   const userData = useAppSelector((state: any) => state.auth);
@@ -126,13 +129,17 @@ function AddDynamicQR() {
   // }, []);
   const onSubmit = async (values: IDynamicQR) => {
     console.log('i am dynamic qr AddDynamicQR', values);
-    const { storeId, ...rest } = values;
+    const { storeId, categoryCode, ...rest } = values;
 
     const outlet: any = stores.find((store: any) => store.label === storeId);
+    const categoryNum: any = categories.find(
+      (category: any) => category.label === categoryCode,
+    );
 
     const additionalValues = {
       ...rest,
       storeId: outlet.value,
+      categoryCode: categoryNum.categoryCode,
       managerMobile: userData?.managerMobile,
     };
     const mdRequest = {
@@ -195,6 +202,14 @@ function AddDynamicQR() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
+                <DropdownInput
+                  label="Catoegory"
+                  name="categoryCode"
+                  formik={formik}
+                  error={formik.errors.categoryCode}
+                  touched={formik.touched.categoryCode}
+                  options={categories}
+                />
                 <Input
                   label="Product Name"
                   name="productName"
@@ -208,6 +223,13 @@ function AddDynamicQR() {
                   type="text"
                   error={formik.errors.amount}
                   touched={formik.touched.amount}
+                />
+                <Input
+                  label="Expiration Time (in minutes)"
+                  name="expirationTime"
+                  type="text"
+                  error={formik.errors.expirationTime}
+                  touched={formik.touched.expirationTime}
                 />
                 <Input
                   label="Product Details"

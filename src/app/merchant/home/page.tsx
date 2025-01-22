@@ -102,9 +102,8 @@ const LoginSucessHome = () => {
             )}
           </p>
           <p className="text-base font-normal leading-5 text-secondary-600 sm:max-md:text-sm sm:max-md:leading-[18px] ">
-            Create and modify your easypaisa Corporate Account effortlessly
-            through our user-friendly portal with real-time application status
-            visibility.
+            Create and modify your easypaisa account effortlessly through our
+            user-friendly portal with real-time application status visibility.
           </p>
         </div>
         <div className="flex gap-5 sm:max-md:flex-col sm:max-md:gap-6">

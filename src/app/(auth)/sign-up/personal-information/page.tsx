@@ -366,6 +366,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -597,7 +598,16 @@ const PersonalInfo = () => {
                   <div className="bg-neutral-white-base p-6">
                     <div className="text-xs leading-tight text-secondary-base">
                       In using this website, you are deemed to have read and
-                      agreed to the following terms and conditions.
+                      agreed to the following&nbsp;
+                      <Link
+                        href={
+                          'https://easypay.easypaisa.com.pk/easypay-merchant/faces/pg/site/SignUp.jsf'
+                        }
+                        target="_blank"
+                        className="text-primary-base underline"
+                      >
+                        terms and conditions.
+                      </Link>
                     </div>
                   </div>
                   <CheckboxItem
