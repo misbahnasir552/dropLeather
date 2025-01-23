@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
+import { categories } from '@/app/merchant/merchant-portal/qr-payments/utils/utils';
 import AddIcon from '@/assets/icons/Add.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 // import H6 from "@/components/UI/Headings/H6";
@@ -26,7 +27,21 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
   };
   const onSubmit = (values: AddStoreInfo, { resetForm }: any) => {
     console.log('i am add store component', values);
-    setAddStoresValues((prevStores: any) => [...prevStores, values]);
+    const { category, ...rest } = values;
+    const categoryNum: any = categories.find((category: any) => {
+      console.log('array val', category.label, 'value simple', category);
+
+      return category.label === values.category;
+    });
+    console.log(categoryNum, 'category number');
+
+    const finalStore = {
+      ...rest,
+      category: categoryNum.categoryCode,
+    };
+    console.log('final store:', finalStore);
+
+    setAddStoresValues((prevStores: any) => [...prevStores, finalStore]);
     resetForm();
   };
 
@@ -70,8 +85,8 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                       label="Store Type"
                       name="storeType"
                       options={[
-                        { value: 'Business', label: 'Business' },
-                        { value: 'By anual', label: 'By anual' },
+                        { value: 'Online Payments', label: 'Online Payments' },
+                        { value: 'Retail', label: 'Retail' },
                       ]}
                       formik={formik}
                       error={formik.errors.storeType}
@@ -94,10 +109,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                     <DropdownInput
                       label="Category"
                       name="category"
-                      options={[
-                        { value: 'Online Payments', label: 'Online Payments' },
-                        { value: 'Retail', label: 'Retail' },
-                      ]}
+                      options={categories}
                       formik={formik}
                       error={formik.errors.category}
                       touched={formik.touched.category}

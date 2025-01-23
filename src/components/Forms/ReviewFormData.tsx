@@ -121,7 +121,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Business Details"
-          active="business-information"
+          active="business-details"
           isEditable={isEditable}
         />
         <ReviewFormDataGrid heading="Business Particulars">
@@ -211,7 +211,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Settlement Details"
-          active="settlement-information"
+          active="settlement-details"
           isEditable={isEditable}
         />
         <ReviewFormDataGrid heading="Settlement Details">
@@ -236,7 +236,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Integration"
-          active="integration-information"
+          active="integration"
           isEditable={isEditable}
         />
         <ReviewFormDataGrid heading="Integration Methods (What would you like to integrate)">
@@ -273,7 +273,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Attachments"
-          active="attachments-information"
+          active="attachments"
           isEditable={isEditable}
         />
         <ReviewFormDataGrid heading="Upload Documents">

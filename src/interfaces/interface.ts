@@ -435,7 +435,7 @@ export interface AddOutletForm {
 
 export interface AddTransactionPointForm {
   outletName: string;
-  transactionPointNumber: string;
+  // transactionPointNumber: string;
   smsNotificationNumber1: string;
   smsNotificationNumber2: string;
   smsNotificationNumber3: string;

@@ -203,48 +203,48 @@ function AddTransactionPoint() {
                     }
                   />
 
-                  <Input
+                  {/* <Input
                     label="Transaction Point Number 1"
                     name="transactionPointNumber"
                     type="text"
                     error={formik.errors.outletName}
                     touched={false}
-                  />
+                  /> */}
                   <Input
                     label="SMS Notification Number 1"
                     name="smsNotificationNumber1"
                     type="text"
-                    error={'hi'}
-                    touched={false}
+                    error={formik.errors.smsNotificationNumber1}
+                    touched={formik.touched.smsNotificationNumber1}
                   />
                   <Input
                     label="SMS Notification Number 2"
                     name="smsNotificationNumber2"
                     type="text"
-                    error={'hi'}
-                    touched={false}
+                    error={formik.errors.smsNotificationNumber2}
+                    touched={formik.touched.smsNotificationNumber2}
                   />
 
                   <Input
                     label="SMS Notification Number 3"
                     name="smsNotificationNumber3"
                     type="text"
-                    error={'hi'}
-                    touched={false}
+                    error={formik.errors.smsNotificationNumber3}
+                    touched={formik.touched.smsNotificationNumber3}
                   />
                   <Input
                     label="SMS Notification Number 4"
                     name="smsNotificationNumber4"
                     type="text"
-                    error={'hi'}
-                    touched={false}
+                    error={formik.errors.smsNotificationNumber4}
+                    touched={formik.touched.smsNotificationNumber4}
                   />
                   <Input
                     label="SMS Notification Number 5"
                     name="smsNotificationNumber5"
                     type="text"
-                    error={'hi'}
-                    touched={false}
+                    error={formik.errors.smsNotificationNumber5}
+                    touched={formik.touched.smsNotificationNumber5}
                   />
                   <BulkRegisterInput
                     key="LetterHeadImage"
@@ -276,7 +276,7 @@ function AddTransactionPoint() {
                 />
                 <Button
                   label="Save"
-                  isDisabled={stores.length > 2}
+                  isDisabled={stores.length < 1}
                   type="submit"
                   className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />

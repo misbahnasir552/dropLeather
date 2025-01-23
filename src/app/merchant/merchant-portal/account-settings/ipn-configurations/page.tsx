@@ -68,6 +68,7 @@ export default function IPNConfig() {
 
     const additionalValues = {
       // ...values,
+      url: values.url,
       fieldIds: ids,
       managerMobile: userData?.managerMobile,
     };
@@ -80,19 +81,19 @@ export default function IPNConfig() {
     try {
       // setIsLoading(true);
       const response = await apiClient.post(
-        '/merchant/createIpnConfiguration',
+        '/merchant/addIpnConfiguration',
         requestBody,
         {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
-          params: { url: values.url },
+          // params: { url: values.url },
         },
       );
       console.log('Added Successfully', response);
-      if (response?.data.responseCode === '00') {
-        setTitle(response?.data.responseCode);
+      if (response?.data.responseCode === '009') {
+        setTitle("Success");
         setDescription(response?.data.url);
       } else {
-        setTitle(response.data.errorDescription);
+        setTitle("Failure");
         setDescription(response.data.errorDescription);
       }
     } catch (e: any) {
@@ -115,7 +116,7 @@ export default function IPNConfig() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
       />
       <HeaderWrapper
         heading="IPN Configurations"

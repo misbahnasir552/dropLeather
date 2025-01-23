@@ -4,7 +4,7 @@ import type { AddTransactionPointForm } from '@/interfaces/interface';
 
 export const addTransactionPointInitialValues: AddTransactionPointForm = {
   outletName: '',
-  transactionPointNumber: '',
+  // transactionPointNumber: '',
   smsNotificationNumber1: '',
   smsNotificationNumber2: '',
   smsNotificationNumber3: '',
@@ -15,7 +15,7 @@ export const addTransactionPointInitialValues: AddTransactionPointForm = {
 
 export const addTransactionPointSchema = Yup.object().shape({
   outletName: Yup.string().required('Please add store'),
-  transactionPointNumber: Yup.string(),
+  // transactionPointNumber: Yup.string(),
   SMSNotificationNumber1: Yup.string(),
   SMSNotificationNumber2: Yup.string(),
   SMSNotificationNumber3: Yup.string(),

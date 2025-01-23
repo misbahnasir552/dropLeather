@@ -143,6 +143,12 @@ const BusinessInformation = () => {
       (item) => item.tab === currentTab,
     );
     console.log('BUSINESS NATURE DATAAA:', businessNatureData);
+    if (addStoresValues.length < 1) {
+      setTitle('No Stores Found');
+      setDescription('Please add atleast 1 store to proceed');
+      setShowModal(true);
+      return;
+    }
 
     if (currentIndex !== -1) {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
@@ -227,7 +233,7 @@ const BusinessInformation = () => {
       />
       <Formik
         initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
