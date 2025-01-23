@@ -2,6 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import type { IInitialDataMerchant } from '@/components/MerchantDualListTable';
@@ -48,13 +49,27 @@ export default function IPNConfig() {
 
   const fetchFields = async () => {
     try {
+      setIsLoading(true);
       const response = await apiClient.get('/merchant/getAllIPNFields', {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
       });
       console.log(response, 'RESPONSE FIELDS');
       setInitialData(response?.data);
-    } catch (e) {
+      if (response?.data.responseCode === '009') {
+        setTitle('Success');
+        setDescription(response?.data.responseDescription);
+      } else {
+        setTitle('Failure');
+        setDescription(response.data.responseDescription);
+        setShowModal(true);
+      }
+    } catch (e: any) {
       console.log(e, 'failed field fetch');
+      setTitle(e.code);
+      setDescription(e.response.data.responseMessage);
+      setShowModal(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -90,14 +105,13 @@ export default function IPNConfig() {
       );
       console.log('Added Successfully', response);
       if (response?.data.responseCode === '009') {
-        setTitle("Success");
-        setDescription(response?.data.url);
+        setTitle('Success');
+        setDescription(response?.data.responseDescription);
       } else {
-        setTitle("Failure");
-        setDescription(response.data.errorDescription);
+        setTitle('Failure');
+        setDescription(response.data.responseDescription);
       }
     } catch (e: any) {
-      console.log('errorrrrrr', e);
       setTitle(e.code);
       setDescription(e.response.data.responseMessage);
       // if (e.responseCode === 401) {
@@ -111,6 +125,7 @@ export default function IPNConfig() {
   };
   return (
     <div className="flex flex-col gap-6">
+      {isLoading && <BarLoader color="#21B25F" />}
       <SuccessModal
         title={title}
         description={description}
