@@ -12,10 +12,11 @@ export const addOutletsInitialValues: AddOutletForm = {
   outletPocName: '',
   outletPocContactNumber: '',
   outletPocEmail: '',
-  outletLongitude: '',
-  outletLatitude: '',
+  outletLongitude: 0,
+  outletLatitude: 0,
   outletImage: null,
-  numberOfTillsRequired: '',
+  // numberOfTillsRequired: '',
+  categoryCode: '',
 };
 
 export const addOutletsSchema = Yup.object().shape({
@@ -28,8 +29,9 @@ export const addOutletsSchema = Yup.object().shape({
   outletPocName: Yup.string().required('Please fill this field'),
   outletPocContactNumber: Yup.string().required('Please fill this field'),
   outletPocEmail: Yup.string().required('Please fill this field'),
-  outletLongitude: Yup.string().required('Please fill this field'),
-  outletLatitude: Yup.string().required('Please fill this field'),
+  outletLongitude: Yup.number(),
+  outletLatitude: Yup.number(),
   outletImage: Yup.mixed().required('Please fill this field'),
-  numberOfTillsRequired: Yup.string().required('Please fill this field'),
+  categoryCode: Yup.string().required('Please fill this field'),
+  // numberOfTillsRequired: Yup.string().required('Please fill this field'),
 });

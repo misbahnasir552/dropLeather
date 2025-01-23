@@ -9,7 +9,7 @@ export const dynamicQRInitialValues: IDynamicQR = {
   productNumber: '',
   storeId: '',
   expirationTime: 0,
-  categoryCode: '',
+  // categoryCode: '',
 };
 
 export const dynamicQRSchema = Yup.object().shape({
@@ -19,5 +19,5 @@ export const dynamicQRSchema = Yup.object().shape({
   productNumber: Yup.string().required('Please fill this field'),
   storeId: Yup.string().required('Please fill this field'),
   expirationTime: Yup.number().required('Please fill this field'),
-  categoryCode: Yup.string().required('Please fill this field'),
+  // categoryCode: Yup.string().required('Please fill this field'),
 });

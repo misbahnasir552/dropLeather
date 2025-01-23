@@ -64,7 +64,7 @@ export const setupApiClient = (dispatch: any, router: any) => {
 
       if (error.response?.status === 401) {
         /* eslint-disable-next-line no-alert */
-        alert('Session Timeout. Please login asain to proceed');
+        alert('Session Timeout. Please login again to proceed');
         console.log(
           'Unauthorized Access (401):',
           error.response.status,

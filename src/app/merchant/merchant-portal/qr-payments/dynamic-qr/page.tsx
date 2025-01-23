@@ -22,7 +22,7 @@ import {
 import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 
 // import DropdownNew from '@/components/UI/Inputs/DropDownNew';
-import { categories } from '../utils/utils';
+// import { categories } from '../utils/utils';
 
 function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
@@ -128,18 +128,22 @@ function AddDynamicQR() {
   //   console.log('Image URL', imageUrl);
   // }, []);
   const onSubmit = async (values: IDynamicQR) => {
-    console.log('i am dynamic qr AddDynamicQR', values);
-    const { storeId, categoryCode, ...rest } = values;
+    console.log('AddDynamicQR', values);
+    const {
+      storeId,
+      // categoryCode,
+      ...rest
+    } = values;
 
     const outlet: any = stores.find((store: any) => store.label === storeId);
-    const categoryNum: any = categories.find(
-      (category: any) => category.label === categoryCode,
-    );
+    // const categoryNum: any = categories.find(
+    //   (category: any) => category.label === categoryCode,
+    // );
 
     const additionalValues = {
       ...rest,
       storeId: outlet.value,
-      categoryCode: categoryNum.categoryCode,
+      // categoryCode: categoryNum.categoryCode,
       managerMobile: userData?.managerMobile,
     };
     const mdRequest = {
@@ -202,14 +206,14 @@ function AddDynamicQR() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
-                <DropdownInput
+                {/* <DropdownInput
                   label="Catoegory"
                   name="categoryCode"
                   formik={formik}
                   error={formik.errors.categoryCode}
                   touched={formik.touched.categoryCode}
                   options={categories}
-                />
+                /> */}
                 <Input
                   label="Product Name"
                   name="productName"

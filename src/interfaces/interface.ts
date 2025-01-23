@@ -427,10 +427,11 @@ export interface AddOutletForm {
   outletPocName: string;
   outletPocContactNumber: string;
   outletPocEmail: string;
-  outletLongitude: string;
-  outletLatitude: string;
+  outletLongitude: number;
+  outletLatitude: number;
   outletImage: File | null;
-  numberOfTillsRequired: string;
+  // numberOfTillsRequired: string;
+  categoryCode: string;
 }
 
 export interface AddTransactionPointForm {

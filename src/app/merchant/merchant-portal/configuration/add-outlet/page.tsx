@@ -7,6 +7,7 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 // import FileInput from '@/components/UI/Inputs/FileInput';
@@ -22,6 +23,7 @@ import {
   addOutletsSchema,
 } from '@/validations/merchant/transactions/addOutlet';
 
+import { categories } from '../../qr-payments/utils/utils';
 import {
   azadKashmirCities,
   federalCities,
@@ -40,23 +42,24 @@ function AddOutlet() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  console.log('selected FILESSS', selectedFiles);
   const formData = new FormData();
   const [cities, setCities] = useState(generalCities);
-  // const [region, setRegion] = useState('');
-
-  // const formikRef = useRef<any>(null); // To reference the Formik instance
 
   const onSubmit = async (
     values: AddOutletForm,
     { resetForm }: { resetForm: () => void },
   ) => {
-    console.log('i am outlet AddOutlet', values);
+    console.log('AddOutlet', values);
 
-    const { outletImage, ...restValues } = values;
+    const { outletImage, categoryCode, ...restValues } = values;
+
+    const categoryNum: any = categories.find(
+      (category: any) => category.label === categoryCode,
+    );
 
     const additionalValues = {
       ...restValues,
+      categoryCode: categoryNum.categoryCode,
       sendSms: true,
     };
     const mdRequest = {
@@ -183,6 +186,14 @@ function AddOutlet() {
                     error={formik.errors.outletName}
                     touched={formik.touched.outletName}
                   />
+                  <DropdownInput
+                    label="Catoegory"
+                    name="categoryCode"
+                    formik={formik}
+                    error={formik.errors.categoryCode}
+                    touched={formik.touched.categoryCode}
+                    options={categories}
+                  />
                   <DropdownNew
                     label="Region"
                     name="region"
@@ -294,13 +305,13 @@ function AddOutlet() {
                       icon: AttachmentsIcon,
                     }}
                   />
-                  <Input
+                  {/* <Input
                     label="Number of Tills/QRs/NFC Machines Required"
                     name="numberOfTillsRequired"
                     type="text"
                     error={formik.errors.numberOfTillsRequired}
                     touched={formik.touched.numberOfTillsRequired}
-                  />
+                  /> */}
                 </div>
               </FormLayout>
               <div className="flex w-full justify-end gap-6">

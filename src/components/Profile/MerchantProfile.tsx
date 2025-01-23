@@ -12,11 +12,12 @@ import { useAppSelector } from '@/hooks/redux';
 
 import MerchantPortalProfileTable from '../Table/MerchantPortalProfileTable';
 import H6 from '../UI/Headings/H6';
+import CustomModal from '../UI/Modal/CustomModal';
 
 const MerchantProfile = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const [response, setResponse] = useState(null);
-  const [merchantTitle, setTitle] = useState<
+  const [merchantTitle, setMerchantTitle] = useState<
     'merchantPortalProfile' | 'merchantPortalTransactionProfile'
   >('merchantPortalProfile');
   // State for active tab (either 'stores' or 'transactionPoints')
@@ -24,28 +25,43 @@ const MerchantProfile = () => {
     'stores',
   );
 
-  // API Call for Merchant Stores
-  const fetchMerchantStores = async (userData?: any) => {
-    console.log('User1 ', userData);
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
+  // API Call for Merchant Stores
+  const fetchMerchantStores = async () => {
+    console.log('User1 ', userData);
     try {
       const response = await apiClient.get('/merchant/stores', {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
-        params: { merchantEmail: userData?.jwt },
+        params: { merchantEmail: userData?.email },
       });
-      setTitle('merchantPortalProfile');
-      setResponse(response.data);
-    } catch (error) {
+      setMerchantTitle('merchantPortalProfile');
+      if (response?.data.responseCode === '009') {
+        // setTitle('Success');
+        setResponse(response.data);
+        // setDescription(response?.data.responseDescription);
+        // setRoute('/merchant/merchant-portal/qr-payments/dynamic-qr/');
+        // router.push();
+      } else if (response?.data.responseCode === '000') {
+        setTitle('Failure');
+        setDescription(response?.data.responseDescription);
+        setShowModal(true);
+      } else {
+        setTitle('Failure');
+        setDescription(response.data.errorDescription);
+        setShowModal(true);
+      }
+    } catch (error: any) {
+      setTitle('Network Failure');
+      setDescription(error.message);
+      setShowModal(true);
+
       console.error('Error fetching merchant stores:', error);
     }
   };
 
-  useEffect(() => {
-    if (userData) {
-      setTitle('merchantPortalProfile');
-      fetchMerchantStores(userData);
-    }
-  }, [userData]);
   // API Call for Merchant Transaction Points
   const fetchMerchantTransactionPoints = async () => {
     console.log('User2 ', userData);
@@ -55,12 +71,19 @@ const MerchantProfile = () => {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
         params: { merchantEmail: userData?.email },
       });
-      setTitle('merchantPortalTransactionProfile');
+      setMerchantTitle('merchantPortalTransactionProfile');
       setResponse(response.data);
     } catch (error) {
       console.error('Error fetching transaction points:', error);
     }
   };
+
+  useEffect(() => {
+    if (userData.email) {
+      setMerchantTitle('merchantPortalProfile');
+      fetchMerchantStores();
+    }
+  }, [userData.email]);
 
   // Handle tab click and make respective API call
   const handleTabClick = (tab: 'stores' | 'transactionPoints') => {
@@ -74,6 +97,13 @@ const MerchantProfile = () => {
 
   return (
     <div className="text-gray-700 flex flex-col gap-10 px-[150px] pt-12">
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+      />
       <div className="flex flex-col">
         <H1 className="text-primary-dark">{userData?.name}</H1>
       </div>
