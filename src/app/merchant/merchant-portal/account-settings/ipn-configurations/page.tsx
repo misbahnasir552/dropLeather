@@ -175,6 +175,7 @@ export default function IPNConfig() {
               <Button
                 label="Save"
                 type="submit"
+                isDisabled={selectedItems.length < 1}
                 className="button-primary w-[270px] py-[19px] text-sm leading-tight"
               />
             </div>
