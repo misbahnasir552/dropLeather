@@ -45,7 +45,7 @@ export default function IPNConfig() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(isLoading, 'isloading');
+  console.log(isLoading, 'isloading', selectedItems);
 
   const fetchFields = async () => {
     try {
@@ -54,10 +54,10 @@ export default function IPNConfig() {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
       });
       console.log(response, 'RESPONSE FIELDS');
-      setInitialData(response?.data);
       if (response?.data.responseCode === '009') {
-        setTitle('Success');
-        setDescription(response?.data.responseDescription);
+        setInitialData(response?.data.fieldsDto);
+        // setTitle('Success');
+        // setDescription(response?.data.responseDescription);
       } else {
         setTitle('Failure');
         setDescription(response.data.responseDescription);
@@ -169,13 +169,13 @@ export default function IPNConfig() {
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Cancel"
-                routeName="/login"
+                // routeName="/login"
                 className="button-secondary w-[270px] py-[19px] text-xs leading-tight"
               />
               <Button
                 label="Save"
                 type="submit"
-                isDisabled={selectedItems.length < 1}
+                isDisabled={selectedItems.length < 1 || isLoading}
                 className="button-primary w-[270px] py-[19px] text-sm leading-tight"
               />
             </div>

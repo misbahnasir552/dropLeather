@@ -233,7 +233,7 @@ const BusinessInformation = () => {
       />
       <Formik
         initialValues={initialValuesState}
-        // validationSchema={validationSchemaState}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (

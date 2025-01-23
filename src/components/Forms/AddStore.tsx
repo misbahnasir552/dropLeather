@@ -2,6 +2,7 @@ import { Form, Formik } from 'formik';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
+import { generalCities } from '@/app/merchant/merchant-portal/configuration/add-outlet/utils/data';
 import { categories } from '@/app/merchant/merchant-portal/qr-payments/utils/utils';
 import AddIcon from '@/assets/icons/Add.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -17,6 +18,7 @@ import {
 import DisabledInput from '../StaticFields/DisabledInput';
 import H6 from '../UI/Headings/H6';
 import M7 from '../UI/Headings/M7';
+import DropdownNew from '../UI/Inputs/DropDownNew';
 
 const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
   const [showAddForm, setShowAddForm] = useState(false);
@@ -114,13 +116,10 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                       error={formik.errors.category}
                       touched={formik.touched.category}
                     />
-                    <DropdownInput
+                    <DropdownNew
                       label="City"
                       name="city"
-                      options={[
-                        { value: 'Pakistan', label: 'Pakistan' },
-                        { value: 'India', label: 'India' },
-                      ]}
+                      options={generalCities}
                       formik={formik}
                       error={formik.errors.city}
                       touched={formik.touched.city}
