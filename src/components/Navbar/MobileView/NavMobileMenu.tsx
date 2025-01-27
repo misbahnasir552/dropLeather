@@ -1,11 +1,18 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
+import apiClient from '@/api/apiClient';
 import ChevronRight from '@/assets/icons/chevron-right.svg';
-import { getNavMenu } from '@/components//Navbar/Utils/utils';
+import {
+  getNavMenu,
+  getOnBoardingNavMenu,
+} from '@/components//Navbar/Utils/utils';
 import Button from '@/components/UI/Button/PrimaryButton';
 import NavMobileViewLayout from '@/components/UI/Wrappers/NavMobileViewLayout';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { setLogout } from '@/redux/features/authSlice';
 
 interface INavMobileMenu {
   setIsMobileSubMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -16,7 +23,42 @@ const NavMobileMenu = ({
   setIsMobileSubMenu,
   setIsOpenMenu,
 }: INavMobileMenu) => {
-  const navMenu = getNavMenu();
+  const userData = useAppSelector((state: any) => state.auth);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  let navMenu;
+  if (userData?.email !== '') {
+    navMenu = getOnBoardingNavMenu();
+  } else {
+    navMenu = getNavMenu();
+  }
+  // const navMenu = getNavMenu();
+  const logOut = async () => {
+    console.log("here i'm to log out >");
+
+    try {
+      const response = await apiClient.get(
+        `/auth/expireJwt?email=${userData?.email}`,
+        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+      );
+
+      if (response.data.responseCode === '000') {
+        dispatch(setLogout());
+        router.push('/login');
+
+        // setTimeout(() => {
+        //   dispatch(clearCredentials());
+        //   dispatch(setLogoutOnboarding());
+        //   dispatch(resetFields());
+        // }, 5000);
+      } else {
+        console.error('logout Error:', response);
+      }
+    } catch (error) {
+      console.error('logout Error:', error);
+    }
+  };
   return (
     <NavMobileViewLayout>
       <>
@@ -58,7 +100,7 @@ const NavMobileMenu = ({
           ))}
         </div>
         <div className="flex w-full flex-col items-start justify-center gap-4 border-b border-solid border-border-light px-6 py-8">
-          <div
+          {/* <div
             onClick={() => {
               setIsOpenMenu(false);
             }}
@@ -79,7 +121,13 @@ const NavMobileMenu = ({
               routeName="/login"
               className="button-secondary w-24 px-2 py-[11px] text-xs leading-tight"
             />
-          </div>
+          </div> */}
+          <Button
+            label="Logout"
+            // routeName="/login"
+            onClickHandler={logOut}
+            className="button-secondary w-24 px-2 py-[11px] text-xs leading-tight"
+          />
         </div>
       </>
     </NavMobileViewLayout>

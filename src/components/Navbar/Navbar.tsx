@@ -257,9 +257,21 @@ const Navbar = () => {
           }}
         >
           {isOpenMenu ? (
-            <Image src={CloseIcon} width={24} height={24} alt="closeIcon" />
+            <Image
+              src={CloseIcon}
+              width={24}
+              height={24}
+              alt="closeIcon"
+              className="cursor-pointer"
+            />
           ) : (
-            <Image src={Menu} alt="menu" width={24} height={24} />
+            <Image
+              src={Menu}
+              alt="menu"
+              width={24}
+              height={24}
+              className="cursor-pointer"
+            />
           )}
         </div>
       </div>
