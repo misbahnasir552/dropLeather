@@ -180,6 +180,7 @@ function AddOutlet() {
               <FormLayout formHeading="Outlet Details">
                 <div className="flex flex-col gap-5">
                   <Input
+                    asterik
                     label="Outlet Name"
                     name="outletName"
                     type="text"
@@ -187,7 +188,8 @@ function AddOutlet() {
                     touched={formik.touched.outletName}
                   />
                   <DropdownInput
-                    label="Catoegory"
+                    asterik
+                    label="Category"
                     name="categoryCode"
                     formik={formik}
                     error={formik.errors.categoryCode}
@@ -195,6 +197,7 @@ function AddOutlet() {
                     options={categories}
                   />
                   <DropdownNew
+                    asterik
                     label="Region"
                     name="region"
                     formik={formik}
@@ -220,6 +223,7 @@ function AddOutlet() {
                     ]}
                   />
                   <DropdownNew
+                    asterik
                     label="City"
                     name="city"
                     formik={formik}
@@ -228,6 +232,7 @@ function AddOutlet() {
                     options={cities}
                   />
                   <Input
+                    asterik
                     label="Address"
                     name="address"
                     type="text"
@@ -235,6 +240,7 @@ function AddOutlet() {
                     touched={formik.touched.address}
                   />
                   <Input
+                    asterik
                     label="Manager Name"
                     name="managerName"
                     type="text"
@@ -243,6 +249,7 @@ function AddOutlet() {
                   />
 
                   <Input
+                    asterik
                     label="Manager Mobile Number"
                     name="managerMobile"
                     type="text"
@@ -250,6 +257,7 @@ function AddOutlet() {
                     touched={formik.touched.managerMobile}
                   />
                   <Input
+                    asterik
                     label="Outlet POC Name"
                     name="outletPocName"
                     type="text"
@@ -257,6 +265,7 @@ function AddOutlet() {
                     touched={formik.touched.outletPocName}
                   />
                   <Input
+                    asterik
                     label="Outlet POC Contact Number"
                     name="outletPocContactNumber"
                     type="text"
@@ -264,6 +273,7 @@ function AddOutlet() {
                     touched={formik.touched.outletPocContactNumber}
                   />
                   <Input
+                    asterik
                     label="Outlet POC Email"
                     name="outletPocEmail"
                     type="text"
@@ -293,6 +303,7 @@ function AddOutlet() {
                     touched={formik.touched.outletLatitude}
                   />
                   <BulkRegisterInput
+                    asterik
                     key="OutletImage"
                     selectedFiles={selectedFiles}
                     setSelectedFiles={setSelectedFiles}
@@ -306,6 +317,7 @@ function AddOutlet() {
                     }}
                   />
                   {/* <Input
+                  asterik
                     label="Number of Tills/QRs/NFC Machines Required"
                     name="numberOfTillsRequired"
                     type="text"

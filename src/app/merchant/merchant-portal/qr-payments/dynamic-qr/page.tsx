@@ -28,6 +28,8 @@ function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
   const userData = useAppSelector((state: any) => state.auth);
   const [stores, setStores] = useState([]);
+  const [amount, setAmount] = useState('');
+  const [expirationTime, setExpirationTime] = useState(0);
 
   const { apiSecret } = userData;
 
@@ -163,6 +165,8 @@ function AddDynamicQR() {
       );
       console.log(response, 'Dynamic QR Added');
       if (response?.data.responseCode === '009') {
+        setAmount(values.amount);
+        setExpirationTime(values.expirationTime);
         base64ToJpg(response?.data.qrCode);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
@@ -207,7 +211,7 @@ function AddDynamicQR() {
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
                 {/* <DropdownInput
-                  label="Catoegory"
+                  label="Category"
                   name="categoryCode"
                   formik={formik}
                   error={formik.errors.categoryCode}
@@ -215,6 +219,7 @@ function AddDynamicQR() {
                   options={categories}
                 /> */}
                 <Input
+                  asterik
                   label="Product Name"
                   name="productName"
                   type="text"
@@ -222,6 +227,7 @@ function AddDynamicQR() {
                   touched={formik.touched.productName}
                 />
                 <Input
+                  asterik
                   label="Amount"
                   name="amount"
                   type="text"
@@ -229,27 +235,31 @@ function AddDynamicQR() {
                   touched={formik.touched.amount}
                 />
                 <Input
-                  label="Expiration Time (in minutes)"
+                  asterik
+                  label="Expiration Time (in seconds)"
                   name="expirationTime"
-                  type="text"
+                  type="number"
                   error={formik.errors.expirationTime}
                   touched={formik.touched.expirationTime}
                 />
                 <Input
+                  asterik
                   label="Product Details"
                   name="productDetails"
                   type="text"
                   error={formik.errors.productDetails}
                   touched={formik.touched.productDetails}
                 />
-                <Input
+                {/* <Input
+                asterik
                   label="Product Number"
                   name="productNumber"
                   type="text"
                   error={formik.errors.productNumber}
                   touched={formik.touched.productNumber}
-                />
+                /> */}
                 <DropdownInput
+                  asterik
                   label="Store Name"
                   name="storeId"
                   formik={formik}
@@ -277,6 +287,7 @@ function AddDynamicQR() {
               <Button
                 label="Save"
                 type="submit"
+                // isDisabled={formik.isValid}
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
             </div>
@@ -285,11 +296,13 @@ function AddDynamicQR() {
       </Formik>
       {imageUrl && showModal && (
         <DynamicQRModal
-          title="DYNAMIC QR"
-          description="Scan this QR code to proceed."
+          title="Your Custom QR"
+          description="Your custom QR Code has been created. You can now share the below QR code to receive money."
           show={showModal}
           setShowModal={setShowModal}
           imageUrl={imageUrl} // Pass the QR code image URL here
+          amount={amount}
+          expirationTime={expirationTime}
         />
       )}
     </div>

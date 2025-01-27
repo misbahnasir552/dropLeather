@@ -12,6 +12,7 @@ import H6 from '@/components/UI/Headings/H6';
 import M7 from '../Headings/M7';
 
 export interface IFileInput {
+  asterik?: boolean;
   index?: any;
   className?: string;
   item?: any;
@@ -27,6 +28,7 @@ export interface IFileInput {
 }
 
 function BulkRegisterInput({
+  asterik = false,
   index,
   item,
   selectedFiles,
@@ -71,13 +73,25 @@ function BulkRegisterInput({
       >
         <div>
           {/* <B3>{item.label}hi</B3> */}
-          {item.file ? <B3>{item.label}</B3> : <M7>{item.label}</M7>}
+          {item.file ? (
+            <div className="flex gap-2">
+              <B3>{item.label}</B3>
+              {asterik && <B3 textColor="text-danger-base">*</B3>}
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              {/* <B3>{item.label}</B3> */}
+              <M7>{item.label}</M7>
+              {asterik && <H6 textColor="text-danger-base">*</H6>}
+            </div>
+          )}
 
           <H6 medium={true}>{file ? file?.name : ''}</H6>
         </div>
         <div className="flex align-middle">
           {file ? (
             <Image
+              className="cursor-pointer"
               src={CrossIcon}
               alt="cross-Icon"
               onClick={(e) => handleFileChange(index, e)}
@@ -92,6 +106,7 @@ function BulkRegisterInput({
                 onChange={(e: any) => handleFileChange(index, e)}
               />
               <Image
+                className="cursor-pointer"
                 src={AttachmentsIcon}
                 alt="attachments-Icon"
                 onClick={handleUpload}

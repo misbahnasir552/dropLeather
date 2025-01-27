@@ -10,6 +10,7 @@ import type { IDropdownInput } from '@/interfaces/interface';
 
 import B3 from '../Body/B3';
 import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
+import H6 from '../Headings/H6';
 
 const DropdownNew = ({
   asterik,
@@ -117,12 +118,16 @@ const DropdownNew = ({
             {formik?.values[name] ? (
               <div className="flex w-full flex-col justify-center text-sm  font-medium text-secondary-base">
                 {/* <B3>{label}</B3> */}
-                <B3>{`${label}${asterik ? '*' : ''} `}</B3>
+                <div className="flex gap-2">
+                  <B3>{label}</B3>
+                  {asterik && <B3 textColor="text-danger-base">*</B3>}
+                </div>
                 <div> {formik?.values[name]}</div>
               </div>
             ) : (
-              <div className="flex w-full items-center align-middle text-sm font-medium text-secondary-base">
-                {`${label}${asterik ? '*' : ''} `}
+              <div className="flex w-full items-center gap-2 align-middle text-sm font-medium text-secondary-base">
+                {label}
+                {asterik && <H6 textColor="text-danger-base">*</H6>}
               </div>
             )}
 

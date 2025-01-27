@@ -186,6 +186,7 @@ function AddTransactionPoint() {
                 <div className="flex flex-col gap-5">
                   {/* <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3"></div> */}
                   <DropdownInput
+                    asterik
                     label="Outlet Name"
                     name="outletName"
                     formik={formik}
@@ -202,17 +203,11 @@ function AddTransactionPoint() {
                           ]
                     }
                   />
-
-                  {/* <Input
-                    label="Transaction Point Number 1"
-                    name="transactionPointNumber"
-                    type="text"
-                    error={formik.errors.outletName}
-                    touched={false}
-                  /> */}
                   <Input
+                    asterik
                     label="SMS Notification Number 1"
                     name="smsNotificationNumber1"
+                    placeholder="03XXXXXXXXX"
                     type="text"
                     error={formik.errors.smsNotificationNumber1}
                     touched={formik.touched.smsNotificationNumber1}
@@ -224,7 +219,6 @@ function AddTransactionPoint() {
                     error={formik.errors.smsNotificationNumber2}
                     touched={formik.touched.smsNotificationNumber2}
                   />
-
                   <Input
                     label="SMS Notification Number 3"
                     name="smsNotificationNumber3"
@@ -247,6 +241,7 @@ function AddTransactionPoint() {
                     touched={formik.touched.smsNotificationNumber5}
                   />
                   <BulkRegisterInput
+                    asterik
                     key="LetterHeadImage"
                     selectedFiles={selectedFiles}
                     setSelectedFiles={setSelectedFiles}
@@ -276,7 +271,7 @@ function AddTransactionPoint() {
                 />
                 <Button
                   label="Save"
-                  isDisabled={stores.length < 1}
+                  // isDisabled={stores.length > 0}
                   type="submit"
                   className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />

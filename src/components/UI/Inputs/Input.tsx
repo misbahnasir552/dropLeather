@@ -9,6 +9,8 @@ import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikError
 // import H7 from '@/components/UI/Headings/H7';
 import type { IInput } from '@/interfaces/interface';
 
+import H6 from '../Headings/H6';
+
 // import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const Input = ({
@@ -72,7 +74,10 @@ const Input = ({
           htmlFor={label}
           className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-tight text-secondary-base transition-all duration-100 ease-in-out"
         >
-          {`${label} ${subString || ''}${asterik ? '*' : ''}`}
+          <div className="flex gap-2">
+            {`${label} ${subString || ''}`}{' '}
+            {asterik && <H6 textColor="text-danger-base">*</H6>}
+          </div>
         </label>
         {hasImage && image && (
           <div className="pointer-events-auto absolute right-5 top-[50%] z-10 -translate-y-1/2 will-change-transform">

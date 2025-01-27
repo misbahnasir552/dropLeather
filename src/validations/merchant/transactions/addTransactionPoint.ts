@@ -16,10 +16,12 @@ export const addTransactionPointInitialValues: AddTransactionPointForm = {
 export const addTransactionPointSchema = Yup.object().shape({
   outletName: Yup.string().required('Please add store'),
   // transactionPointNumber: Yup.string(),
-  SMSNotificationNumber1: Yup.string(),
-  SMSNotificationNumber2: Yup.string(),
-  SMSNotificationNumber3: Yup.string(),
-  SMSNotificationNumber4: Yup.string(),
-  SMSNotificationNumber5: Yup.string(),
+  smsNotificationNumber1: Yup.string()
+    .required('Please fill this field.')
+    .matches(/^03\d{9}$/, 'Number must start with 0 and be exactly 11 digits.'),
+  smsNotificationNumber2: Yup.string(),
+  smsNotificationNumber3: Yup.string(),
+  smsNotificationNumber4: Yup.string(),
+  smsNotificationNumber5: Yup.string(),
   letterHeadImage: Yup.mixed(),
 });
