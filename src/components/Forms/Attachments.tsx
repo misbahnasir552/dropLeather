@@ -21,7 +21,8 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
-import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
+import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
+// import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import DropdownInput from '../UI/Inputs/DropdownInput';
 // import ImageInput from "../UI/Inputs/ImageInput";
 import Input from '../UI/Inputs/Input';
@@ -35,10 +36,10 @@ const Attachments = () => {
   const [filteredData, setFilteredData] = useState<any>();
   const [pageTitle, setPageTitle] = useState<any>();
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
 
   // const userData = useAppSelector((state: any) => state.auth);
-  const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
+  const [selectedFiles, setSelectedFiles] = useState<Array<File[] | null>>(
     Array(5).fill(null),
   );
 
@@ -79,7 +80,7 @@ const Attachments = () => {
       const validationSchema = buildValidationSchema(fData);
       console.log('Vaidation schema result', validationSchema);
 
-      // setValidationSchemaState(validationSchema);
+      setValidationSchemaState(validationSchema);
     }
   }, [currentTab]);
 
@@ -103,20 +104,48 @@ const Attachments = () => {
     if (currentIndex !== -1) {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
       if (currentIndex === 4) {
-        Object.keys(values).forEach((key) => {
-          if (values[key]) {
-            formData.append('files', values[key]);
+        // tested running code without labels
+        // Object.keys(values).forEach((key) => {
+        //   if (values[key]) {
+        //     formData.append('files', values[key]);
+        //   }
+        // });
+        Object.entries(values).forEach(([key, value]) => {
+          console.log('OB VAL ', value, key);
+
+          // Find the corresponding label from filteredData
+          let label: string | undefined;
+          filteredData?.forEach((item: any) => {
+            item.categories.forEach((category: any) => {
+              category.fields.forEach((field: any) => {
+                if (field?.name === key) {
+                  label = field?.label; // Match the key with the field's name
+                }
+              });
+            });
+          });
+          if (label && Array.isArray(value)) {
+            console.log('LABEL ', label);
+
+            value.forEach((file: any) => {
+              formData.append(label!, file); // Use the label here
+            });
           }
         });
-        formData.append('status', 'Completed');
+
+        // formData.append('status', 'Completed');
         console.log('FORM DATAA', formData);
 
         try {
           const response: any = await apiClient.post(
-            `merchant/upload`,
+            `merchant/saveMerchantDocuments`,
             formData,
             {
-              params: { username: userData?.email },
+              params: {
+                merchantEmail: userData?.email,
+                status: 'Completed',
+                resetFiles: false,
+              },
               headers: { Authorization: `Bearer ${userData.jwt}` },
             },
           );
@@ -150,63 +179,6 @@ const Attachments = () => {
           setSubmitting(false);
         }
       }
-      // const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      // const additionalValues = {
-      //   ...values,
-      //   managerMobile: userData?.managerMobile,
-      //   // businessNature: 'partnership',
-      //   status: 'Completed',
-      // };
-      // const mdRequest = {
-      //   ...additionalValues,
-      //   apisecret: userData?.apiSecret,
-      // };
-      // const md5Hash = generateMD5Hash(mdRequest);
-
-      // try {
-      //   if (currentEndpoint) {
-      //     const response = await apiClient.post(
-      //       currentEndpoint,
-      //       {
-      //         request: additionalValues,
-      //         signature: md5Hash,
-      //       },
-      //       {
-      //         params: {
-      //           username: userData?.email,
-      //         },
-      //         headers: { Authorization: `Bearer ${userData?.jwt}` },
-      //       },
-      //     );
-      //     console.log(response);
-      //     if (response?.data?.responseCode === '009') {
-      //       // Navigate to the next tab after successful submission
-      //       const nextTab = endpointArray[currentIndex + 1]?.tab;
-      //       if (nextTab) {
-      //         router.push(`/merchant/home/business-nature/${nextTab}`);
-      //       } else {
-      //         console.log(
-      //           'Form submission completed, no more tabs to navigate.',
-      //         );
-      //       }
-      //     } else if (response?.data?.responseCode === '000') {
-      //       setTitle('Error Occured');
-      //       setDescription(response?.data?.responseDescription);
-      //       setShowModal(true);
-      //     } else {
-      //       setTitle('Error Occured');
-      //       setDescription(response?.data?.responseDescription);
-      //       setShowModal(true);
-      //     }
-      //   }
-      // } catch (e) {
-      //   console.log('Error in submitting dynamic form', e);
-      //   setTitle('Network Failed');
-      //   setDescription('Network failed! Please try again later.');
-      //   setShowModal(true);
-      // } finally {
-      //   setSubmitting(false);
-      // }
     }
   };
 
@@ -222,7 +194,7 @@ const Attachments = () => {
       />
       <Formik
         initialValues={initialValuesState}
-        // validationSchema={validationSchemaState}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -298,7 +270,17 @@ const Attachments = () => {
                                     }
                                     if (field?.type === 'file') {
                                       return (
-                                        <BulkRegisterInput
+                                        // <BulkRegisterInput
+                                        //   asterik={field.validation.required}
+                                        //   key={field.name}
+                                        //   selectedFiles={selectedFiles}
+                                        //   setSelectedFiles={setSelectedFiles}
+                                        //   index={fieldIndex}
+                                        //   formik={formik}
+                                        //   item={field}
+                                        // />
+                                        <CorporateFileInput
+                                          asterik={field.validation.required}
                                           key={field.name}
                                           selectedFiles={selectedFiles}
                                           setSelectedFiles={setSelectedFiles}

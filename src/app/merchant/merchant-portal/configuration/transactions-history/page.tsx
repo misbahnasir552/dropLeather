@@ -17,12 +17,16 @@ import {
   searchTransactionsInitialValues,
   searchTransactionsSchema,
 } from '@/validations/merchant/transactions/searchTransactionsSchema';
+// import Pagination from '@/components/Pagination/Pagination';
 // import { useAppSelector } from "@/hooks/redux";
 
 const SearchTransaction = () => {
   // const userData = useAppSelector((state) => state.auth);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
+  // const [pageNumber, setPageNumber] = useState(0);
+  // const [totalPages, setTotalPages] = useState(0);
+
   // console.log(userData, "userData");
   const fetchRecords = async () => {
     try {
@@ -37,10 +41,10 @@ const SearchTransaction = () => {
     }
   };
   useEffect(() => {
-    if (filteredData) {
-      fetchRecords();
-    }
-  }, [filteredData]);
+    // if (filteredData) {
+    fetchRecords();
+    // }
+  }, []);
 
   const options = [
     { value: 'Missing Document', label: 'Missing Document' },
@@ -66,9 +70,12 @@ const SearchTransaction = () => {
     'Order ID',
     'Order Date',
     'Amount (Rs.)',
+    'Store Name',
+    'Store Type',
     'Pyment Mode',
-    'Transaction ID',
+    // 'Transaction ID',
     'Channel',
+    'TP Number',
     'Status',
   ];
 
@@ -368,10 +375,17 @@ const SearchTransaction = () => {
 
       <div>
         {data ? (
-          <SearchTransactionTable
-            tableHeadings={tableHeadings}
-            tableData={data}
-          />
+          <>
+            <SearchTransactionTable
+              tableHeadings={tableHeadings}
+              tableData={data}
+            />
+            {/* <Pagination
+              pageNumber={pageNumber}
+              totalPages={totalPages}
+              onNext={showNextPage}
+              onPrev={showPrevPage} /> */}
+          </>
         ) : (
           <p>No record found</p>
         )}

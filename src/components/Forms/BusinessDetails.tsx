@@ -250,7 +250,8 @@ const BusinessInformation = () => {
                       <React.Fragment key={pageItem.name}>
                         {pageItem.categories.map((item, itemIndex) => (
                           <FormLayoutDynamic
-                            key={itemIndex}
+                            // key={itemIndex}
+                            key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
                             heading={item.categoryName}
                           >
                             {[...item.fields]

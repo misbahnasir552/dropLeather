@@ -304,6 +304,7 @@ const ActivityInformation = () => {
                                 />
                               ) : field?.type === 'dropDown' ? (
                                 <DropdownNew
+                                  asterik={field.validation.required}
                                   key={fieldIndex} // Add a key prop to DropdownInput as well
                                   label={field.label}
                                   name={field.name}
@@ -320,6 +321,7 @@ const ActivityInformation = () => {
                                 />
                               ) : field?.type === 'date' ? (
                                 <DateInputNew
+                                  asterik={field.validation.required}
                                   key={fieldIndex}
                                   formik={formik}
                                   label={field.label}

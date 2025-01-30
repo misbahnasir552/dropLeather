@@ -5,6 +5,8 @@ import React from 'react';
 import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
 import type { IDate } from '@/interfaces/interface';
 
+import H7 from '../Headings/H7';
+
 const DateInputNew = ({
   label,
   name,
@@ -51,7 +53,10 @@ const DateInputNew = ({
           htmlFor={name}
           className="pointer-events-none absolute left-0 top-0 h-full origin-left p-5 text-sm font-medium leading-[18px] text-secondary-base transition-all duration-100 ease-in-out"
         >
-          {` ${label}${asterik ? '*' : ''}`}
+          <div className="flex gap-2">
+            {label}
+            {asterik && <H7 textColor="text-danger-base">*</H7>}
+          </div>
           {/* {label} */}
         </label>
       </div>

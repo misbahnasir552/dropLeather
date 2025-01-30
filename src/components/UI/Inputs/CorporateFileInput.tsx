@@ -119,6 +119,7 @@ import H6 from '@/components/UI/Headings/H6';
 import M7 from '../Headings/M7';
 
 export interface IFileInput {
+  asterik?: boolean;
   index: number | any;
   className?: string;
   item: {
@@ -137,6 +138,7 @@ function CorporateFileInput({
   selectedFiles,
   setSelectedFiles,
   formik,
+  asterik = false,
 }: IFileInput) {
   const handleFileChange = (
     fieldIndex: number,
@@ -188,7 +190,18 @@ function CorporateFileInput({
         className="flex h-[60px] items-center justify-between rounded-lg border-[1px] border-border-light bg-screen-white px-5"
         key={index}
       >
-        {item.file ? <B3>{item.label}</B3> : <M7>{item.label}</M7>}
+        {item.file ? (
+          <div className="flex gap-2">
+            <B3>{item.label}</B3>
+            {asterik && <B3 textColor="text-danger-base">*</B3>}
+          </div>
+        ) : (
+          <div className="flex gap-2">
+            {/* <B3>{item.label}</B3> */}
+            <M7>{item.label}</M7>
+            {asterik && <H6 textColor="text-danger-base">*</H6>}
+          </div>
+        )}
 
         <div className="flex align-middle">
           <label>

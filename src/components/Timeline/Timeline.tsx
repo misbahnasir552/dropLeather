@@ -562,6 +562,7 @@ import React, {
   // useEffect,
   useState,
 } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import ActivityInformation from '@/components/Forms/ActivityInformation';
@@ -635,7 +636,11 @@ const Timeline: React.FC = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Loading...</div>; // Render a loader while waiting for the response
+    return (
+      <div className="flex w-full items-center justify-center">
+        <BarLoader color="#21B25F" />
+      </div>
+    ); // Render a loader while waiting for the response
   }
 
   if (!data) {

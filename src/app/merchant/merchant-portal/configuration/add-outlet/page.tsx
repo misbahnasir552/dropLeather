@@ -189,6 +189,18 @@ function AddOutlet() {
                   />
                   <DropdownInput
                     asterik
+                    label="Store Type"
+                    name="storeType"
+                    options={[
+                      { value: 'Online Payments', label: 'Online Payments' },
+                      { value: 'Retail', label: 'Retail' },
+                    ]}
+                    formik={formik}
+                    error={formik.errors.storeType}
+                    touched={formik.touched.storeType}
+                  />
+                  <DropdownInput
+                    asterik
                     label="Category"
                     name="categoryCode"
                     formik={formik}

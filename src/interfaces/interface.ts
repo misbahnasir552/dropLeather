@@ -432,6 +432,7 @@ export interface AddOutletForm {
   outletImage: File | null;
   // numberOfTillsRequired: string;
   categoryCode: string;
+  storeType: string;
 }
 
 export interface AddTransactionPointForm {

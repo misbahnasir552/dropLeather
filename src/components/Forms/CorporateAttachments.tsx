@@ -306,6 +306,7 @@ const CorporateAttachments = () => {
                                     if (field?.type === 'file') {
                                       return (
                                         <CorporateFileInput
+                                          asterik={field.validation.required}
                                           key={field.name}
                                           selectedFiles={selectedFiles}
                                           setSelectedFiles={setSelectedFiles}

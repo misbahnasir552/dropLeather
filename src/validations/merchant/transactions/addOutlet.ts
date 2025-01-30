@@ -17,10 +17,12 @@ export const addOutletsInitialValues: AddOutletForm = {
   outletImage: null,
   // numberOfTillsRequired: '',
   categoryCode: '',
+  storeType: '',
 };
 
 export const addOutletsSchema = Yup.object().shape({
   outletName: Yup.string().required('Please fill this field'),
+  storeType: Yup.string().required('Please fill this field'),
   region: Yup.string().required('Please fill this field'),
   city: Yup.string().required('Please fill this field'),
   address: Yup.string().required('Please fill this field'),
