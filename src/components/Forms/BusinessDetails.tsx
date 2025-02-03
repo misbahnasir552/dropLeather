@@ -305,6 +305,7 @@ const BusinessInformation = () => {
                                           .replace(/\s+/g, ''),
                                       }),
                                     )}
+                                    error={field.validation.errorMessage}
                                     form={formik}
                                     setSelectedCheckValue={
                                       setSelectedCheckValue
@@ -322,6 +323,7 @@ const BusinessInformation = () => {
                                           .replace(/\s+/g, ''),
                                       }),
                                     )}
+                                    error={field.validation.errorMessage}
                                     form={formik}
                                     setSelectedCheckValue={
                                       setSelectedCheckValue

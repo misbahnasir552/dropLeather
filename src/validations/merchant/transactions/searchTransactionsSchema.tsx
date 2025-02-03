@@ -8,7 +8,8 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   otcExpirationDate: '',
   customerCellPhone: '',
   otcToken: '',
-  orderDat: '',
+  orderDate: '',
+  merchantName: '',
   authId: '',
   batch: '',
   paymentDate: '',
@@ -22,7 +23,7 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   ccOrderId: '',
   ddBankName: '',
   transactionReference: '',
-  transactionStatus: '',
+  // transactionStatus: '',
   escrowStatus: '',
   settlementtransactionStatus: '',
   value3d: '',
@@ -30,6 +31,8 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   escrow: '',
   transactionPoint: '',
   channel: '',
+  transactionStatus: '',
+  storeID: '',
 };
 
 export const searchTransactionsSchema = Yup.object().shape({
@@ -38,7 +41,8 @@ export const searchTransactionsSchema = Yup.object().shape({
   otcExpirationDate: Yup.string(),
   customerCellPhone: Yup.string(),
   otcToken: Yup.string(),
-  orderDat: Yup.string(),
+  orderDate: Yup.string(),
+  merchantName: Yup.string(),
   authId: Yup.string(),
   batch: Yup.string(),
   paymentDate: Yup.string(),
@@ -60,4 +64,6 @@ export const searchTransactionsSchema = Yup.object().shape({
   escrow: Yup.string(),
   transactionPoint: Yup.string(),
   channel: Yup.string(),
+  // status: Yup.string(),
+  storeID: Yup.string(),
 });

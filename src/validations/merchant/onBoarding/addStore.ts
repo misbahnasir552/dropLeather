@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import type { AddStoreInfo } from '@/interfaces/interface';
 
 export const addStoreInitialValues: AddStoreInfo = {
-  storeType: '',
+  storeType: [],
   websiteName: '',
   websiteURL: '',
   category: '',
@@ -15,7 +15,11 @@ export const addStoreInitialValues: AddStoreInfo = {
 };
 
 export const addStoreSchema = Yup.object().shape({
-  storeType: Yup.string().required('Store type is required'),
+  // storeType: Yup.string().required('Store type is required'),
+  storeType: Yup.array()
+    .of(Yup.string().required('Each item must be a string'))
+    .min(1, 'Please select at least one store type')
+    .required('Please fill this field'),
   websiteName: Yup.string(),
   websiteURL: Yup.string(),
   category: Yup.string().required('Category is required'),

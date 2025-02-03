@@ -17,7 +17,10 @@ import {
 
 import DisabledInput from '../StaticFields/DisabledInput';
 import H6 from '../UI/Headings/H6';
+// import FormLayout from '../UI/Wrappers/FormLayout';
+import H7 from '../UI/Headings/H7';
 import M7 from '../UI/Headings/M7';
+import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 
 const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
@@ -27,6 +30,11 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
       prevStores.filter((_: any, i: number) => i !== index),
     );
   };
+  const [selectedCheckValue, setSelectedCheckValue] = useState<
+    string | undefined | string[]
+  >(undefined);
+  console.log('ADD STORE SELECTED VALUE', selectedCheckValue);
+
   const onSubmit = (values: AddStoreInfo, { resetForm }: any) => {
     console.log('i am add store component', values);
     const { category, ...rest } = values;
@@ -82,92 +90,102 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                       <H6 textColor="text-danger-base">Cancel</H6>
                     </div>
                   </div>
-                  <Form className="grid grid-cols-2 gap-6">
-                    <DropdownInput
-                      label="Store Type"
-                      name="storeType"
-                      options={[
-                        { value: 'Online Payments', label: 'Online Payments' },
-                        { value: 'Retail', label: 'Retail' },
-                      ]}
-                      formik={formik}
-                      error={formik.errors.storeType}
-                      touched={formik.touched.storeType}
-                    />
-                    <Input
-                      label="Website Name"
-                      name="websiteName"
-                      type="text"
-                      error={formik.errors.websiteName}
-                      touched={formik.touched.websiteName}
-                    />
-                    <Input
-                      label="Website URL"
-                      name="websiteURL"
-                      type="text"
-                      error={formik.errors.websiteURL}
-                      touched={formik.touched.websiteURL}
-                    />
-                    <DropdownInput
-                      label="Category"
-                      name="category"
-                      options={categories}
-                      formik={formik}
-                      error={formik.errors.category}
-                      touched={formik.touched.category}
-                    />
-                    <DropdownNew
-                      label="City"
-                      name="city"
-                      options={generalCities}
-                      formik={formik}
-                      error={formik.errors.city}
-                      touched={formik.touched.city}
-                    />
-                    <Input
-                      label="Street Address"
-                      name="streetAddress"
-                      type="text"
-                      error={formik.errors.streetAddress}
-                      touched={formik.touched.streetAddress}
-                    />
-                    <Input
-                      label="Country Code"
-                      name="countryCode"
-                      type="text"
-                      error={formik.errors.countryCode}
-                      touched={formik.touched.countryCode}
-                    />
-                    <Input
-                      label="State"
-                      name="state"
-                      type="text"
-                      error={formik.errors.state}
-                      touched={formik.touched.state}
-                    />
-                    <Input
-                      label="POS Country Code"
-                      name="posCountryCode"
-                      type="text"
-                      error={formik.errors.posCountryCode}
-                      touched={formik.touched.posCountryCode}
-                    />
-                    <Button
-                      label={`Save`}
-                      type="submit"
-                      className={`button-primary w-full px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                    />
+                  <Form className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-4">
+                      <H7>Store Type</H7>
+                      <CheckboxInput
+                        isMulti
+                        name="storeType"
+                        options={[
+                          {
+                            value: 'Online Payments',
+                            label: 'Online Payments',
+                          },
+                          { value: 'Retail', label: 'Retail' },
+                        ]}
+                        form={formik}
+                        setSelectedCheckValue={setSelectedCheckValue}
+                        error={formik.errors.storeType}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-6">
+                      <Input
+                        label="Website Name"
+                        name="websiteName"
+                        type="text"
+                        error={formik.errors.websiteName}
+                        touched={formik.touched.websiteName}
+                      />
+                      <Input
+                        label="Website URL"
+                        name="websiteURL"
+                        type="text"
+                        error={formik.errors.websiteURL}
+                        touched={formik.touched.websiteURL}
+                      />
+                      <DropdownInput
+                        label="Category"
+                        name="category"
+                        options={categories}
+                        formik={formik}
+                        error={formik.errors.category}
+                        touched={formik.touched.category}
+                      />
+                      <DropdownNew
+                        label="City"
+                        name="city"
+                        options={generalCities}
+                        formik={formik}
+                        error={formik.errors.city}
+                        touched={formik.touched.city}
+                      />
+                      <Input
+                        label="Street Address"
+                        name="streetAddress"
+                        type="text"
+                        error={formik.errors.streetAddress}
+                        touched={formik.touched.streetAddress}
+                      />
+                      <Input
+                        label="Country Code"
+                        name="countryCode"
+                        type="text"
+                        error={formik.errors.countryCode}
+                        touched={formik.touched.countryCode}
+                      />
+                      <Input
+                        label="State"
+                        name="state"
+                        type="text"
+                        error={formik.errors.state}
+                        touched={formik.touched.state}
+                      />
+                      <Input
+                        label="POS Country Code"
+                        name="posCountryCode"
+                        type="text"
+                        error={formik.errors.posCountryCode}
+                        touched={formik.touched.posCountryCode}
+                      />
+                      <Button
+                        label={`Save`}
+                        type="submit"
+                        className={`button-primary w-full px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                      />
+                    </div>
                   </Form>
+                  {addStoresValues.length > 0 ? (
+                    <DisabledInput
+                      data={addStoresValues}
+                      removeStore={removeStore}
+                    />
+                  ) : null}
                 </>
               )}
             </div>
           </>
         )}
       </Formik>
-
-      {addStoresValues.length > 0 ? (
-        <DisabledInput data={addStoresValues} removeStore={removeStore} />
-      ) : null}
     </div>
   );
 };

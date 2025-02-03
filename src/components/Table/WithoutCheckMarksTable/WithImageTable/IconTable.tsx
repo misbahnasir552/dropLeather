@@ -19,6 +19,7 @@ interface IconTableProps {
   hasEdit?: boolean;
   hasIcons?: boolean;
   handleDelete?: (id: any) => void;
+  handleView?: (staticQRCode: string, name: string) => void;
 }
 
 const IconTable: React.FC<IconTableProps> = ({
@@ -30,16 +31,20 @@ const IconTable: React.FC<IconTableProps> = ({
   hasEdit = false,
   hasIcons = true,
   handleDelete,
+  handleView,
 }) => {
+  console.log('ICON TABLE ', tableData);
+
   const handleEdit = (id: any) => {
     console.log('Edit row with id:', id);
     // Add your edit functionality here
   };
 
-  const handleShare = (id: any) => {
-    console.log('Share row with id:', id);
-    // Add your share functionality here
-  };
+  // const handleShare = (id: any) => {
+  //   console.log('Share row with id:', id);
+
+  //   // Add your share functionality here
+  // };
 
   const handleDownload = (id: any) => {
     console.log('Download row with id:', id);
@@ -68,7 +73,7 @@ const IconTable: React.FC<IconTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {tableData?.map(({ id, ...tableItem }, rowIndex) => (
+          {tableData?.map(({ id, staticQRCode, ...tableItem }, rowIndex) => (
             <tr
               key={rowIndex}
               className="flex w-full items-center justify-between border-b border-border-light px-6"
@@ -84,14 +89,19 @@ const IconTable: React.FC<IconTableProps> = ({
                       : 'w-32 text-center'
                   } py-[18px]`}
                 >
-                  <B3 textColor="text-secondary-base">{value}</B3>
+                  <B3 textColor="text-secondary-base">{value || 'N/A'}</B3>
                 </td>
               ))}
               {hasIcons && (
                 <td className="w-32 py-[18px] text-right">
                   <div className="flex w-full items-center justify-center gap-4">
                     {hasShare && (
-                      <div onClick={() => handleShare(id)}>
+                      <div
+                        onClick={() =>
+                          handleView &&
+                          handleView(staticQRCode, tableItem.storeName)
+                        }
+                      >
                         <Image
                           className="cursor-pointer"
                           src={ShareIcon}

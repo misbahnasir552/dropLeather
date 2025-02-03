@@ -14,11 +14,15 @@ const Pagination = ({
   onPrev,
 }: PaginationProps) => {
   return (
-    <div className="mt-4 flex justify-between">
+    <div className="flex items-center justify-between">
       <button
         onClick={onPrev}
         disabled={pageNumber + 1 === 1}
-        className="bg-gray-200 hover:bg-gray-300 rounded-md px-4 py-2"
+        className={`w-28 bg-primary-base text-sm text-screen-white ${
+          pageNumber + 1 === 1
+            ? 'cursor-not-allowed hover:bg-secondary-300'
+            : 'cursor-pointer hover:bg-primary-600'
+        } rounded-md px-4 py-2`}
       >
         Previous
       </button>
@@ -28,7 +32,11 @@ const Pagination = ({
       <button
         onClick={onNext}
         disabled={pageNumber + 1 === totalPages}
-        className="bg-gray-200 hover:bg-gray-300 rounded-md px-4 py-2"
+        className={`w-28 bg-primary-base text-sm text-screen-white ${
+          pageNumber + 1 === totalPages
+            ? 'cursor-not-allowed hover:bg-secondary-300'
+            : 'cursor-pointer hover:bg-primary-600'
+        }  rounded-md px-4 py-2`}
       >
         Next
       </button>

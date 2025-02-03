@@ -115,7 +115,7 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
     //     ))}
     //   </tbody>
     // </table>
-    <div className="max-h-[500px] w-full overflow-auto">
+    <div className="scrollbar-thin scrollbar-thumb-primary-400 scrollbar-track-primary-100 hover:scrollbar-thumb-primary-base max-h-[500px] w-full overflow-auto">
       {' '}
       {/* Adjust max height as needed */}
       <table className="w-full border-collapse">
@@ -126,7 +126,7 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                 key={i}
                 className={`py-[17px] ${
                   i === 0
-                    ? 'w-32 text-left'
+                    ? 'w-16 text-left'
                     : i === arr.length - 1
                     ? 'w-32 text-center'
                     : 'w-32 text-center'
@@ -137,7 +137,7 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
             ))}
           </tr>
         </thead>
-        <tbody className="block max-h-[450px] overflow-auto">
+        <tbody className="block max-h-[450px]">
           {tableData.map((item: any, i: number) => (
             <tr
               key={i}
@@ -148,15 +148,15 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                   key={colIndex}
                   className={`${
                     colIndex === 0
-                      ? 'w-32 text-left'
+                      ? 'w-16 text-left'
                       : colIndex === colArr.length - 1
                       ? 'w-32 text-center'
                       : 'w-32 text-center'
                   } py-[18px]`}
                 >
-                  {value === 'success' ? (
+                  {value === 'Success' ? (
                     <B3 textColor="text-primary-base">{value || 'N/A'}</B3>
-                  ) : value === 'failed' ? (
+                  ) : value === 'Failed' ? (
                     <B3 textColor="text-danger-base">{value || 'N/A'}</B3>
                   ) : (
                     <B3 textColor="text-secondary-base">{value || 'N/A'}</B3>

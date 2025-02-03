@@ -1,6 +1,7 @@
 import React from 'react';
 
 import H6 from '../UI/Headings/H6';
+import H7 from '../UI/Headings/H7';
 
 interface DisabledInputProps {
   data: any;
@@ -25,17 +26,57 @@ const DisabledInput: React.FC<DisabledInputProps> = ({ data, removeStore }) => {
               </div>
             </div>
             <div key={index} className="grid grid-cols-2 gap-6 ">
-              {Object.entries(item).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="rounded-lg border-[1px] border-border-light bg-screen-white px-5 py-[10px]"
-                >
-                  <div>{key}</div>
-                  {typeof value === 'string' || typeof value === 'number' ? (
-                    <div>{value}</div>
-                  ) : null}
-                </div>
-              ))}
+              {Object.entries(item).map(([key, value]) => {
+                // Convert key from camelCase to Title Case)
+                const formattedKey = key
+                  .replace(/([a-z])([A-Z])/g, '$1 $2')
+                  .replace(/^./, (str) => str.toUpperCase());
+                if (key === 'storeType') {
+                  return (
+                    <div
+                      key={key}
+                      className="rounded-lg border-[1px] border-border-light bg-screen-grey px-5 py-4"
+                    >
+                      <div>{formattedKey}</div>
+                      {Array.isArray(value) ? (
+                        <div className="flex">
+                          {value.length > 0 ? (
+                            value.map((item: any, index: number, arr: any) => (
+                              <>
+                                <H7 key={index}>{item}</H7>
+                                {arr.length - 1 !== index && <H7>/</H7>}
+                              </>
+                            ))
+                          ) : (
+                            <H7>N/A</H7>
+                          )}
+                        </div>
+                      ) : (
+                        <H7>
+                          {value && typeof value !== 'object'
+                            ? String(value)
+                            : 'N/A'}
+                        </H7>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <div
+                    key={key}
+                    className={`rounded-lg border-[1px] border-border-light ${
+                      value !== '' ? 'bg-screen-grey' : 'bg-screen-white'
+                    }  px-5 py-4`}
+                  >
+                    <H7>{formattedKey}</H7>
+                    <H7>
+                      {value && typeof value !== 'object'
+                        ? String(value)
+                        : 'N/A'}
+                    </H7>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

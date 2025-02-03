@@ -21,8 +21,8 @@ interface QRModalProps {
   setShowModal: (show: boolean) => void;
   routeName?: string;
   imageUrl: string; // The QR code URL passed as a prop
-  amount: string;
-  expirationTime: number;
+  amount?: string;
+  expirationTime?: number;
 }
 
 const DynamicQRModal: React.FC<QRModalProps> = ({
@@ -94,16 +94,20 @@ const DynamicQRModal: React.FC<QRModalProps> = ({
                     />{' '}
                     {/* QR code */}
                   </div>
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <H1 textColor="text-primary-base">Rs. {amount}</H1>
+                  {amount && (
+                    <div className="flex flex-col items-center justify-center gap-2">
+                      <H1 textColor="text-primary-base">Rs. {amount}</H1>
 
-                    <div className="flex w-full flex-row items-center justify-center gap-2">
-                      <B1>Expiry time would be : </B1>
-                      <H6 textColor="text-primary-base">
-                        {expirationTime} seconds
-                      </H6>
+                      {expirationTime && (
+                        <div className="flex w-full flex-row items-center justify-center gap-2">
+                          <B1>Expiry time would be : </B1>
+                          <H6 textColor="text-primary-base">
+                            {expirationTime} seconds
+                          </H6>
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  )}
                   <div className="flex justify-center">
                     <Button
                       label="Download"

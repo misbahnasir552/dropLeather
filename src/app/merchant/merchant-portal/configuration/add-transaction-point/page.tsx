@@ -43,12 +43,14 @@ function AddTransactionPoint() {
   const [description, setDescription] = useState('');
   const [stores, setStores] = useState([]);
   const [route, setRoute] = useState('');
+  const [isLoading, setIsloading] = useState(false);
 
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(1).fill(null),
   );
 
   const fetchStores = async () => {
+    setIsloading(true);
     try {
       const response = await apiClient.get('/merchant/stores', {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
@@ -79,6 +81,8 @@ function AddTransactionPoint() {
       setTitle('Network Error');
       setDescription(error.message);
       setShowModal(true);
+    } finally {
+      setIsloading(false);
     }
   };
 
@@ -111,6 +115,7 @@ function AddTransactionPoint() {
 
     const formData = new FormData();
     try {
+      setIsloading(true);
       if (letterHeadImage && outlet?.value) {
         formData.append('outletId', outlet?.value);
         formData.append('letterHeadImage', letterHeadImage);
@@ -142,6 +147,7 @@ function AddTransactionPoint() {
       setDescription(e.message);
     } finally {
       setShowModal(true);
+      setIsloading(false);
     }
   };
 
@@ -168,7 +174,7 @@ function AddTransactionPoint() {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
-          routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+          // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
         />
         <HeaderWrapper
           heading="Add Transaction Point"
@@ -271,7 +277,7 @@ function AddTransactionPoint() {
                 />
                 <Button
                   label="Save"
-                  // isDisabled={stores.length > 0}
+                  isDisabled={isLoading}
                   type="submit"
                   className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />

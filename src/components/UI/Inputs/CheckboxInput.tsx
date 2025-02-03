@@ -157,7 +157,7 @@ import H7 from '@/components/UI/Headings/H7';
 interface ICheckboxInput {
   name: string;
   options: any;
-  error?: string;
+  error?: string | string[] | undefined;
   form?: FormikProps<any>;
   layout?: string;
   isMulti?: boolean;
@@ -199,11 +199,6 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
       form?.setFieldValue(name, optionValue);
     }
   };
-
-  console.log('setSelectedCheckValue herere ', setSelectedCheckValue);
-  console.log('CheckboxInput --- ', options, name, form);
-
-  console.log('form?.values[name] ', form?.values[name]);
 
   return (
     <div className={`flex w-full ${layout || 'flex-col'} gap-4`}>
@@ -314,7 +309,11 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                   </div>
                 </div>
               ) : (
-                <div className="flex h-6 w-6 justify-center rounded-full border-2 border-border-dark px-[7px] py-2">
+                <div
+                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${
+                    error ? 'border-danger-base' : 'border-border-dark'
+                  } px-[7px] py-2`}
+                >
                   <div className="h-[8px] w-[10px]"></div>
                 </div>
               )}

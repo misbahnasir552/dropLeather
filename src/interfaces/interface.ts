@@ -315,7 +315,7 @@ export interface ActivityFormInfo {
 }
 
 export interface AddStoreInfo {
-  storeType: string;
+  storeType: string[];
   websiteName: string;
   websiteURL: string;
   category: string;
@@ -393,7 +393,8 @@ export interface SearchTransactionsForm {
   otcExpirationDate: string;
   customerCellPhone: string;
   otcToken: string;
-  orderDat: string;
+  orderDate: string;
+  merchantName: string;
   authId: string;
   batch: string;
   paymentDate: string;
@@ -415,6 +416,7 @@ export interface SearchTransactionsForm {
   escrow: string;
   transactionPoint: string;
   channel: string;
+  storeID: string;
 }
 
 export interface AddOutletForm {
@@ -432,7 +434,7 @@ export interface AddOutletForm {
   outletImage: File | null;
   // numberOfTillsRequired: string;
   categoryCode: string;
-  storeType: string;
+  storeType: string[];
 }
 
 export interface AddTransactionPointForm {

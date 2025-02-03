@@ -7,6 +7,7 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
+import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
@@ -38,6 +39,11 @@ import {
 function AddOutlet() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
+  const [selectedCheckValue, setSelectedCheckValue] = useState<
+    string | undefined | string[]
+  >(undefined);
+  console.log(selectedCheckValue, 'add outlet selected check value');
+
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>([]);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -177,6 +183,19 @@ function AddOutlet() {
           }, [formik.values.region]);
           return (
             <Form className="flex flex-col gap-6">
+              <FormLayout formHeading="Store Type">
+                <CheckboxInput
+                  isMulti
+                  name="storeType"
+                  options={[
+                    { value: 'Online Payments', label: 'Online Payments' },
+                    { value: 'Retail', label: 'Retail' },
+                  ]}
+                  form={formik}
+                  setSelectedCheckValue={setSelectedCheckValue}
+                  error={formik.errors.storeType}
+                />
+              </FormLayout>
               <FormLayout formHeading="Outlet Details">
                 <div className="flex flex-col gap-5">
                   <Input
@@ -187,7 +206,7 @@ function AddOutlet() {
                     error={formik.errors.outletName}
                     touched={formik.touched.outletName}
                   />
-                  <DropdownInput
+                  {/* <DropdownInput
                     asterik
                     label="Store Type"
                     name="storeType"
@@ -198,7 +217,7 @@ function AddOutlet() {
                     formik={formik}
                     error={formik.errors.storeType}
                     touched={formik.touched.storeType}
-                  />
+                  /> */}
                   <DropdownInput
                     asterik
                     label="Category"
@@ -262,6 +281,7 @@ function AddOutlet() {
 
                   <Input
                     asterik
+                    placeholder="03XXXXXXXXX"
                     label="Manager Mobile Number"
                     name="managerMobile"
                     type="text"
@@ -278,6 +298,7 @@ function AddOutlet() {
                   />
                   <Input
                     asterik
+                    placeholder="03XXXXXXXXX"
                     label="Outlet POC Contact Number"
                     name="outletPocContactNumber"
                     type="text"
@@ -338,6 +359,7 @@ function AddOutlet() {
                   /> */}
                 </div>
               </FormLayout>
+
               <div className="flex w-full justify-end gap-6">
                 <Button
                   label="Cancel"
