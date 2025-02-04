@@ -176,10 +176,15 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   isMulti,
   // isMulti = false,
 }) => {
+  console.log('check box input ', form, isMulti);
+  
   // Handle checkbox change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const optionValue = e.target.value;
     setSelectedCheckValue(optionValue);
+
+    console.log('optionValue ', optionValue);
+    
 
     const isChecked = e.target.checked;
 

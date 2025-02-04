@@ -313,7 +313,7 @@ const BusinessInformation = () => {
                                   />
                                 ) : field?.type === 'checkBoxInputMulti' ? (
                                   <CheckboxInput
-                                    isMulti
+                                    isMulti={true} 
                                     name={field.name}
                                     options={field.validation.options?.map(
                                       (option) => ({
