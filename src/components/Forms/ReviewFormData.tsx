@@ -9,6 +9,8 @@ import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
 
+import B3 from '../UI/Body/B3';
+
 interface IRevieFormData {
   isEditable: boolean;
   merchant: boolean;
@@ -276,10 +278,59 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           active="attachments"
           isEditable={isEditable}
         />
-        <ReviewFormDataGrid heading="Upload Documents">
-          {/* {data?.documents?.documentNames.map((item, index)=>{
 
-          })} */}
+        <ReviewFormDataGrid heading="Upload Documents">
+          {/* {data?.merchantDocuments?.map((doc: { documentLabel: string | undefined; filename: string | undefined; }, index: Key | null | undefined) => (
+            <ReviewInput
+              key={index}
+              label={doc.documentLabel}
+              value={doc.filename}
+              image={FileIcon}
+            />
+          ))} */}
+
+          {Array.isArray(data?.merchantDocuments) &&
+            (
+              Object.entries(
+                data.merchantDocuments.reduce(
+                  (
+                    acc: { [key: string]: any[] },
+                    doc: { documentLabel: string; filename: string },
+                  ) => {
+                    const label = doc.documentLabel || 'Unknown Label';
+
+                    if (!acc[label]) {
+                      acc[label] = [];
+                    }
+                    acc[label]!.push(doc.filename);
+                    return acc;
+                  },
+                  {} as { [key: string]: string[] },
+                ),
+              ) as [string, string[]][]
+            ).map(([label, filenames], index) => (
+              <div key={index} className="flex w-full flex-col gap-1">
+                <B3 textColor="text-secondary-600">{label}</B3>
+                {filenames?.map((filename: string, fileIndex: number) => (
+                  <div key={fileIndex}>
+                    <ReviewInput value={filename} image={FileIcon} />
+                  </div>
+                ))}
+              </div>
+            ))}
+          {!Array.isArray(data?.merchantDocuments) && (
+            <p>No documents to display.</p>
+          )}
+        </ReviewFormDataGrid>
+        {/* <ReviewFormDataGrid heading="Upload Documents">
+         
+          <ReviewInput
+            label="Account Maintenance Certificate"
+            value={data?.documents?.documentNames[0]}
+            image={FileIcon}
+          />
+
+
           <ReviewInput
             label="Account Maintenance Certificate"
             value={data?.documents?.documentNames[0]}
@@ -305,153 +356,10 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
             value={data?.documents?.documentNames[3]}
             image={FileIcon}
           />
-        </ReviewFormDataGrid>
+        </ReviewFormDataGrid> */}
       </ReviewFormLayout>
     </>
   );
 }
-// <ReviewFormLayout>
-//   <ReviewFormMetaData
-//     heading="Attachments"
-//     active="attachments-information"
-//     isEditable={isEditable}
-//   />
-//   <div className="flex justify-end gap-3">
-//     <div>Download All</div>
-
-//     <Image
-//       className="cursor-pointer"
-//       src={DownloadIcon}
-//       height={39}
-//       width={24}
-//       alt="download-icon"
-//     />
-//   </div>
-
-//   <ReviewFormDataGrid heading="Upload Documents">
-//     <div className="flex gap-3">
-//       <ReviewInput
-//         label="Account Maintenance Certificate"
-//         // value={data?.documents?.documentNames[0]}
-//         value={data?.documents?.fileRecord[0]?.filename}
-//         image={FileIcon}
-//       />
-//       <div
-//         className="flex items-center justify-center"
-//         onClick={() =>
-//           handleDownload(
-//             data?.documents?.fileRecord[0]?.filename,
-//             data?.documents?.fileRecord[0]?.merchantEmail,
-//           )
-//         }
-//       >
-//         <Image
-//           className="cursor-pointer"
-//           src={DownloadIcon}
-//           height={39}
-//           width={24}
-//           alt="download-icon"
-//         />
-//       </div>
-//     </div>
-//     <div className="flex gap-3">
-//       <ReviewInput
-//         label="Your External Bank"
-//         value={data?.documents?.fileRecord[1]?.filename}
-//         image={FileIcon}
-//       />
-//       <div
-//         className="flex items-center justify-center"
-//         onClick={() =>
-//           handleDownload(
-//             data?.documents?.fileRecord[1]?.filename,
-//             data?.documents?.fileRecord[1]?.merchantEmail,
-//           )
-//         }
-//       >
-//         <Image
-//           className="cursor-pointer"
-//           src={DownloadIcon}
-//           height={39}
-//           width={24}
-//           alt="download-icon"
-//         />
-//       </div>
-//     </div>
-//     <div className="flex gap-3">
-//       <ReviewInput
-//         label="Live Picture or Digital Photo"
-//         value={data?.documents?.fileRecord[2]?.filename}
-//         image={FileIcon}
-//       />
-//       <div
-//         className="flex items-center justify-center"
-//         onClick={() =>
-//           handleDownload(
-//             data?.documents?.fileRecord[2]?.filename,
-//             data?.documents?.fileRecord[2]?.merchantEmail,
-//           )
-//         }
-//       >
-//         <Image
-//           className="cursor-pointer"
-//           src={DownloadIcon}
-//           height={39}
-//           width={24}
-//           alt="download-icon"
-//         />
-//       </div>
-//     </div>
-
-//     <div className="flex gap-3">
-//       <ReviewInput
-//         label="CNIC Front"
-//         value={data?.documents?.fileRecord[3]?.filename}
-//         image={FileIcon}
-//       />
-//       {/* <div
-//         className="flex items-center justify-center"
-//         onClick={() =>
-//           handleDownload(
-//             data?.documents?.fileRecord[3]?.filename,
-//             data?.documents?.fileRecord[3]?.merchantEmail,
-//           )
-//         }
-//       > */}
-//         <Image
-//           className="cursor-pointer"
-//           src={DownloadIcon}
-//           height={39}
-//           width={24}
-//           alt="download-icon"
-//         />
-//       </div>
-//     </div>
-//     <div className="flex gap-3">
-//       <ReviewInput
-//         label="CNIC Back"
-//         value={data?.documents?.fileRecord[4]?.filename}
-//         image={FileIcon}
-//       />
-//       <div
-//         className="flex items-center justify-center"
-//         onClick={() =>
-//           handleDownload(
-//             data?.documents?.fileRecord[4]?.filename,
-//             data?.documents?.fileRecord[4]?.merchantEmail,
-//           )
-//         }
-//       >
-//         <Image
-//           className="cursor-pointer"
-//           src={DownloadIcon}
-//           height={39}
-//           width={24}
-//           alt="download-icon"
-//         />
-//       </div>
-//     </div>
-//   </ReviewFormDataGrid>
-// </ReviewFormLayout>
 
 export default ReviewFormData;

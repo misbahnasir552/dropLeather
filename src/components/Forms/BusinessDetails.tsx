@@ -142,6 +142,8 @@ const BusinessInformation = () => {
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
+    console.log('values >>>', values);
+
     console.log('BUSINESS NATURE DATAAA:', businessNatureData);
     if (addStoresValues.length < 1) {
       setTitle('No Stores Found');
