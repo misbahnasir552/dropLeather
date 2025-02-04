@@ -176,7 +176,7 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   isMulti,
   // isMulti = false,
 }) => {
-  console.log('check box input ', form, isMulti);
+  console.log('check box input ', form, isMulti, name);
   
   // Handle checkbox change
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -190,6 +190,9 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
 
     // Ensure the value is initialized as an array if it's a multi-select checkbox
     const currentValues = form?.values[name] || (isMulti ? [] : '');
+
+    console.log('currentValues ', currentValues);
+    
 
     if (isMulti) {
       if (isChecked) {
