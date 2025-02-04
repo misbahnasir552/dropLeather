@@ -224,8 +224,8 @@ const BusinessInformation = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-      // routeName={attachRoute}
-      // routeName="/merchant/home"
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
       />
       <AddStore
         addStoresValues={addStoresValues}
