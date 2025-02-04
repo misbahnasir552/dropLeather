@@ -224,8 +224,8 @@ const BusinessInformation = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
-        // routeName="/merchant/home"
+      // routeName={attachRoute}
+      // routeName="/merchant/home"
       />
       <AddStore
         addStoresValues={addStoresValues}
@@ -313,7 +313,7 @@ const BusinessInformation = () => {
                                   />
                                 ) : field?.type === 'checkBoxInputMulti' ? (
                                   <CheckboxInput
-                                    isMulti={true} 
+                                    isMulti={true}
                                     name={field.name}
                                     options={field.validation.options?.map(
                                       (option) => ({
