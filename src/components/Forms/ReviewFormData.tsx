@@ -3,13 +3,19 @@
 // import Image from 'next/image';
 
 // import DownloadIcon from '@/assets/icons/Download-Table-Icon.svg';
+import { useState } from 'react';
+
+import apiClient from '@/api/apiClient';
 import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
+import SuccessModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
+import { useAppSelector } from '@/hooks/redux';
 
 import B3 from '../UI/Body/B3';
+import Button from '../UI/Button/PrimaryButton';
 
 interface IRevieFormData {
   isEditable: boolean;
@@ -18,20 +24,87 @@ interface IRevieFormData {
 }
 
 function ReviewFormData({ isEditable, data }: IRevieFormData) {
-  // console.log('hereee', data);
+  const userData = useAppSelector((state: any) => state.auth);
 
-  // const handleDownload = (filename: any, email: any) => {
-  //   console.log('email and file name is', email, filename);
-  //   // const response = apiClient.get(`/api/files/download?filename=${filename}&email=${email}`)
-  //   const downloadUrl = `http://merchant-service-opsdev.telenorbank.pk/api/files/download?filename=${filename}&email=${encodeURIComponent(
-  //     email,
-  //   )}`;
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
-  //   window.open(downloadUrl, '_blank');
-  // };
+  const options = [
+    {
+      value: 'soleProprietor',
+      label: 'Sole-Proprietorship',
+      endpoint: 'soleBusinessDetails',
+    },
+    {
+      value: 'publicAndPrivateLtd',
+      label: 'Private Limited / Public Limited / SMC - Private Limited',
+      endpoint: 'pnpBusinessDetails',
+    },
+    {
+      value: 'partnership',
+      label:
+        'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+      endpoint: 'partnershipBusinessDetails',
+    },
+    {
+      value: 'g2p',
+      label: 'Government Accounts / Autonomous Body',
+      endpoint: 'otherBusinessDetails',
+    },
+    {
+      value: 'ngoNpoCharities',
+      label:
+        'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+      endpoint: 'nncBusinessDetails',
+    },
+  ];
+
+  const onSubmit = async () => {
+    // const onSubmit = async ( { resetForm }: any) => {
+    // setIsSubmitting(true);
+    console.log('user data ', userData);
+
+    try {
+      const response = await apiClient.get(`merchant/markApplicationForm`, {
+        params: { email: userData?.email },
+      });
+
+      if (response.data.responseCode === '009') {
+        // success case
+
+        setShowModal(true);
+        setTitle('Application Submitted Successfully');
+        setDescription(
+          `Congratulation! You have successfully submitted application to open an easypaisa Merchant Account. You'll hear back from us in 7 working days. `,
+        );
+      } else {
+        setTitle('Failed Submission');
+        setDescription(`Please, try again later!`);
+      }
+
+      console.log(response);
+      // resetForm();
+    } catch (e: any) {
+      setTitle(e.code);
+      setDescription(e.message);
+      setShowModal(true);
+    } finally {
+      // setIsSubmitting(false);
+      // setShowModal(true);
+    }
+  };
 
   return (
     <>
+      <SuccessModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        routeName="/merchant/home"
+        // routeName={route}
+      />
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Activity Information"
@@ -158,7 +231,12 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Business Type ">
           <ReviewInput
             label="Business Type"
-            value={data?.activityInformation?.businessNature}
+            value={
+              options.find(
+                (option) =>
+                  option.value === data?.activityInformation?.businessNature,
+              )?.label || 'N/A'
+            }
           />
           <ReviewInput
             label="Is Your Business Registered"
@@ -240,7 +318,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           active="integration"
           isEditable={isEditable}
         />
-        <ReviewFormDataGrid heading="Integration Methods (What would you like to integrate)">
+        <ReviewFormDataGrid heading="Integration Methods">
           <ReviewInput
             // label="Website"
             // value={data?.integration?.integrationMethod}
@@ -254,7 +332,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           /> */}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
-        <ReviewFormDataGrid heading="Integration Methods (Select your mode of integration)">
+        <ReviewFormDataGrid heading="Integration Modes">
           <ReviewInput
             value={data?.integration?.integrationMode?.map(
               (item: any, index: any) => <div key={index}>{item}</div>,
@@ -286,15 +364,6 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         />
 
         <ReviewFormDataGrid heading="Upload Documents">
-          {/* {data?.merchantDocuments?.map((doc: { documentLabel: string | undefined; filename: string | undefined; }, index: Key | null | undefined) => (
-            <ReviewInput
-              key={index}
-              label={doc.documentLabel}
-              value={doc.filename}
-              image={FileIcon}
-            />
-          ))} */}
-
           {Array.isArray(data?.merchantDocuments) &&
             (
               Object.entries(
@@ -328,42 +397,16 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
             <p>No documents to display.</p>
           )}
         </ReviewFormDataGrid>
-        {/* <ReviewFormDataGrid heading="Upload Documents">
-         
-          <ReviewInput
-            label="Account Maintenance Certificate"
-            value={data?.documents?.documentNames[0]}
-            image={FileIcon}
-          />
-
-
-          <ReviewInput
-            label="Account Maintenance Certificate"
-            value={data?.documents?.documentNames[0]}
-            image={FileIcon}
-          />
-          <ReviewInput
-            label="Your External Bank"
-            value={data?.documents?.documentNames[0]}
-            image={FileIcon}
-          />
-          <ReviewInput
-            label="Live Picture or Digital Photo"
-            value={data?.documents?.documentNames[1]}
-            image={FileIcon}
-          />
-          <ReviewInput
-            label="CNIC Front"
-            value={data?.documents?.documentNames[2]}
-            image={FileIcon}
-          />
-          <ReviewInput
-            label="CNIC Back"
-            value={data?.documents?.documentNames[3]}
-            image={FileIcon}
-          />
-        </ReviewFormDataGrid> */}
       </ReviewFormLayout>
+      <div className=" sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
+        <Button
+          label={`Submit`}
+          // isDisabled={isSubmitting}
+          type="submit"
+          onClickHandler={onSubmit}
+          className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+        />
+      </div>
     </>
   );
 }

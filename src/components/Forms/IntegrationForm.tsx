@@ -494,9 +494,7 @@ function IntegrationForm() {
                                   options={field.validation?.options?.map(
                                     (option) => ({
                                       label: option,
-                                      value: option
-                                        .toLowerCase()
-                                        .replace(/\s+/g, ''),
+                                      value: option,
                                     }),
                                   )}
                                   form={formik}
