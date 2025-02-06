@@ -302,9 +302,10 @@ const BusinessInformation = () => {
                                     options={field.validation.options?.map(
                                       (option) => ({
                                         label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
+                                        value: option,
+                                        // value: option
+                                        //   .toLowerCase()
+                                        //   .replace(/\s+/g, ''),
                                       }),
                                     )}
                                     error={field.validation.errorMessage}
@@ -320,9 +321,10 @@ const BusinessInformation = () => {
                                     options={field.validation.options?.map(
                                       (option) => ({
                                         label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
+                                        value: option,
+                                        // value: option
+                                        //   .toLowerCase()
+                                        //   .replace(/\s+/g, ''),
                                       }),
                                     )}
                                     error={field.validation.errorMessage}

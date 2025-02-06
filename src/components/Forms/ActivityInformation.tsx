@@ -36,6 +36,9 @@ const ActivityInformation = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
 
+  const formData = useAppSelector((state: any) => state.onBoardingForms);
+  console.log('FORM DATA ', formData);
+
   const [isChecked, setChecked] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>();
   const [pageTitle, setPageTitle] = useState('');
@@ -106,7 +109,7 @@ const ActivityInformation = () => {
       const response: any = await apiClient.post(
         `merchant/activity/${userData.email}`,
         {
-          businessNature: 'option1',
+          businessNature: formData?.businessNature?.businessTypeNature,
           managerMobile: userData.managerMobile,
           fatherName: values.fatherName,
           businessName: values.businessName,
@@ -163,7 +166,7 @@ const ActivityInformation = () => {
       const additionalValues = {
         ...values,
         managerMobile: userData?.managerMobile,
-        businessNature: 'soleProprietor',
+        businessNature: formData?.businessNature?.businessTypeNature,
         status: 'Completed',
       };
       const mdRequest = {

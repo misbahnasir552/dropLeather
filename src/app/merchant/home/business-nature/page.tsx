@@ -18,7 +18,7 @@ import {
   // setApplicants,
   // setApplicationForm,
   setBusinessNature,
-  setCorporateEntity,
+  setMerchantEntity,
 } from '@/redux/features/formSlices/onBoardingForms';
 import {
   businessNatureInitialValues,
@@ -262,7 +262,7 @@ const BusinessNature = () => {
 
     // if (values.typeOfRequest) {
     dispatch(setBusinessNature(values));
-    dispatch(setCorporateEntity(values?.businessNature));
+    dispatch(setMerchantEntity(values?.businessTypeNature));
     try {
       console.log('<Merchant> USER ', userData);
 

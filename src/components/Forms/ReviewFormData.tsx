@@ -155,10 +155,10 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           ))}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
-        <ReviewFormDataGrid heading="Business Type (Sole Proprietor only)">
+        <ReviewFormDataGrid heading="Business Type ">
           <ReviewInput
             label="Business Type"
-            value={data?.businessDetails?.businessType}
+            value={data?.activityInformation?.businessNature}
           />
           <ReviewInput
             label="Is Your Business Registered"
@@ -170,7 +170,10 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           />
           <ReviewInput
             label="Nature of Activity"
-            value={data?.businessDetails?.natureOfActivity}
+            // value={data?.businessDetails?.natureOfActivity?.join(" | ") || ""}
+            value={data?.businessDetails?.natureOfActivity?.map(
+              (item: any, index: any) => <div key={index}>{item}</div>,
+            )}
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
@@ -218,10 +221,6 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         />
         <ReviewFormDataGrid heading="Settlement Details">
           <ReviewInput
-            label="Bank Account"
-            value={data?.settlementDetails?.telenorMicrofinanceBank}
-          />
-          <ReviewInput
             label="Bank Name"
             value={data?.settlementDetails?.bankName}
           />
@@ -243,25 +242,32 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         />
         <ReviewFormDataGrid heading="Integration Methods (What would you like to integrate)">
           <ReviewInput
-            label="Your Website"
+            // label="Website"
+            // value={data?.integration?.integrationMethod}
+            value={data?.integration?.integrationMethod?.map(
+              (item: any, index: any) => <div key={index}>{item}</div>,
+            )}
+          />
+          {/* <ReviewInput
+            label="Facebook Page "
             value={data?.integration?.integrationMethod}
-          />
-          <ReviewInput
-            label="Your Facebook Page "
-            value={data?.integration?.integrationMode}
-          />
+          /> */}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Integration Methods (Select your mode of integration)">
           <ReviewInput
-            label="Plugin"
-            value={data?.integration?.integrationMethod}
+            value={data?.integration?.integrationMode?.map(
+              (item: any, index: any) => <div key={index}>{item}</div>,
+            )}
           />
-          <ReviewInput label="API" value={data?.integration?.integrationMode} />
+          {/* <ReviewInput
+            label="Plugin"
+            value={data?.integration?.integrationMode}
+          />
+          <ReviewInput label="API" value={data?.integration?.integrationMode} /> */}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Developer’s Details">
-          <ReviewInput label="Full Name" value={data?.integration?.fullName} />
           <ReviewInput
             label="Email Address"
             value={data?.integration?.emailAddress}

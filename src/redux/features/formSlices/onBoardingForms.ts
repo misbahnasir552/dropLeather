@@ -56,7 +56,7 @@ const onBoardingFormSlice = createSlice({
       state.businessNature = action.payload;
       // state.businessEndpoint = action.payload;
     },
-    setCorporateEntity: (state, action: PayloadAction<string>) => {
+    setMerchantEntity: (state, action: PayloadAction<string>) => {
       state.corporateEntity = action.payload;
     },
     setCorporateChecklistStatus: (state, action: PayloadAction<string>) => {
@@ -205,7 +205,7 @@ const onBoardingFormSlice = createSlice({
 export const {
   setBusinessNature,
   setSoleName,
-  setCorporateEntity,
+  setMerchantEntity,
   setAdditionalForm,
   setAttachmentForm,
   setBusinessForm,
