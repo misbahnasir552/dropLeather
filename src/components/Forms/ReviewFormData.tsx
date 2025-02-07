@@ -383,7 +383,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
                   {} as { [key: string]: string[] },
                 ),
               ) as [string, string[]][]
-            ).map(([label, filenames], index) => (
+            )?.map(([label, filenames], index) => (
               <div key={index} className="flex w-full flex-col gap-1">
                 <B3 textColor="text-secondary-600">{label}</B3>
                 {filenames?.map((filename: string, fileIndex: number) => (
