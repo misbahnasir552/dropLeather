@@ -146,13 +146,13 @@ const DropdownNew = ({
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
             // style={{ top: "-100%" }}
           >
-            <input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search"
-              className="w-full border-b border-border-light px-4 py-2 focus:outline-none"
-            />
+            {(filteredOptions?.length > 2) ? ( <input
+                  type="text"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Search"
+                  className="w-full border-b border-border-light px-4 py-2 focus:outline-none"
+                /> ) :( <></> )}
 
             {filteredOptions.map(
               (
