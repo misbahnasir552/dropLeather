@@ -34,6 +34,8 @@ const DropdownNew = ({
 
   const handleOptionClick = (item: any) => {
     console.log('ITEM DropDown ', item, name);
+    console.log(setSelectedDropDownValue, 'selecteddropdownvaueeeeeee');
+
     if (name === 'primaryNationality') {
       const newCode = item?.label?.split('-');
       formik?.setFieldValue('countryCode', newCode[1]);
@@ -108,15 +110,16 @@ const DropdownNew = ({
       <div className="relative">
         <div ref={selectRef} onFocus={handleFocus} onBlur={handleBlur}>
           <div
-            className={`flex h-[60px] w-full rounded-lg border-[1px] border-border-light bg-screen-white px-5 align-middle  focus-within:border-primary-base hover:border-primary-base focus:border-primary-base focus:outline-none ${touched && error && 'border-danger-base focus:border-danger-base'
-              }
+            className={`flex h-[60px] w-full rounded-lg border-[1px] border-border-light bg-screen-white px-5 align-middle  focus-within:border-primary-base hover:border-primary-base focus:border-primary-base focus:outline-none ${
+              touched && error && 'border-danger-base focus:border-danger-base'
+            }
               ${name === 'countryCode' ? 'cursor-not-allowed' : ''}
               `}
             onClick={name !== 'countryCode' ? handleToggle : undefined}
             tabIndex={name !== 'countryCode' ? 0 : -1}
 
-          // onClick={handleToggle}
-          // tabIndex={0}
+            // onClick={handleToggle}
+            // tabIndex={0}
           >
             {formik?.values[name] ? (
               <div className="flex w-full flex-col justify-center text-sm  font-medium text-secondary-base">
@@ -147,7 +150,7 @@ const DropdownNew = ({
           <div
             ref={dropdownRef}
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
-          // style={{ top: "-100%" }}
+            // style={{ top: "-100%" }}
           >
             {filteredOptions?.length > 3 ? (
               <input

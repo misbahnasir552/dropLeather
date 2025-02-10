@@ -95,7 +95,7 @@ const BusinessInformation = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
+  // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
   // const BusinessInfoInitialValues = GetBusinessDetails();
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
@@ -253,10 +253,10 @@ const BusinessInformation = () => {
                     (pageItem) => (
                       // pageItem.name === "Business Details" && (
                       <React.Fragment key={pageItem.name}>
-                        {pageItem?.categories?.map((item, itemIndex) => (
+                        {pageItem.categories.map((item, itemIndex) => (
                           <FormLayoutDynamic
-                            key={itemIndex}
-                            // key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
+                            // key={itemIndex}
+                            key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
                             heading={item.categoryName}
                           >
                             {[...item.fields]
@@ -270,9 +270,104 @@ const BusinessInformation = () => {
                                     type={field.type}
                                     error={field.validation.errorMessage}
                                   />
-                                ) : field?.type === 'dropDown' ? (
+                                ) : field?.type === 'dropDown' &&
+                                  field.name !==
+                                    'associationToHighRiskBusiness' &&
+                                  field.name !== 'highRiskType' &&
+                                  field.name !== 'mediumRiskType' &&
+                                  field.name !== 'lowRiskType' ? (
                                   <DropdownNew
                                     key={fieldIndex} // Add a key prop to DropdownInput as well
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                    setSelectedDropDownValue={
+                                      setSelectedDropDownValue
+                                    }
+                                  />
+                                ) : field?.type === 'dropDown' &&
+                                  field.name ===
+                                    'associationToHighRiskBusiness' ? (
+                                  <DropdownNew
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                    setSelectedDropDownValue={(
+                                      value: string,
+                                    ) => {
+                                      // setSelectedAssociation(value);
+                                      setSelectedDropDownValue(value);
+                                    }}
+                                  />
+                                ) : field?.type === 'dropDown' &&
+                                  field.name === 'highRiskType' &&
+                                  selectedDropDownValue ===
+                                    'High Risk Business / Person' ? (
+                                  <DropdownNew
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                    setSelectedDropDownValue={
+                                      setSelectedDropDownValue
+                                    }
+                                  />
+                                ) : field?.type === 'dropDown' &&
+                                  field.name === 'mediumRiskType' &&
+                                  selectedDropDownValue ===
+                                    'Medium Risk Business / Person' ? (
+                                  <DropdownNew
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                    setSelectedDropDownValue={
+                                      setSelectedDropDownValue
+                                    }
+                                  />
+                                ) : field?.type === 'dropDown' &&
+                                  field.name === 'lowRiskType' &&
+                                  selectedDropDownValue ===
+                                    'Low Risk Business / Person' ? (
+                                  <DropdownNew
+                                    key={fieldIndex}
                                     label={field.label}
                                     name={field.name}
                                     options={field.validation?.options?.map(
@@ -348,9 +443,10 @@ const BusinessInformation = () => {
                                     formik={formik}
                                     item={field}
                                   />
-                                ) : (
-                                  <p key={fieldIndex}>nothing to show</p>
-                                );
+                                ) : null;
+                                // (
+                                //   <p key={fieldIndex}>nothing to show</p>
+                                // );
                               })}
                           </FormLayoutDynamic>
                         ))}

@@ -161,35 +161,74 @@ const BusinessNature = () => {
   //   },
   // ];
 
+  // const options = [
+  //   {
+  //     value: 'soleProprietor',
+  //     label: 'Sole-Proprietorship',
+  //     endpoint: 'soleBusinessDetails',
+  //   },
+  //   {
+  //     value: 'publicAndPrivateLtd',
+  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
+  //     endpoint: 'pnpBusinessDetails',
+  //   },
+  //   {
+  //     value: 'partnership',
+  //     label:
+  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+  //     endpoint: 'partnershipBusinessDetails',
+  //   },
+  //   {
+  //     value: 'g2p',
+  //     label: 'Government Accounts / Autonomous Body',
+  //     endpoint: 'otherBusinessDetails',
+  //   },
+  //   {
+  //     value: 'ngoNpoCharities',
+  //     label:
+  //       'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+  //     endpoint: 'nncBusinessDetails',
+  //   },
+  // ];
+
   const options = [
     {
       value: 'soleProprietor',
-      label: 'Sole-Proprietorship',
+      label: 'Sole Proprietorship',
       endpoint: 'soleBusinessDetails',
     },
     {
       value: 'publicAndPrivateLtd',
-      label: 'Private Limited / Public Limited / SMC - Private Limited',
+      label: 'Private and Private Ltd.',
       endpoint: 'pnpBusinessDetails',
     },
     {
       value: 'partnership',
-      label:
-        'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+      label: 'Partnership',
       endpoint: 'partnershipBusinessDetails',
     },
     {
-      value: 'g2p',
-      label: 'Government Accounts / Autonomous Body',
+      value: 'other',
+      label: 'Other',
       endpoint: 'otherBusinessDetails',
     },
     {
+      value: 'trusts',
+      label: 'Trusts',
+      endpoint: 'nncBusinessDetails',
+    },
+    {
+      value: 'clubSocietiesAssociations',
+      label: 'Clubs, Societies, Associations',
+      endpoint: 'nncBusinessDetails',
+    },
+    {
       value: 'ngoNpoCharities',
-      label:
-        'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+      label: 'NGO, NPO, Charities',
       endpoint: 'nncBusinessDetails',
     },
   ];
+
   // const [windowSize, setWindowSize] = useState({
   //   width: 0,
   //   height: 0,
