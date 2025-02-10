@@ -25,7 +25,10 @@ const DisabledInput: React.FC<DisabledInputProps> = ({ data, removeStore }) => {
                 <H6 textColor="text-danger-base">Cancel</H6>
               </div>
             </div>
-            <div key={index} className="grid grid-cols-2 gap-6 ">
+            <div
+              key={index}
+              className="sm:grid sm:grid-cols-1 sm:gap-6 md:grid md:grid-cols-2 md:gap-6 "
+            >
               {Object.entries(item).map(([key, value]) => {
                 // Convert key from camelCase to Title Case)
                 const formattedKey = key
