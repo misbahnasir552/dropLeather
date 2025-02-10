@@ -6,6 +6,7 @@ import { generalCities } from '@/app/merchant/merchant-portal/configuration/add-
 import { categories } from '@/app/merchant/merchant-portal/qr-payments/utils/utils';
 import AddIcon from '@/assets/icons/Add.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
 // import H6 from "@/components/UI/Headings/H6";
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
@@ -45,7 +46,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
 
     const finalStore = {
       ...rest,
-      category: categoryNum.categoryCode,
+      category: categoryNum,
     };
     console.log('final store:', finalStore);
 
@@ -54,6 +55,14 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
   };
 
   console.log('stores are', addStoresValues);
+
+  const disabledFieldData = [
+    {
+      value: '92',
+      label: 'Country Code',
+    },
+  ];
+
   return (
     <div className="flex flex-col gap-4 bg-screen-grey sm:px-[40px] sm:py-[20px] md:px-[290px] md:py-[60px]">
       <H6>Add Store</H6>
@@ -173,14 +182,15 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         error={formik.errors.streetAddress}
                         touched={formik.touched.streetAddress}
                       />
-                      <Input
-                        asterik
+                      {/* <Input
                         label="Country Code"
                         name="countryCode"
                         type="text"
                         error={formik.errors.countryCode}
                         touched={formik.touched.countryCode}
-                      />
+                      /> */}
+
+                      <DisabledField data={disabledFieldData} />
                       <Input
                         asterik
                         label="State"
