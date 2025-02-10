@@ -30,9 +30,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
       prevStores.filter((_: any, i: number) => i !== index),
     );
   };
-  const [selectedCheckValue, setSelectedCheckValue] = useState<
-    string | undefined | string[]
-  >(undefined);
+  const [selectedCheckValue, setSelectedCheckValue] = useState<any>(undefined);
   console.log('ADD STORE SELECTED VALUE', selectedCheckValue);
 
   const onSubmit = (values: AddStoreInfo, { resetForm }: any) => {
@@ -109,20 +107,43 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                       />
                     </div>
                     <div className="grid grid-cols-2 gap-6">
-                      <Input
-                        label="Website Name"
-                        name="websiteName"
-                        type="text"
-                        error={formik.errors.websiteName}
-                        touched={formik.touched.websiteName}
-                      />
-                      <Input
-                        label="Website URL"
-                        name="websiteURL"
-                        type="text"
-                        error={formik.errors.websiteURL}
-                        touched={formik.touched.websiteURL}
-                      />
+                      {(() => {
+                        const isOnline =
+                          selectedCheckValue.includes('Online Payments');
+                        const isRetail = selectedCheckValue.includes('Retail');
+
+                        return (
+                          <>
+                            {isRetail && (
+                              <Input
+                                label="Store Name"
+                                name="storeName"
+                                type="text"
+                                error={formik.errors.storeName}
+                                touched={formik.touched.storeName}
+                              />
+                            )}
+                            {isOnline && (
+                              <>
+                                <Input
+                                  label="Website Name"
+                                  name="websiteName"
+                                  type="text"
+                                  error={formik.errors.websiteName}
+                                  touched={formik.touched.websiteName}
+                                />
+                                <Input
+                                  label="Website URL"
+                                  name="websiteURL"
+                                  type="text"
+                                  error={formik.errors.websiteURL}
+                                  touched={formik.touched.websiteURL}
+                                />
+                              </>
+                            )}
+                          </>
+                        );
+                      })()}
                       <DropdownInput
                         label="Category"
                         name="category"

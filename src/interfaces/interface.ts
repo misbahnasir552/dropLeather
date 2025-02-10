@@ -362,6 +362,7 @@ export interface IDropdownInput {
   label: string;
   formik?: FormikProps<any>;
   onClick?: any;
+  setSelectedDropDownValue?: any;
 }
 
 export interface BusinessNatureForm {

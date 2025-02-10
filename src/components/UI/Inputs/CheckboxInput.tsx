@@ -179,32 +179,63 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   console.log('check box input ', form, isMulti, name);
 
   // Handle checkbox change
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const optionValue = e.target.value;
+  //   setSelectedCheckValue(optionValue);
+
+  //   console.log('optionValue ', optionValue);
+
+  //   const isChecked = e.target.checked;
+
+  //   // Ensure the value is initialized as an array if it's a multi-select checkbox
+  //   const currentValues = form?.values[name] || (isMulti ? [] : '');
+
+  //   console.log('currentValues >>> ', currentValues);
+
+  //   if (isMulti) {
+  //     console.log('here multi ', isMulti, isChecked);
+
+  //     if (isChecked) {
+  //       form?.setFieldValue(name, [...currentValues, optionValue]);
+  //       // setSelectedCheckValue(name, [...currentValues, optionValue]);
+
+  //     } else {
+  //       form?.setFieldValue(
+  //         name,
+  //         currentValues.filter((value: string) => value !== optionValue),
+  //       );
+  //     }
+  //   } else {
+  //     form?.setFieldValue(name, optionValue);
+  //   }
+  // };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const optionValue = e.target.value;
-    setSelectedCheckValue(optionValue);
-
-    console.log('optionValue ', optionValue);
-
     const isChecked = e.target.checked;
 
-    // Ensure the value is initialized as an array if it's a multi-select checkbox
-    const currentValues = form?.values[name] || (isMulti ? [] : '');
+    // Ensure the value is initialized correctly
+    const currentValues = Array.isArray(form?.values[name])
+      ? form?.values[name]
+      : [];
 
-    console.log('currentValues >>> ', currentValues);
 
     if (isMulti) {
-      console.log('here multi ', isMulti, isChecked);
+      let updatedValues;
 
       if (isChecked) {
-        form?.setFieldValue(name, [...currentValues, optionValue]);
+        updatedValues = [...currentValues, optionValue]; // Add new selection
       } else {
-        form?.setFieldValue(
-          name,
-          currentValues.filter((value: string) => value !== optionValue),
-        );
+        updatedValues = currentValues.filter(
+          (value: string) => value !== optionValue,
+        ); // Remove unchecked value
       }
+
+      form?.setFieldValue(name, updatedValues);
+      setSelectedCheckValue(updatedValues); // Keep track of selected values
     } else {
       form?.setFieldValue(name, optionValue);
+      setSelectedCheckValue([optionValue]); // Replace with single value in an array
     }
   };
 
@@ -215,15 +246,15 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
           value: Key | null | undefined;
           logo: string | StaticImport;
           label:
-            | string
-            | number
-            | boolean
-            | ReactElement<any, string | JSXElementConstructor<any>>
-            | Iterable<ReactNode>
-            | ReactPortal
-            | PromiseLikeOfReactNode
-            | null
-            | undefined;
+          | string
+          | number
+          | boolean
+          | ReactElement<any, string | JSXElementConstructor<any>>
+          | Iterable<ReactNode>
+          | ReactPortal
+          | PromiseLikeOfReactNode
+          | null
+          | undefined;
         }) => (
           // <label
           //   // className="flex w-full flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
@@ -318,9 +349,8 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                 </div>
               ) : (
                 <div
-                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${
-                    error ? 'border-danger-base' : 'border-border-dark'
-                  } px-[7px] py-2`}
+                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${error ? 'border-danger-base' : 'border-border-dark'
+                    } px-[7px] py-2`}
                 >
                   <div className="h-[8px] w-[10px]"></div>
                 </div>

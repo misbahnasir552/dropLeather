@@ -9,7 +9,6 @@ import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 // import H6 from '@/components/UI/Headings/H6';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
-import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 // import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -27,6 +26,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
+import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 // import FileInput from '../UI/Inputs/FileInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
@@ -84,6 +84,8 @@ const BusinessInformation = () => {
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
+  const [selectedDropDownValue, setSelectedDropDownValue] =
+    useState<any>(undefined);
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(5).fill(null),
   );
@@ -99,6 +101,7 @@ const BusinessInformation = () => {
     setChecked(!isChecked);
   };
   console.log('selected value checkbox input', selectedCheckValue);
+  console.log('sel dropdown 222', selectedDropDownValue);
 
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
@@ -226,8 +229,8 @@ const BusinessInformation = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
-        // routeName="/merchant/home"
+      // routeName={attachRoute}
+      // routeName="/merchant/home"
       />
       <AddStore
         addStoresValues={addStoresValues}
@@ -268,7 +271,7 @@ const BusinessInformation = () => {
                                     error={field.validation.errorMessage}
                                   />
                                 ) : field?.type === 'dropDown' ? (
-                                  <DropdownInput
+                                  <DropdownNew
                                     key={fieldIndex} // Add a key prop to DropdownInput as well
                                     label={field.label}
                                     name={field.name}
@@ -282,6 +285,9 @@ const BusinessInformation = () => {
                                     )}
                                     formik={formik}
                                     error={field.validation.errorMessage}
+                                    setSelectedDropDownValue={
+                                      setSelectedDropDownValue
+                                    }
                                   />
                                 ) : field?.type === 'date' ? (
                                   <DateInputNew

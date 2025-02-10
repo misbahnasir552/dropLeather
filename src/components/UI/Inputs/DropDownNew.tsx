@@ -20,6 +20,7 @@ const DropdownNew = ({
   label,
   touched,
   formik,
+  setSelectedDropDownValue,
 }: IDropdownInput) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -36,6 +37,9 @@ const DropdownNew = ({
     if (name === 'primaryNationality') {
       const newCode = item?.label?.split('-');
       formik?.setFieldValue('countryCode', newCode[1]);
+    }
+    if (name === 'associationToHighRiskBusiness') {
+      setSelectedDropDownValue(item?.label);
     }
     formik?.setFieldValue(name, item.label.split('-')[0]);
 
@@ -145,13 +149,17 @@ const DropdownNew = ({
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
           // style={{ top: "-100%" }}
           >
-            {(filteredOptions?.length > 2) ? (<input
-              type="text"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search"
-              className="w-full border-b border-border-light px-4 py-2 focus:outline-none"
-            />) : (<></>)}
+            {filteredOptions?.length > 3 ? (
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search"
+                className="w-full border-b border-border-light px-4 py-2 focus:outline-none"
+              />
+            ) : (
+              <></>
+            )}
 
             {filteredOptions.map(
               (
