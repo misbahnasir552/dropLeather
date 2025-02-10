@@ -229,8 +229,8 @@ const BusinessInformation = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-      // routeName={attachRoute}
-      // routeName="/merchant/home"
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
       />
       <AddStore
         addStoresValues={addStoresValues}
@@ -253,10 +253,10 @@ const BusinessInformation = () => {
                     (pageItem) => (
                       // pageItem.name === "Business Details" && (
                       <React.Fragment key={pageItem.name}>
-                        {pageItem.categories.map((item, itemIndex) => (
+                        {pageItem?.categories?.map((item, itemIndex) => (
                           <FormLayoutDynamic
-                            // key={itemIndex}
-                            key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
+                            key={itemIndex}
+                            // key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
                             heading={item.categoryName}
                           >
                             {[...item.fields]

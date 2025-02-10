@@ -69,8 +69,32 @@ const DisabledInput: React.FC<DisabledInputProps> = ({ data, removeStore }) => {
                     }  px-5 py-4`}
                   >
                     <H7>{formattedKey}</H7>
-                    <H7>
+                    {/* <H7>
+
+
+                      
                       {value && typeof value !== 'object'
+                        ? String(value)
+                        : 'N/A'}
+                    </H7> */}
+
+                    <H7>
+                      {key === 'category'
+                        ? typeof value === 'object' &&
+                          value !== null &&
+                          'label' in value
+                          ? (value as { label: string }).label
+                          : String(value || 'N/A')
+                        : Array.isArray(value)
+                        ? value.length > 0
+                          ? value.map((val: any, idx: number) => (
+                              <React.Fragment key={idx}>
+                                <H7>{val}</H7>
+                                {idx < value.length - 1 && <H7>/</H7>}
+                              </React.Fragment>
+                            ))
+                          : 'N/A'
+                        : value && typeof value !== 'object'
                         ? String(value)
                         : 'N/A'}
                     </H7>
