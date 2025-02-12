@@ -234,7 +234,7 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
       setSelectedCheckValue(updatedValues); // Keep track of selected values
     } else {
       form?.setFieldValue(name, optionValue);
-      setSelectedCheckValue([optionValue]); // Replace with single value in an array
+      setSelectedCheckValue(optionValue); // Replace with single value NOT in an array but string
     }
   };
 

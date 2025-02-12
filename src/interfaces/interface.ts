@@ -316,6 +316,7 @@ export interface ActivityFormInfo {
 
 export interface AddStoreInfo {
   storeType: string[];
+  storeName: string;
   websiteName: string;
   websiteURL: string;
   category: string;

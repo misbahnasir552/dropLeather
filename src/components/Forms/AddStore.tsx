@@ -64,7 +64,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
   ];
 
   return (
-    <div className="flex flex-col gap-4 bg-screen-grey px-[290px] py-[60px]">
+    <div className="flex flex-col gap-4 bg-screen-grey sm:px-[40px] sm:py-[20px] md:px-[290px] md:py-[60px]">
       <H6>Add Store</H6>
       <div className="rounded-lg border-[1px] border-border-light bg-screen-white px-5 py-[21px]">
         <div className="flex items-center">
@@ -115,7 +115,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         error={formik.errors.storeType}
                       />
                     </div>
-                    <div className="grid grid-cols-2 gap-6">
+                    <div className="sm:grid sm:grid-cols-1 sm:gap-6 md:grid md:grid-cols-2 md:gap-6">
                       {(() => {
                         const isOnline =
                           selectedCheckValue?.includes('Online Payments');
@@ -125,6 +125,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                           <>
                             {isRetail && (
                               <Input
+                                asterik
                                 label="Store Name"
                                 name="storeName"
                                 type="text"
@@ -135,6 +136,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                             {isOnline && (
                               <>
                                 <Input
+                                  asterik
                                   label="Website Name"
                                   name="websiteName"
                                   type="text"
@@ -142,6 +144,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                                   touched={formik.touched.websiteName}
                                 />
                                 <Input
+                                  asterik
                                   label="Website URL"
                                   name="websiteURL"
                                   type="text"
@@ -154,6 +157,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         );
                       })()}
                       <DropdownInput
+                        asterik
                         label="Category"
                         name="category"
                         options={categories}
@@ -162,6 +166,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         touched={formik.touched.category}
                       />
                       <DropdownNew
+                        asterik
                         label="City"
                         name="city"
                         options={generalCities}
@@ -170,6 +175,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         touched={formik.touched.city}
                       />
                       <Input
+                        asterik
                         label="Street Address"
                         name="streetAddress"
                         type="text"
@@ -186,6 +192,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
 
                       <DisabledField data={disabledFieldData} />
                       <Input
+                        asterik
                         label="State"
                         name="state"
                         type="text"
@@ -193,6 +200,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                         touched={formik.touched.state}
                       />
                       <Input
+                        asterik
                         label="POS Country Code"
                         name="posCountryCode"
                         type="text"
@@ -202,7 +210,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
                       <Button
                         label={`Save`}
                         type="submit"
-                        className={`button-primary w-full px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                        className={`button-primary w-full px-4 py-[18px] text-sm leading-tight transition duration-300`}
                       />
                     </div>
                   </Form>

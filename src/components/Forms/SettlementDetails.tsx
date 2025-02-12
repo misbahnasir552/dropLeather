@@ -452,6 +452,7 @@ const SettlementDetails = () => {
     }
     setSubmitting(false);
   };
+  console.log('asdads', filteredData, selectedCheckValue);
 
   return (
     <div>
