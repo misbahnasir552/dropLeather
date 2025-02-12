@@ -94,26 +94,31 @@ const Navbar = () => {
   const logOut = async () => {
     console.log("here i'm to log out >");
 
-    try {
-      const response = await apiClient.get(
-        `/auth/expireJwt?email=${userData.email}`,
-        { headers: { Authorization: `Bearer ${userData.jwt}` } },
-      );
+    if (userData?.email) {
+      try {
+        const response = await apiClient.get(
+          `/auth/expireJwt?email=${userData.email}`,
+          { headers: { Authorization: `Bearer ${userData.jwt}` } },
+        );
 
-      if (response.data.responseCode === '000') {
-        dispatch(setLogout());
-        router.push('/login');
+        if (response.data.responseCode === '000') {
+          dispatch(setLogout());
+          router.push('/login');
 
-        setTimeout(() => {
-          dispatch(clearCredentials());
-          dispatch(setLogoutOnboarding());
-          dispatch(resetFields());
-        }, 5000);
-      } else {
-        console.error('logout Error:', response);
+          setTimeout(() => {
+            dispatch(clearCredentials());
+            dispatch(setLogoutOnboarding());
+            dispatch(resetFields());
+          }, 5000);
+        } else {
+          console.error('logout Error:', response);
+        }
+      } catch (error) {
+        console.error('logout Error:', error);
       }
-    } catch (error) {
-      console.error('logout Error:', error);
+    } else {
+      dispatch(setLogout());
+      router.push('/login');
     }
   };
 

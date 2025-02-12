@@ -71,7 +71,7 @@ const OtpInputWithValidation = () => {
               setDescription(res?.data?.responseDescription);
               dispatch(resetFormData);
               setRoute('/login');
-            } else if (res.data.responseCode === '000') {
+            } else if (res?.data?.responseCode === '000') {
               // merchant register failure
               // setShowModal(true);
               setApierror(response?.data?.responseMessage);

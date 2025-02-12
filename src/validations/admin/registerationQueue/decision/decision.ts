@@ -9,7 +9,7 @@ export const approvalDecisionInitialValues: ApprovalDecisionForm = {
 };
 
 export const approvalDecisionSchema = Yup.object().shape({
-  approvalDecision: Yup.string().required('Please select atleast an option'),
+  approvalDecision: Yup.string().required('Please select atleast one option'),
   comment: Yup.string()
     .required('Please provide a comment')
     .max(300, 'Comment length must not exceed 300 characters'),

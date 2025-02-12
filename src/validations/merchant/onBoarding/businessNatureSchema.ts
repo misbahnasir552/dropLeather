@@ -12,7 +12,7 @@ export const businessNatureInitialValues: BusinessNatureForm = {
 };
 
 export const businessNatureSchema = Yup.object().shape({
-  businessNature: Yup.string().required('Please select atleast an option'),
+  businessNature: Yup.string().required('Please select atleast one option'),
   // corporateProducts: Yup.string(),
   // managedDisbursementProducts: Yup.string(),
   // othersProducts: Yup.string(),

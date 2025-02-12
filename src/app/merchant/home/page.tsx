@@ -123,11 +123,11 @@ const LoginSucessHome = () => {
       );
 
       setData(response.data);
-      if (response?.data.responseCode !== '009') {
-        setShowModal(true);
-        setTitle('Network Issue');
-        setDescription(response.data.responseDescription);
-      }
+      // if (response?.data.responseCode !== '009') {
+      //   setShowModal(true);
+      //   setTitle('Network Issue');
+      //   setDescription(response.data.responseDescription);
+      // }
 
       console.log('FETCH RES ', response.data);
 
@@ -204,12 +204,6 @@ const LoginSucessHome = () => {
   ];
   const LoginCardData = [
     {
-      title: 'Sandbox Integrations',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: 'business-nature',
-    },
-    {
       title: 'Production Onboarding',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
@@ -221,6 +215,13 @@ const LoginSucessHome = () => {
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: route,
     },
+    {
+      title: 'Sandbox Integrations',
+      description:
+        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+      routeName: 'business-nature',
+    },
+
     // {
     //   title: 'Continue to My Dashboard',
     //   description:

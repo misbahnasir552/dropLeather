@@ -45,7 +45,7 @@ const PersonalInfo = () => {
   };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
-    if (isSubmitted) return; // Prevent multiple calls
+    // if (isSubmitted) return; // Prevent multiple calls
     setIsSubmitted(true);
     setIsLoading(true);
 
@@ -82,7 +82,7 @@ const PersonalInfo = () => {
             setIsSubmitted(false); // Allow retry on failure
           }
         } catch (e: any) {
-          console.error('Error during submission:', e);
+          console.error('Error during submission:', e, isSubmitted);
           showErrorModal('Network Failed', e.message);
           setIsSubmitted(false); // Allow retry on failure
         } finally {
@@ -220,12 +220,10 @@ const PersonalInfo = () => {
                   </div>
                   <div className="bg-neutral-white-base p-6">
                     <div className="text-xs leading-tight text-secondary-base">
-                      In using this website, you are deemed to have read and
-                      agreed to the following terms and conditions. The
-                      following terminology applies to these Terms and
-                      Conditions, Privacy Statement and applies to these Terms
-                      and Conditions Disclaimer Notice and any or all Agree
-                      Notice and any other terms.
+                      By accessing this website, you agree to abide by our Terms
+                      and Conditions, Privacy Policy, and all related notices.
+                      These terms outline the rules and policies governing your
+                      use of this site
                       {/* <Link
                         href={
                           'https://easypay.easypaisa.com.pk/easypay-merchant/faces/pg/site/SignUp.jsf'

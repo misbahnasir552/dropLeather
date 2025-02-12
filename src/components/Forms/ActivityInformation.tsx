@@ -53,7 +53,7 @@ const ActivityInformation = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-
+  console.log('userdatais', userData);
   const { apiSecret } = userData;
   const router = useRouter();
   // const dispatch = useAppDispatch();
