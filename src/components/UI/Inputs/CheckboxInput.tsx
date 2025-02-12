@@ -219,7 +219,6 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
       ? form?.values[name]
       : [];
 
-
     if (isMulti) {
       let updatedValues;
 
@@ -246,15 +245,15 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
           value: Key | null | undefined;
           logo: string | StaticImport;
           label:
-          | string
-          | number
-          | boolean
-          | ReactElement<any, string | JSXElementConstructor<any>>
-          | Iterable<ReactNode>
-          | ReactPortal
-          | PromiseLikeOfReactNode
-          | null
-          | undefined;
+            | string
+            | number
+            | boolean
+            | ReactElement<any, string | JSXElementConstructor<any>>
+            | Iterable<ReactNode>
+            | ReactPortal
+            | PromiseLikeOfReactNode
+            | null
+            | undefined;
         }) => (
           // <label
           //   // className="flex w-full flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
@@ -349,8 +348,9 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                 </div>
               ) : (
                 <div
-                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${error ? 'border-danger-base' : 'border-border-dark'
-                    } px-[7px] py-2`}
+                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${
+                    error ? 'border-danger-base' : 'border-border-dark'
+                  } px-[7px] py-2`}
                 >
                   <div className="h-[8px] w-[10px]"></div>
                 </div>

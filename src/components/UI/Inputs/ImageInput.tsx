@@ -98,12 +98,13 @@ const ImageInput = ({
           name={name}
           type={'text'}
           id={label}
-          className={`${className} dark:text-white peer block w-full appearance-none rounded-lg border-2 border-border-light bg-neutral-white-base px-2.5 pb-1.5 pt-5 text-base font-medium leading-tight text-secondary-base focus:border-primary-base focus:outline-none focus:ring-0 ${touched && error && 'border-danger-base focus:border-danger-base'
-            }`}
+          className={`${className} dark:text-white peer block w-full appearance-none rounded-lg border-2 border-border-light bg-neutral-white-base px-2.5 pb-1.5 pt-5 text-base font-medium leading-tight text-secondary-base focus:border-primary-base focus:outline-none focus:ring-0 ${
+            touched && error && 'border-danger-base focus:border-danger-base'
+          }`}
           placeholder=" "
           style={{ zIndex: 0 }}
           disabled={isDisabled}
-        // autoComplete="off"
+          // autoComplete="off"
         />
         <label
           htmlFor={label}

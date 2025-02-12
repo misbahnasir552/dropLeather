@@ -103,7 +103,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         show={showModal}
         setShowModal={setShowModal}
         routeName="/merchant/home"
-      // routeName={route}
+        // routeName={route}
       />
       <ReviewFormLayout>
         <ReviewFormMetaData

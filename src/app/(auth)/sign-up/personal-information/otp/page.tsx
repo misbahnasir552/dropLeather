@@ -26,7 +26,7 @@ const OtpInputWithValidation = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [route, setRoute] = useState('');
-
+  // const router=useRouter();
   const signUpForm = useAppSelector((state: any) => state.signup);
   const dispatch = useAppDispatch();
   const option = useSearchParams().get('option');
@@ -42,146 +42,70 @@ const OtpInputWithValidation = () => {
   const handleVerify = async () => {
     try {
       setIsLoading(true);
-      if (option === 'corporatePortal') {
-        // corporate verify otp
-        try {
-          const response = await apiClient.post(
-            `corporate/verify`,
-            {},
-            {
-              params: {
-                email: signUpForm.email,
-                otp: emailOtp.join(''),
-              },
-            },
-          );
-          console.log(response, 'Verify Corporate');
-          // corporate verify otp success
-          if (response.data.responseCode === '009') {
-            try {
-              // corporate register
-              const {
-                merchantType,
-                website,
-                managerMobile,
-                confirmPassword,
-                merchantName,
-                email,
-                ...rest
-              } = signUpForm;
-              const res = await apiClient.post('/corporate/registerCorporate', {
-                ...rest,
-                emailAddress: email,
-                accountType: 'Corporate',
-              });
-              console.log(res, 'Successfull signup corporate');
-
-              // corporate register success
-              if (res.data.responseCode == '009') {
-                setShowModal(true);
-                setTitle(res.data.responseMessage);
-                setDescription(res.data.responseDescription);
-                dispatch(resetFormData);
-                setRoute('/login');
-              }
-              // corporate register failure
-              else if (res.data.responseCode === '000') {
-                // setShowModal(true);
-                // setTitle(res.data.responseCode);
-                // setDescription(res.data.responseDescription);
-                setApierror(res.data.responseMessage);
-                setRoute('/sign-up/personal-information/');
-              }
-            } catch (e: any) {
-              // corporate register request failure
-              // setTitle(e.code);
-              // setDescription(e.message);
-              setApierror(e.message);
-              console.log(e, 'Failed Corporate registraion!');
-            }
-          } else if (response.data.responseCode === '000') {
-            setApierror(response.data.responseMessage);
-          }
-          // corporate verify otp failure
-          else {
-            // setShowModal(true);
-            // setTitle(response.data.errorDescription);
-            // setDescription(response.data.errorDescription);
-            console.log('hereeeeeeeee ');
-            setApierror(response.data.errorDescription);
-            setRoute('/sign-up/personal-information/otp/');
-          }
-        } catch (e) {
-          // corporate verify otp request failure
-          console.log(e, 'Corporate verification failed');
-          setApierror('Incorrect OTP');
-          // setTitle('Incorrect OTP');
-          // setDescription('Please enter correct OTP.');
-        }
-      } else {
-        try {
-          // merchant verify otp
-          const response = await apiClient.post('merchant/verifyotp', {
-            managerMobile: signUpForm.managerMobile,
-            numberOtp: smsOtp.join(''),
-            emailOtp: emailOtp.join(''),
-          });
-          // setShowModal(true);
-          console.log(response);
-          // merchant verify otp success
-          if (response.data.responseCode === '009') {
-            try {
-              // merchant register
-              const res = await apiClient.post(
-                '/merchant/onboard/register',
-                signUpForm,
-                {
-                  params: {
-                    channel: 'merchant',
-                  },
+      try {
+        // merchant verify otp
+        const response = await apiClient.post('merchant/verifyotp', {
+          managerMobile: signUpForm.managerMobile,
+          numberOtp: smsOtp.join(''),
+          emailOtp: emailOtp.join(''),
+        });
+        // setShowModal(true);
+        console.log(response);
+        // merchant verify otp success
+        if (response?.data?.responseCode === '009') {
+          try {
+            // merchant register
+            const res = await apiClient.post(
+              '/merchant/onboard/register',
+              signUpForm,
+              {
+                params: {
+                  channel: 'merchant',
                 },
-              );
-              // merchant register success
-              if (res.data.responseCode == '009') {
-                setShowModal(true);
-                setTitle(res.data.responseDescription);
-                setDescription(
-                  'Congratulations! You have signed up successfully for the Sandbox account.',
-                );
-                dispatch(resetFormData);
-                setRoute('/login');
-              } else if (res.data.responseCode == '000') {
-                // merchant register failure
-                setShowModal(true);
-                setTitle('Failure!');
-                setDescription(res.data.responseDescription);
-                setRoute('/sign-up/personal-information/');
-              } else {
-                setShowModal(true);
-                setTitle('Failure!');
-                setDescription(res.data.responseDescription);
-              }
-            } catch (e) {
-              // merchant register request failure
-              console.log(e, 'Merchant registration failed');
+              },
+            );
+            // merchant register success
+            if (res.data.responseCode === '009') {
               setShowModal(true);
-              setTitle('Network Error');
-              setDescription('Merchant registration failed. Please try again!');
+              setTitle(res?.data?.responseMessage);
+              setDescription(res?.data?.responseDescription);
+              dispatch(resetFormData);
+              setRoute('/login');
+            } else if (res.data.responseCode === '000') {
+              // merchant register failure
+              // setShowModal(true);
+              setApierror(response?.data?.responseMessage);
+              // setTitle();
+              // setDescription(res.data.responseDescription);
+              // router.push('/sign-up/personal-information/')
+              // setRoute('/sign-up/personal-information/');
+            } else {
+              setShowModal(true);
+              setTitle('Failure!');
+              setDescription(res.data.responseDescription);
             }
-          } else {
-            // merchant verify otp failure
-            setTitle('Failure!');
-            setDescription(response.data.errorDescription);
+          } catch (e) {
+            // merchant register request failure
+            console.log(e, 'Merchant registration failed');
             setShowModal(true);
-            // setRoute('/sign-up/personal-information/otp/');
+            setTitle('Network Error');
+            setDescription('Merchant registration failed. Please try again!');
           }
-        } catch (e) {
-          // merchant verify otp request failure
-          console.log(e, 'Merchant OTP Verification Failed');
-          setTitle('Network Error');
-          setDescription('Merchant OTP Verification Failed');
+        } else if (response?.data?.responseCode === '000') {
+          setApierror(`${response?.data?.responseMessage}hii`);
+        } else {
+          // merchant verify otp failure
+          setTitle('Failure!');
+          setDescription(response.data.errorDescription);
           setShowModal(true);
+          // setRoute('/sign-up/personal-information/otp/');
         }
+      } catch (e) {
+        // merchant verify otp request failure
+        console.log(e, 'Merchant OTP Verification Failed');
+        setTitle('Network Error');
+        setDescription('Merchant OTP Verification Failed');
+        setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);

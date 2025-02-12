@@ -7,12 +7,16 @@ interface ICheckboxItem {
   description: string;
   isChecked: boolean;
   handleCheckboxChange: () => void;
+  handleTermsAndConditionsChange?: () => void;
+  span?: string;
 }
 
 function CheckboxItem({
   description,
   isChecked,
   handleCheckboxChange,
+  handleTermsAndConditionsChange,
+  span,
 }: ICheckboxItem) {
   return (
     <>
@@ -40,6 +44,14 @@ function CheckboxItem({
           {/* I agree to easypaisa Terms & Conditions */}
           {description}
         </p>
+        {span ? (
+          <p
+            className="text-xs font-semibold leading-tight text-primary-base underline"
+            onClick={handleTermsAndConditionsChange}
+          >
+            {span}
+          </p>
+        ) : null}
       </div>
     </>
   );
