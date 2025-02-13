@@ -183,7 +183,7 @@ const BusinessInformation = () => {
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
-    console.log('values >>>', values);
+    console.log('values >>>', values, addStoresValues);
 
     console.log('BUSINESS NATURE DATAAA:', businessNatureData);
     if (addStoresValues.length < 1) {

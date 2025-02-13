@@ -46,7 +46,7 @@ const AddStore = ({ addStoresValues, setAddStoresValues }: any) => {
 
     const finalStore = {
       ...rest,
-      category: categoryNum,
+      category: categoryNum.categoryCode,
     };
     console.log('final store:', finalStore);
 
