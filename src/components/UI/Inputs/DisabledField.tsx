@@ -5,7 +5,7 @@ interface DisabledInputProps {
 }
 
 const DisabledField = ({ data }: DisabledInputProps) => {
-  console.log('data is', data);
+  // console.log('data is', data);
   return (
     <>
       {data.map((item: any, index: any) => (

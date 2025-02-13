@@ -5,21 +5,15 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
+// import * as Yup from 'yup';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
-// import H6 from '@/components/UI/Headings/H6';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
-// import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import { useAppSelector } from '@/hooks/redux';
-// import {
-//   // businessInfoSchema,
-//   GetBusinessDetails,
-// } from '@/validations/merchant/onBoarding/businessInfo';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo, BusinessFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
-// import { setBusinessForm } from '@/redux/features/formSlices/onBoardingForms';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
@@ -28,41 +22,10 @@ import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
-// import FileInput from '../UI/Inputs/FileInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import AddStore from './AddStore';
 import { buildValidationSchema } from './validations/helper';
 import type { FieldsData, Page } from './validations/types';
-// import axios from 'axios';
-
-// import AddStore from './AddStore';
-
-// const checkboxData: any = [
-//   {
-//     label: 'Mobile Account',
-//     value: 'Mobile Account',
-//   },
-//   {
-//     label: 'Debit/Credit Card',
-//     value: 'Debit/Credit Card',
-//   },
-//   {
-//     label: 'Easypaisa shop',
-//     value: 'Easypaisa shop',
-//   },
-//   {
-//     label: 'QR',
-//     value: 'QR',
-//   },
-//   {
-//     label: 'TILL',
-//     value: 'TILL',
-//   },
-//   {
-//     label: 'Direct Debit',
-//     value: 'Direct Debit',
-//   },
-// ];
 
 const BusinessInformation = () => {
   const userData = useAppSelector((state: any) => state.auth);
@@ -71,7 +34,6 @@ const BusinessInformation = () => {
     (state: any) => state.onBoardingForms,
   );
 
-  // const dispatch = useAppDispatch();
   const router = useRouter();
   const [isChecked, setChecked] = useState(false);
 
@@ -105,34 +67,109 @@ const BusinessInformation = () => {
 
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
-    if (currentTab) {
-      const title = convertSlugToTitle(currentTab);
-      setPageTitle(title);
-      console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
-      const fData = fieldsData.pages.page.filter((item) => {
-        console.log(item.name, 'ITEM NAME');
-        return convertSlugToTitle(item.name) === title;
-      });
-      setFilteredData(fData);
+    if (!currentTab) return;
 
-      fData?.forEach((item) => {
-        // if (item.name === "Activity Information") {
-        item.categories.forEach((category) => {
-          category.fields.forEach((field) => {
-            if (field?.type === 'checkItem') {
-              return;
-            }
-            initialValues[field.name] = '';
-          });
+    const title = convertSlugToTitle(currentTab);
+    setPageTitle(title);
+
+    let updatedFData = fieldsData.pages.page.filter(
+      (item) => convertSlugToTitle(item.name) === title,
+    );
+
+    // Find the category containing "associationToHighRiskBusiness"
+    updatedFData = updatedFData.map((item) => {
+      return {
+        ...item,
+        categories: item.categories.map((category) => {
+          const hasAssociationField = category.fields.some(
+            (field) =>
+              field.name === 'associationToHighRiskBusiness' &&
+              field.type === 'dropDown',
+          );
+
+          if (!hasAssociationField) return category;
+
+          let updatedFields = category.fields;
+
+          if (selectedDropDownValue === 'High Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'Medium Risk Business / Person'
+          ) {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+            );
+          } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'mediumRiskType' &&
+                field.name !== 'highRiskType',
+            );
+          }
+
+          return {
+            ...category,
+            fields: updatedFields,
+          };
+        }),
+      };
+    });
+
+    setFilteredData(updatedFData);
+
+    updatedFData?.forEach((item) => {
+      // if (item.name === "Activity Information") {
+      item.categories.forEach((category) => {
+        category.fields.forEach((field) => {
+          if (field?.type === 'checkItem') {
+            return;
+          }
+          initialValues[field.name] = '';
         });
-        setInitialValuesState(initialValues);
-        // }
       });
-      const validationSchema = buildValidationSchema(fData);
+      setInitialValuesState(initialValues);
+      const validationSchema = buildValidationSchema(updatedFData);
 
       setValidationSchemaState(validationSchema);
-    }
-  }, [currentTab]);
+      // }
+    });
+  }, [currentTab, selectedDropDownValue]);
+
+  // useEffect(() => {
+  //   const initialValues: { [key: string]: any } = {};
+  //   if (currentTab) {
+  //     const title = convertSlugToTitle(currentTab);
+  //     setPageTitle(title);
+  //     console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
+  //     const fData = fieldsData.pages.page.filter((item) => {
+  //       // console.log(item.name, 'ITEM NAME');
+  //       return convertSlugToTitle(item.name) === title;
+  //     });
+  //     setFilteredData(fData);
+
+  //     fData?.forEach((item) => {
+  //       // if (item.name === "Activity Information") {
+  //       item.categories.forEach((category) => {
+  //         category.fields.forEach((field) => {
+  //           if (field?.type === 'checkItem') {
+  //             return;
+  //           }
+  //           initialValues[field.name] = '';
+  //         });
+  //       });
+  //       setInitialValuesState(initialValues);
+  //       // }
+  //     });
+  //     console.log("fData is",fData)
+  //     const validationSchema = buildValidationSchema(fData);
+
+  //     setValidationSchemaState(validationSchema);
+  //   }
+  // }, [currentTab, selectedDropDownValue]);
 
   if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
@@ -141,6 +178,7 @@ const BusinessInformation = () => {
       </div>
     );
   }
+
   const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,

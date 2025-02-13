@@ -322,7 +322,7 @@ export interface AddStoreInfo {
   category: string;
   city: string;
   streetAddress: string;
-  countryCode: string;
+  // countryCode: string;
   state: string;
   posCountryCode: string;
 }

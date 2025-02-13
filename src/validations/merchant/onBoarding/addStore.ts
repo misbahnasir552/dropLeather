@@ -68,7 +68,7 @@ export const addStoreInitialValues: AddStoreInfo = {
   category: '',
   city: '',
   streetAddress: '',
-  countryCode: '',
+  // countryCode: '',
   state: '',
   posCountryCode: '',
 };
@@ -102,7 +102,7 @@ export const addStoreSchema = Yup.object().shape({
   city: Yup.string().required('City is required'),
   streetAddress: Yup.string().required('Street Address is required'),
 
-  countryCode: Yup.string().required('Country is required'), // Changed to string
+  // countryCode: Yup.string().required('Country is required'), // Changed to string
 
   state: Yup.string().required('State is required'),
   posCountryCode: Yup.string().required('POS code is required'),
