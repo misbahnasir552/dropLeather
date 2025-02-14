@@ -57,6 +57,7 @@ const BusinessInformation = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
   // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
   // const BusinessInfoInitialValues = GetBusinessDetails();
   const handleCheckboxChange = () => {
@@ -240,9 +241,7 @@ const BusinessInformation = () => {
               );
             }
           } else if (response?.data?.responseCode === '000') {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
+            setApierror(response?.data?.responseMessage);
           } else {
             setTitle('Error Occured');
             setDescription(response?.data?.responseDescription);
@@ -492,6 +491,9 @@ const BusinessInformation = () => {
                     ),
                     // )
                   )}
+                </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   <Button
