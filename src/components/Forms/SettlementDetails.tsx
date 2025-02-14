@@ -409,7 +409,7 @@ const SettlementDetails = () => {
       managerMobile: userData.managerMobile,
       account: values.accounts,
       bankName:
-        values?.bankName !== '' ? values?.bankName : 'easypaisa Bank Limited',
+        values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
       accountNumber: values.accountNumber,
       accountTitle: values.accountTitle,
       status: 'Completed',

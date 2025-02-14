@@ -152,7 +152,7 @@ const DropdownNew = ({
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
             // style={{ top: "-100%" }}
           >
-            {filteredOptions?.length > 3 ? (
+            {filteredOptions?.length > 10 ? (
               <input
                 type="text"
                 value={searchTerm}
