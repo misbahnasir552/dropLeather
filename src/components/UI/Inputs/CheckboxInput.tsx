@@ -348,9 +348,8 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                 </div>
               ) : (
                 <div
-                  className={`flex h-6 w-6 justify-center rounded-full border-2 ${
-                    error ? 'border-danger-base' : 'border-border-dark'
-                  } px-[7px] py-2`}
+                  className={`flex h-6 w-6 justify-center rounded-full border-2 border-border-dark
+                   px-[7px] py-2`}
                 >
                   <div className="h-[8px] w-[10px]"></div>
                 </div>

@@ -119,7 +119,7 @@ const AttachmentsStatic = () => {
                 <div className="flex flex-col gap-6">
                   <FormWrapper>
                     <H6>
-                      Upload Documents{' '}
+                      Upload Documentsm,jnkj{' '}
                       <span className="font-normal leading-tight text-secondary-500">
                         (What would you like to integrate)
                       </span>
