@@ -93,7 +93,7 @@ export interface IInput {
   isDisabled?: boolean;
   hasImage?: boolean;
   image?: StaticImageData | string;
-  error?: string | undefined;
+  error?: string | undefined | string[];
   touched?: boolean | undefined;
   eyeinput?: boolean;
   value?: any;
@@ -358,7 +358,7 @@ export interface IDropdownInput {
   asterik?: boolean;
   name: string;
   options: any;
-  error?: string | undefined;
+  error?: string | undefined | string[];
   touched?: boolean | undefined;
   label: string;
   formik?: FormikProps<any>;

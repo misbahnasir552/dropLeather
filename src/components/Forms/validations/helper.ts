@@ -68,7 +68,8 @@ export const buildValidationSchema = (responseFields: Page[]) => {
         }
 
         if (field.type === 'checkBoxInputMulti') {
-          fieldValidation = Yup.array().of(Yup.string());
+          // fieldValidation = Yup.array().of(Yup.string());
+          fieldValidation = Yup.string().required('fill it');
         } else if (field.type === 'file') {
           // Custom validation for file type
           fieldValidation = Yup.array()

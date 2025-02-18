@@ -8,6 +8,10 @@ export const endpointArray = [
     endpoint: `/merchant/`,
   },
   {
+    tab: 'store-details',
+    endpoint: `/merchant/saveMerchantStore`,
+  },
+  {
     tab: 'settlement-details',
     endpoint: `/merchant/settlementdetails`,
   },

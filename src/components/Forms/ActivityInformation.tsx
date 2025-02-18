@@ -217,7 +217,7 @@ const ActivityInformation = () => {
         }
       } catch (e) {
         console.log('Error in submitting dynamic form', e);
-        setTitle('Network Failed');
+        console.error('Network Failed');
         setDescription('Network failed! Please try again later.');
         setShowModal(true);
       } finally {
@@ -225,24 +225,6 @@ const ActivityInformation = () => {
       }
     }
   };
-
-  // const handleCheckboxChange = (name: string, formik: any) => {
-  //   setChecked((prevChecked) => {
-  //     const newChecked = !prevChecked;
-
-  //     // Log for debugging
-  //     console.log('AZKA ISSUE 1:', name, formik.values.businessAddress);
-
-  //     // Handle business logic based on the updated state
-  //     if (newChecked && formik.values.businessAddress) {
-  //       formik.setFieldValue(name, formik.values.businessAddress);
-  //     } else {
-  //       formik.setFieldValue(name, '');
-  //     }
-
-  //     return newChecked; // Update the state
-  //   });
-  // };
 
   const handleCheckboxChange = (name: string, formik: any) => {
     const newChecked = !isChecked;

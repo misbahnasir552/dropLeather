@@ -20,10 +20,10 @@ import Button from '../UI/Button/PrimaryButton';
 interface IRevieFormData {
   isEditable: boolean;
   merchant: boolean;
-  data: any;
+  onboardingData: any;
 }
 
-function ReviewFormData({ isEditable, data }: IRevieFormData) {
+function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   const userData = useAppSelector((state: any) => state.auth);
 
   const [showModal, setShowModal] = useState(false);
@@ -59,6 +59,8 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
       endpoint: 'nncBusinessDetails',
     },
   ];
+
+  console.log('onboarding ', onboardingData);
 
   const onSubmit = async () => {
     // const onSubmit = async ( { resetForm }: any) => {
@@ -114,82 +116,87 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Merchant Personal Details">
           <ReviewInput
             label="Father Name"
-            value={data?.activityInformation?.fatherSpouseName}
+            value={onboardingData?.activityInformation?.fatherSpouseName}
           />
           <ReviewInput
             label="Gender"
-            value={data?.activityInformation?.gender}
+            value={onboardingData?.activityInformation?.gender}
           />
           <ReviewInput
             label="Purpose of Your Account"
-            value={data?.activityInformation?.purposeOfAccount}
+            value={onboardingData?.activityInformation?.purposeOfAccount}
           />
           <ReviewInput
             label="Citizenship"
-            value={data?.activityInformation?.citizenship}
+            value={onboardingData?.activityInformation?.citizenship}
           />
           <ReviewInput
             label="Country of residency"
-            value={data?.activityInformation?.residency}
+            value={onboardingData?.activityInformation?.residency}
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Business Details">
           <ReviewInput
             label="Name of Business Owner as per CNIC"
-            value={data?.activityInformation?.businessOwnerName}
+            value={onboardingData?.activityInformation?.businessOwnerName}
           />
           <ReviewInput
             label="Business Name"
-            value={data?.activityInformation?.businessName}
+            value={onboardingData?.activityInformation?.businessName}
           />
           <ReviewInput
             label="Legal Name of Business"
-            value={data?.activityInformation?.legalName}
+            value={onboardingData?.activityInformation?.legalName}
           />
           <ReviewInput
             label="Date of Incorporation"
-            value={data?.activityInformation?.dateOfCorporation}
+            value={onboardingData?.activityInformation?.dateOfCorporation}
           />
           <ReviewInput
             label="Terror Financing"
-            value={data?.activityInformation?.terrorFinancing}
+            value={onboardingData?.activityInformation?.terrorFinancing}
           />
           <ReviewInput
             label="Politically Exposed"
-            value={data?.activityInformation?.politicalExposed}
+            value={onboardingData?.activityInformation?.politicalExposed}
           />
           <ReviewInput
             label="NTN Number"
-            value={data?.activityInformation?.ntnNo}
+            value={onboardingData?.activityInformation?.ntnNo}
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Contact Details">
           <ReviewInput
             label="Email Address"
-            value={data?.activityInformation?.emailAddress}
+            value={onboardingData?.activityInformation?.emailAddress}
           />
-          <ReviewInput label="City" value={data?.activityInformation?.city} />
+          <ReviewInput
+            label="City"
+            value={onboardingData?.activityInformation?.city}
+          />
           <ReviewInput
             label="Business Address"
-            value={data?.activityInformation?.businessAddress}
+            value={onboardingData?.activityInformation?.businessAddress}
           />
           <ReviewInput
             label="Correspondence Address"
-            value={data?.activityInformation?.correspondenceAddress}
+            value={onboardingData?.activityInformation?.correspondenceAddress}
           />
           <ReviewInput
             label="Are you an Account Holder?"
-            value={data?.activityInformation?.isAccountHandlerDifferent}
+            value={
+              onboardingData?.activityInformation?.isAccountHandlerDifferent
+            }
           />
           <ReviewInput
             label="Primary Phone Number"
-            value={data?.activityInformation?.primaryPhoneNo}
+            value={onboardingData?.activityInformation?.primaryPhoneNo}
           />
           <ReviewInput
             label="Other Phone Number"
-            value={data?.activityInformation?.secondaryPhoneNo}
+            value={onboardingData?.activityInformation?.secondaryPhoneNo}
           />
         </ReviewFormDataGrid>
       </ReviewFormLayout>
@@ -202,30 +209,32 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Business Particulars">
           <ReviewInput
             label="Business Documentation Type"
-            value={data?.businessDetails?.businessDocumentationType}
+            value={onboardingData?.businessDetails?.businessDocumentationType}
           />
           {/* <ReviewInput
             label="Merchant Category"
-            value={data?.businessDetails?.merchantCategory}
+            value={onboardingData?.businessDetails?.merchantCategory}
           /> */}
           <ReviewInput
             label="Business Mode"
-            value={data?.businessDetails?.businessMode}
+            value={onboardingData?.businessDetails?.businessMode}
           />
           <ReviewInput
             label="Established Since"
-            value={data?.businessDetails?.establishedSince}
+            value={onboardingData?.businessDetails?.establishedSince}
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Payment Modes Required">
-          {data?.businessDetails?.paymentModes?.map((item: any, index: any) => (
-            <ReviewInput
-              key={index}
-              label={`Payment Mode ${index + 1}`}
-              value={item}
-            />
-          ))}
+          {onboardingData?.businessDetails?.paymentModes?.map(
+            (item: any, index: any) => (
+              <ReviewInput
+                key={index}
+                label={`Payment Mode ${index + 1}`}
+                value={item}
+              />
+            ),
+          )}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Business Type ">
@@ -234,22 +243,23 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
             value={
               options.find(
                 (option) =>
-                  option.value === data?.activityInformation?.businessNature,
+                  option.value ===
+                  onboardingData?.activityInformation?.businessNature,
               )?.label || 'N/A'
             }
           />
           <ReviewInput
             label="Is Your Business Registered"
-            value={data?.businessDetails?.registerUnRegister}
+            value={onboardingData?.businessDetails?.registerUnRegister}
           />
           <ReviewInput
             label="Special Customer"
-            value={data?.businessDetails?.specialCustomer}
+            value={onboardingData?.businessDetails?.specialCustomer}
           />
           <ReviewInput
             label="Nature of Activity"
-            // value={data?.businessDetails?.natureOfActivity?.join(" | ") || ""}
-            value={data?.businessDetails?.natureOfActivity?.map(
+            // value={onboardingData?.businessDetails?.natureOfActivity?.join(" | ") || ""}
+            value={onboardingData?.businessDetails?.natureOfActivity?.map(
               (item: any, index: any) => <div key={index}>{item}</div>,
             )}
           />
@@ -258,23 +268,25 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Customer Details">
           <ReviewInput
             label="Do you get an income from salary?"
-            value={data?.businessDetails?.incomeStatus}
+            value={onboardingData?.businessDetails?.incomeStatus}
           />
           <ReviewInput
             label="Current Daily Transactions (in PKR)"
-            value={data?.businessDetails?.currentDailyTransaction}
+            value={onboardingData?.businessDetails?.currentDailyTransaction}
           />
           <ReviewInput
             label="Association to High Risk Business "
-            value={data?.businessDetails?.associationToHighRiskBusiness}
+            value={
+              onboardingData?.businessDetails?.associationToHighRiskBusiness
+            }
           />
           <ReviewInput
             label="Source of Funds"
-            value={data?.businessDetails?.sourceOfFunds}
+            value={onboardingData?.businessDetails?.sourceOfFunds}
           />
           <ReviewInput
             label="Current Monthly Transactions (in PKR)"
-            value={data?.businessDetails?.currentMonthlyTransaction}
+            value={onboardingData?.businessDetails?.currentMonthlyTransaction}
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
@@ -282,12 +294,16 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
           <ReviewInput
             label="Expected No. of Transactions per Month"
             value={
-              data?.businessDetails?.expectedMonthlyCreditTurnoverTransactions
+              onboardingData?.businessDetails
+                ?.expectedMonthlyCreditTurnoverTransactions
             }
           />
           <ReviewInput
             label="Expected Sales Volume per Month"
-            value={data?.businessDetails?.expectedMonthlyCreditTurnoverAmount}
+            value={
+              onboardingData?.businessDetails
+                ?.expectedMonthlyCreditTurnoverAmount
+            }
           />
         </ReviewFormDataGrid>
       </ReviewFormLayout>
@@ -300,15 +316,15 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Settlement Details">
           <ReviewInput
             label="Bank Name"
-            value={data?.settlementDetails?.bankName}
+            value={onboardingData?.settlementDetails?.bankName}
           />
           <ReviewInput
             label="Bank Account Number"
-            value={data?.settlementDetails?.accountNumber}
+            value={onboardingData?.settlementDetails?.accountNumber}
           />
           <ReviewInput
             label="Bank Account Title"
-            value={data?.settlementDetails?.accountTitle}
+            value={onboardingData?.settlementDetails?.accountTitle}
           />
         </ReviewFormDataGrid>
       </ReviewFormLayout>
@@ -321,8 +337,8 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <ReviewFormDataGrid heading="Integration Methods">
           <ReviewInput
             // label="Website"
-            // value={data?.integration?.integrationMethod}
-            value={data?.integration?.integrationMethod?.map(
+            // value={onboardingData?.integration?.integrationMethod}
+            value={onboardingData?.integration?.integrationMethod?.map(
               (item: any, index: any) => <div key={index}>{item}</div>,
             )}
           />
@@ -334,25 +350,25 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Integration Modes">
           <ReviewInput
-            value={data?.integration?.integrationMode?.map(
+            value={onboardingData?.integration?.integrationMode?.map(
               (item: any, index: any) => <div key={index}>{item}</div>,
             )}
           />
           {/* <ReviewInput
             label="Plugin"
-            value={data?.integration?.integrationMode}
+            value={onboardingData?.integration?.integrationMode}
           />
-          <ReviewInput label="API" value={data?.integration?.integrationMode} /> */}
+          <ReviewInput label="API" value={onboardingData?.integration?.integrationMode} /> */}
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Developer’s Details">
           <ReviewInput
             label="Email Address"
-            value={data?.integration?.emailAddress}
+            value={onboardingData?.integration?.emailAddress}
           />
           <ReviewInput
             label="Mobile Number"
-            value={data?.integration?.mobileNumber}
+            value={onboardingData?.integration?.mobileNumber}
           />
         </ReviewFormDataGrid>
       </ReviewFormLayout>
@@ -364,10 +380,10 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
         />
 
         <ReviewFormDataGrid heading="Upload Documents">
-          {Array.isArray(data?.merchantDocuments) &&
+          {Array.isArray(onboardingData?.merchantDocuments) &&
             (
               Object.entries(
-                data.merchantDocuments.reduce(
+                onboardingData?.merchantDocuments.reduce(
                   (
                     acc: { [key: string]: any[] },
                     doc: { documentLabel: string; filename: string },
@@ -393,7 +409,7 @@ function ReviewFormData({ isEditable, data }: IRevieFormData) {
                 ))}
               </div>
             ))}
-          {!Array.isArray(data?.merchantDocuments) && (
+          {!Array.isArray(onboardingData?.merchantDocuments) && (
             <p>No documents to display.</p>
           )}
         </ReviewFormDataGrid>

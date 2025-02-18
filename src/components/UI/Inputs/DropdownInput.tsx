@@ -31,6 +31,8 @@ const DropdownInput = ({
     setToggle(false);
   };
 
+  console.log('000000000dropdown error is', error);
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -151,6 +153,9 @@ const DropdownInput = ({
         )}
       </div>
       <FormikErrorMessage name={name} />
+      {/* <div className="flex w-full justify-start px-3 text-xs text-danger-base">
+        {error}
+      </div> */}
     </div>
   );
 };

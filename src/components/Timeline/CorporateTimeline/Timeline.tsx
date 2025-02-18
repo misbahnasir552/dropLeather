@@ -4,18 +4,18 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-import ApplicationFormStatic from '@/components/Forms/ApplicationFormStatic';
+// import ApplicationFormStatic from '@/components/Forms/ApplicationFormStatic';
 // import apiClient from '@/api/apiClient';
 // import ApplicationForm from '@/components/Forms/ApplicationForm';
 // import LivePicture from '@/components/Forms/LivePicture';
 import Checklist from '@/components/Forms/Checklist';
-import AttachmentsForm from '@/components/Forms/CorporateAttachments';
+// import AttachmentsForm from '@/components/Forms/CorporateAttachments';
 import ReviewForm from '@/components/Forms/ReviewForm';
 import type { FieldsData } from '@/components/Forms/validations/types';
 import PhotoCapture from '@/components/LivePhotoCapture/PhotoCapture';
 import {
-  ApplicationFormIcon,
-  AttachmentsIcon,
+  // ApplicationFormIcon,
+  // AttachmentsIcon,
   CheckListIcon,
   LivePictureIcon,
   ReviewFormIcon,
@@ -81,9 +81,9 @@ const Timeline: React.FC = () => {
     data?.corporateDocuments?.[0]?.documentStatus;
   const corporateChecklistStatus = data?.livePictures?.[0]?.livePictureStatus;
   const corporateLivePictureStatus = data?.livePictures?.[0]?.livePictureStatus;
-  const applicationFormStatus = data?.mulipleApplicantsData?.status
-    ? data?.mulipleApplicantsData?.status
-    : appStatus;
+  // const applicationFormStatus = data?.mulipleApplicantsData?.status
+  //   ? data?.mulipleApplicantsData?.status
+  //   : appStatus;
 
   const getFilteredTabs = (fetchedPages: { name: string }[], tabs: Tab[]) => {
     // const getFilteredTabs = (backendPages: { name: string }[], tabs: Tab[]) => {
@@ -116,24 +116,24 @@ const Timeline: React.FC = () => {
   }, []);
 
   const tabs: Tab[] = [
-    {
-      name: 'application-form',
-      label: 'Application Form',
-      component: <ApplicationFormStatic />,
-      status: applicationFormStatus,
-      svg: (
-        <ApplicationFormIcon
-          color={
-            activeTab === 'application-form'
-              ? '#21B25F'
-              : activeTab !== 'application-form' &&
-                applicationFormStatus === 'Completed'
-              ? '#322C3C'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
+    // {
+    //   name: 'application-form',
+    //   label: 'Application Form',
+    //   component: <ApplicationFormStatic />,
+    //   status: applicationFormStatus,
+    //   svg: (
+    //     <ApplicationFormIcon
+    //       color={
+    //         activeTab === 'application-form'
+    //           ? '#21B25F'
+    //           : activeTab !== 'application-form' &&
+    //             applicationFormStatus === 'Completed'
+    //           ? '#322C3C'
+    //           : '#6F6B76'
+    //       }
+    //     />
+    //   ),
+    // },
 
     {
       name: 'live-picture',
@@ -175,24 +175,24 @@ const Timeline: React.FC = () => {
       ),
     },
 
-    {
-      name: 'attachments',
-      label: 'Attachments',
-      component: <AttachmentsForm />,
-      status: corporateAttachmentsStatus ?? corporateAttachmentsStatus,
-      svg: (
-        <AttachmentsIcon
-          color={
-            activeTab === 'attachments'
-              ? '#21B25F'
-              : activeTab !== 'attachments' &&
-                corporateAttachmentsStatus === 'Completed'
-              ? '#322C3C'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
+    // {
+    //   name: 'attachments',
+    //   label: 'Attachments',
+    //   component: <AttachmentsForm />,
+    //   status: corporateAttachmentsStatus ?? corporateAttachmentsStatus,
+    //   svg: (
+    //     <AttachmentsIcon
+    //       color={
+    //         activeTab === 'attachments'
+    //           ? '#21B25F'
+    //           : activeTab !== 'attachments' &&
+    //             corporateAttachmentsStatus === 'Completed'
+    //           ? '#322C3C'
+    //           : '#6F6B76'
+    //       }
+    //     />
+    //   ),
+    // },
     {
       name: 'review-form',
       label: 'Review Form',

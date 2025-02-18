@@ -37,6 +37,7 @@ const Attachments = () => {
   const [pageTitle, setPageTitle] = useState<any>();
   const [initialValuesState, setInitialValuesState] = useState<any>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [apierror, setApierror] = useState('');
 
   // const userData = useAppSelector((state: any) => state.auth);
   const [selectedFiles, setSelectedFiles] = useState<Array<File[] | null>>(
@@ -161,9 +162,7 @@ const Attachments = () => {
               );
             }
           } else if (response?.data?.responseCode === '000') {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
+            setApierror(response?.data?.responseMessage);
           } else {
             setTitle('Error Occured');
             setDescription(response?.data?.responseDescription);
@@ -293,6 +292,9 @@ const Attachments = () => {
                                     return null;
                                   },
                                 )}
+                              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                                {apierror}
+                              </div>
                             </FormLayoutDynamic>
                           ),
                         )}
@@ -300,6 +302,7 @@ const Attachments = () => {
                     ),
                   )}
                 </div>
+
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   <Button
                     label={`Save & Continue Later`}

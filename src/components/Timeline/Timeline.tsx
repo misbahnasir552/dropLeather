@@ -15,6 +15,7 @@ import BusinessInformation from '@/components/Forms/BusinessDetails';
 import IntegrationForm from '@/components/Forms/IntegrationForm';
 import ReviewForm from '@/components/Forms/ReviewForm';
 import SettlementDetailsStatic from '@/components/Forms/SettlementDetails';
+import StoreDetails from '@/components/Forms/StoreDetails';
 import {
   ActivityInformationIcon,
   AttachmentsIcon,
@@ -109,7 +110,7 @@ const Timeline: React.FC = () => {
   const tabs: Tab[] = [
     {
       name: 'activity-information',
-      label: 'Activity Information',
+      label: 'Activity Informations',
       component: <ActivityInformation />,
       status: data?.activityInformation?.status,
       svg: (
@@ -143,6 +144,25 @@ const Timeline: React.FC = () => {
         />
       ),
     },
+    {
+      name: 'store-details',
+      label: 'Store Details',
+      component: <StoreDetails />,
+      status: data?.businessDetails?.status,
+      svg: (
+        <BusinessDetailsIcon
+          color={
+            activeTab === 'store-details'
+              ? '#21B25F'
+              : activeTab !== 'store-details' &&
+                data?.businessDetails?.status === 'Completed'
+              ? '#000000'
+              : '#6F6B76'
+          }
+        />
+      ),
+    },
+
     {
       name: 'settlement-details',
       label: 'Settlement Details',

@@ -23,7 +23,7 @@ import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import AddStore from './AddStore';
+// import AddStore from './AddStore';
 import { buildValidationSchema } from './validations/helper';
 import type { FieldsData, Page } from './validations/types';
 
@@ -63,7 +63,11 @@ const BusinessInformation = () => {
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
   };
-  console.log('selected value checkbox input', selectedCheckValue);
+  console.log(
+    'selected value checkbox input',
+    selectedCheckValue,
+    setAddStoresValues,
+  );
   console.log('sel dropdown 222', selectedDropDownValue);
 
   useEffect(() => {
@@ -73,12 +77,12 @@ const BusinessInformation = () => {
     const title = convertSlugToTitle(currentTab);
     setPageTitle(title);
 
-    let updatedFData = fieldsData.pages.page.filter(
+    let updatedFData = fieldsData?.pages?.page?.filter(
       (item) => convertSlugToTitle(item.name) === title,
     );
 
     // Find the category containing "associationToHighRiskBusiness"
-    updatedFData = updatedFData.map((item) => {
+    updatedFData = updatedFData?.map((item) => {
       return {
         ...item,
         categories: item.categories.map((category) => {
@@ -139,38 +143,6 @@ const BusinessInformation = () => {
       // }
     });
   }, [currentTab, selectedDropDownValue]);
-
-  // useEffect(() => {
-  //   const initialValues: { [key: string]: any } = {};
-  //   if (currentTab) {
-  //     const title = convertSlugToTitle(currentTab);
-  //     setPageTitle(title);
-  //     console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
-  //     const fData = fieldsData.pages.page.filter((item) => {
-  //       // console.log(item.name, 'ITEM NAME');
-  //       return convertSlugToTitle(item.name) === title;
-  //     });
-  //     setFilteredData(fData);
-
-  //     fData?.forEach((item) => {
-  //       // if (item.name === "Activity Information") {
-  //       item.categories.forEach((category) => {
-  //         category.fields.forEach((field) => {
-  //           if (field?.type === 'checkItem') {
-  //             return;
-  //           }
-  //           initialValues[field.name] = '';
-  //         });
-  //       });
-  //       setInitialValuesState(initialValues);
-  //       // }
-  //     });
-  //     console.log("fData is",fData)
-  //     const validationSchema = buildValidationSchema(fData);
-
-  //     setValidationSchemaState(validationSchema);
-  //   }
-  // }, [currentTab, selectedDropDownValue]);
 
   if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
@@ -269,10 +241,10 @@ const BusinessInformation = () => {
         // routeName={attachRoute}
         // routeName="/merchant/home"
       />
-      <AddStore
+      {/* <AddStore
         addStoresValues={addStoresValues}
         setAddStoresValues={setAddStoresValues}
-      />
+      /> */}
       <Formik
         initialValues={initialValuesState}
         validationSchema={validationSchemaState}
@@ -435,7 +407,7 @@ const BusinessInformation = () => {
                                   />
                                 ) : field?.type === 'checkBoxInput' ? (
                                   <CheckboxInput
-                                    // isMulti
+                                    isMulti={false}
                                     name={field.name}
                                     options={field.validation.options?.map(
                                       (option) => ({
@@ -453,24 +425,27 @@ const BusinessInformation = () => {
                                     }
                                   />
                                 ) : field?.type === 'checkBoxInputMulti' ? (
-                                  <CheckboxInput
-                                    isMulti={true}
-                                    name={field.name}
-                                    options={field.validation.options?.map(
-                                      (option) => ({
-                                        label: option,
-                                        value: option,
-                                        // value: option
-                                        //   .toLowerCase()
-                                        //   .replace(/\s+/g, ''),
-                                      }),
-                                    )}
-                                    error={field.validation.errorMessage}
-                                    form={formik}
-                                    setSelectedCheckValue={
-                                      setSelectedCheckValue
-                                    }
-                                  />
+                                  <div>
+                                    <CheckboxInput
+                                      layout="grid grid-cols-2 gap-4"
+                                      isMulti={true}
+                                      name={field.name}
+                                      options={field.validation.options?.map(
+                                        (option) => ({
+                                          label: option,
+                                          value: option,
+                                          // value: option
+                                          //   .toLowerCase()
+                                          //   .replace(/\s+/g, ''),
+                                        }),
+                                      )}
+                                      error={field.validation.errorMessage}
+                                      form={formik}
+                                      setSelectedCheckValue={
+                                        setSelectedCheckValue
+                                      }
+                                    />
+                                  </div>
                                 ) : field?.type === 'file' ? (
                                   <BulkRegisterInput
                                     key={field.name}
