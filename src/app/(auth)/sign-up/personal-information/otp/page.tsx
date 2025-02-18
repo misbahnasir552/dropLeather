@@ -92,7 +92,7 @@ const OtpInputWithValidation = () => {
             setDescription('Merchant registration failed. Please try again!');
           }
         } else if (response?.data?.responseCode === '000') {
-          setApierror(`${response?.data?.responseMessage}hii`);
+          setApierror(`${response?.data?.responseMessage}`);
         } else {
           // merchant verify otp failure
           setTitle('Failure!');
