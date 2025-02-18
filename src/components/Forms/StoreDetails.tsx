@@ -164,8 +164,8 @@ const AddStore = () => {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
       const dynamicCurrentEndpoint = `${currentEndpoint}`;
       const additionalValues = {
-        ...values,
-        stores: addStoresValues,
+        // ...values,
+        stores: [values],
         // managerMobile: userData?.managerMobile,
         // businessNature: businessNatureData?.businessTypeNature,
         status: 'Completed',

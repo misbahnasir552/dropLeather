@@ -171,7 +171,7 @@ const BusinessInformation = () => {
       const dynamicCurrentEndpoint = `${currentEndpoint}${businessNatureData.businessNature.businessEndpoint}`;
       const additionalValues = {
         ...values,
-        stores: addStoresValues,
+        // stores: addStoresValues,
         managerMobile: userData?.managerMobile,
         businessNature: businessNatureData?.businessTypeNature,
         status: 'Completed',

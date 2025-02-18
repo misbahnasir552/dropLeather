@@ -201,6 +201,7 @@ const PersonalInfo = () => {
                     error={formik.errors.password}
                     touched={formik.touched.password}
                     image={eye}
+                    hasImage={true}
                   />
                   <Input
                     label="Confirm Password"
@@ -210,6 +211,7 @@ const PersonalInfo = () => {
                     error={formik.errors.confirmPassword}
                     touched={formik.touched.confirmPassword}
                     image={eye}
+                    hasImage={true}
                   />
                 </div>
               </FormWrapper>
