@@ -20,30 +20,7 @@ export const storeFields = [
     type: 'text',
     show: ['Online'],
   },
-  {
-    label: 'Payment Enable ',
-    name: 'paymentEnable',
-    type: 'dropdown',
-    options: [
-      { value: 'Yes', label: 'Yes' },
-      { value: 'No', label: 'No' },
-    ],
-    show: ['Online', 'Retail'],
-  },
 
-  {
-    label: 'Merchant Addendum ID *',
-    name: 'merchantAddendumID',
-    type: 'text',
-    show: ['Online', 'Retail'],
-  },
-
-  {
-    label: 'Merchant Addendum Name *',
-    name: 'merchantAddendumName',
-    type: 'text',
-    show: ['Online', 'Retail'],
-  },
   {
     label: 'Street Address *',
     name: 'streetAddress',
@@ -63,16 +40,15 @@ export const storeFields = [
     show: ['Online', 'Retail'],
     // options: storeCategoryList,
   },
-
   {
-    label: 'Sub - Merchant State *',
-    name: 'subMerchantState',
+    label: 'Country Code *',
+    name: 'countryCode',
     type: 'text',
     show: ['Online', 'Retail'],
   },
   {
-    label: 'Country Code *',
-    name: 'countryCode',
+    label: 'State *',
+    name: 'state',
     type: 'text',
     show: ['Online', 'Retail'],
   },
@@ -81,85 +57,5 @@ export const storeFields = [
     name: 'posCountryCode',
     type: 'text',
     show: ['Online', 'Retail'],
-  },
-  {
-    label: 'Postal Code *',
-    name: 'postalCode',
-    type: 'text',
-    show: ['Online', 'Retail'],
-  },
-
-  {
-    label: 'Manager Name',
-    name: 'managerName',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'Manager Mobile Phone Number',
-    name: 'managerMobilePhoneNumber',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'Commercial Name *',
-    name: 'commercialName',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'No. of Transaction Points *',
-    name: 'noOfTransactionPoints',
-    type: 'text',
-    show: ['Retail'],
-  },
-
-  {
-    label: 'Region *',
-    name: 'region',
-    type: 'dropdown',
-    show: ['Retail'],
-  },
-  {
-    label: 'POC Name *',
-    name: 'pocName',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'POC Contact Number *',
-    name: 'pocContactNumber',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'POC Email',
-    name: 'pocEmail',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'Longitude, Latitude',
-    name: 'longLat',
-    type: 'text',
-    show: ['Retail'],
-  },
-  {
-    label: 'Cash In Allowed ',
-    name: 'cashInAllowed',
-    type: 'dropdown',
-    options: [
-      { value: 'Yes', label: 'Yes' },
-      { value: 'No', label: 'No' },
-    ],
-  },
-  {
-    label: 'Cash Out Allowed ',
-    name: 'cashOutAllowed',
-    type: 'dropdown',
-    options: [
-      { value: 'Yes', label: 'Yes' },
-      { value: 'No', label: 'No' },
-    ],
   },
 ];

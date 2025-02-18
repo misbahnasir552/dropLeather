@@ -33,7 +33,8 @@ const DropdownNew = ({
   );
 
   const handleOptionClick = (item: any) => {
-    console.log('ITEM DropDown ', item, name);
+    // console.log('ITEM DropDown ', item, name);
+    console.log('ITEMsas DropDown ', item);
     console.log(setSelectedDropDownValue, 'selecteddropdownvaueeeeeee');
 
     if (name === 'primaryNationality') {
@@ -43,6 +44,7 @@ const DropdownNew = ({
     if (name === 'associationToHighRiskBusiness') {
       setSelectedDropDownValue(item?.label);
     }
+    // formik?.setFieldValue(name, item.label);
     formik?.setFieldValue(name, item.label.split('-')[0]);
 
     setToggle(false);
@@ -175,7 +177,8 @@ const DropdownNew = ({
                   data-value={item.value.split('-')[0]}
                   onClick={() => handleOptionClick(item)}
                 >
-                  {item.label.split('-')[0]}
+                  {item.label}
+                  {/* {item.label.split('-')[0]} */}
                 </div>
               ),
             )}

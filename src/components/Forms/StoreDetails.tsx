@@ -31,10 +31,11 @@ import DisabledInput from './DisabledStoreComponent';
 
 const AddStore = () => {
   const { currentTab } = useCurrentTab();
-  const businessNatureData = useAppSelector(
-    (state: any) => state.onBoardingForms,
-  );
-  const adminData = useAppSelector((state: any) => state.adminAuth);
+  // const businessNatureData = useAppSelector(
+  //   (state: any) => state.onBoardingForms,
+  // );
+  // const adminData = useAppSelector((state: any) => state.adminAuth);
+  const userData = useAppSelector((state: any) => state.auth);
   const [addStoresValues, setAddStoresValues] = useState<AddStoreInfo[]>([]);
   const [isAddFormVisible, setIsAddFormVisible] = useState(true);
   const [isStoreAdded, setIsStoreAdded] = useState(false);
@@ -48,7 +49,7 @@ const AddStore = () => {
   const [regions, setRegions] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [apierror, setApierror] = useState('');
-  const { apiSecret, jwt, email } = adminData;
+  const { apiSecret, jwt, email } = userData;
 
   const [checkboxValue, setCheckboxValue] = useState<
     string | undefined | string[]
@@ -145,6 +146,7 @@ const AddStore = () => {
   }, [addStoresValues]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
+    console.log('hoi');
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
@@ -160,7 +162,7 @@ const AddStore = () => {
 
     if (currentIndex !== -1) {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      const dynamicCurrentEndpoint = `${currentEndpoint}${businessNatureData.businessNature.businessEndpoint}`;
+      const dynamicCurrentEndpoint = `${currentEndpoint}`;
       const additionalValues = {
         ...values,
         stores: addStoresValues,

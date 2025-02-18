@@ -292,9 +292,9 @@ const BusinessInformation = () => {
                                     options={field.validation?.options?.map(
                                       (option: string) => ({
                                         label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
+                                        value: option,
+                                        // .toLowerCase()
+                                        // .replace(/\s+/g, ''),
                                       }),
                                     )}
                                     formik={formik}
