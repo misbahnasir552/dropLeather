@@ -103,7 +103,18 @@ export const buildValidationSchema = (responseFields: Page[]) => {
         } else {
           fieldValidation = Yup.string(); // Default to string validation
         }
-
+        // if (field.name === 'paymentModes') {
+        //   fieldValidation = Yup.string().required('Please select a payment mode');
+        // }
+        if (
+          ['natureOfActivity', 'businessMode', 'paymentModes'].includes(
+            field.name,
+          )
+        ) {
+          fieldValidation = Yup.array()
+            .of(Yup.string())
+            .min(1, 'Please select at least one option');
+        }
         if (field.type === 'date') {
           fieldValidation = Yup.date()
             .required('Please fill the field')

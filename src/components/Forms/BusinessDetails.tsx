@@ -133,7 +133,14 @@ const BusinessInformation = () => {
           if (field?.type === 'checkItem') {
             return;
           }
-          initialValues[field.name] = '';
+          // initialValues[field.name] = '';
+          initialValues[field.name] = [
+            'natureOfActivity',
+            'businessMode',
+            'paymentModes',
+          ].includes(field.name)
+            ? []
+            : '';
         });
       });
       setInitialValuesState(initialValues);
