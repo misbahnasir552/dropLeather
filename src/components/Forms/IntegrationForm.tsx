@@ -18,7 +18,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 import CustomModal from '../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import { buildValidationSchema } from './validations/helper';
+// import { buildValidationSchema } from './validations/helper';
 import type { FieldsData, Page } from './validations/types';
 
 function IntegrationForm() {
@@ -31,10 +31,10 @@ function IntegrationForm() {
     string | undefined | string[]
   >(undefined);
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const router = useRouter();
   const { currentTab } = useCurrentTab();
-
+  const [apierror, setApierror] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -45,6 +45,7 @@ function IntegrationForm() {
 
   useEffect(() => {
     const initialValues: InitialValues = {};
+
     if (currentTab) {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
@@ -65,8 +66,8 @@ function IntegrationForm() {
           });
         });
         setInitialValuesState(initialValues);
-        const validationSchema = buildValidationSchema(fData);
-        setValidationSchemaState(validationSchema);
+        // const validationSchema = buildValidationSchema(fData);
+        // setValidationSchemaState(validationSchema);
       });
     }
     console.log('selected check value', selectedCheckValue);
@@ -100,7 +101,8 @@ function IntegrationForm() {
   // }, [currentTab]);
 
   // console.log("VALIDATION SCHEMA,", validationSchemaState);
-  if (!initialValuesState || !validationSchemaState || !filteredData) {
+  if (!initialValuesState || !filteredData) {
+    // if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
       <div className="flex w-full flex-col justify-center">
         <BarLoader color="#21B25F" />
@@ -112,6 +114,7 @@ function IntegrationForm() {
     values: { [key: string]: any },
     { setSubmitting }: any,
   ) => {
+    console.log('values are', values);
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
@@ -157,9 +160,10 @@ function IntegrationForm() {
               );
             }
           } else if (response?.data?.responseCode === '000') {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
+            setApierror(response?.data?.responseMessage);
+            // setTitle('Error Occured');
+            // setDescription(response?.data?.responseDescription);
+            // setShowModal(true);
           } else {
             setTitle('Error Occured');
             setDescription(response?.data?.responseDescription);
@@ -173,11 +177,12 @@ function IntegrationForm() {
         // } else {
         //   console.log('Form submission completed, no more tabs to navigate.');
         // }
-      } catch (e) {
+      } catch (e: any) {
         console.log('Error in submitting dynamic form', e);
-        setTitle('Network Failed');
-        setDescription('Network failed! Please try again later.');
-        setShowModal(true);
+        setApierror(e.message);
+        // setTitle('Network Failed');
+        // setDescription('Network failed! Please try again later.');
+        // setShowModal(true);
       } finally {
         setSubmitting(false);
       }
@@ -196,7 +201,7 @@ function IntegrationForm() {
       />
       <Formik
         initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -249,6 +254,9 @@ function IntegrationForm() {
                       ))}
                     </React.Fragment>
                   ))}
+                </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   <Button

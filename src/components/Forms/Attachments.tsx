@@ -104,7 +104,7 @@ const Attachments = () => {
 
     if (currentIndex !== -1) {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
-      if (currentIndex === 4) {
+      if (currentIndex === 5) {
         // tested running code without labels
         // Object.keys(values).forEach((key) => {
         //   if (values[key]) {
