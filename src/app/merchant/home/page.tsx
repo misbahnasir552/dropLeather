@@ -46,7 +46,7 @@ const LoginSucessHome = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const [route, setRoute] = useState<any>();
+  // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
 
   const applicantsStore = useAppSelector(
@@ -62,57 +62,57 @@ const LoginSucessHome = () => {
     router.push('/merchant/home/reset-password');
   }
 
-  const determineNextRoute = (
-    pages: { routeName: string; status: string }[],
-  ) => {
-    console.log('determineNextRoute ', route);
+  // const determineNextRoute = (
+  //   pages: { routeName: string; status: string }[],
+  // ) => {
+  //   console.log('determineNextRoute ', route);
 
-    const routeOrder = [
-      '/merchant/home/business-nature/activity-information',
-      '/merchant/home/business-nature/business-details',
-      '/merchant/home/business-nature/settlement-details',
-      '/merchant/home/business-nature/integration/',
-      '/merchant/home/business-nature/attachments',
-      '/merchant/home/business-nature/review-form',
-    ];
+  //   const routeOrder = [
+  //     '/merchant/home/business-nature/activity-information',
+  //     '/merchant/home/business-nature/business-details',
+  //     '/merchant/home/business-nature/settlement-details',
+  //     '/merchant/home/business-nature/integration/',
+  //     '/merchant/home/business-nature/attachments',
+  //     '/merchant/home/business-nature/review-form',
+  //   ];
 
-    for (let i = 0; i < routeOrder.length; i += 1) {
-      console.log('111');
+  //   for (let i = 0; i < routeOrder.length; i += 1) {
+  //     console.log('111');
 
-      const currentRoute = pages.find(
-        (page) => page.routeName === routeOrder[i],
-      );
+  //     const currentRoute = pages.find(
+  //       (page) => page.routeName === routeOrder[i],
+  //     );
 
-      const nextRouteStatus = pages.find(
-        (page) => page.routeName === routeOrder[i + 1],
-      );
+  //     const nextRouteStatus = pages.find(
+  //       (page) => page.routeName === routeOrder[i + 1],
+  //     );
 
-      const nextRoute = routeOrder[i + 1];
+  //     const nextRoute = routeOrder[i + 1];
 
-      if (currentRoute?.status === 'Pending') {
-        setRoute(currentRoute.routeName);
-        return;
-      }
-      console.log('1111111', currentRoute);
+  //     if (currentRoute?.status === 'Pending') {
+  //       setRoute(currentRoute.routeName);
+  //       return;
+  //     }
+  //     console.log('1111111', currentRoute);
 
-      if (currentRoute?.status === 'Completed' && nextRoute) {
-        console.log('222', nextRoute);
+  //     if (currentRoute?.status === 'Completed' && nextRoute) {
+  //       console.log('222', nextRoute);
 
-        if (nextRoute && nextRouteStatus?.status !== 'Completed') {
-          setRoute(nextRoute);
-          return;
-        }
-      } else if (currentRoute?.status && currentRoute?.routeName) {
-        console.log('3333');
+  //       if (nextRoute && nextRouteStatus?.status !== 'Completed') {
+  //         setRoute(nextRoute);
+  //         return;
+  //       }
+  //     } else if (currentRoute?.status && currentRoute?.routeName) {
+  //       console.log('3333');
 
-        setRoute(currentRoute.routeName);
-        return;
-      } else {
-        setRoute('business-nature');
-      }
-    }
-    console.log('route to ', route);
-  };
+  //       setRoute(currentRoute.routeName);
+  //       return;
+  //     } else {
+  //       setRoute('business-nature');
+  //     }
+  //   }
+  //   console.log('route to ', route);
+  // };
 
   const fetchData = async () => {
     console.log('fetch data');
@@ -131,35 +131,35 @@ const LoginSucessHome = () => {
 
       console.log('FETCH RES ', response.data);
 
-      const pageStatuses = [
-        {
-          routeName: '/merchant/home/business-nature/activity-information',
-          status: response?.data?.activityInformation?.status,
-        },
-        {
-          routeName: '/merchant/home/business-nature/business-details',
-          status: response?.data?.businessDetails?.status,
-        },
-        {
-          routeName: '/merchant/home/business-nature/settlement-details',
-          status: response?.data?.settlementDetails?.status,
-        },
-        {
-          routeName: '/merchant/home/business-nature/integration/',
-          status: response?.data?.integration?.status,
-        },
-        {
-          routeName: '/merchant/home/business-nature/attachments',
-          status: response?.data?.merchantDocuments?.documentStatus,
-        },
-        {
-          routeName: '/merchant/home/business-nature/review-form',
-          status: response?.data?.applicationForm?.documentStatus,
-        },
-      ];
-      console.log('pageStatuses ', pageStatuses);
+      // const pageStatuses = [
+      //   {
+      //     routeName: '/merchant/home/business-nature/activity-information',
+      //     status: response?.data?.activityInformation?.status,
+      //   },
+      //   {
+      //     routeName: '/merchant/home/business-nature/business-details',
+      //     status: response?.data?.businessDetails?.status,
+      //   },
+      //   {
+      //     routeName: '/merchant/home/business-nature/settlement-details',
+      //     status: response?.data?.settlementDetails?.status,
+      //   },
+      //   {
+      //     routeName: '/merchant/home/business-nature/integration/',
+      //     status: response?.data?.integration?.status,
+      //   },
+      //   {
+      //     routeName: '/merchant/home/business-nature/attachments',
+      //     status: response?.data?.merchantDocuments?.documentStatus,
+      //   },
+      //   {
+      //     routeName: '/merchant/home/business-nature/review-form',
+      //     status: response?.data?.applicationForm?.documentStatus,
+      //   },
+      // ];
+      // console.log('pageStatuses ', pageStatuses);
 
-      determineNextRoute(pageStatuses);
+      // determineNextRoute(pageStatuses);
 
       if (response) {
         try {
@@ -213,7 +213,8 @@ const LoginSucessHome = () => {
       title: 'Continue to My Dashboard',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: route,
+      // routeName: route,
+      routeName: '/merchant/merchant-portal/home/',
     },
     {
       title: 'Sandbox Integrations',
