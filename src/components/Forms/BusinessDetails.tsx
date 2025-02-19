@@ -166,12 +166,6 @@ const BusinessInformation = () => {
     console.log('values >>>', values, addStoresValues);
 
     console.log('BUSINESS NATURE DATAAA:', businessNatureData);
-    if (addStoresValues.length < 1) {
-      setTitle('No Stores Found');
-      setDescription('Please add atleast 1 store to proceed');
-      setShowModal(true);
-      return;
-    }
 
     if (currentIndex !== -1) {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
@@ -227,11 +221,12 @@ const BusinessInformation = () => {
             setShowModal(true);
           }
         }
-      } catch (e) {
-        console.log('Error in submitting dynamic form', e);
-        setTitle('Network Failed');
-        setDescription('Network failed! Please try again later.');
-        setShowModal(true);
+      } catch (e: any) {
+        setApierror(e.message);
+        // console.log('Error in submitting dynamic form', e);
+        // setTitle('Network Failed');
+        // setDescription('Network failed! Please try again later.');
+        // setShowModal(true);
       } finally {
         setSubmitting(false);
       }

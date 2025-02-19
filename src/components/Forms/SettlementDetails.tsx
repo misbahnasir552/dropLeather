@@ -370,6 +370,68 @@ const SettlementDetails = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  // useEffect(() => {
+  //   const initialValues: { [key: string]: any } = {};
+  //   if (!currentTab) return;
+
+  //   const title = convertSlugToTitle(currentTab);
+  //   setPageTitle(title);
+
+  //   let updatedFData = fieldsData?.pages?.page?.filter(
+  //     (item) => convertSlugToTitle(item.name) === title,
+  //   );
+
+  //   // Find the category containing "associationToHighRiskBusiness"
+  //   updatedFData = updatedFData?.map((item) => {
+  //     return {
+  //       ...item,
+  //       categories: item.categories.map((category) => {
+  //         const hasAssociationField = category.fields.some(
+  //           (field) =>
+  //             field.name === 'associationToHighRiskBusiness' &&
+  //             field.type === 'dropDown',
+  //         );
+
+  //         if (!hasAssociationField) return category;
+
+  //         let updatedFields = category.fields;
+
+  //         if (selectedDropDownValue === 'High Risk Business / Person') {
+  //           updatedFields = category.fields.filter(
+  //             (field) =>
+  //               field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+  //           );
+  //         }
+
+  //         return {
+  //           ...category,
+  //           fields: updatedFields,
+  //         };
+  //       }),
+  //     };
+  //   });
+
+  //   setFilteredData(updatedFData);
+
+  //   updatedFData?.forEach((item) => {
+  //     // if (item.name === "Activity Information") {
+  //     item.categories.forEach((category) => {
+  //       category.fields.forEach((field) => {
+  //         if (field?.type === 'checkItem') {
+  //           return;
+  //         }
+  //         // initialValues[field.name] = '';
+  //         initialValues[field.name] ='';
+  //       });
+  //     });
+  //     setInitialValuesState(initialValues);
+  //     const validationSchema = buildValidationSchema(updatedFData);
+
+  //     setValidationSchemaState(validationSchema);
+  //     // }
+  //   });
+  // }, [currentTab, selectedDropDownValue]);
+
   useEffect(() => {
     const initialValues: InitialValues = {};
     if (currentTab) {
