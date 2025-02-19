@@ -44,8 +44,8 @@ const DropdownNew = ({
     if (name === 'associationToHighRiskBusiness') {
       setSelectedDropDownValue(item?.label);
     }
-    // formik?.setFieldValue(name, item.label);
-    formik?.setFieldValue(name, item.label.split('-')[0]);
+    formik?.setFieldValue(name, item.label);
+    // formik?.setFieldValue(name, item.label.split('-')[0]);
 
     setToggle(false);
     setSearchTerm('');
