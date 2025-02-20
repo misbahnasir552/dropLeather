@@ -260,7 +260,14 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
             label="Nature of Activity"
             // value={onboardingData?.businessDetails?.natureOfActivity?.join(" | ") || ""}
             value={onboardingData?.businessDetails?.natureOfActivity?.map(
-              (item: any, index: any) => <div key={index}>{item}</div>,
+              (item: any, index: any) => (
+                <div
+                  key={index}
+                  style={{ display: 'flex', flexDirection: 'column' }}
+                >
+                  {item}
+                </div>
+              ),
             )}
           />
         </ReviewFormDataGrid>

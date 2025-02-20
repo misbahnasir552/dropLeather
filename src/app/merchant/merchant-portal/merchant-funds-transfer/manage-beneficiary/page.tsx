@@ -21,7 +21,6 @@ function ManageBeneficiary() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   // const [filteredParams, setFilteredParams] = useState();
-
   const fetchRecords = async () => {
     try {
       setLoading(true);
@@ -117,6 +116,7 @@ function ManageBeneficiary() {
               label={`Back`}
               type="button"
               className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+              routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer"
             />
             <Button
               label={`Transfer Funds`}

@@ -239,7 +239,7 @@ const Timeline: React.FC = () => {
 
   return (
     <div className="flex flex-col justify-between py-2">
-      <div className="flex w-full justify-between">
+      <div className="flex w-full justify-between overflow-auto">
         {tabs?.map((tab, index) => (
           <React.Fragment key={index}>
             <div className="flex flex-col">

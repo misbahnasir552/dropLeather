@@ -57,7 +57,9 @@ function MerchantPortalHeader() {
           </div>
           <div className="h-[10px] w-[1px] bg-border-dark" />
           <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-2 bg-secondary-base p-[10px]">
-            <H6 textColor="text-screen-white">F</H6>
+            <H6 textColor="text-screen-white">
+              {userData?.name?.charAt(0) || ''}
+            </H6>
           </div>
         </div>
       </div>
