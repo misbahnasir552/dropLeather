@@ -2,7 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import eye from '@/assets/icons/eye.svg';
@@ -44,10 +44,25 @@ const PersonalInfo = () => {
     setShowModal(true);
   };
 
+  useEffect(() => {
+    console.log('ischecked is', isChecked);
+  }, [isChecked]);
+
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     // if (isSubmitted) return; // Prevent multiple calls
     setIsSubmitted(true);
     setIsLoading(true);
+
+    if (!isChecked) {
+      console.log('here in checked ');
+      setApierror(
+        'You must agree to the terms and conditions to proceed. Please check the box to continue.',
+      );
+      setIsSubmitted(false);
+      setIsLoading(false);
+      setSubmitting(false);
+      return;
+    }
 
     try {
       const response = await apiClient.post('merchant/register/inquire', {
@@ -101,7 +116,7 @@ const PersonalInfo = () => {
   };
 
   const handleCheckboxChange = () => {
-    setChecked(!isChecked);
+    setChecked((prev) => !prev);
   };
 
   const handleTermsAndConditionsChange = () => {

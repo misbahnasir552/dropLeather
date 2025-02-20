@@ -24,7 +24,7 @@ import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import AddStore from './AddStore';
-import { buildValidationSchema } from './validations/helper';
+// import { buildValidationSchema } from './validations/helper';
 import type { FieldsData, Page } from './validations/types';
 
 const BusinessInformation = () => {
@@ -52,7 +52,7 @@ const BusinessInformation = () => {
     Array(5).fill(null),
   );
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -133,7 +133,7 @@ const BusinessInformation = () => {
           if (field?.type === 'checkItem') {
             return;
           }
-          // initialValues[field.name] = '';
+          initialValues[field.name] = '';
           initialValues[field.name] = [
             'natureOfActivity',
             'businessMode',
@@ -144,14 +144,15 @@ const BusinessInformation = () => {
         });
       });
       setInitialValuesState(initialValues);
-      const validationSchema = buildValidationSchema(updatedFData);
+      // const validationSchema = buildValidationSchema(updatedFData);
 
-      setValidationSchemaState(validationSchema);
+      // setValidationSchemaState(validationSchema);
       // }
     });
   }, [currentTab, selectedDropDownValue]);
 
-  if (!initialValuesState || !validationSchemaState || !filteredData) {
+  if (!initialValuesState || !filteredData) {
+    // if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
       <div className="flex w-full flex-col justify-center">
         <BarLoader color="#21B25F" />
@@ -249,7 +250,7 @@ const BusinessInformation = () => {
       /> */}
       <Formik
         initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
