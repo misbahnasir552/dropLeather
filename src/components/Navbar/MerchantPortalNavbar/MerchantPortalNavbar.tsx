@@ -58,7 +58,7 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Reversal Module',
-      // link: '/merchant/merchant-portal/home',
+      // link: '/merchant/merchant-portal/reversal-module',
     },
     {
       title: 'Merchant Funds Transfer',

@@ -6,6 +6,7 @@ import type { MouseEvent } from 'react';
 import React from 'react';
 
 import closeIcon from '@/assets/icons/close-icon.svg';
+import ErrorIcon from '@/assets/icons/errorIcon.png';
 import Bitmap from '@/assets/images/Bitmap.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import type { ICustomModalProps } from '@/interfaces/interface';
@@ -44,6 +45,7 @@ const CustomModal = ({
       handleClose();
     }
   };
+  console.log('title', title);
 
   return (
     <>
@@ -62,7 +64,19 @@ const CustomModal = ({
                   <div>
                     <div className="flex flex-col gap-9">
                       <div className="flex justify-center">
-                        <Image src={image || Bitmap} alt="bitmap-icon" />
+                        {title === 'Failure' ||
+                        title === 'Failed' ||
+                        title === 'Network Failure' ||
+                        title === 'Network Failed' ? (
+                          <Image
+                            src={ErrorIcon}
+                            alt="error"
+                            width={80}
+                            height={80}
+                          />
+                        ) : (
+                          <Image src={image || Bitmap} alt="bitmap-icon" />
+                        )}
                       </div>
                       <div>
                         <div className="flex flex-col items-center justify-center gap-2">
@@ -78,11 +92,18 @@ const CustomModal = ({
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    <Button
-                      label="Continue"
-                      onClickHandler={handleContinue}
-                      className="button-primary w-[270px] px-3 py-[19px] text-sm leading-tight"
-                    />
+                    {title === 'Failure' ||
+                    title === 'Failed' ||
+                    title === 'Network Failure' ||
+                    title === 'Network Failed' ? (
+                      <></>
+                    ) : (
+                      <Button
+                        label="Continue"
+                        onClickHandler={handleContinue}
+                        className="button-primary w-[270px] px-3 py-[19px] text-sm leading-tight"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
