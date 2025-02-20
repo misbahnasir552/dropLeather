@@ -202,18 +202,49 @@ const LoginSucessHome = () => {
       routeName: 'business-nature',
     },
   ];
+  // const LoginCardData = [
+
+  //   {
+  //     title: 'Production Onboarding',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+  //   {
+  //     title: 'Continue to My Dashboard',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     // routeName: route,
+  //     routeName: '/merchant/merchant-portal/home/',
+  //   },
+  //   {
+  //     title: 'Sandbox Integrations',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+
+  //   // {
+  //   //   title: 'Continue to My Dashboard',
+  //   //   description:
+  //   //     'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //   //   routeName: 'xyz',
+  //   // },
+  // ];
+
+  console.log('uzair onboarding status is', userData.onboardingCompleted);
   const LoginCardData = [
     {
       title: 'Production Onboarding',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
+      hide: userData.onboardingCompleted,
     },
     {
       title: 'Continue to My Dashboard',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      // routeName: route,
       routeName: '/merchant/merchant-portal/home/',
     },
     {
@@ -222,14 +253,7 @@ const LoginSucessHome = () => {
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
     },
-
-    // {
-    //   title: 'Continue to My Dashboard',
-    //   description:
-    //     'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-    //   routeName: 'xyz',
-    // },
-  ];
+  ].filter((card) => !card.hide);
 
   return (
     <>
