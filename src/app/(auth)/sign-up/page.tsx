@@ -21,11 +21,6 @@ import {
 } from '@/validations/merchant/onBoarding/businessNatureSchema';
 
 const checkboxData: ICheckboxData[] = [
-  // {
-  //   value: 'corporatePortal',
-  //   label: 'Corporate Account',
-  //   logo: CartIcon,
-  // },
   {
     value: 'onlinePayments',
     label: 'Online Payments',

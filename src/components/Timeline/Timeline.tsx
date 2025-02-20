@@ -65,7 +65,7 @@ const Timeline: React.FC = () => {
         console.log('Response received:', response?.data);
 
         if (response?.data) {
-          setData(response?.data); // Call setData only after receiving a response
+          setData(response?.data);
           console.log('Data set successfully.');
         } else {
           console.error('Empty response data.');
@@ -246,12 +246,22 @@ const Timeline: React.FC = () => {
               {/* {isAccessible(index) ? ( */}
               <Link
                 key={index}
-                href={`/merchant/home/business-nature/${tab.name}`}
-                className={
-                  tab.name === activeTab
-                    ? 'text-primary-base'
-                    : 'text-danger-base'
+                // href={`/merchant/home/business-nature/${tab.name}`}
+                href={
+                  tab.status === 'Completed'
+                    ? `/merchant/home/business-nature/${tab.name}`
+                    : '#'
                 }
+                className={`${
+                  tab.status === 'Completed'
+                    ? 'cursor-pointer'
+                    : 'cursor-not-allowed opacity-50'
+                }`}
+                // className={
+                //   tab.name === activeTab
+                //     ? 'text-primary-base'
+                //     : 'text-danger-base'
+                // }
               >
                 <div className="flex justify-center px-[14px] pb-[8px]">
                   <div
