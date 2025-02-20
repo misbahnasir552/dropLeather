@@ -7,8 +7,6 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
-// import MerchantRecordTable from "@/components/Table/MerchantRecordTable";
-// import TableComponent from '@/components/Table/TableComponent';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -20,11 +18,10 @@ import {
   searchTransactionsInitialValues,
   searchTransactionsSchema,
 } from '@/validations/merchant/transactions/searchTransactionsSchema';
-// import { useAppSelector } from "@/hooks/redux";
 
 const ReversalModule = () => {
   // const userData = useAppSelector((state) => state.auth);
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
 
   const [showModal, setShowModal] = useState(false);
@@ -68,7 +65,7 @@ const ReversalModule = () => {
         pageNumber,
       );
       if (response?.data?.responseCode === '009') {
-        setData(response?.data?.transactionResponse);
+        // setData(response?.data?.transactionResponse);
         setTotalPages(response.data.totalPages);
       } else {
         setTitle('Failed');
@@ -106,10 +103,7 @@ const ReversalModule = () => {
     'Total Transaction Amount',
   ];
 
-  console.log('Filtered data', filteredData);
-
   const onSubmit = async (values: SearchTransactionsForm) => {
-    console.log('VALUES SEARCH TRANSACTIONS', values);
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -125,7 +119,34 @@ const ReversalModule = () => {
     formik.resetForm();
     fetchRecords();
   };
-
+  const dummyData = [
+    {
+      batchId: 1,
+      orderDate: '20/02/2025',
+      reversalDate: '21/02/2025',
+      orderId: '22',
+      opsId: '22',
+      reversalId: '33',
+      transactionCount: '33',
+      totalReversalAmount: '23432',
+      totalReversalFee: '254',
+      totalReversalTax: '105',
+      totalTransactionAmount: '52142',
+    },
+    {
+      batchId: 1,
+      orderDate: '20/02/2025',
+      reversalDate: '21/02/2025',
+      orderId: '22',
+      opsId: '22',
+      reversalId: '33',
+      transactionCount: '33',
+      totalReversalAmount: '23432',
+      totalReversalFee: '254',
+      totalReversalTax: '105',
+      totalTransactionAmount: '52142',
+    },
+  ];
   return (
     <div className="flex flex-col gap-6">
       <CustomModal
@@ -134,7 +155,7 @@ const ReversalModule = () => {
         setShowModal={setShowModal}
         show={showModal}
       />
-      <HeaderWrapper heading="Reversal Module" />
+      <HeaderWrapper heading="Reversal Report" />
       <Formik
         initialValues={searchTransactionsInitialValues}
         validationSchema={searchTransactionsSchema}
@@ -195,11 +216,11 @@ const ReversalModule = () => {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {data ? (
+          {dummyData ? (
             <>
               <SearchTransactionTable
                 tableHeadings={tableHeadings}
-                tableData={data}
+                tableData={dummyData}
               />
               <Pagination
                 pageNumber={pageNumber}
