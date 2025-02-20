@@ -33,8 +33,8 @@ const HeroBanner = (): JSX.Element => {
             Merchant Portal
           </p>
           <B1 textColor="text-secondary-base" classes="w-3/5">
-            Where every transaction begins, explore, manage and thrive with our
-            powerful tools.
+            Where every transaction begins, explore, <br /> manage and thrive
+            with our powerful tools.
           </B1>
         </div>
         <Button

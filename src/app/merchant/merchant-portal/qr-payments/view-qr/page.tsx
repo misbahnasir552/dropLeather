@@ -36,6 +36,7 @@ function StaticQr() {
   const [isLoading, setIsloading] = useState(false);
 
   const base64ToJpg = (base64String: any) => {
+    console.log('base 64 is', base64String);
     if (!base64String) {
       console.error('Base64 string is undefined or null.');
       return;
@@ -54,7 +55,9 @@ function StaticQr() {
       }
     } else {
       try {
-        byteString = atob(base64String); // Assume it’s already clean Base64
+        const cleanBase64String = base64String.replace(/[^A-Za-z0-9+/=]/g, '');
+        byteString = atob(cleanBase64String);
+        // byteString = atob(base64String); // Assume it’s already clean Base64
       } catch (error) {
         console.error('Error decoding Base64 string:', error);
         return;
