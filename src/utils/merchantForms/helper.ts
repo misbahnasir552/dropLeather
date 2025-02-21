@@ -5,7 +5,7 @@ export const endpointArray = [
   },
   {
     tab: 'business-details',
-    endpoint: `/merchant/`,
+    endpoint: `/merchant/businessDetails`,
   },
   {
     tab: 'store-details',
