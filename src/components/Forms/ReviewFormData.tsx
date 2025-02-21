@@ -342,13 +342,20 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
           isEditable={isEditable}
         />
         <ReviewFormDataGrid heading="Integration Methods">
-          <ReviewInput
+          {onboardingData?.integration?.integrationMethod?.map(
+            (item: string, index: number) => (
+              <ReviewInput key={index} value={item} />
+            ),
+          )}
+
+          {/* <ReviewInput
             // label="Website"
             // value={onboardingData?.integration?.integrationMethod}
             value={onboardingData?.integration?.integrationMethod?.map(
-              (item: any, index: any) => <div key={index}>{item}</div>,
+              (item: any, index: any) => 
+              <div key={index}>{item}</div>,
             )}
-          />
+          /> */}
           {/* <ReviewInput
             label="Facebook Page "
             value={data?.integration?.integrationMethod}
@@ -356,11 +363,16 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
         <ReviewFormDataGrid heading="Integration Modes">
-          <ReviewInput
+          {onboardingData?.integration?.integrationMode?.map(
+            (item: string, index: number) => (
+              <ReviewInput key={index} value={item} />
+            ),
+          )}
+          {/* <ReviewInput
             value={onboardingData?.integration?.integrationMode?.map(
               (item: any, index: any) => <div key={index}>{item}</div>,
             )}
-          />
+          /> */}
           {/* <ReviewInput
             label="Plugin"
             value={onboardingData?.integration?.integrationMode}

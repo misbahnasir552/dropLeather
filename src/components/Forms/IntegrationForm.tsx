@@ -18,7 +18,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 import CustomModal from '../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import { buildValidationSchema } from './validations/integrationSchema';
+// import { buildValidationSchema } from './validations/integrationSchema';
 import type { FieldsData, Page } from './validations/types';
 
 function IntegrationForm() {
@@ -31,7 +31,7 @@ function IntegrationForm() {
     string | undefined | string[]
   >(undefined);
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const router = useRouter();
   const { currentTab } = useCurrentTab();
   const [apierror, setApierror] = useState('');
@@ -66,15 +66,15 @@ function IntegrationForm() {
           });
         });
         setInitialValuesState(initialValues);
-        const validationSchema = buildValidationSchema(fData);
-        setValidationSchemaState(validationSchema);
+        // const validationSchema = buildValidationSchema(fData);
+        // setValidationSchemaState(validationSchema);
       });
     }
     console.log('selected check value', selectedCheckValue);
   }, [currentTab, fieldData.pages.page]);
 
-  // if (!initialValuesState || !filteredData) {
-  if (!initialValuesState || !validationSchemaState || !filteredData) {
+  if (!initialValuesState || !filteredData) {
+    //  / if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
       <div className="flex w-full flex-col justify-center">
         <BarLoader color="#21B25F" />
@@ -173,7 +173,7 @@ function IntegrationForm() {
       />
       <Formik
         initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
