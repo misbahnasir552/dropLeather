@@ -4,22 +4,20 @@
 // };
 
 type TLogin = {
-  // user: TLoginUser | null;
-  apiKey: string | undefined;
-  apiSecret: string | undefined;
-  email: null | undefined | string;
+  responseCode: string | undefined;
+  responseMessage: string | undefined;
   jwt: string | undefined;
-  managerMobile: string | undefined;
-  loading: boolean;
-  success: boolean;
-  expiry: string | undefined;
-  temp: boolean | undefined;
-  isAuthenticated: boolean;
-  onboardingCompleted: boolean | undefined;
+  apiSecret: string | undefined;
+  apiKey: string | undefined;
   name: string | undefined;
-  userType: string | undefined | null;
-  ticketId: string | undefined;
-  isrequestRevision: boolean | undefined;
+  email: string | undefined;
+  managerMobile: string | undefined;
+  expiry: string | undefined;
+  userType: string | undefined;
+  isrequestRevision: boolean;
+  lastLogin: string | undefined;
+  temp: boolean;
+  onboardingCompleted: boolean;
 };
 
 type TAdminLogin = {

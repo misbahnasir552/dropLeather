@@ -3,31 +3,29 @@ import { createSlice } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 
 const initialState: TLogin = {
+  responseCode: '',
+  responseMessage: '',
+  jwt: '',
+  apiSecret: '',
+  apiKey: '',
   name: '',
   email: '',
-  apiKey: '',
-  apiSecret: '',
-  jwt: '',
   managerMobile: '',
-  loading: false,
-  success: false,
   expiry: '',
-  isAuthenticated: false,
-  onboardingCompleted: false,
   userType: '',
-  ticketId: '',
-  temp: false,
   isrequestRevision: false,
+  lastLogin: '',
+  temp: false,
+  onboardingCompleted: false,
 };
-
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
     loginSuccess: (state, action: PayloadAction<Partial<TLogin>>) => {
       console.log('redux login success', action.payload);
-      state.isAuthenticated = true;
-      state.onboardingCompleted = action.payload?.onboardingCompleted;
+      state.responseMessage = action.payload?.responseMessage;
+      state.onboardingCompleted = action.payload?.onboardingCompleted || false;
       state.email = action.payload?.email;
       state.name = action.payload?.name;
       state.jwt = action.payload?.jwt;
@@ -36,9 +34,9 @@ const authSlice = createSlice({
       state.managerMobile = action.payload?.managerMobile;
       state.expiry = action.payload?.expiry;
       state.userType = action.payload?.userType;
-      state.temp = action.payload?.temp;
-      state.ticketId = action?.payload?.ticketId;
-      state.isrequestRevision = action?.payload?.isrequestRevision;
+      state.temp = action.payload?.temp || false;
+      state.responseCode = action?.payload?.responseCode;
+      state.isrequestRevision = action?.payload?.isrequestRevision || false;
     },
     setRequestRevision: (state, action) => {
       console.log('REVISION TEST TEST 2', action.payload);
@@ -50,7 +48,7 @@ const authSlice = createSlice({
       Cookies.remove('jwt', { path: '/' });
       Cookies.remove('username', { path: '/' });
       Cookies.remove('browser_number', { path: '/' });
-      state.isAuthenticated = false;
+      state.responseMessage = '';
       state.email = '';
       state.name = '';
       state.jwt = '';
@@ -61,7 +59,7 @@ const authSlice = createSlice({
       state.expiry = '';
       state.userType = '';
       state.temp = false;
-      state.ticketId = '';
+      state.responseCode = '';
       state.isrequestRevision = false;
     },
   },
