@@ -265,82 +265,89 @@ const ActivityInformation = () => {
                 (pageItem) => (
                   // pageItem.name === "Business Details" && (
                   <React.Fragment key={pageItem.name}>
-                    {pageItem?.categories.map(
-                      (
-                        item: { categoryName: any; fields: any[] },
-                        itemIndex: number,
-                      ) => (
-                        <FormLayoutDynamic
-                          key={itemIndex}
-                          heading={item.categoryName}
-                        >
-                          {[...item.fields]
-                            .sort((a, b) => a.priority - b.priority)
-                            .map((field, fieldIndex) => {
-                              return field?.type === 'text' ? (
-                                <Input
-                                  key={fieldIndex}
-                                  label={field.label}
-                                  name={field.name}
-                                  placeholder={field.placeholder}
-                                  type={field.type}
-                                  error={field.validation.errorMessage}
-                                  asterik={field.validation.required}
-                                />
-                              ) : field?.type === 'dropDown' ? (
-                                <DropdownNew
-                                  asterik={field.validation.required}
-                                  key={fieldIndex} // Add a key prop to DropdownInput as well
-                                  label={field.label}
-                                  name={field.name}
-                                  options={field.validation?.options?.map(
-                                    (option: string) => ({
-                                      label: option,
-                                      value: option
-                                        .toLowerCase()
-                                        .replace(/\s+/g, ''),
-                                    }),
-                                  )}
-                                  formik={formik}
-                                  error={field.validation.errorMessage}
-                                />
-                              ) : field?.type === 'date' ? (
-                                <DateInputNew
-                                  asterik={field.validation.required}
-                                  key={fieldIndex}
-                                  formik={formik}
-                                  label={field.label}
-                                  name={field.name}
-                                  error={field.validation.errorMessage}
-                                />
-                              ) : field?.type === 'checkItem' ? (
-                                <CheckboxItem
-                                  key={fieldIndex}
-                                  description={field.label}
-                                  isChecked={isChecked}
-                                  handleCheckboxChange={() =>
-                                    handleCheckboxChange(
-                                      'correspondenceAddress',
-                                      formik,
-                                    )
-                                  }
-                                />
-                              ) : field?.type === 'checkBoxInput' ? (
-                                <CheckboxInput
-                                  key={fieldIndex}
-                                  name={field.name}
-                                  error={field.validation.errorMessage}
-                                  options={field.validation.options}
-                                  form={formik}
-                                  setSelectedCheckValue={setSelectedCheckValue}
-                                />
-                              ) : (
-                                <p key={fieldIndex}>nothing to show field</p>
-                              );
-                            })}
-                        </FormLayoutDynamic>
-                      ),
-                    )}
+                    {pageItem?.categories
+                      .sort(
+                        (a: any, b: any) =>
+                          Number(a.priority) - Number(b.priority),
+                      )
+                      .map(
+                        (
+                          item: { categoryName: any; fields: any[] },
+                          itemIndex: number,
+                        ) => (
+                          <FormLayoutDynamic
+                            key={itemIndex}
+                            heading={item.categoryName}
+                          >
+                            {[...item.fields]
+                              .sort((a, b) => a.priority - b.priority)
+                              .map((field, fieldIndex) => {
+                                return field?.type === 'text' ? (
+                                  <Input
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    placeholder={field.placeholder}
+                                    type={field.type}
+                                    error={field.validation.errorMessage}
+                                    asterik={field.validation.required}
+                                  />
+                                ) : field?.type === 'dropDown' ? (
+                                  <DropdownNew
+                                    asterik={field.validation.required}
+                                    key={fieldIndex} // Add a key prop to DropdownInput as well
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                  />
+                                ) : field?.type === 'date' ? (
+                                  <DateInputNew
+                                    asterik={field.validation.required}
+                                    key={fieldIndex}
+                                    formik={formik}
+                                    label={field.label}
+                                    name={field.name}
+                                    error={field.validation.errorMessage}
+                                  />
+                                ) : field?.type === 'checkItem' ? (
+                                  <CheckboxItem
+                                    key={fieldIndex}
+                                    description={field.label}
+                                    isChecked={isChecked}
+                                    handleCheckboxChange={() =>
+                                      handleCheckboxChange(
+                                        'correspondenceAddress',
+                                        formik,
+                                      )
+                                    }
+                                  />
+                                ) : field?.type === 'checkBoxInput' ? (
+                                  <CheckboxInput
+                                    key={fieldIndex}
+                                    name={field.name}
+                                    error={field.validation.errorMessage}
+                                    options={field.validation.options}
+                                    form={formik}
+                                    setSelectedCheckValue={
+                                      setSelectedCheckValue
+                                    }
+                                  />
+                                ) : (
+                                  <p key={fieldIndex}>nothing to show field</p>
+                                );
+                              })}
+                          </FormLayoutDynamic>
+                        ),
+                      )}
                   </React.Fragment>
                 ),
                 // )

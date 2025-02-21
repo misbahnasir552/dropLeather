@@ -18,7 +18,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 import CustomModal from '../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-// import { buildValidationSchema } from './validations/helper';
+import { buildValidationSchema } from './validations/integrationSchema';
 import type { FieldsData, Page } from './validations/types';
 
 function IntegrationForm() {
@@ -31,7 +31,7 @@ function IntegrationForm() {
     string | undefined | string[]
   >(undefined);
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const router = useRouter();
   const { currentTab } = useCurrentTab();
   const [apierror, setApierror] = useState('');
@@ -54,7 +54,7 @@ function IntegrationForm() {
       });
       setFilteredData(fData);
       console.log('FDATAAA:', fData);
-
+      console.log('Filtered data', filteredData);
       fData?.forEach((item) => {
         item?.categories?.forEach((category) => {
           category.fields.forEach((field) => {
@@ -66,43 +66,15 @@ function IntegrationForm() {
           });
         });
         setInitialValuesState(initialValues);
-        // const validationSchema = buildValidationSchema(fData);
-        // setValidationSchemaState(validationSchema);
+        const validationSchema = buildValidationSchema(fData);
+        setValidationSchemaState(validationSchema);
       });
     }
     console.log('selected check value', selectedCheckValue);
   }, [currentTab, fieldData.pages.page]);
 
-  // useEffect(() => {
-  //   const initialValues: { [key: string]: any } = {};
-  //   if (currentTab) {
-  //     const title = convertSlugToTitle(currentTab);
-  //     setPageTitle(title);
-  //     const fData = fieldData.pages?.page.filter((item) => {
-  //       return convertSlugToTitle(item.name) === title;
-  //     });
-  //     setFilteredData(fData);
-  //     console.log('FDATAAA:', fData);
-
-  //     fData?.forEach((item) => {
-  //       item.categories.forEach((category) => {
-  //         category.fields.forEach((field) => {
-  //           // if (field?.type !== 'checkItem') {
-  //           //   initialValues[field.name] = '';
-  //           // }
-  //         });
-  //       });
-  //       setInitialValuesState(initialValues);
-  //     });
-  //     const validationSchema = buildValidationSchema(fData);
-  //     setValidationSchemaState(validationSchema);
-  //   }
-  //   console.log('selected check value', selectedCheckValue);
-  // }, [currentTab]);
-
-  // console.log("VALIDATION SCHEMA,", validationSchemaState);
-  if (!initialValuesState || !filteredData) {
-    // if (!initialValuesState || !validationSchemaState || !filteredData) {
+  // if (!initialValuesState || !filteredData) {
+  if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
       <div className="flex w-full flex-col justify-center">
         <BarLoader color="#21B25F" />
@@ -201,7 +173,7 @@ function IntegrationForm() {
       />
       <Formik
         initialValues={initialValuesState}
-        // validationSchema={validationSchemaState}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -214,7 +186,62 @@ function IntegrationForm() {
                 <div className="flex flex-col gap-6">
                   {filteredData?.map((pageItem, index) => (
                     <React.Fragment key={`${pageItem.name}-${index}`}>
-                      {pageItem.categories.map((item, itemIndex) => (
+                      {pageItem?.categories
+                        ?.sort(
+                          (a: any, b: any) =>
+                            Number(a.priority) - Number(b.priority),
+                        )
+                        .map((item, itemIndex) => (
+                          <FormLayoutDynamic
+                            key={`${pageItem.name}-${itemIndex}`}
+                            heading={item.categoryName}
+                          >
+                            {[...item.fields]
+                              .sort(
+                                (a, b) =>
+                                  Number(a.priority) - Number(b.priority),
+                              ) // Sorting fields
+                              .map((field, fieldIndex) => {
+                                return field.type === 'text' ? (
+                                  <Input
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    type={field.type}
+                                    formik={formik}
+                                    asterik={field.validation.required}
+                                    error={field.validation?.errorMessage}
+                                  />
+                                ) : field?.type === 'checkBoxInputMulti' ? (
+                                  <CheckboxInput
+                                    key={fieldIndex}
+                                    isMulti
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option) => ({
+                                        label: option,
+                                        value: option,
+                                      }),
+                                    )}
+                                    form={formik}
+                                    setSelectedCheckValue={
+                                      setSelectedCheckValue
+                                    }
+                                  />
+                                ) : (
+                                  <p key={fieldIndex}>nothing to show</p>
+                                );
+                              })}
+                          </FormLayoutDynamic>
+                        ))}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                {/* <div className="flex flex-col gap-6">
+                  {filteredData?.map((pageItem, index) => (
+                    <React.Fragment key={`${pageItem.name}-${index}`}>
+                      {pageItem?.categories?.map((item, itemIndex) => (
                         <FormLayoutDynamic
                           key={`${pageItem.name}-${itemIndex}`}
                           heading={item.categoryName}
@@ -254,7 +281,7 @@ function IntegrationForm() {
                       ))}
                     </React.Fragment>
                   ))}
-                </div>
+                </div> */}
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}
                 </div>
