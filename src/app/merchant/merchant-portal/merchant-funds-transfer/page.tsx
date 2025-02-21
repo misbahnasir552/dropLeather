@@ -23,7 +23,7 @@ function MerchantFundsTransfer() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
+  const [responseCode, setResponseCode] = useState('');
   const isOtpComplete = () => {
     // const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
     const isSmsOtpFilled = otp.every((digit) => digit !== '');
@@ -42,16 +42,19 @@ function MerchantFundsTransfer() {
       });
       console.log(response);
       if (response.data.responseCode === '009') {
+        setResponseCode(response.data.responseCode);
         router.push(
           '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
         );
       } else {
+        setResponseCode('500');
         setTitle('Failed');
         setDescription(response.data.errorDescription);
         setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);
+      setResponseCode('0000');
       setTitle('Network Failed');
       setDescription(e.message);
       setShowModal(true);
@@ -85,16 +88,19 @@ function MerchantFundsTransfer() {
       console.log(response);
 
       if (response.data.responseCode === '009') {
+        setResponseCode(response.data.responseCode);
         setTitle('Success');
         setDescription(response.data.responseDescription);
         setShowModal(true);
       } else {
+        setResponseCode('500');
         setTitle('Failure');
         setDescription(response.data.errorDescription);
         setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);
+      setResponseCode('0000');
       setTitle('Network Failure');
       setDescription(e.message);
       setShowModal(true);
@@ -116,6 +122,7 @@ function MerchantFundsTransfer() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        responseCode={responseCode}
         // routeName="/login"
       />
       <HeaderWrapper
