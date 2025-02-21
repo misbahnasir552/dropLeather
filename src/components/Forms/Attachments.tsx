@@ -216,88 +216,98 @@ const Attachments = () => {
                       categories: any[];
                     }) => (
                       <React.Fragment key={pageItem.name}>
-                        {pageItem.categories.map(
-                          (
-                            item: { categoryName: any; fields: any[] },
-                            itemIndex: any,
-                          ) => (
-                            <FormLayoutDynamic
-                              key={itemIndex}
-                              heading={item.categoryName}
-                            >
-                              {[...item.fields]
-                                .sort(
-                                  (
-                                    a: { priority: number },
-                                    b: { priority: number },
-                                  ) => a.priority - b.priority,
-                                )
-                                .map(
-                                  (
-                                    field: {
-                                      type?: any;
-                                      label: any;
-                                      name: any;
-                                      validation?: any;
-                                      file?: any;
-                                      icon?: string | StaticImageData;
+                        {pageItem.categories
+                          .slice()
+                          .sort(
+                            (a: any, b: any) =>
+                              Number(a.priority) - Number(b.priority),
+                          )
+                          .map(
+                            (
+                              item: { categoryName: any; fields: any[] },
+                              itemIndex: any,
+                            ) => (
+                              <FormLayoutDynamic
+                                key={itemIndex}
+                                heading={item.categoryName}
+                              >
+                                {[...item.fields]
+                                  .sort(
+                                    (
+                                      a: { priority: number },
+                                      b: { priority: number },
+                                    ) => a.priority - b.priority,
+                                  )
+                                  .map(
+                                    (
+                                      field: {
+                                        type?: any;
+                                        label: any;
+                                        name: any;
+                                        validation?: any;
+                                        file?: any;
+                                        icon?: string | StaticImageData;
+                                      },
+                                      fieldIndex: React.Key | null | undefined,
+                                    ) => {
+                                      if (field?.type === 'text') {
+                                        return (
+                                          <Input
+                                            key={fieldIndex}
+                                            label={field.label}
+                                            name={field.name}
+                                            type={field.type}
+                                            error={
+                                              field.validation.errorMessage
+                                            }
+                                          />
+                                        );
+                                      }
+                                      if (field?.type === 'dropDown') {
+                                        return (
+                                          <DropdownInput
+                                            key={fieldIndex}
+                                            label={field.label}
+                                            name={field.name}
+                                            options={field.validation?.options}
+                                            formik={formik}
+                                            error={
+                                              field.validation.errorMessage
+                                            }
+                                          />
+                                        );
+                                      }
+                                      if (field?.type === 'file') {
+                                        return (
+                                          // <BulkRegisterInput
+                                          //   asterik={field.validation.required}
+                                          //   key={field.name}
+                                          //   selectedFiles={selectedFiles}
+                                          //   setSelectedFiles={setSelectedFiles}
+                                          //   index={fieldIndex}
+                                          //   formik={formik}
+                                          //   item={field}
+                                          // />
+                                          <CorporateFileInput
+                                            asterik={field.validation.required}
+                                            key={field.name}
+                                            selectedFiles={selectedFiles}
+                                            setSelectedFiles={setSelectedFiles}
+                                            index={fieldIndex}
+                                            formik={formik}
+                                            item={field}
+                                          />
+                                        );
+                                      }
+                                      return null;
                                     },
-                                    fieldIndex: React.Key | null | undefined,
-                                  ) => {
-                                    if (field?.type === 'text') {
-                                      return (
-                                        <Input
-                                          key={fieldIndex}
-                                          label={field.label}
-                                          name={field.name}
-                                          type={field.type}
-                                          error={field.validation.errorMessage}
-                                        />
-                                      );
-                                    }
-                                    if (field?.type === 'dropDown') {
-                                      return (
-                                        <DropdownInput
-                                          key={fieldIndex}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={field.validation?.options}
-                                          formik={formik}
-                                          error={field.validation.errorMessage}
-                                        />
-                                      );
-                                    }
-                                    if (field?.type === 'file') {
-                                      return (
-                                        // <BulkRegisterInput
-                                        //   asterik={field.validation.required}
-                                        //   key={field.name}
-                                        //   selectedFiles={selectedFiles}
-                                        //   setSelectedFiles={setSelectedFiles}
-                                        //   index={fieldIndex}
-                                        //   formik={formik}
-                                        //   item={field}
-                                        // />
-                                        <CorporateFileInput
-                                          asterik={field.validation.required}
-                                          key={field.name}
-                                          selectedFiles={selectedFiles}
-                                          setSelectedFiles={setSelectedFiles}
-                                          index={fieldIndex}
-                                          formik={formik}
-                                          item={field}
-                                        />
-                                      );
-                                    }
-                                    return null;
-                                  },
-                                )}
-                              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-                                {apierror}
-                              </div>
-                            </FormLayoutDynamic>
-                          ),
-                        )}
+                                  )}
+                                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                                  {apierror}
+                                </div>
+                              </FormLayoutDynamic>
+                            ),
+                          )}
                       </React.Fragment>
                     ),
                   )}

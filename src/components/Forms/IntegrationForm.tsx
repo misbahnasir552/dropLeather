@@ -187,7 +187,8 @@ function IntegrationForm() {
                   {filteredData?.map((pageItem, index) => (
                     <React.Fragment key={`${pageItem.name}-${index}`}>
                       {pageItem?.categories
-                        ?.sort(
+                        ?.slice()
+                        .sort(
                           (a: any, b: any) =>
                             Number(a.priority) - Number(b.priority),
                         )

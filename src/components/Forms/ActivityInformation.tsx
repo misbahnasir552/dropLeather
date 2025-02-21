@@ -266,6 +266,7 @@ const ActivityInformation = () => {
                   // pageItem.name === "Business Details" && (
                   <React.Fragment key={pageItem.name}>
                     {pageItem?.categories
+                      ?.slice()
                       .sort(
                         (a: any, b: any) =>
                           Number(a.priority) - Number(b.priority),
