@@ -18,6 +18,7 @@ const CustomModal = ({
   setShowModal,
   routeName,
   image,
+  responseCode,
 }: ICustomModalProps) => {
   const router = useRouter();
   const handleClose = () => {
@@ -45,7 +46,6 @@ const CustomModal = ({
       handleClose();
     }
   };
-  console.log('title', title);
 
   return (
     <>
@@ -64,18 +64,15 @@ const CustomModal = ({
                   <div>
                     <div className="flex flex-col gap-9">
                       <div className="flex justify-center">
-                        {title === 'Failure' ||
-                        title === 'Failed' ||
-                        title === 'Network Failure' ||
-                        title === 'Network Failed' ? (
+                        {responseCode === '009' ? (
+                          <Image src={image || Bitmap} alt="bitmap-icon" />
+                        ) : (
                           <Image
                             src={ErrorIcon}
                             alt="error"
                             width={80}
                             height={80}
                           />
-                        ) : (
-                          <Image src={image || Bitmap} alt="bitmap-icon" />
                         )}
                       </div>
                       <div>
@@ -92,17 +89,14 @@ const CustomModal = ({
                     </div>
                   </div>
                   <div className="flex justify-center">
-                    {title === 'Failure' ||
-                    title === 'Failed' ||
-                    title === 'Network Failure' ||
-                    title === 'Network Failed' ? (
-                      <></>
-                    ) : (
+                    {responseCode === '009' ? (
                       <Button
                         label="Continue"
                         onClickHandler={handleContinue}
                         className="button-primary w-[270px] px-3 py-[19px] text-sm leading-tight"
                       />
+                    ) : (
+                      <></>
                     )}
                   </div>
                 </div>

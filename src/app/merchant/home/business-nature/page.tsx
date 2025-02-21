@@ -42,155 +42,6 @@ const BusinessNature = () => {
   console.log('business nature type', corporateJourneyType);
   const userData = useAppSelector((state) => state.auth);
 
-  // useEffect(() => {
-  //   console.log('uploadsss', uploads);
-  // }, [uploads]);
-
-  // const corporateProducts = [
-  //   {
-  //     label: 'Current Account',
-  //     value: 'currentAccount',
-  //   },
-  //   {
-  //     label: 'Savings Account',
-  //     value: 'savingAccount',
-  //   },
-  // ];
-  // const selfServeProducts = [
-  //   {
-  //     label: 'Salary Disbursement',
-  //     value: 'self_salaryDisbursement',
-  //   },
-  //   {
-  //     label: 'Bulk Transactions',
-  //     value: 'self_bulkTransactions',
-  //   },
-  // ];
-  // const managedDisbursementProducts = [
-  //   {
-  //     label: 'Salary Disbursement',
-  //     value: 'managed_salaryDisbursement',
-  //   },
-  //   {
-  //     label: 'Bulk Transactions',
-  //     value: 'managed_bulkTransactions',
-  //   },
-  // ];
-  // const othersProducts = [
-  //   {
-  //     label: 'Payment Collection',
-  //     value: 'Payment Collection',
-  //   },
-  //   {
-  //     label: 'Disbursement API',
-  //     value: 'Disbursement API',
-  //   },
-  //   {
-  //     label: 'Online Payment Gateway',
-  //     value: 'Payment Gateway',
-  //   },
-  //   {
-  //     label: 'In-App Integration',
-  //     value: 'In-App Integration',
-  //   },
-  //   {
-  //     label: 'Easypaisa QR ',
-  //     value: 'Easypaisa QR ',
-  //   },
-  //   {
-  //     label: 'Easypaisa Till Payment',
-  //     value: 'Easypaisa Till Payment',
-  //   },
-  // ];
-
-  // const products = [
-  //   {
-  //     label: 'Current Account',
-  //     value: 'currentAccount',
-  //   },
-  //   {
-  //     label: 'Saving Account',
-  //     value: 'savingAccount',
-  //   },
-  //   // {
-  //   //   label: 'Self Account',
-  //   //   value: 'selfAccount',
-  //   // },
-  //   // {
-  //   //   label: 'Etc Account',
-  //   //   value: 'etcAccount',
-  //   // },
-  // ];
-
-  // const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(Array(5).fill(null))
-  // const [selectedCheckValue, setSelectedCheckValue] = useState<
-  //   string | undefined | string[]
-  // >(undefined);
-  // console.log(selectedCheckValue, 'MULTI SELECT OPTION');
-
-  // const dispatch = useAppDispatch();
-  // corporate Options business nature
-  // const options = [
-  //   {
-  //     value: 'soleProprietor',
-  //     label: 'Sole-Proprietorship',
-  //     endpoint: 'soleBusinessDetails'
-  //   },
-  //   {
-  //     value: 'publicAndPrivateLtd',
-  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
-  //     endpoint: 'pnpBusinessDetails'
-
-  //   },
-  //   {
-  //     value: 'partnership',
-  //     label:
-  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
-  //     endpoint: 'partnershipBusinessDetails'
-  //   },
-  //   {
-  //     value: 'g2p',
-  //     label: 'Government Accounts / Autonomous Body',
-  //     endpoint: 'otherBusinessDetails'
-  //   },
-  //   {
-  //     value: 'ngoNpoCharities',
-  //     label:
-  //     'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
-  //     endpoint: 'nncBusinessDetails',
-  //   },
-  // ];
-
-  // const options = [
-  //   {
-  //     value: 'soleProprietor',
-  //     label: 'Sole-Proprietorship',
-  //     endpoint: 'soleBusinessDetails',
-  //   },
-  //   {
-  //     value: 'publicAndPrivateLtd',
-  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
-  //     endpoint: 'pnpBusinessDetails',
-  //   },
-  //   {
-  //     value: 'partnership',
-  //     label:
-  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
-  //     endpoint: 'partnershipBusinessDetails',
-  //   },
-  //   {
-  //     value: 'g2p',
-  //     label: 'Government Accounts / Autonomous Body',
-  //     endpoint: 'otherBusinessDetails',
-  //   },
-  //   {
-  //     value: 'ngoNpoCharities',
-  //     label:
-  //       'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
-  //     endpoint: 'nncBusinessDetails',
-  //   },
-  // ];
-
   const options = [
     {
       value: 'soleProprietor',
@@ -229,45 +80,6 @@ const BusinessNature = () => {
     },
   ];
 
-  // const [windowSize, setWindowSize] = useState({
-  //   width: 0,
-  //   height: 0,
-  // });
-
-  // const fetchData = async () => {
-  //   try {
-  //     const response = await apiClient.get(`/corporate/corporateFormReview`, {
-  //       params: { email: userData?.email },
-  //     });
-  //     const fetchedData = {
-  //       ...response?.data?.mulipleApplicantsData?.applicants?.[0],
-  //       accountTitle: response?.data?.mulipleApplicantsData?.accountTitle,
-  //       businessNtnNumber:
-  //         response?.data?.mulipleApplicantsData?.businessNtnNumber,
-  //       requiredBusiness:
-  //         response?.data?.mulipleApplicantsData?.requiredBusiness,
-  //     };
-  //     console.log('FETCH RES ', response, fetchedData);
-  //     dispatch(setApplicationForm(fetchedData ?? ''));
-
-  //     if (response?.data?.mulipleApplicantsData?.applicants?.length > 1) {
-  //       const processedApplicants =
-  //         response?.data?.mulipleApplicantsData?.applicants
-  //           ?.slice(1)
-  //           ?.map((applicant: any, index: any) => ({
-  //             ...applicant,
-  //             id: index, // Assign a unique id
-  //             // id: nanoid(), // Assign a unique id
-  //           }));
-
-  //       console.log('processedApplicants ', processedApplicants);
-  //       dispatch(setApplicants(processedApplicants ?? []));
-  //     }
-  //   } catch (e) {
-  //     console.log(e, 'error fetching');
-  //   }
-  // };
-
   useEffect(() => {
     // fetchData();
 
@@ -294,10 +106,10 @@ const BusinessNature = () => {
     );
 
     const businessType = selectedOption?.value;
-    const businessEndpoint = selectedOption?.endpoint;
+    // const businessEndpoint = selectedOption?.endpoint;
 
     values.businessTypeNature = businessType;
-    values.businessEndpoint = businessEndpoint;
+    // values.businessEndpoint = businessEndpoint;
 
     // if (values.typeOfRequest) {
     dispatch(setBusinessNature(values));

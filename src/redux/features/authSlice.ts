@@ -13,6 +13,7 @@ const initialState: TLogin = {
   success: false,
   expiry: '',
   isAuthenticated: false,
+  onboardingCompleted: false,
   userType: '',
   ticketId: '',
   temp: false,
@@ -26,6 +27,7 @@ const authSlice = createSlice({
     loginSuccess: (state, action: PayloadAction<Partial<TLogin>>) => {
       console.log('redux login success', action.payload);
       state.isAuthenticated = true;
+      state.onboardingCompleted = action.payload?.onboardingCompleted;
       state.email = action.payload?.email;
       state.name = action.payload?.name;
       state.jwt = action.payload?.jwt;
@@ -55,6 +57,7 @@ const authSlice = createSlice({
       state.apiSecret = '';
       state.apiKey = '';
       state.managerMobile = '';
+      state.onboardingCompleted = false;
       state.expiry = '';
       state.userType = '';
       state.temp = false;

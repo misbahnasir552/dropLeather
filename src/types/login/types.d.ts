@@ -15,6 +15,7 @@ type TLogin = {
   expiry: string | undefined;
   temp: boolean | undefined;
   isAuthenticated: boolean;
+  onboardingCompleted: boolean | undefined;
   name: string | undefined;
   userType: string | undefined | null;
   ticketId: string | undefined;
