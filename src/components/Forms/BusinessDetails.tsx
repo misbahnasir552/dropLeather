@@ -289,6 +289,7 @@ const BusinessInformation = () => {
                                       name={field.name}
                                       type={field.type}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                     />
                                   ) : field?.type === 'dropDown' &&
                                     field.name !==
@@ -310,6 +311,7 @@ const BusinessInformation = () => {
                                       )}
                                       formik={formik}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                       setSelectedDropDownValue={
                                         setSelectedDropDownValue
                                       }
@@ -331,6 +333,7 @@ const BusinessInformation = () => {
                                       )}
                                       formik={formik}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                       setSelectedDropDownValue={(
                                         value: string,
                                       ) => {
@@ -356,6 +359,7 @@ const BusinessInformation = () => {
                                       )}
                                       formik={formik}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                       setSelectedDropDownValue={
                                         setSelectedDropDownValue
                                       }
@@ -378,6 +382,7 @@ const BusinessInformation = () => {
                                       )}
                                       formik={formik}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                       setSelectedDropDownValue={
                                         setSelectedDropDownValue
                                       }
@@ -400,6 +405,7 @@ const BusinessInformation = () => {
                                       )}
                                       formik={formik}
                                       error={field.validation.errorMessage}
+                                      asterik={field.validation.required}
                                       setSelectedDropDownValue={
                                         setSelectedDropDownValue
                                       }
@@ -409,11 +415,13 @@ const BusinessInformation = () => {
                                       formik={formik}
                                       label={field.label}
                                       name={field.name}
+                                      asterik={field.validation.required}
                                     />
                                   ) : field?.type === 'checkItem' ? (
                                     <CheckboxItem
                                       description={field.label}
                                       isChecked={isChecked}
+                                      // asterik={field.validation.required}
                                       handleCheckboxChange={
                                         handleCheckboxChange
                                       }

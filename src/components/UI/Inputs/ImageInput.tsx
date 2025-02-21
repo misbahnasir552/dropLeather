@@ -35,7 +35,7 @@ const ImageInput = ({
   name,
   label,
   // type,
-  className,
+  // className,
   isDisabled = false,
   error,
   touched,
@@ -75,7 +75,8 @@ const ImageInput = ({
           { headers: { Authorization: `Bearer ${userData?.jwt}` } },
         );
         console.log(response, 'FETCH OTHER BANK TITLE');
-        formik?.setFieldValue(name, response?.data?.accountTitle);
+        // formik?.setFieldValue(name, response?.data?.accountTitle);
+        formik?.setFieldValue(name, 'response?.data?.accountTitle');
       } else {
         console.log('Caling TMB', data);
 
@@ -85,7 +86,7 @@ const ImageInput = ({
           { headers: { Authorization: `Bearer ${userData?.jwt}` } },
         );
         formik?.setFieldValue(name, response?.data?.accountTitle);
-        // console.log(response, "FETCH TMB");
+        // formik?.setFieldValue(name, response?.data?.accountTitle);
       }
     } catch (e) {
       console.log('Image input', e);
@@ -93,14 +94,19 @@ const ImageInput = ({
   };
   return (
     <>
-      <div className={`relative w-full`}>
+      <div className={`floating-input relative w-full`}>
         <Field
           name={name}
           type={'text'}
           id={label}
-          className={`${className} dark:text-white peer block w-full appearance-none rounded-lg border-2 border-border-light bg-neutral-white-base px-2.5 pb-1.5 pt-5 text-base font-medium leading-tight text-secondary-base focus:border-primary-base focus:outline-none focus:ring-0 ${
-            touched && error && 'border-danger-base focus:border-danger-base'
-          }`}
+          value={formik.values[name] || ''}
+          // className={`${className} dark:text-white peer block w-full appearance-none rounded-lg border-2 border-border-light bg-neutral-white-base px-2.5 pb-1.5 pt-5 text-base font-medium leading-tight text-secondary-base focus:border-primary-base focus:outline-none focus:ring-0 ${
+          //   touched && error && 'border-danger-base focus:border-danger-base'
+          // }`}
+          className={`h-[60px] w-full
+          rounded-lg p-5 pr-[48px] font-medium focus:outline-none ${
+            touched && error ? 'border-danger-base' : ''
+          }appearance-none [&::-ms-clear]:hidden [&::-ms-reveal]:hidden [&::-webkit-password-toggle-button]:hidden`}
           placeholder=" "
           // style={{ zIndex: 0 }}
           disabled={isDisabled}
@@ -116,7 +122,7 @@ const ImageInput = ({
           (image === 'Fetch Title' ? (
             <div
               onClick={handleClick}
-              className="absolute right-5 top-1/2 -translate-y-1/2 cursor-pointer"
+              className="absolute right-5 top-[50%] -translate-y-1/2 cursor-pointer will-change-transform"
             >
               <B3 medium textColor="text-primary-base">
                 {image}
