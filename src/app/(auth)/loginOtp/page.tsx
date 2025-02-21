@@ -82,30 +82,7 @@ const OtpLogin = () => {
         });
         dispatch(clearApplicants());
         router.push('/merchant/home');
-      }
-
-      // if (response?.data?.responseCode === '000') {
-      //   // dispatch(loginSuccess(response?.data));
-      //   dispatch(adminLoginSuccess(response?.data));
-      //   Cookies.set('adminRole', response?.data?.adminRole, {
-      //     expires: 1, // 1 day
-      //     secure: process.env.NODE_ENV === 'production',
-      //     path: '/admin',
-      //   });
-      //   Cookies.set('jwt', response?.data?.jwt, {
-      //     expires: 1, // 1 day
-      //     secure: process.env.NODE_ENV === 'production',
-      //     path: '/admin',
-      //   });
-      //   // Cookies.set('pages', JSON.stringify(response?.data?.pages), {
-      //   //   expires: 1, // 1 day
-      //   //   secure: process.env.NODE_ENV === 'production',
-      //   //   path: '/',
-      //   // });
-      //   // router.push('/admin/admin-portal/manage-users/search-user/');
-      //   router.push('/admin/corporate');
-      // }
-      else {
+      } else {
         console.log('Login failure');
         console.log('Login failure');
         setApierror(response?.data?.responseMessage);

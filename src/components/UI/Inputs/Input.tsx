@@ -56,7 +56,7 @@ const Input = ({
             eyeinput ? 'w-[95%]' : 'w-full'
           } h-[60px] rounded-lg p-5 pr-[48px] focus:outline-none ${
             touched && error ? 'border-danger-base' : ''
-          }`}
+          }appearance-none [&::-ms-clear]:hidden [&::-ms-reveal]:hidden [&::-webkit-password-toggle-button]:hidden`}
           placeholder={showPlaceholder ? placeholder : ''}
           autoComplete="off"
           disabled={isDisabled}
