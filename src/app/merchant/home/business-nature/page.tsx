@@ -15,6 +15,7 @@ import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import {
+  setBusinessEndpoint,
   // setApplicants,
   // setApplicationForm,
   setBusinessNature,
@@ -106,13 +107,14 @@ const BusinessNature = () => {
     );
 
     const businessType = selectedOption?.value;
-    // const businessEndpoint = selectedOption?.endpoint;
+    const businessEndpoint = selectedOption?.endpoint || '';
 
     values.businessTypeNature = businessType;
     // values.businessEndpoint = businessEndpoint;
 
     // if (values.typeOfRequest) {
     dispatch(setBusinessNature(values));
+    dispatch(setBusinessEndpoint(businessEndpoint));
     dispatch(setMerchantEntity(values?.businessTypeNature));
     try {
       console.log('<Merchant> USER ', userData);

@@ -24,6 +24,7 @@ const PersonalInfo = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [responseCode, setResponseCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
@@ -43,6 +44,7 @@ const PersonalInfo = () => {
       // });
 
       if (response.data.responseCode === '009') {
+        setResponseCode('009');
         dispatch(
           addFormData({
             ...values,
@@ -84,6 +86,7 @@ const PersonalInfo = () => {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
+          responseCode={responseCode}
         />
       )}
       <Formik

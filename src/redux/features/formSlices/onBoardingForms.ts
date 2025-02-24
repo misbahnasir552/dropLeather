@@ -56,6 +56,9 @@ const onBoardingFormSlice = createSlice({
       state.businessNature = action.payload;
       // state.businessEndpoint = action.payload;
     },
+    setBusinessEndpoint: (state, action: PayloadAction<string>) => {
+      state.businessEndpoint = action.payload;
+    },
     setMerchantEntity: (state, action: PayloadAction<string>) => {
       state.corporateEntity = action.payload;
     },
@@ -220,6 +223,7 @@ export const {
   setCorporateAttachmentStatus,
   resetForms,
   setLogoutOnboarding,
+  setBusinessEndpoint,
 } = onBoardingFormSlice.actions;
 
 // Export reducer
