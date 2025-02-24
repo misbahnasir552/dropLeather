@@ -33,7 +33,7 @@ const BusinessInformation = () => {
   const businessNatureData = useAppSelector(
     (state: any) => state.onBoardingForms,
   );
-
+  console.log('businessNatureData', businessNatureData);
   const router = useRouter();
   const [isChecked, setChecked] = useState(false);
 
@@ -68,7 +68,6 @@ const BusinessInformation = () => {
     selectedCheckValue,
     setAddStoresValues,
   );
-  console.log('sel dropdown 222', selectedDropDownValue);
 
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
@@ -126,8 +125,6 @@ const BusinessInformation = () => {
 
     setFilteredData(updatedFData);
 
-    console.log('fdata', updatedFData);
-
     updatedFData?.forEach((item) => {
       // if (item.name === "Activity Information") {
       item.categories.forEach((category) => {
@@ -172,7 +169,10 @@ const BusinessInformation = () => {
 
     if (currentIndex !== -1) {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      const dynamicCurrentEndpoint = `${currentEndpoint}${businessNatureData.businessNature.businessEndpoint}`;
+      console.log('currentEndpoint', currentEndpoint);
+      console.log('businessNatureData', businessNatureData);
+
+      const dynamicCurrentEndpoint = `merchant/${businessNatureData?.businessEndpoint}`;
       // const dynamicCurrentEndpoint = `${currentEndpoint}`;
       const additionalValues = {
         ...values,

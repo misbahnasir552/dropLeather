@@ -61,7 +61,7 @@ const Attachments = () => {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
-      const fData = fieldsData.pages?.page.filter((item: any) => {
+      const fData = fieldsData?.pages?.page?.filter((item: any) => {
         // console.log(item.name, "ITEM NAME");
         return convertSlugToTitle(item.name) === title;
       });

@@ -67,11 +67,6 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
     }
   };
 
-  console.log('setSelectedCheckValue herere ', setSelectedCheckValue);
-  // console.log('CheckboxInput --- ', options, name, form);
-
-  console.log('form?.values[name] ', form?.values[name]);
-
   return (
     <>
       <div className={`flex w-full ${layout || 'flex-col'} gap-4`}>

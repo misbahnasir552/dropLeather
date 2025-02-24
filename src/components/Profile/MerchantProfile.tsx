@@ -28,6 +28,7 @@ const MerchantProfile = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [responseCode, setResponseCode] = useState('');
 
   // API Call for Merchant Stores
   const fetchMerchantStores = async () => {
@@ -41,6 +42,7 @@ const MerchantProfile = () => {
       if (response?.data.responseCode === '009') {
         // setTitle('Success');
         setResponse(response.data);
+        setResponseCode('009');
         // setDescription(response?.data.responseDescription);
         // setRoute('/merchant/merchant-portal/qr-payments/dynamic-qr/');
         // router.push();
@@ -102,6 +104,7 @@ const MerchantProfile = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        responseCode={responseCode}
         // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
       />
       <div className="flex flex-col">
