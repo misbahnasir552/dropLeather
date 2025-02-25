@@ -63,13 +63,23 @@ const BusinessInformation = () => {
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
   };
-  console.log(
-    'selected value checkbox input',
-    selectedCheckValue,
-    setAddStoresValues,
-  );
+  // console.log(
+  //   'selected value checkbox input',
+  //   selectedCheckValue,
+  //   setAddStoresValues,
+  // );
 
   useEffect(() => {
+    console.log(
+      'dropdown value is',
+      selectedDropDownValue,
+      selectedCheckValue,
+      setAddStoresValues,
+    );
+  }, [selectedDropDownValue]);
+
+  useEffect(() => {
+    // console.log(selectedDropDownValue, "selected drop value")
     const initialValues: { [key: string]: any } = {};
     if (!currentTab) return;
 
@@ -112,6 +122,14 @@ const BusinessInformation = () => {
               (field) =>
                 field.name !== 'mediumRiskType' &&
                 field.name !== 'highRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'No' ||
+            selectedDropDownValue === '' ||
+            selectedDropDownValue === undefined
+          ) {
+            updatedFields = category.fields.filter(
+              (field) => field.name !== 'currentSalary',
             );
           }
 

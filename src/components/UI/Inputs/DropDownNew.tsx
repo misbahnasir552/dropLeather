@@ -44,6 +44,11 @@ const DropdownNew = ({
     if (name === 'associationToHighRiskBusiness') {
       setSelectedDropDownValue(item?.label);
     }
+    if (name === 'incomeStatus') {
+      setSelectedDropDownValue(item?.value);
+    }
+
+    // setSelectedDropDownValue(selectedValue);
     formik?.setFieldValue(name, item.label);
     // formik?.setFieldValue(name, item.label.split('-')[0]);
 
