@@ -41,6 +41,7 @@ const LoginSucessHome = () => {
   //   name: string;
   //   status: TabStatus;
   // }
+  console.log('userData', userData);
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -239,14 +240,14 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
-      hide: userData.onboardingCompleted,
+      // hide: userData.onboardingCompleted,
     },
     {
       title: 'Continue to My Dashboard',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: '/merchant/merchant-portal/home/',
-      hide: !userData.onboardingCompleted,
+      // hide: !userData.onboardingCompleted,
     },
     {
       title: 'Sandbox Integrations',
@@ -255,7 +256,7 @@ const LoginSucessHome = () => {
       routeName: 'business-nature',
     },
   ];
-  // ].filter((card) => !card.hide);
+  // .filter((card) => !card.hide);
   // ].filter((card) => !card.hide);
 
   return (
@@ -300,9 +301,7 @@ const LoginSucessHome = () => {
                   title={item.title}
                   description={item.description}
                   routeName={item.routeName}
-                  // type={item.type}
-                  // onClickHandler={handleNavigate}
-                />
+                /> // type={item.type} // onClickHandler={handleNavigate} /> ))
               ))}
         </div>
       </div>
