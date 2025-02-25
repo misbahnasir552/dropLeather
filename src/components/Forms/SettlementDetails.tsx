@@ -93,19 +93,37 @@ const SettlementDetails = () => {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
 
-      const fData = fieldsData.pages.page.filter(
+      let updatedFData = fieldsData.pages.page.filter(
         (item) => convertSlugToTitle(item.name) === title,
       );
 
-      // if (selectedCheckValue === 'High Risk Business / Person') {
-      //   updatedFields = category.fields.filter(
-      //     (field) =>
-      //       field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
-      //   );
+      updatedFData = updatedFData?.map((item) => {
+        return {
+          ...item,
+          categories: item.categories.map((category) => {
+            let updatedFields = category.fields;
 
-      setFilteredData(fData);
+            if (
+              selectedCheckValue === 'easypaisabanklimited' ||
+              selectedCheckValue === '' ||
+              selectedCheckValue === undefined
+            ) {
+              updatedFields = category.fields.filter(
+                (field) => field.name !== 'bankName',
+              );
+            }
 
-      fData?.forEach((item) => {
+            return {
+              ...category,
+              fields: updatedFields,
+            };
+          }),
+        };
+      });
+
+      setFilteredData(updatedFData);
+
+      updatedFData?.forEach((item) => {
         item.categories.forEach((category) => {
           category.fields.forEach((field) => {
             initialValues[field.name] = '';
@@ -114,7 +132,7 @@ const SettlementDetails = () => {
         setInitialValuesState(initialValues);
       });
     }
-  }, [currentTab, fieldsData.pages.page]);
+  }, [currentTab, fieldsData.pages.page, selectedCheckValue]);
 
   if (!initialValuesState || !filteredData) {
     setTimeout(() => {}, 12000);
@@ -244,8 +262,9 @@ const SettlementDetails = () => {
                                 );
                               }
                               if (
-                                field?.type === 'dropDown' &&
-                                selectedCheckValue === 'bankaccount'
+                                field?.type === 'dropDown'
+                                //  &&
+                                // selectedCheckValue?.includes('bankaccount')
                               ) {
                                 return (
                                   <DropdownInput
