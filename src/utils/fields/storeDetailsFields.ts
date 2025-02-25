@@ -12,6 +12,12 @@ export const storeFields = [
     label: 'Web Store Name *',
     name: 'webstoreName',
     type: 'text',
+    show: ['Online'],
+  },
+  {
+    label: 'Store Name *',
+    name: 'storeName',
+    type: 'text',
     show: ['Online', 'Retail'],
   },
   {

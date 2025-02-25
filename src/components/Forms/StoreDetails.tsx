@@ -40,6 +40,7 @@ const AddStore = () => {
   const [isAddFormVisible, setIsAddFormVisible] = useState(true);
   const [isStoreAdded, setIsStoreAdded] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  // const [newStoreFields, setNewStoreFields] = useState<any>([]);
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -123,10 +124,16 @@ const AddStore = () => {
   }, [checkboxValue]);
 
   const updatedStoreFields = storeFields.map((field: any) => {
+    if (checkboxValue?.length === 1 && checkboxValue[0] === 'Online') {
+      console.log("Only 'Online' is selected");
+      console.log('onlineeeeeeeee', checkboxValue);
+      console.log('fieldss', field);
+    }
+
     if (field.name === 'region') {
       return {
         ...field,
-        options: regions, // Set the fetched regions as options for 'region'
+        options: regions,
       };
     }
     if (field.name === 'category') {
@@ -346,7 +353,7 @@ const AddStore = () => {
                         <>
                           <div className="grid grid-cols-2 gap-6">
                             {updatedStoreFields.map(
-                              ({ label, name, type, options }) => (
+                              ({ label, name, type, options }: any) => (
                                 <div
                                   key={name}
                                   className={`flex flex-col gap-2 ${

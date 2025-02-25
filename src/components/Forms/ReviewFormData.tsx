@@ -297,20 +297,42 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
           />
         </ReviewFormDataGrid>
         <div className="border-t-px border border-border-light" />
-        <ReviewFormDataGrid heading="Transaction Activity">
+        <ReviewFormDataGrid heading="Account Profile / Transaction Activity">
           <ReviewInput
-            label="Expected No. of Transactions per Month"
+            label="Expected monthly Debit turnover (No. of transactions)"
             value={
               onboardingData?.businessDetails
                 ?.expectedMonthlyCreditTurnoverTransactions
             }
           />
           <ReviewInput
-            label="Expected Sales Volume per Month"
+            label="Expected monthly Debit turnover (amount)"
             value={
               onboardingData?.businessDetails
                 ?.expectedMonthlyCreditTurnoverAmount
             }
+          />
+          <ReviewInput
+            label="Expected monthly credit turnover (No. of transactions)"
+            value={
+              onboardingData?.businessDetails
+                ?.expectedMonthlyDebitTurnoverTransactions
+            }
+          />
+          <ReviewInput
+            label="Expected monthly credit turnover (amount)"
+            value={
+              onboardingData?.businessDetails
+                ?.expectedMonthlyCreditTurnoverAmount
+            }
+          />
+          <ReviewInput
+            label="Annual Turnover( Credit)"
+            value={onboardingData?.businessDetails?.annualTurnoverCredit}
+          />
+          <ReviewInput
+            label="Annual Turnover( Debit)"
+            value={onboardingData?.businessDetails?.annualTurnoverDebit}
           />
         </ReviewFormDataGrid>
       </ReviewFormLayout>
