@@ -17,13 +17,11 @@ const CustomModal = ({
   setShowModal,
   routeName,
   image,
-  responseCode,
 }: ICustomModalProps) => {
   const router = useRouter();
   const handleClose = () => {
     setShowModal(false);
   };
-  console.log(responseCode);
   const handleContinue = () => {
     if (routeName) {
       // router.push(routeName);

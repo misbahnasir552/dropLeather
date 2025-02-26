@@ -150,7 +150,6 @@ export interface ICustomModalProps {
   setShowModal: (value: boolean) => void;
   routeName?: string;
   image?: any;
-  responseCode?: string;
 }
 
 // export  interface ICustomModalHookProps{

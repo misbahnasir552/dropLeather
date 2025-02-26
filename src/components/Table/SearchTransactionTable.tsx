@@ -21,7 +21,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [responseCode, setResponseCode] = useState('');
   const onSubmit = async (transactionID: any) => {
     const req = {
       managerMobile: userData.managerMobile,
@@ -49,7 +48,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
         },
       );
       if (response.data.responseCode === '009') {
-        setResponseCode('009');
         console.log('success response', response?.data);
       } else if (response?.data?.responseCode === '000') {
         setTitle('Error Occured');
@@ -177,7 +175,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
         description={description}
         setShowModal={setShowModal}
         show={showModal}
-        responseCode={responseCode}
       />
       {/* Adjust max height as needed */}
       <table className="w-full border-collapse">

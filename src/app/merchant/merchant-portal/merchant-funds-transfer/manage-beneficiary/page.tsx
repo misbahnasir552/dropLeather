@@ -20,7 +20,6 @@ function ManageBeneficiary() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [responseCode, setResponseCode] = useState('');
   // const [filteredParams, setFilteredParams] = useState();
   const fetchRecords = async () => {
     try {
@@ -58,7 +57,6 @@ function ManageBeneficiary() {
       });
       console.log(response, 'Deleted response');
       if (response?.data?.responseCode === '009') {
-        setResponseCode('009');
         setTitle('Successfully Deleted');
         setDescription(response?.data?.responseDescription);
         setShowModal(true);
@@ -94,7 +92,6 @@ function ManageBeneficiary() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        responseCode={responseCode}
       />
       <HeaderWrapper
         heading="Manage Beneficiary"

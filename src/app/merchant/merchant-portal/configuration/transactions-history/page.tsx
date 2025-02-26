@@ -32,7 +32,6 @@ const SearchTransaction = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [responseCode, setResponseCode] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
@@ -91,17 +90,14 @@ const SearchTransaction = () => {
         pageNumber,
       );
       if (response?.data) {
-        setResponseCode('009');
         setData(response?.data?.transactionResponse);
         setTotalPages(response.data.totalPages);
       } else {
-        setResponseCode('500');
         setTitle('Failed');
         setDescription(response?.data?.responseDescription);
         setShowModal(true);
       }
     } catch (e: any) {
-      setResponseCode('0000');
       setTitle('Network Error');
       setDescription(e.message);
       setShowModal(true);
@@ -184,7 +180,6 @@ const SearchTransaction = () => {
         description={description}
         setShowModal={setShowModal}
         show={showModal}
-        responseCode={responseCode}
       />
       <HeaderWrapper heading="Search Transactions" />
       <Formik
