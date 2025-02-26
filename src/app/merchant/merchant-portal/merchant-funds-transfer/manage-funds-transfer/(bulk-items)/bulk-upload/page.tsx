@@ -44,7 +44,7 @@ function BulkFileUpload() {
       if (bulkFile) {
         formData.append('file', bulkFile);
         const response = await apiClient.post(
-          '/merchant/fundsTransfer1',
+          `/merchant/fundsTransfer1?email=${userData?.email}`,
           formData,
           {
             headers: {
