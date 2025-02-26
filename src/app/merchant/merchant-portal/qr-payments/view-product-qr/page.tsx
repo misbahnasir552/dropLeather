@@ -26,6 +26,7 @@ function ViewProductQR() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [responseCode, setResponseCode] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -74,6 +75,7 @@ function ViewProductQR() {
       });
       console.log(response, 'Deleted response');
       if (response?.data?.responseCode === '009') {
+        setResponseCode('009');
         setTitle('Deleted Successfully');
         setDescription(response?.data?.responseMessage);
         fetchRecords();
@@ -154,6 +156,7 @@ function ViewProductQR() {
             description={description}
             show={showModal}
             setShowModal={setShowModal}
+            responseCode={responseCode}
             // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
           />
           <HeaderWrapper

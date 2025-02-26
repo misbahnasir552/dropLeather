@@ -44,6 +44,7 @@ function AddTransactionPoint() {
   const [stores, setStores] = useState([]);
   const [route, setRoute] = useState('');
   const [isLoading, setIsloading] = useState(false);
+  const [responseCode, setResponseCode] = useState('');
 
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
     Array(1).fill(null),
@@ -67,6 +68,7 @@ function AddTransactionPoint() {
           }),
         );
         setStores(filterValues);
+        setResponseCode('009');
       } else if (response.data.responseCode === '000') {
         setTitle('Error');
         setDescription(response.data.responseDescription);
@@ -129,6 +131,7 @@ function AddTransactionPoint() {
         );
         console.log(response);
         if (response?.data.responseCode === '009') {
+          setResponseCode('009');
           setTitle('Success');
           setDescription(response?.data.responseDescription);
           setRoute('/merchant/merchant-portal/qr-payments/dynamic-qr/');
@@ -160,6 +163,7 @@ function AddTransactionPoint() {
           show={showModal}
           setShowModal={setShowModal}
           routeName={route}
+          responseCode={responseCode}
         />
         <BarLoader color="#21B25F" />
       </div>
@@ -174,6 +178,7 @@ function AddTransactionPoint() {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
+          responseCode={responseCode}
           // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
         />
         <HeaderWrapper

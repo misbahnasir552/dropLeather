@@ -23,6 +23,7 @@ const OtpInputWithValidation = () => {
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
   const [showModal, setShowModal] = useState(false);
+  const [responseCode, setResponseCode] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +72,7 @@ const OtpInputWithValidation = () => {
       console.log(response);
 
       if (response.data.responseCode === '009') {
+        setResponseCode('009');
         const additionalValues = {
           ...addBeneficiaryForm,
           managerMobile: userData?.managerMobile,
@@ -155,6 +157,7 @@ const OtpInputWithValidation = () => {
         show={showModal}
         setShowModal={setShowModal}
         routeName={route}
+        responseCode={responseCode}
       />
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper
