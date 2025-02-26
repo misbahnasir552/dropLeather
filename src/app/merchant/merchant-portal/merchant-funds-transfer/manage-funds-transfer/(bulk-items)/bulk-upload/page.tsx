@@ -27,6 +27,7 @@ function BulkFileUpload() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
 
   const onSubmit = async (
     values: IBulkUpload,
@@ -56,17 +57,20 @@ function BulkFileUpload() {
         if (response?.data.responseCode === '009') {
           setTitle('Success');
           setDescription(response?.data.responseDescription);
+          setShowModal(true);
           resetForm();
         } else {
           setTitle('Failed');
           setDescription(response.data.errorDescription);
+          setApierror(response?.data?.errorDescription);
         }
       }
     } catch (e: any) {
       setTitle('Network Failed');
       setDescription(e.message);
+      setApierror(e?.message);
     } finally {
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -77,10 +81,12 @@ function BulkFileUpload() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
         // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
       />
       <HeaderWrapper
         heading="Bulk Upload"
+        description="File Should include Following fields: Transfer From, Transfer To, Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
@@ -92,6 +98,7 @@ function BulkFileUpload() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Upload File">
               <div className="flex flex-col gap-4">
+                <div className="flex flex-col"></div>
                 <BulkRegisterInput
                   key="bulkFile"
                   selectedFiles={selectedFiles}
@@ -107,6 +114,9 @@ function BulkFileUpload() {
                 />
               </div>
             </FormLayout>
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"

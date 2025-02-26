@@ -21,6 +21,7 @@ function MerchantFundsTransfer() {
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
+  const [apierror, setApierror] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const isOtpComplete = () => {
@@ -47,13 +48,15 @@ function MerchantFundsTransfer() {
       } else {
         setTitle('Failed');
         setDescription(response.data.errorDescription);
-        setShowModal(true);
+        // setShowModal(true);
+        setApierror(response?.data?.errorDescription);
       }
     } catch (e: any) {
       console.log(e);
       setTitle('Network Failed');
       setDescription(e.message);
-      setShowModal(true);
+      setApierror(e?.message);
+      // setShowModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -90,13 +93,15 @@ function MerchantFundsTransfer() {
       } else {
         setTitle('Failure');
         setDescription(response.data.errorDescription);
-        setShowModal(true);
+        setApierror(response?.data?.errorDescription);
+        // setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);
       setTitle('Network Failure');
       setDescription(e.message);
-      setShowModal(true);
+      setApierror(e?.message);
+      // setShowModal(true);
     } finally {
       setIsLoading(false);
       // setShowModal(true);
@@ -137,6 +142,9 @@ function MerchantFundsTransfer() {
             description="Mobile Number OTP Verification Code"
             numberOfDigits={6}
           />
+          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+            {apierror}
+          </div>
           <Button
             isDisabled={!isOtpComplete() || isLoading}
             label="Verify"

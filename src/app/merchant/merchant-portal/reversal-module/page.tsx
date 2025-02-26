@@ -6,13 +6,14 @@ import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
-import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+import ReversalReportTable from '@/components/Table/ReversalReportTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { useAppSelector } from '@/hooks/redux';
 import type { SearchTransactionsForm } from '@/interfaces/interface';
 import {
   searchTransactionsInitialValues,
@@ -20,8 +21,8 @@ import {
 } from '@/validations/merchant/transactions/searchTransactionsSchema';
 
 const ReversalModule = () => {
-  // const userData = useAppSelector((state) => state.auth);
-  // const [data, setData] = useState();
+  const userData = useAppSelector((state) => state.auth);
+  const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
 
   const [showModal, setShowModal] = useState(false);
@@ -49,33 +50,52 @@ const ReversalModule = () => {
       // const response = await apiClient.get('/qrcode/searchTransactions', {
       //   params: filteredData,page: pageNumber, size: totalPages ,
       // });
-      const response = await apiClient.get('/qrcode/searchTransactions', {
-        params: {
-          ...(filteredData && typeof filteredData === 'object'
-            ? filteredData
-            : {}), // Spread existing filtered data
-          page: pageNumber, // Add page parameter
-          size: +envPageSize, // Add size parameter
+      const response = await apiClient.get(
+        `/merchant/reversalReport?email=${userData?.email}`,
+        {
+          params: {
+            ...(filteredData && typeof filteredData === 'object'
+              ? filteredData
+              : {}), // Spread existing filtered data
+            page: pageNumber, // Add page parameter
+            size: +envPageSize, // Add size parameter
+          },
         },
-      });
+      );
       console.log(
-        response.data.transactionResponse,
+        response.data.reversalReports,
         'RESPONSE',
         'PAGE NUMBER',
         pageNumber,
       );
       if (response?.data?.responseCode === '009') {
-        // setData(response?.data?.transactionResponse);
+        setData(
+          response?.data?.reversalReports?.map((item: any) => {
+            return {
+              batchId: item?.batchId,
+              orderDate: item?.orderDate,
+              reversalDate: item?.reversalDate,
+              orderId: item?.orderId,
+              opsId: item?.opsId,
+              id: item?.reversalId,
+              transactionCount: item?.transactionCount,
+              reversalAmount: item?.reversalAmount,
+              reversalFee: item?.reversalFee,
+              tax: item?.tax,
+              transactionAmount: item?.transactionAmount,
+            };
+          }),
+        );
         setTotalPages(response.data.totalPages);
       } else {
         setTitle('Failed');
         setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        // setShowModal(true);
       }
     } catch (e: any) {
       setTitle('Network Error');
       setDescription(e.message);
-      setShowModal(true);
+      // setShowModal(true);
       console.log('Error in fetching transactions', e);
     } finally {
       setIsLoading(false);
@@ -99,9 +119,10 @@ const ReversalModule = () => {
     'Transaction Count',
     'Total Reversal Amount',
     'Total Reversal Fee',
-    'Total Reversal Text',
+    'Total Reversal Tax',
     'Total Transaction Amount',
   ];
+  console.log('t data', data);
 
   const onSubmit = async (values: SearchTransactionsForm) => {
     const filteredValues: any = {};
@@ -119,34 +140,7 @@ const ReversalModule = () => {
     formik.resetForm();
     fetchRecords();
   };
-  const dummyData = [
-    {
-      batchId: 1,
-      orderDate: '20/02/2025',
-      reversalDate: '21/02/2025',
-      orderId: '22',
-      opsId: '22',
-      reversalId: '33',
-      transactionCount: '33',
-      totalReversalAmount: '23432',
-      totalReversalFee: '254',
-      totalReversalTax: '105',
-      totalTransactionAmount: '52142',
-    },
-    {
-      batchId: 1,
-      orderDate: '20/02/2025',
-      reversalDate: '21/02/2025',
-      orderId: '22',
-      opsId: '22',
-      reversalId: '33',
-      transactionCount: '33',
-      totalReversalAmount: '23432',
-      totalReversalFee: '254',
-      totalReversalTax: '105',
-      totalTransactionAmount: '52142',
-    },
-  ];
+
   return (
     <div className="flex flex-col gap-6">
       <CustomModal
@@ -195,6 +189,7 @@ const ReversalModule = () => {
                 label="Search"
                 type="submit"
                 className="button-primary h-9 w-[120px] px-3 py-[19px] text-xs"
+                isDisabled={isLoading}
               />
               {/* <Button
                 label="Export"
@@ -216,11 +211,11 @@ const ReversalModule = () => {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {dummyData ? (
+          {data ? (
             <>
-              <SearchTransactionTable
+              <ReversalReportTable
                 tableHeadings={tableHeadings}
-                tableData={dummyData}
+                tableData={data}
               />
               <Pagination
                 pageNumber={pageNumber}

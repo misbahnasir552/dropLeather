@@ -4,8 +4,8 @@ export interface IManageFundsTransfer {
   availableBalance: string;
   currentBalance: string;
   beneficiaryName: string;
-  dateBetween: string;
-  paymentStatus: string;
+  transferDate: string;
+  status: string;
   transferAmount: string;
 }
 
@@ -20,7 +20,7 @@ export interface IFundsTransfer {
   beneficiaryBank: string;
   transferAmount: number;
   transferPurpose: string;
-  mpin: string;
+  transferTo: '';
 }
 
 export interface IAddBeneficiary {

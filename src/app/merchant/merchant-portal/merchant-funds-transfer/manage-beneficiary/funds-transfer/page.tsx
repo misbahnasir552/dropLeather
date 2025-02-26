@@ -28,6 +28,7 @@ function FundsTranfer() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
+  const [apierror, setApierror] = useState('');
 
   const fetchBeneficiariesRecords = async () => {
     try {
@@ -38,13 +39,15 @@ function FundsTranfer() {
       } else {
         setTitle('Failure');
         setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setApierror(response.data.responseDescription);
+        // setShowModal(true);
       }
     } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
       setTitle('Network Failure');
       setDescription(e.message);
-      setShowModal(true);
+      setApierror(e?.message);
+      // setShowModal(true);
     }
   };
 
@@ -94,19 +97,23 @@ function FundsTranfer() {
       );
       console.log('Added Successfully', response);
       if (response?.data.responseCode === '009') {
-        setTitle('Transfered Successfully!');
+        setShowModal(true);
+
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         resetForm();
       } else {
         setTitle('Failure');
         setDescription(response.data.responseDescription);
+        setApierror(response.data.responseDescription);
       }
     } catch (e: any) {
       setTitle('Network Failure');
       setDescription(e.message);
+      setApierror(e?.message);
     } finally {
       setIsLoading(false);
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -117,7 +124,7 @@ function FundsTranfer() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
       />
       <HeaderWrapper
         heading="Funds Transfer"
@@ -140,6 +147,19 @@ function FundsTranfer() {
                   type="text"
                   error={formik.errors.transferFrom}
                   touched={formik.touched.transferFrom}
+                  asterik={true}
+                  placeholder={'92XXXXXXXXXX'}
+                />
+                <Input
+                  // isDisabled
+                  value={'923458496384'}
+                  label="Transfer To"
+                  name={'transferTo'}
+                  type="text"
+                  error={formik.errors.transferTo}
+                  touched={formik.touched.transferTo}
+                  asterik={true}
+                  placeholder={'92XXXXXXXXXX'}
                 />
                 {/* <Input
                   label="Beneficiary Account Details"
@@ -151,6 +171,7 @@ function FundsTranfer() {
                 <DropdownInput
                   label="Beneficiary Account Details"
                   name={'beneficiaryAccountNumber'}
+                  asterik={true}
                   error={formik.errors.beneficiaryAccountNumber}
                   touched={formik.touched.beneficiaryAccountNumber}
                   formik={formik}
@@ -171,18 +192,11 @@ function FundsTranfer() {
                     value: option.bankPrefix,
                   }))}
                 /> */}
-
-                <Input
-                  label="MPIN"
-                  name={'mpin'}
-                  type="password"
-                  error={formik.errors.mpin}
-                  touched={formik.touched.mpin}
-                />
                 <Input
                   label="Transfer Amount"
                   name={'transferAmount'}
                   type="number"
+                  asterik={true}
                   error={formik.errors.transferAmount}
                   touched={formik.touched.transferAmount}
                 />
@@ -190,11 +204,15 @@ function FundsTranfer() {
                   label="Transfer Purpose"
                   name={'transferPurpose'}
                   type="text"
+                  asterik={true}
                   error={formik.errors.transferPurpose}
                   touched={formik.touched.transferPurpose}
                 />
               </div>
             </FormLayout>
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
             {isLoading && (
               <div className="flex w-full justify-center">
                 <BarLoader color="#21B25F" />
