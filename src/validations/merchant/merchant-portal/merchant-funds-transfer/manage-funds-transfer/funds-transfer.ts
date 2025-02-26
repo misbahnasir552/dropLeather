@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import type { IFundsTransfer } from './interfaces';
 
 export const fundsTransferInitialValues: IFundsTransfer = {
-  transferFrom: '',
+  // transferFrom: '',
   // beneficiaryName: '',
   beneficiaryAccountNumber: '',
   beneficiaryBank: '',
@@ -13,7 +13,7 @@ export const fundsTransferInitialValues: IFundsTransfer = {
 };
 
 export const fundsTransferSchema = Yup.object().shape({
-  transferFrom: Yup.string().required('Please fill this field.'),
+  // transferFrom: Yup.string().required('Please fill this field.'),
   transferTo: Yup.string().required('Please fill this field.'),
   // beneficiaryName: Yup.string().required('Please fill this field.'),
   beneficiaryAccountNumber: Yup.string().required('Please fill this field.'),

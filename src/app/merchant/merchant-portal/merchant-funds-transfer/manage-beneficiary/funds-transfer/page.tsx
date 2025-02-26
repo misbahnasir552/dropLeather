@@ -91,7 +91,7 @@ function FundsTranfer() {
       };
       setIsLoading(true);
       const response = await apiClient.post(
-        '/merchant/fundsTransfer',
+        `/merchant/fundsTransfer?email=${userData?.email}`,
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
@@ -139,7 +139,7 @@ function FundsTranfer() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Account Details">
               <div className="flex flex-col gap-4">
-                <Input
+                {/* <Input
                   // isDisabled
                   value={'923458496384'}
                   label="Transfer From"
@@ -149,7 +149,7 @@ function FundsTranfer() {
                   touched={formik.touched.transferFrom}
                   asterik={true}
                   placeholder={'92XXXXXXXXXX'}
-                />
+                /> */}
                 <Input
                   // isDisabled
                   value={'923458496384'}
