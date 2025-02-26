@@ -139,7 +139,7 @@
 'use client';
 
 import type { FormikProps } from 'formik';
-import { ErrorMessage, Field } from 'formik';
+import { Field } from 'formik';
 import type { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import Image from 'next/image';
 import type {
@@ -152,6 +152,7 @@ import type {
 } from 'react';
 
 import TickIcon from '@/assets/icons/tick-icon.svg';
+import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
 import H7 from '@/components/UI/Headings/H7';
 
 interface ICheckboxInput {
@@ -172,7 +173,7 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   name,
   options,
   form,
-  error,
+  // error,
   isStore,
   layout,
   setSelectedCheckValue,
@@ -360,13 +361,14 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
           ),
         )}
       </div>
-      {error && (
+      {/* {error && (
         <ErrorMessage
           name={name}
           component="div"
           className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base"
         />
-      )}
+      )} */}
+      <FormikErrorMessage name={name} />
     </>
   );
 };
