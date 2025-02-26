@@ -30,7 +30,6 @@ function AddDynamicQR() {
   const [stores, setStores] = useState([]);
   const [amount, setAmount] = useState('');
   const [expirationTime, setExpirationTime] = useState(0);
-  const [responseCode, setResponseCode] = useState('');
   const { apiSecret } = userData;
 
   const [showModal, setShowModal] = useState(false);
@@ -168,7 +167,6 @@ function AddDynamicQR() {
         setAmount(values.amount);
         setExpirationTime(values.expirationTime);
         base64ToJpg(response?.data.qrCode);
-        setResponseCode('009');
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
       } else if (response?.data.responseCode === '000') {
@@ -196,7 +194,6 @@ function AddDynamicQR() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        responseCode={responseCode}
         // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
       />
       <HeaderWrapper

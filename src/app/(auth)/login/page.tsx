@@ -27,7 +27,6 @@ const NewLogin = () => {
   const [apierror, setApierror] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [responseCode, setResponseCode] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); // Added state to track button state
   const session = null;
@@ -110,7 +109,6 @@ const NewLogin = () => {
 
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
-        setResponseCode('009');
         setApierror(loginResponse?.data?.responseMessage);
         // setDescription(loginResponse?.data?.responseMessage);
         // setShowModal(true);
@@ -135,7 +133,6 @@ const NewLogin = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        responseCode={responseCode}
       />
       <span className="flex w-full justify-center pb-8 text-[40px] font-semibold text-secondary-base sm:max-md:text-[32px]">
         Login to your account
