@@ -193,7 +193,7 @@ function AddOutlet() {
                   ]}
                   form={formik}
                   setSelectedCheckValue={setSelectedCheckValue}
-                  error={formik.errors.storeType}
+                  // error={formik.errors.storeType}
                 />
               </FormLayout>
               <FormLayout formHeading="Outlet Details">

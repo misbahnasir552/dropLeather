@@ -118,6 +118,7 @@ export const storeDetailsInitialValues: any = {
   storeType: '',
   webstoreName: '',
   webstoreURL: '',
+  storeName: '',
   // paymentEnable: '',
   // merchantAddendumID: '',
 
@@ -138,6 +139,7 @@ export const storeDetailsSchema = Yup.object().shape({
   webstoreName: Yup.string().required('Website Name is required'),
 
   webstoreURL: Yup.string().required('Website URL is required'),
+  storeName: Yup.string().required('Store Name is required'),
   // paymentEnable: Yup.string(),
   // merchantAddendumID: Yup.string().required('Merchant Addendum Id is required'),
   // merchantAddendumName: Yup.string().required(
