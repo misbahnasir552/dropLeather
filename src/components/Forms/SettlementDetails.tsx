@@ -295,7 +295,12 @@ const SettlementDetails = () => {
                                     image={field.image}
                                     data={{
                                       accNumber: formik?.values?.accountNumber,
-                                      bankName: formik?.values?.bankName,
+                                      // easypaisabankLimited otherwise if otherbanks then selected
+                                      bankName:
+                                        selectedCheckValue ===
+                                        'easypaisabanklimited'
+                                          ? 'easypaisabanklimited'
+                                          : formik?.values?.bankName,
                                     }}
                                     formik={formik}
                                     selectedCheckValue={selectedCheckValue}

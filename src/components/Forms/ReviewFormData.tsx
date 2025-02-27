@@ -83,10 +83,8 @@ function ReviewFormData({
         // success case
 
         setShowModal(true);
-        setTitle('Application Submitted Successfully');
-        setDescription(
-          `Congratulation! You have successfully submitted application to open an easypaisa Merchant Account. You'll hear back from us in 7 working days. `,
-        );
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
       } else {
         setTitle('Failed Submission');
         setDescription(`Please, try again later!`);
