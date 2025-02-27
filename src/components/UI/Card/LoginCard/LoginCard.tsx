@@ -4,12 +4,12 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-import apiClient from '@/api/apiClient';
+// import apiClient from '@/api/apiClient';
 import arrowRight from '@/assets/icons/arrow-right.svg';
 import arrowRightWhite from '@/assets/icons/arrow-rightWhite.svg';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+// import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { ILoginCard } from '@/interfaces/interface';
-import { setPageData } from '@/redux/features/formSlices/fieldSlice';
+// import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 // import { setJourneyType } from '@/redux/features/adminSlices/corporateSlices/corporateJourneyTypeSlice';
 
 export default function LoginCard({
@@ -18,12 +18,12 @@ export default function LoginCard({
   routeName, // onClickHandler
   type, // isDisabled,
 }: ILoginCard) {
-  const userData = useAppSelector((state) => state.auth);
+  // const userData = useAppSelector((state) => state.auth);
 
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
   // const [journeyType, setJourneyType] = useState('');
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
 
   // console.log("isdisabled",isDisabled)
   const handleClick = async (type: any) => {
@@ -31,37 +31,39 @@ export default function LoginCard({
 
     console.log('route name is', routeName);
     // if (routeName) {
-    if (userData?.isrequestRevision) {
-      dispatch(setPageData([]));
-      try {
-        const response = await apiClient.get(
-          `/corporate/requestRevisionDynamicFields?email=${userData.email}`,
-        );
-        console.log('LOGIN CARD API', response.data);
+    // if (userData?.isrequestRevision) {
+    //   dispatch(setPageData([]));
+    //   try {
+    //     const response = await apiClient.get(
+    //       `/corporate/requestRevisionDynamicFields?email=${userData.email}`,
+    //     );
+    //     console.log('LOGIN CARD API', response.data);
 
-        dispatch(setPageData(response.data));
+    //     dispatch(setPageData(response.data));
 
-        if (type === 'viewApplicationStatus') {
-          console.log('App Status ROUTE ');
-          router.push(routeName);
-        } else if (
-          response.data.page?.[0]?.name === 'Application Form' ||
-          response.data.page?.[1]?.name === 'Application Form'
-        ) {
-          console.log('IF LOGIN ROUTE ');
+    //     if (type === 'viewApplicationStatus') {
+    //       console.log('App Status ROUTE ');
+    //       router.push(routeName);
+    //     } else if (
+    //       response.data.page?.[0]?.name === 'Application Form' ||
+    //       response.data.page?.[1]?.name === 'Application Form'
+    //     ) {
+    //       console.log('IF LOGIN ROUTE ');
 
-          router.push('business-nature/application-form');
-        } else {
-          console.log('LOGIN ROUTE ');
+    //       router.push('business-nature/application-form');
+    //     } else {
+    //       console.log('LOGIN ROUTE ');
 
-          router.push('business-nature/attachments');
-        }
-      } catch (e) {
-        console.log('Set Page info for Rquest Revision Failed!', e);
-      }
-    } else {
-      router.push(routeName);
-    }
+    //       router.push('business-nature/attachments');
+    //     }
+    //   } catch (e) {
+    //     console.log('Set Page info for Rquest Revision Failed!', e);
+    //   }
+    // }
+
+    // else {
+    router.push(routeName);
+    // }
     // }
     // router.push(routeName);
     // dispatch(setJourneyType(type));

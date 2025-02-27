@@ -115,6 +115,13 @@ export const buildValidationSchema = (responseFields: Page[]) => {
             .of(Yup.string())
             .min(1, 'Please select at least one option');
         }
+
+        if (field.type === 'checkBoxInputMulti') {
+          // Use Yup.array() for multi-checkbox fields
+          fieldValidation = Yup.array()
+            .min(1, 'Please select at least one option') // Ensure at least one option is selected
+            .of(Yup.string()); // Ensure each item in the array is a string
+        }
         if (field.type === 'date') {
           fieldValidation = Yup.date()
             .required('Please fill the field')
