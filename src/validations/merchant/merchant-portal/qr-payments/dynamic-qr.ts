@@ -29,7 +29,7 @@ export const dynamicQRSchema = Yup.object().shape({
     .required('Please fill this field')
     .test(
       'is-valid-expiration-time',
-      'Expiration time should nor be 0 neither it may exceed 12 hours',
+      'Expiration time should neither be 0 nor exceed 12 hours',
       (value) =>
         value !== undefined && value <= 12 * 60 * 60 && Number(value) > 0, // 12 hours in seconds
     ),

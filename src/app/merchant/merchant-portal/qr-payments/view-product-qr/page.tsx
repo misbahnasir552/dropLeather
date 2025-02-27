@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
@@ -65,7 +66,25 @@ function ViewProductQR() {
       console.log('Error in fetching dynamic QR list', e);
     }
   };
+  const exportToExcel = () => {
+    // if (!response) return;
 
+    // if (!response || response.length === 0) {
+    if (!qrFilteredData) {
+      console.error('No data available to export');
+      return;
+    }
+
+    // Create a worksheet from the response data
+    const ws = XLSX?.utils?.json_to_sheet(qrFilteredData);
+
+    // Create a new workbook and append the worksheet
+    const wb = XLSX?.utils?.book_new();
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Products QR');
+
+    // Generate an Excel file and download it
+    XLSX.writeFile(wb, 'products_qr.xlsx');
+  };
   const handleDelete = async (id: any) => {
     console.log('Delete row with id:', id);
     try {
@@ -194,11 +213,11 @@ function ViewProductQR() {
                       type="submit"
                       className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
-                    {/* <Button
+                    <Button
                       label="Export"
-                      routeName="/login"
-                      className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
-                    /> */}
+                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                      onClickHandler={exportToExcel} // Export button click handler
+                    />
                     <Button
                       label="Reset"
                       routeName="/login"

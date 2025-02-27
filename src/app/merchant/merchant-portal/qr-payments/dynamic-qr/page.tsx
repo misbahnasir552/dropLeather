@@ -279,8 +279,8 @@ function AddDynamicQR() {
             </FormLayout>
             <div className="flex w-full justify-end gap-6">
               <Button
-                label="Cancel"
-                // routeName="/login"
+                label="Reset"
+                onClickHandler={() => formik.resetForm()}
                 className="button-secondary h-14 w-[270px] px-2 py-[11px] text-xs leading-tight"
               />
               <Button

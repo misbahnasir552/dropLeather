@@ -39,7 +39,7 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Account Settings',
-      className: 'left-[32%]',
+      className: 'left-[32%] top-[20%]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
@@ -51,6 +51,7 @@ const MerchantPortalNavbar = () => {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
+      className: 'top-[20%]',
     },
     {
       title: 'Settlement Module',
@@ -67,7 +68,7 @@ const MerchantPortalNavbar = () => {
   ];
   return (
     <>
-      <nav className="flex w-full justify-between overflow-auto shadow-[0px_2px_6px_0px_rgba(51,_51,_51,_0.08)] sm:px-6 md:px-[150px]">
+      <nav className="flex w-full justify-between gap-2 overflow-auto shadow-[0px_2px_6px_0px_rgba(51,_51,_51,_0.08)] sm:px-6 md:px-[150px]">
         {merchantPortalNavMenu.map((item, index, arr) => (
           <React.Fragment key={index}>
             <div className="item-center flex">
@@ -78,10 +79,14 @@ const MerchantPortalNavbar = () => {
               >
                 {item.link ? (
                   <Link href={item.link}>
-                    <B2 textColor={`hover:text-primary-base`}>{item.title}</B2>
+                    <B2 textColor={`hover:text-primary-base`}>
+                      {item?.title.replace(/ /g, '\u00A0')}
+                    </B2>
                   </Link>
                 ) : (
-                  <B2 textColor={`hover:text-primary-base`}>{item.title}</B2>
+                  <B2 textColor={`hover:text-primary-base`}>
+                    {item?.title.replace(/ /g, '\u00A0')}
+                  </B2>
                 )}
                 {item.dropdown && hoveredMenu === item.title && (
                   <ConfigurationDropDown
