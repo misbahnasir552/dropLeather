@@ -27,6 +27,7 @@ const SearchTransaction = () => {
   // const userData = useAppSelector((state) => state.auth);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
+  const [apierror, setApierror] = useState('');
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -95,12 +96,14 @@ const SearchTransaction = () => {
       } else {
         setTitle('Failed');
         setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       }
     } catch (e: any) {
       setTitle('Network Error');
       setDescription(e.message);
-      setShowModal(true);
+      setApierror(e?.message);
+      // setShowModal(true);
       console.log('Error in fetching transactions', e);
     } finally {
       setIsLoading(false);
@@ -307,6 +310,9 @@ const SearchTransaction = () => {
           ) : (
             <H7>No Records found.</H7>
           )}
+          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+            {apierror}
+          </div>
         </>
       )}
     </div>

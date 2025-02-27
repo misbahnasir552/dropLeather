@@ -20,6 +20,7 @@ import {
   qrPaymentsInitialValues,
   qrPaymentsSchema,
 } from '@/validations/merchant/merchant-portal/qr-payments/qr-payments';
+// import QRModal from '@/components/UI/Modal/QR/QRModal';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);

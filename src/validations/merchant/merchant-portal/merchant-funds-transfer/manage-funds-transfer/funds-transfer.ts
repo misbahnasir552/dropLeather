@@ -3,17 +3,18 @@ import * as Yup from 'yup';
 import type { IFundsTransfer } from './interfaces';
 
 export const fundsTransferInitialValues: IFundsTransfer = {
-  transferFrom: '',
+  // transferFrom: '',
   // beneficiaryName: '',
   beneficiaryAccountNumber: '',
   beneficiaryBank: '',
   transferAmount: 0,
   transferPurpose: '',
-  mpin: '',
+  transferTo: '',
 };
 
 export const fundsTransferSchema = Yup.object().shape({
-  transferFrom: Yup.string().required('Please fill this field.'),
+  // transferFrom: Yup.string().required('Please fill this field.'),
+  transferTo: Yup.string().required('Please fill this field.'),
   // beneficiaryName: Yup.string().required('Please fill this field.'),
   beneficiaryAccountNumber: Yup.string().required('Please fill this field.'),
   // beneficiaryBank: Yup.string().required('Please fill this field.'),
@@ -24,5 +25,4 @@ export const fundsTransferSchema = Yup.object().shape({
     .min(1, 'Minimum amount is 1.') // Ensures minimum value
     .max(1000000, 'Maximum amount is 10000.'), // Ensures maximum value
   transferPurpose: Yup.string().required('Please fill this field.'),
-  mpin: Yup.string().required('Please fill this field.'),
 });
