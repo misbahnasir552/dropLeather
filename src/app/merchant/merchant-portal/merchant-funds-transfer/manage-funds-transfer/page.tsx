@@ -99,6 +99,7 @@ function ManageFundsTransfer() {
     'Beneficiary Name',
     'Transfer Date',
     'Transaction Id',
+    'Batch Id',
     'Transfer Amount',
     'Account Closing Balance',
     // 'Failure Reason',
