@@ -6,7 +6,7 @@ import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
-import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -318,7 +318,7 @@ function ManageFundsTransfer() {
         <>
           {beneficiaryFilteredData.length > 0 ? (
             <div className="flex flex-col gap-3">
-              <SearchTransactionTable
+              <FundsTransferTable
                 tableHeadings={tableHeadings}
                 tableData={beneficiaryFilteredData}
               />
