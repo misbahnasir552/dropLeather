@@ -63,7 +63,6 @@ const QRModal: React.FC<QRModalProps> = ({
       setShowModal(false);
     }
   };
-
   return (
     <>
       {show && (
@@ -71,7 +70,7 @@ const QRModal: React.FC<QRModalProps> = ({
           className="overlay fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-secondary-base/75 sm:px-6 md:px-12"
           onClick={handleOverlayClick}
         >
-          <div className="flex h-[90%] w-[70%] flex-col gap-12 rounded-2xl border-[1px] border-border-dark bg-screen-white p-2">
+          <div className="flex w-[95%] flex-col gap-12 rounded-2xl border-[1px] border-border-dark bg-screen-white p-2 md:w-[70%]">
             <div className="flex flex-col gap-8">
               <div
                 className="flex cursor-pointer justify-end"
@@ -86,24 +85,44 @@ const QRModal: React.FC<QRModalProps> = ({
               </div>
               <div className="md:px-12 md:py-2">
                 <div className="flex flex-col gap-6">
-                  <div className="flex items-center justify-center">
+                  {/* <div className="flex items-center justify-center">
                     <Image
                       src={imageUrl}
                       alt="QR code"
                       width={300}
                       height={300}
                     />{' '}
-                    {/* QR code */}
                   </div>
-                  <div>
+                  <div className="flex items-center justify-center">
                     <Image
                       src={QRCodeFormat}
                       alt="paymentGateway Background"
-                      width={400}
-                      height={400}
+                      width={600}
+                      height={600}
                       objectFit="cover"
-                      className="absolute inset-0 object-left"
                     />
+                  </div> */}
+                  <div className="relative flex items-center justify-center ">
+                    {/* Background Image */}
+                    <Image
+                      src={QRCodeFormat}
+                      alt="paymentGateway Background"
+                      width={600}
+                      height={600}
+                      objectFit="cover"
+                      className="h-auto w-full" // Make it responsive
+                    />
+
+                    {/* Overlay Image */}
+                    <div className="absolute inset-0 left-[50%] flex items-center justify-center">
+                      <Image
+                        src={imageUrl}
+                        alt="QR code"
+                        width={200}
+                        height={200}
+                        className=" h-auto" // Make it responsive
+                      />
+                    </div>
                   </div>
                   {amount && (
                     <div className="flex flex-col items-center justify-center gap-2">
