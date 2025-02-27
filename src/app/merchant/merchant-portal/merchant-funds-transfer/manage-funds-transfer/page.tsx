@@ -5,7 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+import Pagination from '@/components/Pagination/Pagination';
+import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -25,10 +26,16 @@ function ManageFundsTransfer() {
   const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
     [],
   );
+  const [filteredData, setFilteredData] = useState();
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
+  const [pageNumber, setPageNumber] = useState(0);
+  const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
+  const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  console.log('beneficiaryFilteredData', beneficiaryFilteredData);
 
   const fetchRecords = async () => {
     try {
@@ -38,10 +45,19 @@ function ManageFundsTransfer() {
       }, 2000);
       const response = await apiClient.get(
         '/merchant/getAllFundsTransferRecords',
+        {
+          params: {
+            ...(filteredData && typeof filteredData === 'object'
+              ? filteredData
+              : {}), // Spread existing filtered data
+            page: pageNumber, // Add page parameter
+            size: +envPageSize, // Add size parameter
+          },
+        },
       );
       if (response.data.responseCode === '009') {
         setAllRecords(response?.data?.fundsTransferReportRecords);
-        console.log(response?.data?.fundsTransferReportRecords, 'RESPONSE');
+        setTotalPages(response?.data?.totalPages);
         const filteredValues = response?.data?.fundsTransferReportRecords.map(
           ({ msisdn, failureReason, accountType, ...rest }: any) => rest,
         );
@@ -49,14 +65,16 @@ function ManageFundsTransfer() {
       } else {
         setTitle('Error Occured');
         setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       }
       // setLoading(false);
     } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
       setTitle('Network Failed');
       setDescription(e.message);
-      setShowModal(true);
+      setApierror(e?.message);
+      // setShowModal(true);
     } finally {
       setLoading(false);
     }
@@ -64,8 +82,19 @@ function ManageFundsTransfer() {
 
   useEffect(() => {
     fetchRecords();
-  }, []);
+  }, [filteredData, pageNumber]);
+  const showNextPage = () => {
+    setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
+    // fetchRecords()
+  };
 
+  const showPrevPage = () => {
+    setPageNumber((prev) => Math.max(prev - 1, 0));
+    // fetchRecords()
+  };
+  const handleReset = (Formik: any) => {
+    Formik.resetForm();
+  };
   const tableHeadings: string[] = [
     'Beneficiary Name',
     'Transfer Date',
@@ -107,6 +136,15 @@ function ManageFundsTransfer() {
 
   // };
   const onSubmit = (values: IManageFundsTransfer) => {
+    const filteredValues: any = {};
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== '' && value !== null) {
+        filteredValues[key] = value;
+      }
+    });
+    setFilteredData(filteredValues);
+    fetchRecords();
     const filteredData = allRecords
       .map((record: any) => {
         const matchesAccountType = values.accountType
@@ -120,8 +158,8 @@ function ManageFundsTransfer() {
               .toLowerCase()
               .includes(values.beneficiaryName.toLowerCase())
           : true;
-        const matchesPaymentStatus = values.paymentStatus
-          ? record.paymentStatus === values.paymentStatus
+        const matchesPaymentStatus = values.status
+          ? record.paymentStatus === values.status
           : true;
         // const matchesDate = values.dateBetween ? record.transferDate >= values.dateBetween[0] && record.transferDate <= values.dateBetween[1] : true;
         const matchesTransferAmount = values.transferAmount
@@ -151,7 +189,6 @@ function ManageFundsTransfer() {
 
   return (
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
-      {loading && <BarLoader color="#21B25F" />}
       <CustomModal
         title={title}
         description={description}
@@ -190,17 +227,17 @@ function ManageFundsTransfer() {
                   error={'hi'}
                   touched={false}
                 />
-                <Input
+                {/* <Input
                   label="Available Balance"
                   name={'availableBalance'}
                   type="text"
                   error={'hi'}
                   touched={false}
-                />
+                /> */}
                 <Input
                   label="Current Balance"
                   name={'currentBalance'}
-                  type="text"
+                  type="number"
                   error={'hi'}
                   touched={false}
                 />
@@ -221,15 +258,15 @@ function ManageFundsTransfer() {
                 <DateInputNew
                   formik={formik}
                   label="Date"
-                  name={'dateBetween'}
+                  name={'transferDate'}
                 />
                 <DropdownInput
                   formik={formik}
                   label="Payment Status"
-                  name={'paymentStatus'}
+                  name={'status'}
                   options={[
-                    { label: 'Success', value: 'Success' },
-                    { label: 'Failed', value: 'Failed' },
+                    { label: 'Success', value: 'SUCCESS' },
+                    { label: 'Failed', value: 'FAILED' },
                   ]}
                 />
               </div>
@@ -246,11 +283,11 @@ function ManageFundsTransfer() {
                   type="submit"
                   className="button-secondary h-9 w-[160px] px-3 py-[19px] text-sm"
                 />
-                <Button
+                {/* <Button
                   label="View Scheduled Transactions"
                   type="submit"
                   className="button-secondary h-9 w-[250px] px-3 py-[19px] text-sm"
-                />
+                /> */}
                 <Button
                   label="Bulk Transfer"
                   routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/bulk-upload/"
@@ -264,7 +301,8 @@ function ManageFundsTransfer() {
                 /> */}
                 <Button
                   label="Reset"
-                  type="submit"
+                  type="button"
+                  onClickHandler={() => handleReset(formik)}
                   className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
               </div>
@@ -279,11 +317,20 @@ function ManageFundsTransfer() {
       ) : (
         <>
           {beneficiaryFilteredData.length > 0 ? (
-            <div>
-              <SearchTransactionTable
+            <div className="flex flex-col gap-3">
+              <FundsTransferTable
                 tableHeadings={tableHeadings}
                 tableData={beneficiaryFilteredData}
               />
+              <Pagination
+                pageNumber={pageNumber}
+                totalPages={totalPages}
+                onNext={showNextPage}
+                onPrev={showPrevPage}
+              />
+              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                {apierror}
+              </div>
             </div>
           ) : (
             <H4>No Records Found</H4>
