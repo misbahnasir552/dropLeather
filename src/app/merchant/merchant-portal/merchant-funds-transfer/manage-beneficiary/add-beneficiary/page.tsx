@@ -38,6 +38,7 @@ function AddBeneficiary() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apierror, setApierror] = useState('');
 
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
@@ -83,12 +84,12 @@ function AddBeneficiary() {
 
   const handleFetchTitle = async (formik: any) => {
     console.log('FETCH TITLEeeee');
-
+    setApierror('');
     try {
       setIsLoading(true);
       const additionalValues = {
         bankName: formik.values.bankName,
-        accNumber: formik.values.accountNumber,
+        accNumber: formik.values.mobileNumber,
         managerMobile: userData?.managerMobile,
       };
       const mdRequest = {
@@ -112,12 +113,14 @@ function AddBeneficiary() {
       } else {
         setTitle('Error fetching Title');
         setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       }
     } catch (e) {
       console.log('Fetch details failed', e);
       setTitle('Network Failed');
-      setShowModal(true);
+      setApierror('Network Failed');
+      // setShowModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -195,6 +198,7 @@ function AddBeneficiary() {
               <div className="flex flex-col gap-4">
                 <DropdownInput
                   formik={formik}
+                  asterik={true}
                   label="Account Type"
                   name={'accountType'}
                   options={[
@@ -211,6 +215,7 @@ function AddBeneficiary() {
                   type="text"
                   error={formik.errors.mobileNumber}
                   touched={false}
+                  asterik={true}
                 />
                 {/* <Input
                   label="Bank Name"
@@ -222,6 +227,7 @@ function AddBeneficiary() {
                 <DropdownNew
                   label="Bank Name"
                   name={'bankName'}
+                  asterik={true}
                   error={formik.errors.bankName}
                   touched={formik.touched.bankName}
                   formik={formik}
@@ -230,11 +236,15 @@ function AddBeneficiary() {
                     value: option.bankPrefix,
                   }))}
                 />
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
                 <div className="flex w-full justify-end">
                   <Button
                     label="Fetch Title"
                     // isDisabled={!!formik.values.mobileNumber}
                     className="button-secondary h-[14px] w-[120px] px-3 py-[19px] text-xs"
+                    isDisabled={!formik.values.mobileNumber}
                     onClickHandler={() => handleFetchTitle(formik)}
                   />
                 </div>
@@ -242,6 +252,7 @@ function AddBeneficiary() {
                   label="Account Title"
                   name={'accountTitle'}
                   type="text"
+                  asterik={true}
                   value={formik.values.accountTitle}
                   // error={formik.errors.accountTitle}
                   // touched={formik.touched.accountTitle}
@@ -252,6 +263,7 @@ function AddBeneficiary() {
                   name={'beneficiaryName'}
                   type="text"
                   error={'hi'}
+                  asterik={true}
                   touched={false}
                 />
                 <Input

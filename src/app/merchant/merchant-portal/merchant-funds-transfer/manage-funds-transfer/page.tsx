@@ -94,6 +94,7 @@ function ManageFundsTransfer() {
   };
   const handleReset = (Formik: any) => {
     Formik.resetForm();
+    fetchRecords();
   };
   const tableHeadings: string[] = [
     'Beneficiary Name',

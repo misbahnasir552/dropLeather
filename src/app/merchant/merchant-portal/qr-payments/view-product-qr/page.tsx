@@ -13,6 +13,7 @@ import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import { useAppSelector } from '@/hooks/redux';
 import type { IViewProductQr } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 import {
   viewProductQrInitialValues,
@@ -20,10 +21,11 @@ import {
 } from '@/validations/merchant/merchant-portal/qr-payments/view-product-qr';
 
 function ViewProductQR() {
+  const userData = useAppSelector((state: any) => state.auth);
   const [qrFilteredData, setQrFilteredData] = useState([]);
   const [filteredParams, setFilteredParams] = useState();
   const [loading, setLoading] = useState(false);
-
+  const [apierror, setApierror] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -43,9 +45,12 @@ function ViewProductQR() {
         // setData(['Item 1', 'Item 2', 'Item 3']);
         setLoading(false);
       }, 2000);
-      const response = await apiClient.get('/merchantportal/searchDynamicQr', {
-        params: filteredParams,
-      });
+      const response = await apiClient.get(
+        `/merchantportal/searchDynamicQr?email=${userData?.email}`,
+        {
+          params: filteredParams,
+        },
+      );
       console.log(response.data.dynamicQrResponse, 'RESPONSE');
       const filteredValues = response?.data?.dynamicQrResponse.map(
         ({
@@ -95,20 +100,24 @@ function ViewProductQR() {
       if (response?.data?.responseCode === '009') {
         setTitle('Deleted Successfully');
         setDescription(response?.data?.responseMessage);
+        setShowModal(true);
         fetchRecords();
       } else if (response?.data?.responseCode === '000') {
         setTitle('Failure!');
         setDescription(response?.data?.responseMessage);
+        setApierror(response?.data?.responseMessage);
       } else {
         setTitle('Failure!');
         setDescription(response?.data?.responseMessage);
+        setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
       setTitle('Network Failure!');
       setDescription(e.message);
+      setApierror(e?.message);
       console.log('Error in fetching dynamic QR list', e);
     } finally {
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -220,7 +229,10 @@ function ViewProductQR() {
                     />
                     <Button
                       label="Reset"
-                      routeName="/login"
+                      onClickHandler={() => {
+                        formik.resetForm();
+                        fetchRecords();
+                      }}
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
                     />
                   </div>
@@ -249,6 +261,9 @@ function ViewProductQR() {
               )}
             </>
           )}
+        </div>
+        <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+          {apierror}
         </div>
       </>
     </div>

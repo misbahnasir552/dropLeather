@@ -8,7 +8,7 @@ import apiClient from '@/api/apiClient';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 // import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import Button from '@/components/UI/Button/PrimaryButton';
-import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
@@ -221,13 +221,13 @@ function StaticQr() {
                 <Form className="bg-screen-grey">
                   <div className="mb-9 grid gap-5 bg-screen-grey sm:grid-cols-1 md:grid-cols-3 ">
                     {/* <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3"></div> */}
-                    <DateInputNew
+                    {/* <DateInputNew
                       formik={formik}
                       label="QR Generation Date Between"
                       name="qrDateBetween"
                       error={formik.errors.qrDateBetween}
                       touched={formik.touched.qrDateBetween}
-                    />
+                    /> */}
                     <Input
                       label="Store Name"
                       name="storeName"
@@ -236,14 +236,14 @@ function StaticQr() {
                       formik={formik}
                       // touched={formik.touched.CardNumber}
                     />
-                    <Input
+                    {/* <Input
                       label="Transaction Point Number"
                       name="transactionPointNumber"
                       formik={formik}
                       type="text"
                       error={'hi'}
                       touched={false}
-                    />
+                    /> */}
                     <Input
                       label="Store ID"
                       name="storeId"
@@ -251,6 +251,15 @@ function StaticQr() {
                       // error={"hi"}
                       formik={formik}
                       // touched={formik.touched.CardNumber}
+                    />
+                    <DropdownInput
+                      label="Status"
+                      options={[
+                        { label: 'Active', value: 'Active' },
+                        { label: 'In-Active', value: 'InActive' },
+                      ]}
+                      name="status"
+                      formik={formik}
                     />
                   </div>
                   <div className="flex w-full justify-start gap-6">
