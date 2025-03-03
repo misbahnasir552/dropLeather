@@ -35,6 +35,7 @@ function AddDynamicQR() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -173,7 +174,8 @@ function AddDynamicQR() {
         setTitle('Failure');
         setDescription(response?.data.responseDescription);
         setImageUrl('');
-        setShowModal(true);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       }
       // else {
       //   setTitle("Failure");
@@ -183,8 +185,9 @@ function AddDynamicQR() {
       console.log('Network Failure!', e);
       setTitle(e.code);
       setDescription(e.message);
+      setApierror(e?.message);
       setImageUrl('');
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
   return (
@@ -277,6 +280,9 @@ function AddDynamicQR() {
                 />
               </div>
             </FormLayout>
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Reset"

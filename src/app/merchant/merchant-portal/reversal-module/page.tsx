@@ -22,7 +22,7 @@ import {
 
 const ReversalModule = () => {
   const userData = useAppSelector((state) => state.auth);
-  const [data, setData] = useState();
+  const [data, setData] = useState<any[]>([]);
   const [filteredData, setFilteredData] = useState();
 
   const [showModal, setShowModal] = useState(false);
@@ -62,12 +62,6 @@ const ReversalModule = () => {
           },
         },
       );
-      console.log(
-        response.data.reversalReports,
-        'RESPONSE',
-        'PAGE NUMBER',
-        pageNumber,
-      );
       if (response?.data?.responseCode === '009') {
         setData(
           response?.data?.reversalReports?.map((item: any) => {
@@ -102,11 +96,7 @@ const ReversalModule = () => {
     }
   };
   useEffect(() => {
-    console.log('FILTERED DATA:', filteredData);
-
-    // if (filteredData) {
     fetchRecords();
-    // }
   }, [pageNumber, filteredData]);
 
   const tableHeadings: string[] = [
@@ -122,7 +112,6 @@ const ReversalModule = () => {
     'Total Reversal Tax',
     'Total Transaction Amount',
   ];
-  console.log('t data', data);
 
   const onSubmit = async (values: SearchTransactionsForm) => {
     const filteredValues: any = {};
@@ -211,7 +200,7 @@ const ReversalModule = () => {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {data ? (
+          {data?.length > 0 ? (
             <>
               <ReversalReportTable
                 tableHeadings={tableHeadings}
@@ -225,7 +214,7 @@ const ReversalModule = () => {
               />
             </>
           ) : (
-            <H7>No Records found.</H7>
+            <H7 className="text-center">No Records found.</H7>
           )}
         </>
       )}
