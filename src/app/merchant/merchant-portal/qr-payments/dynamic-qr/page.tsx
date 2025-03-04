@@ -252,14 +252,14 @@ function AddDynamicQR() {
                   error={formik.errors.productDetails}
                   touched={formik.touched.productDetails}
                 />
-                {/* <Input
-                asterik
+                <Input
+                  asterik
                   label="Product Number"
                   name="productNumber"
                   type="text"
                   error={formik.errors.productNumber}
                   touched={formik.touched.productNumber}
-                /> */}
+                />
                 <DropdownInput
                   asterik
                   label="Store Name"

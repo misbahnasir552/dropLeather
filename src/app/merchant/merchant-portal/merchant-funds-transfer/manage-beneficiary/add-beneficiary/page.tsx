@@ -288,12 +288,13 @@ function AddBeneficiary() {
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
-                type="submit"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
                 label="Next"
                 type="submit"
+                disable={!isChecked}
                 // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />

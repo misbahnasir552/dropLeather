@@ -47,7 +47,6 @@ function BulkRegisterInput({
   const handleFileChange = (index: number, e: any) => {
     const f = e.target.files?.[0];
     setFile(f);
-    console.log(index, 'FILEEEEEE form input file:', f);
 
     if (f) {
       formik?.setFieldValue(item.name, f);

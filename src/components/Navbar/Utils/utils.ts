@@ -99,3 +99,14 @@ export const getQRPaymentsDropDownMenu = () => [
   },
   { title: 'View Product QR', link: 'qr-payments/view-product-qr' },
 ];
+
+export const getReversalModuleDropDownMenu = () => [
+  {
+    title: 'Reversal Report',
+    link: 'reversal-module/reversal-report',
+  },
+  {
+    title: 'Bulk Report',
+    link: 'reversal-module/reversal-bulk-batch',
+  },
+];

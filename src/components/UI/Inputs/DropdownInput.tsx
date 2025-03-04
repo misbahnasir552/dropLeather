@@ -31,8 +31,6 @@ const DropdownInput = ({
     setToggle(false);
   };
 
-  console.log('000000000dropdown error is', error);
-
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {

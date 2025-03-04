@@ -20,7 +20,7 @@ export interface IFundsTransfer {
   beneficiaryBank: string;
   transferAmount: number;
   transferPurpose: string;
-  transferTo: '';
+  // transferTo: '';
 }
 
 export interface IAddBeneficiary {
