@@ -11,6 +11,7 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -25,8 +26,8 @@ function ViewProductQR() {
   const [qrFilteredData, setQrFilteredData] = useState([]);
   const [filteredParams, setFilteredParams] = useState();
   const [loading, setLoading] = useState(false);
-  const [apierror, setApierror] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const viewProductQrTableHeadings: string[] = [
@@ -51,10 +52,10 @@ function ViewProductQR() {
           params: filteredParams,
         },
       );
-      console.log(response.data.dynamicQrResponse, 'RESPONSE');
-      const filteredValues = response?.data?.dynamicQrResponse.map(
+      const filteredValues = response?.data?.dynamicQrResponse?.map(
         ({
-          id,
+          // id,
+          isDeleted,
           qrFormatIndicator,
           branchCode,
           qrCode,
@@ -63,6 +64,7 @@ function ViewProductQR() {
           ...rest
         }: any) => rest,
       );
+
       setQrFilteredData(filteredValues);
       // setLoading(false);
     } catch (e: any) {
@@ -76,7 +78,6 @@ function ViewProductQR() {
 
     // if (!response || response.length === 0) {
     if (!qrFilteredData) {
-      console.error('No data available to export');
       return;
     }
 
@@ -91,12 +92,10 @@ function ViewProductQR() {
     XLSX.writeFile(wb, 'products_qr.xlsx');
   };
   const handleDelete = async (id: any) => {
-    console.log('Delete row with id:', id);
     try {
       const response = await apiClient.get('/merchantportal/removeDynamicQr', {
-        params: { storeId: id },
+        params: { id },
       });
-      console.log(response, 'Deleted response');
       if (response?.data?.responseCode === '009') {
         setTitle('Deleted Successfully');
         setDescription(response?.data?.responseMessage);
@@ -105,17 +104,16 @@ function ViewProductQR() {
       } else if (response?.data?.responseCode === '000') {
         setTitle('Failure!');
         setDescription(response?.data?.responseMessage);
-        setApierror(response?.data?.responseMessage);
+        setShowErrorModal(true);
       } else {
         setTitle('Failure!');
         setDescription(response?.data?.responseMessage);
-        setApierror(response?.data?.responseMessage);
+        setShowErrorModal(true);
       }
     } catch (e: any) {
       setTitle('Network Failure!');
-      setDescription(e.message);
-      setApierror(e?.message);
-      console.log('Error in fetching dynamic QR list', e);
+      setDescription(e?.message);
+      setShowErrorModal(true);
     } finally {
       // setShowModal(true);
     }
@@ -162,7 +160,6 @@ function ViewProductQR() {
   //     },
   //   ];
   const onSubmit = async (values: IViewProductQr) => {
-    console.log('i am VIEW PRODUCT QR ViewProductQR', values);
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -172,18 +169,28 @@ function ViewProductQR() {
     });
     setFilteredParams(filteredValues);
   };
-
   return (
     <div>
       <>
         <div className="flex flex-col gap-6">
-          <CustomModal
-            title={title}
-            description={description}
-            show={showModal}
-            setShowModal={setShowModal}
-            // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
-          />
+          {showModal && (
+            <CustomModal
+              title={title}
+              description={description}
+              show={showModal}
+              setShowModal={setShowModal}
+              // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+            />
+          )}
+          {showErrorModal && (
+            <ErrorModal
+              title={title}
+              description={description}
+              show={showErrorModal}
+              setShow={setShowErrorModal}
+              // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+            />
+          )}
           <HeaderWrapper
             heading="View Product QR"
             // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -261,9 +268,6 @@ function ViewProductQR() {
               )}
             </>
           )}
-        </div>
-        <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-          {apierror}
         </div>
       </>
     </div>

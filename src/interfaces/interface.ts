@@ -143,6 +143,12 @@ export interface ISuccessModalProps {
   show: boolean;
   setShowModal?: (value: boolean) => void;
 }
+export interface IErrorModalProps {
+  title?: string;
+  description?: string;
+  show: boolean;
+  setShow: (value: boolean) => void;
+}
 export interface ICustomModalProps {
   title?: string;
   description?: string;

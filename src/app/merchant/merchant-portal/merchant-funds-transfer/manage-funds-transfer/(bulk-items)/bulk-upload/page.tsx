@@ -33,7 +33,6 @@ function BulkFileUpload() {
     values: IBulkUpload,
     { resetForm }: { resetForm: () => void },
   ) => {
-    console.log(values);
     const { bulkFile } = values;
 
     try {
@@ -53,7 +52,6 @@ function BulkFileUpload() {
             },
           },
         );
-        console.log(response);
         if (response?.data.responseCode === '009') {
           setTitle('Success');
           setDescription(response?.data.responseDescription);
@@ -86,7 +84,7 @@ function BulkFileUpload() {
       />
       <HeaderWrapper
         heading="Bulk Upload"
-        description="File Should include Following fields: Transfer From, Transfer To, Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
+        description="File Should include Following fields: Transfer From, Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
@@ -120,7 +118,7 @@ function BulkFileUpload() {
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
-                type="submit"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button

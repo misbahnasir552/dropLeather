@@ -33,7 +33,6 @@ function FundsTranfer() {
   const fetchBeneficiariesRecords = async () => {
     try {
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
-      console.log(response.data.beneficiaryList, 'RESPONSE');
       if (response?.data.responseCode === '009') {
         setRecords(response.data.beneficiaryList);
       } else {
@@ -43,9 +42,8 @@ function FundsTranfer() {
         // setShowModal(true);
       }
     } catch (e: any) {
-      console.log('Error in fetching dynamic QR list', e);
       setTitle('Network Failure');
-      setDescription(e.message);
+      setDescription(e?.message);
       setApierror(e?.message);
       // setShowModal(true);
     }
@@ -56,20 +54,16 @@ function FundsTranfer() {
   }, []);
 
   const onSubmit = async (values: any, { resetForm }: any) => {
-    console.log('Fund transfer values: ', values);
     const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
-    console.log('RECORDS', records);
     // const splitStringLastPart = values.beneficiaryAccountNumber?.split('-').pop();
     const splitStringLastPart = values.beneficiaryAccountNumber
       ?.split('-')
       .pop()
       ?.trim();
-    console.log('splitStringLastPart', `${splitStringLastPart}`);
 
     const selectedOption: any = records?.find(
       (option: any) => option.mobileNumber === splitStringLastPart,
     );
-    console.log(selectedOption, 'SELECTED OPTION');
 
     try {
       const additionalValues = {
@@ -78,7 +72,6 @@ function FundsTranfer() {
         beneficiaryBank: selectedOption?.bankName,
         managerMobile: userData?.managerMobile,
       };
-      console.log('additional values', additionalValues);
 
       const mdRequest = {
         ...additionalValues,
@@ -95,7 +88,6 @@ function FundsTranfer() {
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
-      console.log('Added Successfully', response);
       if (response?.data.responseCode === '009') {
         setShowModal(true);
 
@@ -150,7 +142,7 @@ function FundsTranfer() {
                   asterik={true}
                   placeholder={'92XXXXXXXXXX'}
                 /> */}
-                <Input
+                {/* <Input
                   // isDisabled
                   value={'923458496384'}
                   label="Transfer To"
@@ -160,7 +152,7 @@ function FundsTranfer() {
                   touched={formik.touched.transferTo}
                   asterik={true}
                   placeholder={'92XXXXXXXXXX'}
-                />
+                /> */}
                 {/* <Input
                   label="Beneficiary Account Details"
                   name={'beneficiaryAccountNumber'}
@@ -204,7 +196,6 @@ function FundsTranfer() {
                   label="Transfer Purpose"
                   name={'transferPurpose'}
                   type="text"
-                  asterik={true}
                   error={formik.errors.transferPurpose}
                   touched={formik.touched.transferPurpose}
                 />
@@ -222,6 +213,7 @@ function FundsTranfer() {
               <Button
                 label="Cancel"
                 type="button"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button

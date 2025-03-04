@@ -43,10 +43,10 @@ const MerchantPortalNavbar = () => {
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
-    {
-      title: 'Integration Guide',
-      link: '/merchant/merchant-portal/home',
-    },
+    // {
+    //   title: 'Integration Guide',
+    //   link: '/merchant/merchant-portal/home',
+    // },
     {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
