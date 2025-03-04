@@ -9,6 +9,7 @@ import {
   getAccountSettingsDropDownMenu,
   getConfigurationDropDownMenu,
   getQRPaymentsDropDownMenu,
+  getReversalModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
 // import Logo from "@/assets/icons/logo.svg";
 import B2 from '@/components/UI/Body/B2';
@@ -59,7 +60,9 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Reversal Module',
-      link: '/merchant/merchant-portal/reversal-module',
+      // link: '/merchant/merchant-portal/reversal-module',
+      dropdown: getReversalModuleDropDownMenu(),
+      className: 'top-[20%]',
     },
     {
       title: 'Merchant Funds Transfer',

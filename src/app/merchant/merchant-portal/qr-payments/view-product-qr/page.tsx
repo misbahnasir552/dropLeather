@@ -12,6 +12,7 @@ import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import ErrorModal from '@/components/UI/Modal/ErrorModal';
+import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -30,6 +31,8 @@ function ViewProductQR() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [storeName, setStoreName] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -64,6 +67,7 @@ function ViewProductQR() {
           ...rest
         }: any) => rest,
       );
+      console.log('filteredValues', filteredValues);
 
       setQrFilteredData(filteredValues);
       // setLoading(false);
@@ -169,6 +173,60 @@ function ViewProductQR() {
     });
     setFilteredParams(filteredValues);
   };
+  const base64ToJpg = (base64String: any) => {
+    console.log('base 64 is', base64String);
+    if (!base64String) {
+      console.error('Base64 string is undefined or null.');
+      return;
+    }
+
+    let byteString;
+
+    // Check if the Base64 string contains the header
+    if (base64String.includes('base64,')) {
+      // Ensure the Base64 string is correctly formatted and split
+      try {
+        [, byteString] = base64String.split(','); // Use array destructuring
+      } catch (error) {
+        console.error('Error decoding Base64 string:', error);
+        return;
+      }
+    } else {
+      try {
+        const cleanBase64String = base64String.replace(/[^A-Za-z0-9+/=]/g, '');
+        byteString = atob(cleanBase64String);
+        // byteString = atob(base64String); // Assume it’s already clean Base64
+      } catch (error) {
+        console.error('Error decoding Base64 string:', error);
+        return;
+      }
+    }
+
+    // Extract MIME type from the string if available
+    let mimeString = 'image/jpeg'; // Default to JPEG
+    if (base64String.includes('data:')) {
+      [mimeString] = base64String.split(',')[0].split(':')[1].split(';'); // Use array destructuring
+    }
+
+    // Convert the Base64 string to an ArrayBuffer and create a Blob
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i += 1) {
+      // Replace ++ with i += 1
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([uint8Array], { type: mimeString });
+    const imageUrl = URL.createObjectURL(blob);
+
+    setImageUrl(imageUrl); // Update the state to display the image
+    setShowModal(true);
+  };
+  const handleView = (qrCode: string, name: string) => {
+    base64ToJpg(qrCode);
+    setStoreName(name);
+  };
   return (
     <div>
       <>
@@ -189,6 +247,17 @@ function ViewProductQR() {
               show={showErrorModal}
               setShow={setShowErrorModal}
               // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+            />
+          )}
+          {imageUrl && showModal && (
+            <DynamicQRModal
+              title={storeName}
+              description="Your static QR Code has been created. You can now share the below QR code to receive money."
+              show={showModal}
+              setShowModal={setShowModal}
+              imageUrl={imageUrl} // Pass the QR code image URL here
+              // amount={amount}
+              // expirationTime={expirationTime}
             />
           )}
           <HeaderWrapper
@@ -262,6 +331,7 @@ function ViewProductQR() {
                   hasDelete
                   // hasIcons
                   handleDelete={handleDelete}
+                  handleView={handleView}
                 />
               ) : (
                 <H4>No Records Found</H4>

@@ -123,7 +123,7 @@ function MerchantFundsTransfer() {
       /> */}
       <HeaderWrapper
         heading="Enter One Time Password (OTP)"
-        description={`We have sent the OTP Verification number to email ${userData?.email} and mobile number +(${userData?.managerMobile})`}
+        description={`We have sent the OTP Verification number to email (${userData?.email}) and mobile number (${userData?.managerMobile})`}
       />
       <FormLayout>
         {/* {isLoading ?

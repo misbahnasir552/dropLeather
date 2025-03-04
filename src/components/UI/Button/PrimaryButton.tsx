@@ -13,6 +13,7 @@ const Button = ({
   routeName,
   className,
   isDisabled = false,
+  disable,
 }: IButton) => {
   const router = useRouter();
 
@@ -31,11 +32,11 @@ const Button = ({
       data-label={label}
       type={type}
       className={`${
-        isDisabled
+        isDisabled || disable
           ? 'hover:none bg-neutral-black-300'
           : 'cursor-pointer bg-primary-base'
       } ${className}`}
-      disabled={isDisabled}
+      disabled={isDisabled || disable}
       onClick={handleClick}
     >
       <div className="flex w-full items-center justify-center gap-2">

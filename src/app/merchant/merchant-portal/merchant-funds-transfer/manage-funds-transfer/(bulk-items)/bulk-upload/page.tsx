@@ -34,7 +34,7 @@ function BulkFileUpload() {
     { resetForm }: { resetForm: () => void },
   ) => {
     const { bulkFile } = values;
-
+    setApierror('');
     try {
       // const additionalValues = {
       //   file: values.bulkFile,
@@ -59,8 +59,12 @@ function BulkFileUpload() {
           resetForm();
         } else {
           setTitle('Failed');
-          setDescription(response.data.errorDescription);
-          setApierror(response?.data?.errorDescription);
+          setDescription(
+            response?.data?.map((item: any) => item?.responseDescription),
+          );
+          setApierror(
+            response?.data?.map((item: any) => item?.responseDescription),
+          );
         }
       }
     } catch (e: any) {
@@ -84,7 +88,7 @@ function BulkFileUpload() {
       />
       <HeaderWrapper
         heading="Bulk Upload"
-        description="File Should include Following fields: Transfer From, Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
+        description="File Should include Following fields: Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik

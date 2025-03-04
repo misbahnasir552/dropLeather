@@ -52,6 +52,7 @@ export interface IButton {
   isDisabled?: boolean;
   routeName?: string;
   onClickHandler?: (values?: any) => void;
+  disable?: boolean;
 }
 
 export interface IFormLayout {

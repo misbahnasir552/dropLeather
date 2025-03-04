@@ -35,7 +35,6 @@ function ManageFundsTransfer() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
-  console.log('beneficiaryFilteredData', beneficiaryFilteredData);
 
   const fetchRecords = async () => {
     try {
@@ -63,7 +62,7 @@ function ManageFundsTransfer() {
         );
         setBeneficiaryFilteredData(filteredValues);
       } else {
-        setTitle('Error Occured');
+        setTitle(response?.data?.responseMessage || '');
         setDescription(response?.data?.responseDescription);
         setApierror(response?.data?.responseDescription);
         // setShowModal(true);
@@ -71,8 +70,8 @@ function ManageFundsTransfer() {
       // setLoading(false);
     } catch (e: any) {
       console.log('Error in fetching dynamic QR list', e);
-      setTitle('Network Failed');
-      setDescription(e.message);
+      // setTitle('Network Failed');
+      setDescription(e?.message);
       setApierror(e?.message);
       // setShowModal(true);
     } finally {
@@ -146,7 +145,6 @@ function ManageFundsTransfer() {
       }
     });
     setFilteredData(filteredValues);
-    fetchRecords();
     const filteredData = allRecords
       .map((record: any) => {
         const matchesAccountType = values.accountType
@@ -184,7 +182,7 @@ function ManageFundsTransfer() {
 
         return null;
       })
-      .filter(Boolean); // Remove null entries from the array
+      ?.filter(Boolean); // Remove null entries from the array
 
     setBeneficiaryFilteredData(filteredData);
   };
@@ -304,7 +302,10 @@ function ManageFundsTransfer() {
                 <Button
                   label="Reset"
                   type="button"
-                  onClickHandler={() => handleReset(formik)}
+                  onClickHandler={() => {
+                    handleReset(formik);
+                    setFilteredData(undefined);
+                  }}
                   className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
               </div>
@@ -318,7 +319,7 @@ function ManageFundsTransfer() {
         </>
       ) : (
         <>
-          {beneficiaryFilteredData.length > 0 ? (
+          {beneficiaryFilteredData?.length > 0 ? (
             <div className="flex flex-col gap-3">
               <FundsTransferTable
                 tableHeadings={tableHeadings}

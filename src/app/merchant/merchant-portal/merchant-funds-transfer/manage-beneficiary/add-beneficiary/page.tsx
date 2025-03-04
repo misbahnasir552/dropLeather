@@ -294,6 +294,7 @@ function AddBeneficiary() {
               <Button
                 label="Next"
                 type="submit"
+                disable={!isChecked}
                 // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />

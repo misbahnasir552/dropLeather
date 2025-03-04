@@ -23,6 +23,6 @@ export const fundsTransferSchema = Yup.object().shape({
     .required('Please fill this field.')
     .positive('Amount must be positive.') // Ensures the value is positive
     .min(1, 'Minimum amount is 1.') // Ensures minimum value
-    .max(1000000, 'Maximum amount is 10000.'), // Ensures maximum value
+    .max(1000000, 'Maximum amount is 1000000.'), // Ensures maximum value
   transferPurpose: Yup.string(),
 });
