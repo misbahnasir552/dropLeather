@@ -102,17 +102,16 @@ function AddDynamicQR() {
         );
         setStores(filterValues);
       } else if (response?.data?.responseCode === '000') {
-        setTitle('Error');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
         setShowModal(true);
       } else {
-        setTitle('Error');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
         setShowModal(true);
       }
     } catch (error: any) {
       console.error('Error fetching merchant stores:', error);
-      setTitle('Network Error');
       setDescription(error?.message);
       setShowModal(true);
     }
@@ -162,7 +161,6 @@ function AddDynamicQR() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log(response, 'Dynamic QR Added');
       if (response?.data.responseCode === '009') {
         setAmount(values.amount);
         setQrExpirationTime(values.qrExpirationTime);
@@ -170,20 +168,20 @@ function AddDynamicQR() {
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
       } else if (response?.data.responseCode === '000') {
-        setTitle('Failure');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         setImageUrl('');
         setShowErrorModal(true);
         // setShowModal(true);
       } else {
-        setTitle('Failure');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
         setShowErrorModal(true);
       }
     } catch (e: any) {
       console.log('Network Failure!', e);
-      setTitle(e.code);
-      setDescription(e.message);
+      setTitle(e?.code);
+      setDescription(e?.message);
       setImageUrl('');
       setShowErrorModal(true);
       // setShowModal(true);

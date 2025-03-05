@@ -33,7 +33,7 @@ function AddBeneficiary() {
   const userData = useAppSelector((state: any) => state.auth);
   // const { apiSecret } = userData;
   const [isChecked, setIsChecked] = useState(false);
-
+  const [checkedError, setCheckedError] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -41,6 +41,7 @@ function AddBeneficiary() {
   const [apierror, setApierror] = useState('');
 
   const handleCheckboxChange = () => {
+    setCheckedError('');
     setIsChecked(!isChecked);
   };
 
@@ -128,13 +129,15 @@ function AddBeneficiary() {
 
   const onSubmit = async (values: any) => {
     console.log('Add beneficiary values', values);
-
-    dispatch(addBeneficiaryData(values));
-    const res = await fetchOTP();
-    if (res) {
-      router.push('otp');
+    if (!isChecked) {
+      setCheckedError('Select Terms & Conditions to continue');
+    } else {
+      dispatch(addBeneficiaryData(values));
+      const res = await fetchOTP();
+      if (res) {
+        router.push('otp');
+      }
     }
-
     // const additionalValues = {
     //   ...values,
     //   managerMobile: userData?.managerMobile,
@@ -171,7 +174,10 @@ function AddBeneficiary() {
     //   setShowModal(true);
     // }
   };
-
+  const handleTermsAndConditionsChange = () => {
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=Online%20Payment%20Services%20Agreement.pdf&email=termsandconditions@gmail.com&type=merchant`;
+    window.open(downloadUrl, '_blank');
+  };
   return (
     <div className="flex flex-col gap-6">
       {isLoading && <BarLoader color="#21B25F" />}
@@ -274,11 +280,23 @@ function AddBeneficiary() {
                   touched={false}
                 />
               </div>
-              <CheckboxItem
+              {/* <CheckboxItem
                 description="I agree to easypaisa Terms & Conditions"
                 handleCheckboxChange={handleCheckboxChange}
                 isChecked={isChecked}
+              /> */}
+              <CheckboxItem
+                description="I agree to easypaisa"
+                span="terms & conditions"
+                handleTermsAndConditionsChange={handleTermsAndConditionsChange}
+                isChecked={isChecked}
+                handleCheckboxChange={handleCheckboxChange}
               />
+              {checkedError && (
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {checkedError}
+                </div>
+              )}
             </FormLayout>
             {/* {isLoading && (
               <div className="flex w-full justify-center">
@@ -294,7 +312,6 @@ function AddBeneficiary() {
               <Button
                 label="Next"
                 type="submit"
-                disable={!isChecked}
                 // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />

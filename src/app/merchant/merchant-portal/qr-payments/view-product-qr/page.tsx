@@ -249,7 +249,7 @@ function ViewProductQR() {
           {imageUrl && showModal && (
             <DynamicQRModal
               title={storeName}
-              description="Your QR Code has been created. You can now share the below QR code to receive money."
+              description="Your QR Code has been created. You can now share the below QR code to receive payments."
               show={showModal}
               setShowModal={setShowModal}
               imageUrl={imageUrl} // Pass the QR code image URL here

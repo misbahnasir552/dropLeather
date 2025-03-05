@@ -115,11 +115,11 @@ function BulkFileUpload() {
                 />
               </div>
             </FormLayout>
-            <div className="flex w-full flex-col justify-start px-3 pt-[8px] text-xs text-danger-base">
+            {/* <div className="flex w-full flex-col justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror?.map((item, index) => (
                 <p key={index}>{item?.responseDescription || ''}</p>
               ))}
-            </div>
+            </div> */}
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"

@@ -46,7 +46,7 @@ function CheckboxItem({
         </p>
         {span ? (
           <p
-            className="text-xs font-semibold leading-tight text-primary-base underline"
+            className="cursor-pointer text-xs font-semibold leading-tight text-primary-base underline"
             onClick={handleTermsAndConditionsChange}
           >
             {span}
