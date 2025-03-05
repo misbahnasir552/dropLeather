@@ -26,6 +26,7 @@ const OtpInputWithValidation = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [apierror, setApierror] = useState('');
 
   // const fetchOTP = async () => {
   //   try {
@@ -70,7 +71,7 @@ const OtpInputWithValidation = () => {
       });
       console.log(response);
 
-      if (response.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         const additionalValues = {
           ...addBeneficiaryForm,
           managerMobile: userData?.managerMobile,
@@ -98,17 +99,18 @@ const OtpInputWithValidation = () => {
             setRoute(
               '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
             );
+            setShowModal(true);
             // router.push("")
           } else {
-            setTitle('Failed to add Beneficiary');
-            setDescription(response.data.errorDescription);
+            setTitle(response?.data?.errorMessage);
+            setDescription(response?.data?.errorDescription);
+            setApierror(response?.data?.errorDescription);
           }
         } catch (e: any) {
-          setTitle('Network Failed');
-          setDescription(e.message);
+          setDescription(e?.message);
+          setApierror(e?.message);
         } finally {
           setIsLoading(false);
-          setShowModal(true);
         }
         // try {
         //   const res = await apiClient.post(
@@ -130,16 +132,16 @@ const OtpInputWithValidation = () => {
         //   console.log(e);
         // }
       } else {
-        setTitle('Failed');
-        setDescription(response.data.errorDescription);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseMessage);
+        setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
       console.log(e);
-      setTitle('Network Failed');
-      setDescription(e.message);
+      setDescription(e?.message);
+      setApierror(e?.message);
     } finally {
       setIsLoading(false);
-      setShowModal(true);
     }
   };
 
@@ -149,13 +151,15 @@ const OtpInputWithValidation = () => {
         <BarLoader color="#21B25F" />
         // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
       )}
-      <SuccessModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        routeName={route}
-      />
+      {showModal && (
+        <SuccessModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          routeName={route}
+        />
+      )}
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper
           heading={'Enter One Time Password (OTP)'}
@@ -176,6 +180,9 @@ const OtpInputWithValidation = () => {
               otp={smsOtp}
               medium="sms"
             />
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
             <div className="flex justify-center">
               <Button
                 // routeName="/login"

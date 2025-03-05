@@ -24,6 +24,7 @@ import signupReducer from '@/redux/features/signUpSlice';
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
 import fieldReducer from '../features/formSlices/fieldSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
+import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
 import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
 import merchantIntegrationReducer from '../features/merchantSlice/merchantIntegration';
 // import sessionSliceReducer from '../features/sessionSlice/sessionSlice';
@@ -39,6 +40,7 @@ const persistConfig = {
     'onBoardingForms',
     'merchantDetails',
     'merchantIntegration',
+    'fundsTransfer',
     'fields',
     'adminAuth',
     'corporateAccountDetails',
@@ -59,6 +61,7 @@ const rootReducer = combineReducers({
   merchantDetails: merchantDetailsReducer,
   corporateAccountDetails: corporateAccountDetailsReducer,
   merchantIntegration: merchantIntegrationReducer,
+  fundsTransfer: fundsTransferReducer,
   fields: fieldReducer,
   adminAuth: adminAuthReducer,
   updateUser: updateUserReducer,

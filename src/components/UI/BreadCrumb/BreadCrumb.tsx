@@ -7,12 +7,13 @@ import React from 'react';
 
 import home from '@/assets/icons/home-2.svg';
 import B3 from '@/components/UI/Body/B3';
+import { useAppSelector } from '@/hooks/redux';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 
 function BreadCrumb() {
   const location = usePathname();
   const pathnames: string[] = location.split('/').filter((x) => x);
-  // console.log(pathnames, 'PATHNAMESSSS');
+  const otpSuccess = useAppSelector((state: any) => state.fundsTransfer);
 
   return (
     <nav>
@@ -22,17 +23,21 @@ function BreadCrumb() {
           const lastItem = index === pathnames.length - 1;
           const url = `/${pathnames.slice(0, index + 1).join('/')}`;
           const title = convertSlugToTitle(value);
-
+          const updatedUrl =
+            otpSuccess?.isAuthenticated &&
+            url === '/merchant/merchant-portal/merchant-funds-transfer'
+              ? '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/'
+              : url;
           if (value === 'admin' || (value === 'merchant' && !lastItem)) {
             return null;
           }
           return (
-            <li key={url} className=" flex items-center justify-center">
+            <li key={updatedUrl} className=" flex items-center justify-center">
               <div className="">
                 {lastItem ? (
                   <B3 textColor="text-secondary-400">{title}</B3>
                 ) : (
-                  <Link href={url} className="">
+                  <Link href={updatedUrl} className="">
                     <B3 textColor="text-secondary-base">{title}</B3>
                   </Link>
                 )}

@@ -18,5 +18,5 @@ export interface IDynamicQR {
   productNumber: string;
   storeId: string;
   // categoryCode: string;
-  expirationTime: number;
+  qrExpirationTime: number;
 }

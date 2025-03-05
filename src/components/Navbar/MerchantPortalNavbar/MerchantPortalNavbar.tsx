@@ -13,6 +13,7 @@ import {
 } from '@/components/Navbar/Utils/utils';
 // import Logo from "@/assets/icons/logo.svg";
 import B2 from '@/components/UI/Body/B2';
+import { useAppSelector } from '@/hooks/redux';
 
 // import H6 from "@/components/UI/Headings/H6";
 import ConfigurationDropDown from '../NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
@@ -22,6 +23,7 @@ const MerchantPortalNavbar = () => {
   const configurationList = getConfigurationDropDownMenu();
   const accountSettingsList = getAccountSettingsDropDownMenu();
   const qrList = getQRPaymentsDropDownMenu();
+  const otpSuccess = useAppSelector((state: any) => state.fundsTransfer);
 
   const merchantPortalNavMenu = [
     {
@@ -66,7 +68,9 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Merchant Funds Transfer',
-      link: '/merchant/merchant-portal/merchant-funds-transfer',
+      link: otpSuccess?.isAuthenticated
+        ? '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer'
+        : '/merchant/merchant-portal/merchant-funds-transfer',
     },
   ];
   return (

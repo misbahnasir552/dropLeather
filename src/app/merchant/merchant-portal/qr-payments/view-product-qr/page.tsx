@@ -61,19 +61,18 @@ function ViewProductQR() {
           isDeleted,
           qrFormatIndicator,
           branchCode,
-          qrCode,
+          // qrCode,
           createdAt,
           updatedAt,
           ...rest
         }: any) => rest,
       );
-      console.log('filteredValues', filteredValues);
 
       setQrFilteredData(filteredValues);
       // setLoading(false);
     } catch (e: any) {
       setTitle('Network Failure!');
-      setDescription(e.message);
+      setDescription(e?.message);
       console.log('Error in fetching dynamic QR list', e);
     }
   };
@@ -107,11 +106,11 @@ function ViewProductQR() {
         fetchRecords();
       } else if (response?.data?.responseCode === '000') {
         setTitle('Failure!');
-        setDescription(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
         setShowErrorModal(true);
       } else {
         setTitle('Failure!');
-        setDescription(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
         setShowErrorModal(true);
       }
     } catch (e: any) {
@@ -174,9 +173,7 @@ function ViewProductQR() {
     setFilteredParams(filteredValues);
   };
   const base64ToJpg = (base64String: any) => {
-    console.log('base 64 is', base64String);
     if (!base64String) {
-      console.error('Base64 string is undefined or null.');
       return;
     }
 
@@ -252,7 +249,7 @@ function ViewProductQR() {
           {imageUrl && showModal && (
             <DynamicQRModal
               title={storeName}
-              description="Your static QR Code has been created. You can now share the below QR code to receive money."
+              description="Your QR Code has been created. You can now share the below QR code to receive payments."
               show={showModal}
               setShowModal={setShowModal}
               imageUrl={imageUrl} // Pass the QR code image URL here
@@ -322,16 +319,16 @@ function ViewProductQR() {
             <BarLoader color="#21B25F" />
           ) : (
             <>
-              {qrFilteredData.length > 0 ? (
+              {qrFilteredData?.length > 0 ? (
                 <IconTable
                   tableHeadings={viewProductQrTableHeadings}
                   tableData={qrFilteredData}
-                  hasEdit
                   hasShare
                   hasDelete
                   // hasIcons
                   handleDelete={handleDelete}
                   handleView={handleView}
+                  isDynamicQr={true}
                 />
               ) : (
                 <H4>No Records Found</H4>

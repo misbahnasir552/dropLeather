@@ -100,7 +100,6 @@ function StaticQr() {
       });
       // setTitle('merchantPortalProfile');
 
-      console.log('STORESS', response?.data);
       if (response.data.responseCode === '009') {
         const filterValues = response?.data?.merchantStores.map(
           (item: any) => item,
@@ -287,14 +286,18 @@ function StaticQr() {
           </MerchantFormLayout>
           {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
         </div>
-        <div className="flex pt-[40px]">
-          <IconTable
-            tableHeadings={qrPaymentsTableHeadings}
-            tableData={stores}
-            // hasEdit
-            handleView={handleView}
-            hasShare
-          />
+        <div className="flex justify-center pt-[40px]">
+          {stores?.length > 0 ? (
+            <IconTable
+              tableHeadings={qrPaymentsTableHeadings}
+              tableData={stores}
+              // hasEdit
+              handleView={handleView}
+              hasShare
+            />
+          ) : (
+            <div className="text-center">No Data Available</div>
+          )}
         </div>
       </>
     </div>
