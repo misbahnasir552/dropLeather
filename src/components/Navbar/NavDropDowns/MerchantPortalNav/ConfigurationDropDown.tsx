@@ -18,7 +18,6 @@ function ConfigurationDropDown({
   const handleClickItem = () => {
     if (hoveredMenu) {
       // setIsHovered(false);
-      console.log('hi');
     }
   };
   return (

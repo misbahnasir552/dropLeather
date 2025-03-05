@@ -10,6 +10,7 @@ import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 // import H2 from '@/components/UI/Headings/H2';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -29,17 +30,16 @@ function AddDynamicQR() {
   const userData = useAppSelector((state: any) => state.auth);
   const [stores, setStores] = useState([]);
   const [amount, setAmount] = useState('');
-  const [expirationTime, setExpirationTime] = useState(0);
+  const [qrExpirationTime, setQrExpirationTime] = useState(0);
   const { apiSecret } = userData;
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [apierror, setApierror] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
-      console.error('Base64 string is undefined or null.');
       return;
     }
 
@@ -93,8 +93,7 @@ function AddDynamicQR() {
       });
       // setTitle('merchantPortalProfile');
 
-      console.log('STORESS', response?.data);
-      if (response.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         const filterValues = response?.data?.merchantStores.map(
           (item: any) => ({
             label: item.storeName,
@@ -102,19 +101,19 @@ function AddDynamicQR() {
           }),
         );
         setStores(filterValues);
-      } else if (response.data.responseCode === '000') {
+      } else if (response?.data?.responseCode === '000') {
         setTitle('Error');
-        setDescription(response.data.responseDescription);
+        setDescription(response?.data?.responseDescription);
         setShowModal(true);
       } else {
         setTitle('Error');
-        setDescription(response.data.responseDescription);
+        setDescription(response?.data?.responseDescription);
         setShowModal(true);
       }
     } catch (error: any) {
       console.error('Error fetching merchant stores:', error);
       setTitle('Network Error');
-      setDescription(error.message);
+      setDescription(error?.message);
       setShowModal(true);
     }
   };
@@ -166,7 +165,7 @@ function AddDynamicQR() {
       console.log(response, 'Dynamic QR Added');
       if (response?.data.responseCode === '009') {
         setAmount(values.amount);
-        setExpirationTime(values.expirationTime);
+        setQrExpirationTime(values.qrExpirationTime);
         base64ToJpg(response?.data.qrCode);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
@@ -174,31 +173,41 @@ function AddDynamicQR() {
         setTitle('Failure');
         setDescription(response?.data.responseDescription);
         setImageUrl('');
-        setApierror(response?.data?.responseDescription);
+        setShowErrorModal(true);
         // setShowModal(true);
+      } else {
+        setTitle('Failure');
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       }
-      // else {
-      //   setTitle("Failure");
-      //   setDescription(response.data.errorDescription);
-      // }
     } catch (e: any) {
       console.log('Network Failure!', e);
       setTitle(e.code);
       setDescription(e.message);
-      setApierror(e?.message);
       setImageUrl('');
+      setShowErrorModal(true);
       // setShowModal(true);
     }
   };
   return (
     <div className="flex flex-col gap-6">
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
-      />
+      {showModal && (
+        <CustomModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
       <HeaderWrapper
         heading="Dynamic QR"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -239,10 +248,10 @@ function AddDynamicQR() {
                 <Input
                   asterik
                   label="Expiration Time (in seconds)"
-                  name="expirationTime"
+                  name="qrExpirationTime"
                   type="number"
-                  error={formik.errors.expirationTime}
-                  touched={formik.touched.expirationTime}
+                  error={formik.errors.qrExpirationTime}
+                  touched={formik.touched.qrExpirationTime}
                 />
                 <Input
                   asterik
@@ -280,9 +289,6 @@ function AddDynamicQR() {
                 />
               </div>
             </FormLayout>
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Reset"
@@ -307,7 +313,7 @@ function AddDynamicQR() {
           setShowModal={setShowModal}
           imageUrl={imageUrl} // Pass the QR code image URL here
           amount={amount}
-          expirationTime={expirationTime}
+          expirationTime={qrExpirationTime}
         />
       )}
     </div>
