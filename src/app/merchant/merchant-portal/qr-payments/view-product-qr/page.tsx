@@ -322,7 +322,7 @@ function ViewProductQR() {
             <BarLoader color="#21B25F" />
           ) : (
             <>
-              {qrFilteredData.length > 0 ? (
+              {qrFilteredData?.length > 0 ? (
                 <IconTable
                   tableHeadings={viewProductQrTableHeadings}
                   tableData={qrFilteredData}

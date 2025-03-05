@@ -12,6 +12,7 @@ import H6 from '@/components/UI/Headings/H6';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
 import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
+import { setFundsTransferLogout } from '@/redux/features/merchantSlice/FundsTransfer';
 
 function MerchantPortalHeader() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -28,6 +29,7 @@ function MerchantPortalHeader() {
 
       if (response.data.responseCode === '000') {
         dispatch(setLogout());
+        dispatch(setFundsTransferLogout());
         dispatch(resetForms());
 
         router.push('/login');
@@ -38,6 +40,7 @@ function MerchantPortalHeader() {
       console.error('logout Error:', error);
     }
     dispatch(setLogout());
+    dispatch(setFundsTransferLogout());
     dispatch(resetForms());
     router.push('/login');
   };

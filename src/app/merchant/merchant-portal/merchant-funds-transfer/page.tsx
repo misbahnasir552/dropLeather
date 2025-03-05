@@ -10,12 +10,14 @@ import Button from '@/components/UI/Button/PrimaryButton';
 // import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { otpSuccess } from '@/redux/features/merchantSlice/FundsTransfer';
 import { generateMD5Hash } from '@/utils/helper';
 
 function MerchantFundsTransfer() {
   const userData = useAppSelector((state) => state.auth);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
 
@@ -42,6 +44,7 @@ function MerchantFundsTransfer() {
       });
       console.log(response);
       if (response.data.responseCode === '009') {
+        dispatch(otpSuccess({ isAuthenticated: true }));
         router.push(
           '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
         );

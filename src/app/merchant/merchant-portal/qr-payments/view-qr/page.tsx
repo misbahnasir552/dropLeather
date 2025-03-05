@@ -100,7 +100,6 @@ function StaticQr() {
       });
       // setTitle('merchantPortalProfile');
 
-      console.log('STORESS', response?.data);
       if (response.data.responseCode === '009') {
         const filterValues = response?.data?.merchantStores.map(
           (item: any) => item,
