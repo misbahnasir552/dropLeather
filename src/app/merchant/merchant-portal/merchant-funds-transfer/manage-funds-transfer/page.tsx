@@ -62,6 +62,11 @@ function ManageFundsTransfer() {
           ({ msisdn, accountType, batchId, ...rest }: any) => rest,
         );
         setBeneficiaryFilteredData(filteredValues);
+      } else if (response?.data?.responseCode === '000') {
+        setTitle(response?.data?.responseMessage || '');
+        setDescription(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       } else {
         setTitle(response?.data?.responseMessage || '');
         setDescription(response?.data?.responseDescription);

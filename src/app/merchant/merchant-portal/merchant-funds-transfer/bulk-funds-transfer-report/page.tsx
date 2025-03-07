@@ -20,10 +20,10 @@ import {
 function BulkFundsTransferReport() {
   const [apierror, setApierror] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
   const [fileNames, setFileNames] = useState([]);
   const [filteredData, setFilteredData] = useState();
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
+  const [totalPages, setTotalPages] = useState(+envPageSize);
 
   const [response, setResponse] = useState<Array<any> | null>(null);
   const fetchRecords = async () => {

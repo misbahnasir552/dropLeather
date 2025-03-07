@@ -50,12 +50,16 @@ function BulkFileUpload() {
         );
         if (response?.data.responseCode === '009') {
           setTitle(response?.data?.responseMessage);
-          setDescription(response?.data.responseDescription);
+          setDescription(response?.data?.responseDescription);
           setShowModal(true);
+        } else if (response?.data.responseCode === '000') {
+          setTitle(response?.data?.responseMessage);
+          setDescription(response?.data?.responseDescription);
+          setApierror(response?.data?.responseDescription);
           resetForm();
         } else {
           setTitle(response?.data?.responseMessage);
-          setDescription(response?.data.responseDescription);
+          setDescription(response?.data?.responseDescription);
           setApierror(response?.data?.responseDescription);
         }
       }

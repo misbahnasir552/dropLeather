@@ -53,6 +53,10 @@ function BulkReversalFileUpload() {
           setDescription(response?.data.responseDescription);
           setShowModal(true);
           resetForm();
+        } else if (response?.data.responseCode === '000') {
+          setTitle(response?.data?.responseMessage);
+          setDescription(response?.data.responseDescription);
+          setApierror(response?.data.responseDescription);
         } else {
           setTitle(response?.data?.responseMessage);
           setDescription(response?.data.responseDescription);
