@@ -52,20 +52,14 @@ function BulkFileUpload() {
           setTitle(response?.data?.responseMessage);
           setDescription(response?.data?.responseDescription);
           setShowModal(true);
-        } else if (response?.data.responseCode === '000') {
-          setTitle(response?.data?.responseMessage);
-          setDescription(response?.data?.responseDescription);
-          setApierror(response?.data?.responseDescription);
           resetForm();
+        } else if (response?.data.responseCode === '000') {
+          setApierror(response?.data?.responseMessage);
         } else {
-          setTitle(response?.data?.responseMessage);
-          setDescription(response?.data?.responseDescription);
-          setApierror(response?.data?.responseDescription);
+          setApierror(response?.data?.responseMessage);
         }
       }
     } catch (e: any) {
-      setTitle(e?.message);
-      setDescription(e?.message);
       setApierror(e?.message);
     } finally {
       // setShowModal(true);
