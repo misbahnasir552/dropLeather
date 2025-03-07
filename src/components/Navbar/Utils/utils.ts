@@ -106,7 +106,24 @@ export const getReversalModuleDropDownMenu = () => [
     link: 'reversal-module/reversal-report',
   },
   {
-    title: 'Bulk Report',
-    link: 'reversal-module/reversal-bulk-batch',
+    title: 'Bulk Reversal Report',
+    link: 'reversal-module/bulk-reversal-report',
+  },
+];
+export const getMerchantFundsTransferDropDownMenu = (
+  isAuthenticated: boolean,
+) => [
+  {
+    title: 'Manage Funds Transfer',
+    link: isAuthenticated
+      ? '/merchant-funds-transfer/manage-funds-transfer'
+      : '/merchant-funds-transfer',
+    //  'merchant-funds-transfer/manage-funds-transfer',
+  },
+  {
+    title: 'Bulk Funds Transfer',
+    link: isAuthenticated
+      ? '/merchant-funds-transfer/bulk-funds-transfer-report'
+      : '/merchant-funds-transfer',
   },
 ];

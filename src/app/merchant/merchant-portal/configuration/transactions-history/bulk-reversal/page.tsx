@@ -19,7 +19,7 @@ import {
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/bulk-fund-transfer';
 import type { IBulkUpload } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/interfaces';
 
-function BulkFileUpload() {
+function BulkReversalFileUpload() {
   const userData = useAppSelector((state: any) => state.auth);
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>([]);
   const formData = new FormData();
@@ -27,23 +27,19 @@ function BulkFileUpload() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [apierror, setApierror] = useState<any[]>([]);
+  const [apierror, setApierror] = useState<string>('');
 
   const onSubmit = async (
     values: IBulkUpload,
     { resetForm }: { resetForm: () => void },
   ) => {
     const { bulkFile } = values;
-    setApierror([]);
+    setApierror('');
     try {
-      // const additionalValues = {
-      //   file: values.bulkFile,
-      //   managerMobile: userData?.managerMobile
-      // }
       if (bulkFile) {
         formData.append('file', bulkFile);
         const response = await apiClient.post(
-          `/merchant/fundsTransfer1?email=${userData?.email}`,
+          `/merchant/bulkReversal`,
           formData,
           {
             headers: {
@@ -53,41 +49,37 @@ function BulkFileUpload() {
           },
         );
         if (response?.data.responseCode === '009') {
-          setTitle('Success');
+          setTitle(response?.data?.responseMessage);
           setDescription(response?.data.responseDescription);
           setShowModal(true);
           resetForm();
         } else {
-          setTitle('Failed');
-          setDescription(
-            response?.data?.map((item: any) => item?.responseDescription),
-          );
-          setApierror(response?.data);
+          setTitle(response?.data?.responseMessage);
+          setDescription(response?.data.responseDescription);
+          setApierror(response?.data?.responseDescription);
         }
       }
     } catch (e: any) {
-      setTitle('Network Failed');
-      setDescription(e.message);
+      setTitle(e?.message);
+      setDescription(e?.message);
       setApierror(e?.message);
     } finally {
       // setShowModal(true);
     }
   };
-  console.log('apiError', apierror);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-6 pt-12">
       <SuccessModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
-        // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+        routeName="/merchant/merchant-portal/reversal-module/bulk-reversal-report/"
       />
       <HeaderWrapper
-        heading="Bulk Upload"
-        description="File Should include Following fields: Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
+        heading="Bulk Reversal File Upload"
+        description="File Should include Transaction ID"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
       />
       <Formik
@@ -115,15 +107,13 @@ function BulkFileUpload() {
                 />
               </div>
             </FormLayout>
-            {/* <div className="flex w-full flex-col justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror?.map((item, index) => (
-                <p key={index}>{item?.responseDescription || ''}</p>
-              ))}
-            </div> */}
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
-                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
@@ -140,4 +130,4 @@ function BulkFileUpload() {
   );
 }
 
-export default BulkFileUpload;
+export default BulkReversalFileUpload;

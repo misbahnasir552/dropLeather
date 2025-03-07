@@ -286,8 +286,8 @@ function AddBeneficiary() {
                 isChecked={isChecked}
               /> */}
               <CheckboxItem
-                description="I agree to easypaisa"
-                span="terms & conditions"
+                description="I agree to these"
+                span="Terms & Conditions"
                 handleTermsAndConditionsChange={handleTermsAndConditionsChange}
                 isChecked={isChecked}
                 handleCheckboxChange={handleCheckboxChange}
