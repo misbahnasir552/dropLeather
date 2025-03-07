@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
@@ -54,13 +55,18 @@ function ManageFundsTransfer() {
           },
         },
       );
-      if (response.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         setAllRecords(response?.data?.fundsTransferReportRecords);
         setTotalPages(response?.data?.totalPages);
         const filteredValues = response?.data?.fundsTransferReportRecords.map(
-          ({ msisdn, failureReason, accountType, ...rest }: any) => rest,
+          ({ msisdn, accountType, batchId, ...rest }: any) => rest,
         );
         setBeneficiaryFilteredData(filteredValues);
+      } else if (response?.data?.responseCode === '000') {
+        setTitle(response?.data?.responseMessage || '');
+        setDescription(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
+        // setShowModal(true);
       } else {
         setTitle(response?.data?.responseMessage || '');
         setDescription(response?.data?.responseDescription);
@@ -99,11 +105,10 @@ function ManageFundsTransfer() {
     'Beneficiary Name',
     'Transfer Date',
     'Transaction Id',
-    'Batch Id',
     'Transfer Amount',
     'Account Closing Balance',
-    // 'Failure Reason',
     'Status',
+    'Failure Reason',
     // 'OPS ID',
     // 'Merchant Name',
     // 'Order ID',
@@ -174,7 +179,7 @@ function ManageFundsTransfer() {
           matchesPaymentStatus &&
           matchesTransferAmount
         ) {
-          const { msisdn, accountType, failureReason, ...rest } = record; // Exclude msisdn, accountType, and failureReason
+          const { msisdn, accountType, ...rest } = record; // Exclude msisdn, accountType, and failureReason
           return {
             ...rest, // Return only the necessary fields
           };
@@ -186,7 +191,24 @@ function ManageFundsTransfer() {
 
     setBeneficiaryFilteredData(filteredData);
   };
+  const exportToExcel = () => {
+    // if (!response) return;
 
+    // if (!response || response.length === 0) {
+    if (!beneficiaryFilteredData) {
+      return;
+    }
+
+    // Create a worksheet from the response data
+    const ws = XLSX?.utils?.json_to_sheet(beneficiaryFilteredData);
+
+    // Create a new workbook and append the worksheet
+    const wb = XLSX?.utils?.book_new();
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Funds Transfer Report');
+
+    // Generate an Excel file and download it
+    XLSX.writeFile(wb, 'funds_transfer_report.xlsx');
+  };
   return (
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
       <CustomModal
@@ -241,13 +263,13 @@ function ManageFundsTransfer() {
                   error={'hi'}
                   touched={false}
                 />
-                <Input
+                {/* <Input
                   label="Transfer Amount"
                   name={'transferAmount'}
                   type="number"
                   error={'hi'}
                   touched={false}
-                />
+                /> */}
                 <Input
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
@@ -257,7 +279,7 @@ function ManageFundsTransfer() {
                 />
                 <DateInputNew
                   formik={formik}
-                  label="Date"
+                  label="Date Between"
                   name={'transferDate'}
                 />
                 <DropdownInput
@@ -289,16 +311,10 @@ function ManageFundsTransfer() {
                   className="button-secondary h-9 w-[250px] px-3 py-[19px] text-sm"
                 /> */}
                 <Button
-                  label="Bulk Transfer"
-                  routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/bulk-upload/"
-                  type="submit"
-                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
-                />
-                {/* <Button
                   label="Export"
-                  type="submit"
-                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
-                /> */}
+                  className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                  onClickHandler={exportToExcel} // Export button click handler
+                />
                 <Button
                   label="Reset"
                   type="button"

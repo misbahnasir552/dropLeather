@@ -296,7 +296,13 @@ export interface BusinessFormInfo {
   expectedSalesVolume: string;
   // status?: string;
 }
-
+export interface ISearchBulk {
+  batchId: string;
+  file: string;
+  fromDate: string;
+  toDate: string;
+  status: string;
+}
 export interface ActivityFormInfo {
   fatherName: string;
   businessOwner: string;

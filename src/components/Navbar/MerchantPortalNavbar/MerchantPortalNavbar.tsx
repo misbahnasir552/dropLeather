@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import {
   getAccountSettingsDropDownMenu,
   getConfigurationDropDownMenu,
+  getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
   getReversalModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
@@ -68,9 +69,10 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Merchant Funds Transfer',
-      link: otpSuccess?.isAuthenticated
-        ? '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer'
-        : '/merchant/merchant-portal/merchant-funds-transfer',
+      dropdown: getMerchantFundsTransferDropDownMenu(
+        otpSuccess?.isAuthenticated,
+      ),
+      className: 'top-[20%]',
     },
   ];
   return (
