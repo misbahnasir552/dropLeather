@@ -19,7 +19,7 @@ interface IconTableProps {
   hasEdit?: boolean;
   hasIcons?: boolean;
   handleDelete?: (id: any) => void;
-  handleView?: (staticQRCode: string, name: string) => void;
+  handleView?: (staticQRCode: string, name: string, tillNum?: string) => void;
   isDynamicQr?: boolean;
 }
 
@@ -35,6 +35,8 @@ const IconTable: React.FC<IconTableProps> = ({
   handleDelete,
   handleView,
 }) => {
+  console.log('tableData', tableData);
+
   const handleEdit = (id: any) => {
     console.log('Edit row with id:', id);
     // Add your edit functionality here
@@ -74,7 +76,10 @@ const IconTable: React.FC<IconTableProps> = ({
         </thead>
         <tbody>
           {tableData?.map(
-            ({ id, staticQRCode, qrCode, ...tableItem }, rowIndex) => (
+            (
+              { id, staticQRCode, qrCode, tillNumber, ...tableItem },
+              rowIndex,
+            ) => (
               <tr
                 key={rowIndex}
                 className="flex w-full items-center justify-between border-b border-border-light px-6"
@@ -105,6 +110,7 @@ const IconTable: React.FC<IconTableProps> = ({
                               isDynamicQr
                                 ? tableItem?.productName
                                 : tableItem?.storeName,
+                              tillNumber,
                             )
                           }
                         >

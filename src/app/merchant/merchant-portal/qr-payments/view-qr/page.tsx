@@ -11,7 +11,8 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
+// import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -195,7 +196,7 @@ function StaticQr() {
           />
         )}
         {imageUrl && showModal && (
-          <DynamicQRModal
+          <QRModal
             title={storeName}
             description="Your static QR Code has been created. You can now share the below QR code to receive money."
             show={showModal}

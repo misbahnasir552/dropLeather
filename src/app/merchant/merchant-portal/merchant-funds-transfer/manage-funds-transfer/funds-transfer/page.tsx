@@ -88,7 +88,7 @@ function FundsTranfer() {
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
-      if (response?.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         setShowModal(true);
 
         setTitle(response?.data?.responseMessage);
@@ -213,7 +213,7 @@ function FundsTranfer() {
               <Button
                 label="Cancel"
                 type="button"
-                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
