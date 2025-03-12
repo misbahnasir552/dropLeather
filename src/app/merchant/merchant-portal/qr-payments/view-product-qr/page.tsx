@@ -67,9 +67,6 @@ function ViewProductQR() {
     }
   };
   const exportToExcel = () => {
-    // if (!response) return;
-
-    // if (!response || response.length === 0) {
     if (!qrFilteredData) {
       console.error('No data available to export');
       return;
@@ -116,42 +113,6 @@ function ViewProductQR() {
     fetchRecords();
   }, [filteredParams]);
 
-  // const viewProductQrTableData: any =
-  //   // : TableData[]
-  //   [
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //   ];
   const onSubmit = async (values: IViewProductQr) => {
     console.log('i am VIEW PRODUCT QR ViewProductQR', values);
     const filteredValues: any = {};

@@ -4,7 +4,6 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';

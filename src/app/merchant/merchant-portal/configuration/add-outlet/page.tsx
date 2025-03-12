@@ -10,8 +10,6 @@ import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
-// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-// import FileInput from '@/components/UI/Inputs/FileInput';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
@@ -138,23 +136,7 @@ function AddOutlet() {
           /* eslint-disable react-hooks/rules-of-hooks */
           useEffect(() => {
             const selectedRegion = formik.values.region;
-            // if (selectedRegion === "Punjab") {
-            //   setCities(punjabCities)
-            // } else if (selectedRegion === "Sindh") {
-            //   setCities(sindhCities)
-            // } else if (selectedRegion === "Islamabad Capital Territory") {
-            //   setCities(federalCities)
-            // } else if (selectedRegion === "Balochistan") {
-            //   setCities(quettaCities)
-            // } else if (selectedRegion === "Khyber Pakhtunkhwa") {
-            //   setCities(peshawarCities)
-            // } else if (selectedRegion === "Azad Jammu and Kashmir") {
-            //   setCities(azadKashmirCities)
-            // } else if (selectedRegion === "Gilgit Baltistan") {
-            //   setCities(gilgitCities)
-            // } else {
-            //   setCities(generalCities)
-            // }
+
             switch (selectedRegion) {
               case 'Punjab':
                 setCities(punjabCities);
@@ -206,18 +188,7 @@ function AddOutlet() {
                     error={formik.errors.outletName}
                     touched={formik.touched.outletName}
                   />
-                  {/* <DropdownInput
-                    asterik
-                    label="Store Type"
-                    name="storeType"
-                    options={[
-                      { value: 'Online Payments', label: 'Online Payments' },
-                      { value: 'Retail', label: 'Retail' },
-                    ]}
-                    formik={formik}
-                    error={formik.errors.storeType}
-                    touched={formik.touched.storeType}
-                  /> */}
+
                   <DropdownInput
                     asterik
                     label="Category"
@@ -313,14 +284,6 @@ function AddOutlet() {
                     error={formik.errors.outletPocEmail}
                     touched={formik.touched.outletPocEmail}
                   />
-                  {/* <CheckboxInput
-                  setSelectedCheckValue={setSelectedCheckValue}
-                  name="sendSms"
-                  form={formik}
-                  key={"sendSms"}
-                  options={[{ label: "sendSms", value: selectedCheckValue }]}
-                /> */}
-
                   <Input
                     label="Outlet Longitude"
                     name="outletLongitude"
@@ -349,14 +312,6 @@ function AddOutlet() {
                       icon: AttachmentsIcon,
                     }}
                   />
-                  {/* <Input
-                  asterik
-                    label="Number of Tills/QRs/NFC Machines Required"
-                    name="numberOfTillsRequired"
-                    type="text"
-                    error={formik.errors.numberOfTillsRequired}
-                    touched={formik.touched.numberOfTillsRequired}
-                  /> */}
                 </div>
               </FormLayout>
 

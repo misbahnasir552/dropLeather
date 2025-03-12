@@ -4,43 +4,12 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-// import { BarLoader } from 'react-spinners';
-// import apiClient from '@/api/apiClient';
 import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
-// import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppSelector } from '@/hooks/redux';
-// import { clearCredentials } from '@/redux/features/corporateSlices/loginCredentials';
-// import { setPageData } from '@/redux/features/formSlices/fieldSlice';
-// import {
-//   setApplicants,
-//   setApplicationForm,
-//   setBusinessNature,
-//   setCorporateEntity,
-//   // setLogoutOnboarding,
-//   setSoleName,
-// } from '@/redux/features/formSlices/onBoardingForms';
-
-// import apiClient from '@/api/apiClient';
 
 const LoginSucessHome = () => {
   const userData = useAppSelector((state: any) => state.auth);
-  // const applicationData = useAppSelector(
-  //   (state: any) => state.onBoardingForms.applicationForm,
-  // );
-  // const [showModal, setShowModal] = useState(false);
-  // const [title, setTitle] = useState('');
-  // const [description, setDescription] = useState('');
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // const userEmail = userData.email
-  // type TabStatus = 'Pending' | 'Completed';
-
-  // interface Tab {
-  //   id: number;
-  //   name: string;
-  //   status: TabStatus;
-  // }
   console.log('userData', userData);
 
   const [showModal, setShowModal] = useState(false);
@@ -203,37 +172,7 @@ const LoginSucessHome = () => {
       routeName: 'business-nature',
     },
   ];
-  // const LoginCardData = [
 
-  //   {
-  //     title: 'Production Onboarding',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-  //   {
-  //     title: 'Continue to My Dashboard',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     // routeName: route,
-  //     routeName: '/merchant/merchant-portal/home/',
-  //   },
-  //   {
-  //     title: 'Sandbox Integrations',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-
-  //   // {
-  //   //   title: 'Continue to My Dashboard',
-  //   //   description:
-  //   //     'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //   //   routeName: 'xyz',
-  //   // },
-  // ];
-
-  console.log('uzair onboarding status is', userData.onboardingCompleted);
   const LoginCardData = [
     {
       title: 'Production Onboarding',

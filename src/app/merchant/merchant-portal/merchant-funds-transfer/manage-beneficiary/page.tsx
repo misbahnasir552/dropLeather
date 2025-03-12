@@ -8,7 +8,6 @@ import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 
 function ManageBeneficiary() {

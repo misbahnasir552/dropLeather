@@ -1,24 +1,3 @@
-// export const tableHeadings: string[] = [
-//   'Merchants Name',
-//   'Webstore Name',
-//   'Email Address',
-//   'Mobile Number',
-//   // 'Turnaround Time',
-//   'Registration Date',
-//   'Request Status',
-//   'Actions',
-// ];
-
-// export const adminTableHeadings: string[] = [
-//   '#',
-//   'First Name',
-//   'Last Name',
-//   'Email',
-//   'Role',
-//   'Request Status',
-//   'Actions',
-// ];
-
 export const manageProfilesHeadings: string[] = [
   '#',
   'Profile Name',

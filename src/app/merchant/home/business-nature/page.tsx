@@ -7,8 +7,6 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
-// import H7 from '@/components/UI/Headings/H7';
-// import CheckboxInput from '@/components/UI/Inputs/CheckboxRadioInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -16,8 +14,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import {
   setBusinessEndpoint,
-  // setApplicants,
-  // setApplicationForm,
   setBusinessNature,
   setMerchantEntity,
 } from '@/redux/features/formSlices/onBoardingForms';
@@ -82,14 +78,7 @@ const BusinessNature = () => {
   ];
 
   useEffect(() => {
-    // fetchData();
-
-    const handleResize = () => {
-      // setWindowSize({
-      //   width: window.innerWidth,
-      //   height: window.innerHeight,
-      // });
-    };
+    const handleResize = () => {};
 
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -154,7 +143,6 @@ const BusinessNature = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/merchant/home/business-nature/application-form"
       />
       <Formik
         initialValues={businessNatureInitialValues}

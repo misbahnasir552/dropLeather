@@ -33,16 +33,9 @@ const MerchantMethods = () => {
                 {item.label.main} {''}
                 <span className="text-primary-base">{item.label.sub}</span>
               </H1>
-              {/* <div className="sm:max-md:text-[32px] text-5xl font-semibold leading-tight text-secondary-base">
-                {item.label.main} {""}
-                <span className="text-primary-base">{item.label.sub}</span>
-              </div> */}
+
               {typeof item.description === 'string' ? (
                 <>
-                  {/* <div className="sm:max-md:text-sm sm:max-md:text-secondary-400 text-base font-normal leading-tight text-secondary-600">
-                    {item.description}
-                  </div> */}
-
                   <B1>{item.description}</B1>
                 </>
               ) : (

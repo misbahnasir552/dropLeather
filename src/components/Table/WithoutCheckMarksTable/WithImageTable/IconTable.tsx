@@ -37,14 +37,7 @@ const IconTable: React.FC<IconTableProps> = ({
 
   const handleEdit = (id: any) => {
     console.log('Edit row with id:', id);
-    // Add your edit functionality here
   };
-
-  // const handleShare = (id: any) => {
-  //   console.log('Share row with id:', id);
-
-  //   // Add your share functionality here
-  // };
 
   const handleDownload = (id: any) => {
     console.log('Download row with id:', id);

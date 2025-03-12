@@ -7,7 +7,6 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import type { IInitialDataMerchant } from '@/components/MerchantDualListTable';
 import MerchantDualListTable from '@/components/MerchantDualListTable';
-// import DualListTable, { IInitialData } from '@/components/DualListTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
 import Input from '@/components/UI/Inputs/Input';
@@ -21,14 +20,6 @@ import {
   ipnConfigurationInitialValues,
   ipnConfigurationSchema,
 } from '@/validations/merchant/merchant-portal/account-settings/IPNConfiguration';
-// import { useRouter } from 'next/navigation';
-// import { setLogout } from '@/redux/features/authSlice';
-
-// interface IInitialData {
-//   // id: number;
-//   name: string;
-//   category: string;
-// }
 
 export default function IPNConfig() {
   const userData = useAppSelector((state) => state.auth);
@@ -37,8 +28,6 @@ export default function IPNConfig() {
   const [selectedItems, setSelectedItems] = useState<IInitialDataMerchant[]>(
     [],
   );
-  // const router = useRouter();
-  // const dispatch = useAppDispatch()
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');

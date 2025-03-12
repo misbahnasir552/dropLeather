@@ -7,8 +7,6 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
-// import MerchantRecordTable from "@/components/Table/MerchantRecordTable";
-// import TableComponent from '@/components/Table/TableComponent';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -21,10 +19,8 @@ import {
   searchTransactionsInitialValues,
   searchTransactionsSchema,
 } from '@/validations/merchant/transactions/searchTransactionsSchema';
-// import { useAppSelector } from "@/hooks/redux";
 
 const SearchTransaction = () => {
-  // const userData = useAppSelector((state) => state.auth);
   const [data, setData] = useState();
   const [filteredData, setFilteredData] = useState();
   const [apierror, setApierror] = useState('');
@@ -37,27 +33,6 @@ const SearchTransaction = () => {
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
 
-  // const showNextPage = () => {
-  //   console.log("NEXT:", pageNumber);
-
-  //   setPageNumber((prevPageNumber) => {
-  //     const newPageNumber = prevPageNumber + 1;
-  //     // getAllMerchants();
-  //     return newPageNumber;
-  //   });
-  //   fetchRecords()
-  // };
-
-  // const showPrevPage = () => {
-  //   console.log('i am on previous page', pageNumber);
-
-  //   setPageNumber((prevPageNumber) => {
-  //     const newPageNumber = prevPageNumber - 1;
-  //     // getAllMerchants();
-  //     return newPageNumber;
-  //   });
-  //   fetchRecords()
-  // };
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
     // fetchRecords()
@@ -72,9 +47,6 @@ const SearchTransaction = () => {
   const fetchRecords = async () => {
     try {
       setIsLoading(true);
-      // const response = await apiClient.get('/qrcode/searchTransactions', {
-      //   params: filteredData,page: pageNumber, size: totalPages ,
-      // });
       const response = await apiClient.get('/qrcode/searchTransactions', {
         params: {
           ...(filteredData && typeof filteredData === 'object'
@@ -127,18 +99,6 @@ const SearchTransaction = () => {
     { value: 'Success', label: 'Success' },
     { value: 'Failed', label: 'Failed' },
   ];
-
-  // interface TableData {
-  //   opsId: string;
-  //   merchantName: string;
-  //   orderId: string;
-  //   orderDate: string;
-  //   amount: string;
-  //   paymentMode: string;
-  //   transactionId: string;
-  //   status: string;
-  //   channel: string;
-  // }
 
   const tableHeadings: string[] = [
     'OPS ID',

@@ -6,7 +6,6 @@ import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import Input from '@/components/UI/Inputs/Input';
@@ -20,12 +19,9 @@ import {
   qrPaymentsInitialValues,
   qrPaymentsSchema,
 } from '@/validations/merchant/merchant-portal/qr-payments/qr-payments';
-// import QRModal from '@/components/UI/Modal/QR/QRModal';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
-  // const { apiSecret } = userData;
-
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
 
@@ -33,7 +29,6 @@ function StaticQr() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [stores, setStores] = useState([]);
-  // const [route, setRoute] = useState('');
   const [isLoading, setIsloading] = useState(false);
 
   const base64ToJpg = (base64String: any) => {
@@ -138,42 +133,7 @@ function StaticQr() {
     'Status',
     'Actions',
   ];
-  // const qrPaymentsTableData: any =
-  //   // : TableData[]
-  //   [
-  //     {
-  //       transactionPointNumber: '001123',
-  //       storeId: '1',
-  //       storeName: 'momin',
-  //       qrDateBetween: '02/05/2024',
-  //       smsNotificationNumber: '03345674415',
-  //       // actions: 'Images',
-  //     },
-  //     {
-  //       transactionPointNumber: '001123',
-  //       storeId: '1',
-  //       storeName: 'momin',
-  //       qrDateBetween: '02/05/2024',
-  //       smsNotificationNumber: '03345674415',
-  //       // actions: 'Images',
-  //     },
-  //     {
-  //       transactionPointNumber: '001123',
-  //       storeId: '1',
-  //       storeName: 'momin',
-  //       qrDateBetween: '02/05/2024',
-  //       smsNotificationNumber: '03345674415',
-  //       // actions: 'Images',
-  //     },
-  //     {
-  //       transactionPointNumber: '001123',
-  //       storeId: '1',
-  //       storeName: 'momin',
-  //       qrDateBetween: '02/05/2024',
-  //       smsNotificationNumber: '03345674415',
-  //       // actions: 'Images',
-  //     },
-  //   ];
+
   const onSubmit = (values: IQrPayments) => {
     console.log('StaticQr', values);
   };

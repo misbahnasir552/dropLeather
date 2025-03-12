@@ -239,51 +239,6 @@ function IntegrationForm() {
                     </React.Fragment>
                   ))}
                 </div>
-
-                {/* <div className="flex flex-col gap-6">
-                  {filteredData?.map((pageItem, index) => (
-                    <React.Fragment key={`${pageItem.name}-${index}`}>
-                      {pageItem?.categories?.map((item, itemIndex) => (
-                        <FormLayoutDynamic
-                          key={`${pageItem.name}-${itemIndex}`}
-                          heading={item.categoryName}
-                        >
-                          {[...item.fields]
-                            .sort((a, b) => a.priority - b.priority)
-                            .map((field, fieldIndex) => {
-                              return field.type === 'text' ? (
-                                <Input
-                                  key={fieldIndex}
-                                  label={field.label}
-                                  name={field.name}
-                                  type={field.type}
-                                  formik={formik}
-                                  asterik={field.validation.required}
-                                  error={field.validation?.errorMessage}
-                                />
-                              ) : field?.type === 'checkBoxInputMulti' ? (
-                                <CheckboxInput
-                                  key={fieldIndex}
-                                  isMulti
-                                  name={field.name}
-                                  options={field.validation?.options?.map(
-                                    (option) => ({
-                                      label: option,
-                                      value: option,
-                                    }),
-                                  )}
-                                  form={formik}
-                                  setSelectedCheckValue={setSelectedCheckValue}
-                                />
-                              ) : (
-                                <p key={fieldIndex}>nothing to show</p>
-                              );
-                            })}
-                        </FormLayoutDynamic>
-                      ))}
-                    </React.Fragment>
-                  ))}
-                </div> */}
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}
                 </div>

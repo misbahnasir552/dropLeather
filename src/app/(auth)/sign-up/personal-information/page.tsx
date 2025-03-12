@@ -6,7 +6,6 @@ import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import eye from '@/assets/icons/eye.svg';
-// import Bitmap from '@/assets/images/Bitmap.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import Input from '@/components/UI/Inputs/Input';
@@ -14,11 +13,7 @@ import CustomModal from '@/components/UI/Modal/CustomModal';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch } from '@/hooks/redux';
-// import { useAppDispatch } from '@/hooks/redux';
-import {
-  // addCorporateFormData,
-  addFormData,
-} from '@/redux/features/signUpSlice';
+import { addFormData } from '@/redux/features/signUpSlice';
 import {
   signUpInitialValues,
   signUpSchema,
@@ -31,12 +26,10 @@ const PersonalInfo = () => {
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // const [apierror, setApierror] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false); // New state to prevent multiple submissions
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const searchParams = useSearchParams();
   const dispatch = useAppDispatch();
   const router = useRouter();
-  // const option = searchParams.get('option');
 
   const showErrorModal = (title: string, description: string) => {
     setTitle(title);
@@ -49,7 +42,7 @@ const PersonalInfo = () => {
   }, [isChecked]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
-    // if (isSubmitted) return; // Prevent multiple calls
+    // if (isSubmitted) return; // Preventing multiple calls
     setIsSubmitted(true);
     setIsLoading(true);
 
@@ -241,15 +234,6 @@ const PersonalInfo = () => {
                       and Conditions, Privacy Policy, and all related notices.
                       These terms outline the rules and policies governing your
                       use of this site
-                      {/* <Link
-                        href={
-                          'https://easypay.easypaisa.com.pk/easypay-merchant/faces/pg/site/SignUp.jsf'
-                        }
-                        target="_blank"
-                        className="text-primary-base underline"
-                      >
-                        terms and conditions.
-                      </Link> */}
                     </div>
                   </div>
                   <CheckboxItem

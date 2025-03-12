@@ -13,10 +13,7 @@ function Layout({ children }: { children: React.ReactNode }) {
   return (
     <div>
       {isLoggedIn ? <OnBoardingNavbar /> : <Navbar />}
-      {/* <Navbar /> */}
-      {/* <div className="sm:max-md:px-6 px-[150px]"> */}
       {children}
-      {/* </div> */}
       <Footer />
     </div>
   );

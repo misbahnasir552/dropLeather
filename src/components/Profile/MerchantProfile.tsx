@@ -39,11 +39,7 @@ const MerchantProfile = () => {
       });
       setMerchantTitle('merchantPortalProfile');
       if (response?.data.responseCode === '009') {
-        // setTitle('Success');
         setResponse(response.data);
-        // setDescription(response?.data.responseDescription);
-        // setRoute('/merchant/merchant-portal/qr-payments/dynamic-qr/');
-        // router.push();
       } else if (response?.data.responseCode === '000') {
         setTitle('Failure');
         setDescription(response?.data.responseDescription);

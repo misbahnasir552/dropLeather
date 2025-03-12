@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
-// import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
@@ -24,14 +23,12 @@ import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/add-beneficiary';
-// import ImageInput from '@/components/UI/Inputs/ImageInput';
 
 function AddBeneficiary() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const userData = useAppSelector((state: any) => state.auth);
-  // const { apiSecret } = userData;
   const [isChecked, setIsChecked] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
@@ -131,42 +128,6 @@ function AddBeneficiary() {
     if (res) {
       router.push('otp');
     }
-
-    // const additionalValues = {
-    //   ...values,
-    //   managerMobile: userData?.managerMobile,
-    // };
-    // const mdRequest = {
-    //   ...additionalValues,
-    //   apisecret: apiSecret,
-    // };
-    // const md5Hash = generateMD5Hash(mdRequest);
-    // const requestBody = { request: additionalValues, signature: md5Hash };
-    // try {
-    //   setIsLoading(true);
-    //   const response = await apiClient.post(
-    //     '/merchant/addBeneficiary',
-    //     requestBody,
-    //     {
-    //       headers: { Authorization: `Bearer ${userData?.jwt}` },
-    //       params: { merchantEmail: userData?.email },
-    //     },
-    //   );
-    //   console.log('Added Successfully', response);
-    //   if (response?.data.responseCode === '00') {
-    //     setTitle(response?.data.responseCode);
-    //     setDescription(response?.data.responseDescription);
-    //   } else {
-    //     setTitle(response.data.errorDescription);
-    //     setDescription(response.data.errorDescription);
-    //   }
-    // } catch (e: any) {
-    //   setTitle(e.code);
-    //   setDescription(e.message);
-    // } finally {
-    //   setIsLoading(false);
-    //   setShowModal(true);
-    // }
   };
 
   return (

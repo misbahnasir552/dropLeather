@@ -3,19 +3,6 @@
 // import { Form, Formik } from 'formik';
 import React from 'react';
 
-// import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
-// import Button from '@/components/UI/Button/PrimaryButton';
-// import DateInputNew from '@/components/UI/Inputs/DateInputNew';
-// import Input from '@/components/UI/Inputs/Input';
-// import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-// import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
-// import type { IQrPayments } from '@/interfaces/interface';
-// import {
-//   qrPaymentsInitialValues,
-//   qrPaymentsSchema,
-// } from '@/validations/merchant/merchant-portal/qr-payments/view-qr/qr-payments';
-
 function page() {
   // const qrPaymentsTableHeadings: string[] = [
   //   'Transaction Point',

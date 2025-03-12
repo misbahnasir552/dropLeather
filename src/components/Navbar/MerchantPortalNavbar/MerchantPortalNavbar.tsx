@@ -1,7 +1,5 @@
 'use client';
 
-// import Image from "next/image";
-// import Link from "next/link";
 import Link from 'next/link';
 import React, { useState } from 'react';
 
@@ -10,10 +8,8 @@ import {
   getConfigurationDropDownMenu,
   getQRPaymentsDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
-// import Logo from "@/assets/icons/logo.svg";
 import B2 from '@/components/UI/Body/B2';
 
-// import H6 from "@/components/UI/Headings/H6";
 import ConfigurationDropDown from '../NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
 
 const MerchantPortalNavbar = () => {

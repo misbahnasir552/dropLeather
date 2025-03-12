@@ -11,7 +11,6 @@ import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-// import { adminLoginSuccess } from '@/redux/features/adminSlices/adminLoginSlice';
 import { loginSuccess } from '@/redux/features/authSlice';
 import { clearApplicants } from '@/redux/features/formSlices/onBoardingForms';
 
@@ -59,37 +58,12 @@ const OtpLogin = () => {
         dispatch(loginSuccess(response?.data));
         console.log('Login success. Redirecting...');
         Cookies.set('jwt', response?.data?.jwt, {
-          expires: 1, // 1 day
-          // secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === 'false',
+          expires: 1,
           path: '/',
-          // domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         });
         dispatch(clearApplicants());
         router.push('/merchant/home');
-      }
-
-      // if (response?.data?.responseCode === '000') {
-      //   // dispatch(loginSuccess(response?.data));
-      //   dispatch(adminLoginSuccess(response?.data));
-      //   Cookies.set('adminRole', response?.data?.adminRole, {
-      //     expires: 1, // 1 day
-      //     secure: process.env.NODE_ENV === 'production',
-      //     path: '/admin',
-      //   });
-      //   Cookies.set('jwt', response?.data?.jwt, {
-      //     expires: 1, // 1 day
-      //     secure: process.env.NODE_ENV === 'production',
-      //     path: '/admin',
-      //   });
-      //   // Cookies.set('pages', JSON.stringify(response?.data?.pages), {
-      //   //   expires: 1, // 1 day
-      //   //   secure: process.env.NODE_ENV === 'production',
-      //   //   path: '/',
-      //   // });
-      //   // router.push('/admin/admin-portal/manage-users/search-user/');
-      //   router.push('/admin/corporate');
-      // }
-      else {
+      } else {
         console.log('Login failure');
         console.log('Login failure');
         setApierror(response?.data?.responseMessage);
