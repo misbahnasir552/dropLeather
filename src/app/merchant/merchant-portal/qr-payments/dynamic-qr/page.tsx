@@ -11,7 +11,8 @@ import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import ErrorModal from '@/components/UI/Modal/ErrorModal';
-import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
+// import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -31,6 +32,7 @@ function AddDynamicQR() {
   const [stores, setStores] = useState([]);
   const [amount, setAmount] = useState('');
   const [qrExpirationTime, setQrExpirationTime] = useState(0);
+  const [tillNum, setTillNum] = useState<string>('');
   const { apiSecret } = userData;
 
   const [showModal, setShowModal] = useState(false);
@@ -163,8 +165,9 @@ function AddDynamicQR() {
       );
       if (response?.data.responseCode === '009') {
         setAmount(values.amount);
-        setQrExpirationTime(values.qrExpirationTime);
+        setQrExpirationTime(values?.qrExpirationTime);
         base64ToJpg(response?.data.qrCode);
+        setTillNum(response?.data?.transactionPointNum);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
       } else if (response?.data.responseCode === '000') {
@@ -304,7 +307,7 @@ function AddDynamicQR() {
         )}
       </Formik>
       {imageUrl && showModal && (
-        <DynamicQRModal
+        <QRModal
           title="Your Custom QR"
           description="Your custom QR Code has been created. You can now share the below QR code to receive money."
           show={showModal}
@@ -312,6 +315,7 @@ function AddDynamicQR() {
           imageUrl={imageUrl} // Pass the QR code image URL here
           amount={amount}
           expirationTime={qrExpirationTime}
+          tilNum={tillNum}
         />
       )}
     </div>

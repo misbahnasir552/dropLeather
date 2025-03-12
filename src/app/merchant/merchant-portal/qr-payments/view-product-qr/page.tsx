@@ -12,7 +12,7 @@ import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import ErrorModal from '@/components/UI/Modal/ErrorModal';
-import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -33,6 +33,7 @@ function ViewProductQR() {
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
+  const [tillNum, setTillNum] = useState<string>('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -62,6 +63,7 @@ function ViewProductQR() {
           qrFormatIndicator,
           branchCode,
           // qrCode,
+          // tillNumber,
           createdAt,
           updatedAt,
           ...rest
@@ -126,42 +128,6 @@ function ViewProductQR() {
     fetchRecords();
   }, [filteredParams]);
 
-  // const viewProductQrTableData: any =
-  //   // : TableData[]
-  //   [
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //     {
-  //       productNumber: '001123',
-  //       productName: 'Shampoo',
-  //       storeId: '03345674415',
-  //       storeName: 'momin',
-  //       amount: '1000',
-  //       actions: 'Images',
-  //     },
-  //   ];
   const onSubmit = async (values: IViewProductQr) => {
     const filteredValues: any = {};
 
@@ -220,9 +186,14 @@ function ViewProductQR() {
     setImageUrl(imageUrl); // Update the state to display the image
     setShowModal(true);
   };
-  const handleView = (qrCode: string, name: string) => {
+  const handleView = (qrCode: string, name: string, tillId?: string) => {
+    setTillNum(tillId || '');
     base64ToJpg(qrCode);
     setStoreName(name);
+  };
+  const handleReset = (formik: any) => {
+    formik.resetForm();
+    fetchRecords();
   };
   return (
     <div>
@@ -247,12 +218,13 @@ function ViewProductQR() {
             />
           )}
           {imageUrl && showModal && (
-            <DynamicQRModal
+            <QRModal
               title={storeName}
               description="Your QR Code has been created. You can now share the below QR code to receive payments."
               show={showModal}
               setShowModal={setShowModal}
               imageUrl={imageUrl} // Pass the QR code image URL here
+              tilNum={tillNum}
               // amount={amount}
               // expirationTime={expirationTime}
             />
@@ -303,8 +275,8 @@ function ViewProductQR() {
                     <Button
                       label="Reset"
                       onClickHandler={() => {
-                        formik.resetForm();
-                        fetchRecords();
+                        handleReset(formik);
+                        setFilteredParams(undefined);
                       }}
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
                     />

@@ -49,17 +49,11 @@ function MerchantFundsTransfer() {
           '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
         );
       } else {
-        // setTitle('Failed');
-        // setDescription(response.data.errorDescription);
-        // setShowModal(true);
         setApierror(response?.data?.errorDescription);
       }
     } catch (e: any) {
       console.log(e);
-      // setTitle('Network Failed');
-      // setDescription(e.message);
       setApierror(e?.message);
-      // setShowModal(true);
     } finally {
       setIsLoading(false);
     }

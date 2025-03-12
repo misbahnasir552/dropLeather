@@ -1,7 +1,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -15,8 +15,8 @@ import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
+import { useAppSelector } from '@/hooks/redux';
+// import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
 import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
 import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
 import { generateMD5Hash } from '@/utils/helper';
@@ -27,8 +27,8 @@ import {
 // import ImageInput from '@/components/UI/Inputs/ImageInput';
 
 function AddBeneficiary() {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
+  // const router = useRouter();
+  // const dispatch = useAppDispatch();
 
   const userData = useAppSelector((state: any) => state.auth);
   // const { apiSecret } = userData;
@@ -45,43 +45,43 @@ function AddBeneficiary() {
     setIsChecked(!isChecked);
   };
 
-  const fetchOTP = async () => {
-    try {
-      setIsLoading(true);
-      const additionalValues = {
-        managerMobile: userData?.managerMobile,
-        email: userData?.email,
-      };
-      const mdRequest = {
-        ...additionalValues,
-        apisecret: userData?.apiSecret,
-      };
-      const md5Hash = generateMD5Hash(mdRequest);
-      const requestBody = { request: additionalValues, signature: md5Hash };
-      const response = await apiClient.post(
-        'merchant/sendOtpMerchant',
-        requestBody,
-        {
-          headers: { Authorization: `Bearer ${userData?.jwt}` },
-        },
-      );
-      console.log(response, 'FETCH OTP RESPONSE');
-      if (response.data.responseCode === '009') {
-        return true;
-      }
-      setTitle('Error fetching OTP');
-      setShowModal(true);
-      return false;
-    } catch (e: any) {
-      console.log(e);
-      setTitle('Network Failed');
-      setDescription(e.message);
-      setShowModal(true);
-      return false;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // const fetchOTP = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const additionalValues = {
+  //       managerMobile: userData?.managerMobile,
+  //       email: userData?.email,
+  //     };
+  //     const mdRequest = {
+  //       ...additionalValues,
+  //       apisecret: userData?.apiSecret,
+  //     };
+  //     const md5Hash = generateMD5Hash(mdRequest);
+  //     const requestBody = { request: additionalValues, signature: md5Hash };
+  //     const response = await apiClient.post(
+  //       'merchant/sendOtpMerchant',
+  //       requestBody,
+  //       {
+  //         headers: { Authorization: `Bearer ${userData?.jwt}` },
+  //       },
+  //     );
+  //     console.log(response, 'FETCH OTP RESPONSE');
+  //     if (response.data.responseCode === '009') {
+  //       return true;
+  //     }
+  //     setTitle('Error fetching OTP');
+  //     setShowModal(true);
+  //     return false;
+  //   } catch (e: any) {
+  //     console.log(e);
+  //     setTitle('Network Failed');
+  //     setDescription(e.message);
+  //     setShowModal(true);
+  //     return false;
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleFetchTitle = async (formik: any) => {
     console.log('FETCH TITLEeeee');
@@ -132,10 +132,50 @@ function AddBeneficiary() {
     if (!isChecked) {
       setCheckedError('Select Terms & Conditions to continue');
     } else {
-      dispatch(addBeneficiaryData(values));
-      const res = await fetchOTP();
-      if (res) {
-        router.push('otp');
+      // dispatch(addBeneficiaryData(values));
+      // const res = await fetchOTP();
+      // if (res) {
+      //   router.push('otp');
+      // }
+      const additionalValues = {
+        ...values,
+        managerMobile: userData?.managerMobile,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = { request: additionalValues, signature: md5Hash };
+      try {
+        setIsLoading(true);
+        const response = await apiClient.post(
+          '/merchant/addBeneficiary',
+          requestBody,
+          {
+            headers: { Authorization: `Bearer ${userData?.jwt}` },
+            params: { merchantEmail: userData?.email },
+          },
+        );
+        console.log('Added Successfully', response);
+        if (response?.data.responseCode === '009') {
+          setTitle('Beneficiary Added Successfully');
+          setDescription(response?.data.responseDescription);
+          // setRoute(
+          //   '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
+          // );
+          setShowModal(true);
+          // router.push("")
+        } else {
+          setTitle(response?.data?.errorMessage);
+          setDescription(response?.data?.errorDescription);
+          setApierror(response?.data?.errorDescription);
+        }
+      } catch (e: any) {
+        setDescription(e?.message);
+        setApierror(e?.message);
+      } finally {
+        setIsLoading(false);
       }
     }
     // const additionalValues = {
@@ -186,7 +226,7 @@ function AddBeneficiary() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
+        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
       />
 
       <HeaderWrapper
@@ -310,7 +350,7 @@ function AddBeneficiary() {
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
-                label="Next"
+                label="Save"
                 type="submit"
                 // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
