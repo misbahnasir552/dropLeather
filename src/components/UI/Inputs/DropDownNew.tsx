@@ -28,8 +28,12 @@ const DropdownNew = ({
   const [isFocused, setIsFocused] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const filteredOptions = options.filter((item: { label: string }) =>
-    item.label.toLowerCase().startsWith(searchTerm.toLowerCase()),
+  // const filteredOptions = options.filter((item: { label: string }) =>
+  //   item.label.toLowerCase().startsWith(searchTerm.toLowerCase()),
+  // );
+
+  const filteredOptions = options?.filter(
+    (item: { label: string }) => item.label,
   );
 
   const handleOptionClick = (item: any) => {

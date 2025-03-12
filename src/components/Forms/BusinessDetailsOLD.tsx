@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 // import * as Yup from 'yup';
 import apiClient from '@/api/apiClient';
@@ -11,43 +12,33 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import type { AddStoreInfo } from '@/interfaces/interface';
+import type { AddStoreInfo, BusinessFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-// import { BarLoader } from 'react-spinners';
-import { BusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
 
-// import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
-// import CheckboxItem from '../UI/Inputs/CheckboxItem';
+import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
+import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import AddStore from './AddStore';
 // import { buildValidationSchema } from './validations/helper';
-// import type { FieldsData,  } from './validationsOLD/types';
-// import { businessDetailsInitialValues }, from './validations/businessForm';
-// import businessDetailsSchema,{businessDetailsInitialValues}  from './validations/businessForm'
-// import { businessDetailsFormSchema } from './validations/businessForm';
-import {
-  businessDetailsFormInitialValues,
-  businessDetailsFormSchema,
-} from './validations/businessForm';
+import type { FieldsData, Page } from './validationsOLD/types';
 
 const BusinessInformation = () => {
-  const [formData, setFormData] = useState(BusinessDetailsFormData.categories);
   const userData = useAppSelector((state: any) => state.auth);
-  // const fieldsData: FieldsData = useAppSelector((state: any) => state.fields);
+  const fieldsData: FieldsData = useAppSelector((state: any) => state.fields);
   const businessNatureData = useAppSelector(
     (state: any) => state.onBoardingForms,
   );
-  console.log('businessNatureData', businessNatureData, setFormData);
+  console.log('businessNatureData', businessNatureData);
   const router = useRouter();
-  // const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState(false);
 
   const { apiSecret } = userData;
-  const [filteredData, setFilteredData] = useState<any[]>();
+  const [filteredData, setFilteredData] = useState<Page[]>();
   const [addStoresValues, setAddStoresValues] = useState<AddStoreInfo[]>([]);
 
   const [pageTitle, setPageTitle] = useState('');
@@ -57,10 +48,10 @@ const BusinessInformation = () => {
   >(undefined);
   const [selectedDropDownValue, setSelectedDropDownValue] =
     useState<any>(undefined);
-  // const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
-  //   Array(5).fill(null),
-  // );
-  // const [initialValuesState, setInitialValuesState] = useState<any>();
+  const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
+    Array(5).fill(null),
+  );
+  const [initialValuesState, setInitialValuesState] = useState<any>();
   // const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
   const [showModal, setShowModal] = useState(false);
@@ -69,9 +60,9 @@ const BusinessInformation = () => {
   const [apierror, setApierror] = useState('');
   // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
   // const BusinessInfoInitialValues = GetBusinessDetails();
-  // const handleCheckboxChange = () => {
-  //   setChecked(!isChecked);
-  // };
+  const handleCheckboxChange = () => {
+    setChecked(!isChecked);
+  };
   // console.log(
   //   'selected value checkbox input',
   //   selectedCheckValue,
@@ -89,129 +80,104 @@ const BusinessInformation = () => {
 
   useEffect(() => {
     // console.log(selectedDropDownValue, "selected drop value")
-    // const initialValues: { [key: string]: any } = {};
+    const initialValues: { [key: string]: any } = {};
     if (!currentTab) return;
 
     const title = convertSlugToTitle(currentTab);
     setPageTitle(title);
 
-    // let updatedFData = fieldsData?.pages?.page?.filter(
-    //   (item) => convertSlugToTitle(item.name) === title,
-    // );
+    let updatedFData = fieldsData?.pages?.page?.filter(
+      (item) => convertSlugToTitle(item.name) === title,
+    );
 
     // Find the category containing "associationToHighRiskBusiness"
-
-    const updatedFormData = formData.map((category) => {
-      const hasAssociationField = category.fields.some(
-        (field) =>
-          field.name === 'associationToHighRiskBusiness' &&
-          field.type === 'dropdown',
-      );
-
-      if (!hasAssociationField) return category;
-
-      let updatedFields = category.fields;
-
-      if (selectedDropDownValue === 'High Risk Business / Person') {
-        updatedFields = category.fields.filter(
-          (field) =>
-            field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
-        );
-      } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
-        updatedFields = category.fields.filter(
-          (field) =>
-            field.name !== 'lowRiskType' && field.name !== 'highRiskType',
-        );
-      } else if (selectedDropDownValue === 'Low Risk Business / Person') {
-        updatedFields = category.fields.filter(
-          (field) =>
-            field.name !== 'mediumRiskType' && field.name !== 'highRiskType',
-        );
-      } else if (
-        selectedDropDownValue === 'No' ||
-        selectedDropDownValue === '' ||
-        selectedDropDownValue === undefined
-      ) {
-        updatedFields = category.fields.filter(
-          (field) =>
-            field.name !== 'mediumRiskType' &&
-            field.name !== 'highRiskType' &&
-            field.name !== 'lowRiskType',
-        );
-      }
-
+    updatedFData = updatedFData?.map((item) => {
       return {
-        ...category,
-        fields: updatedFields,
+        ...item,
+        categories: item.categories.map((category) => {
+          const hasAssociationField = category.fields.some(
+            (field) =>
+              field.name === 'associationToHighRiskBusiness' &&
+              field.type === 'dropDown',
+          );
+
+          if (!hasAssociationField) return category;
+
+          let updatedFields = category.fields;
+
+          if (selectedDropDownValue === 'High Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'Medium Risk Business / Person'
+          ) {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+            );
+          } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'mediumRiskType' &&
+                field.name !== 'highRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'No' ||
+            selectedDropDownValue === '' ||
+            selectedDropDownValue === undefined
+          ) {
+            updatedFields = category.fields.filter(
+              (field) => field.name !== 'currentSalary',
+            );
+          }
+
+          return {
+            ...category,
+            fields: updatedFields,
+          };
+        }),
       };
     });
 
-    // updatedFData = updatedFData?.map((item) => {
-    //   return {
-    //     ...item,
-    //     categories: item.categories.map((category) => {
-    //       const hasAssociationField = category.fields.some(
-    //         (field) =>
-    //           field.name === 'associationToHighRiskBusiness' &&
-    //           field.type === 'dropDown',
-    //       );
+    setFilteredData(updatedFData);
 
-    //       if (!hasAssociationField) return category;
+    updatedFData?.forEach((item) => {
+      // if (item.name === "Activity Information") {
+      item.categories.forEach((category) => {
+        category.fields.forEach((field) => {
+          if (field?.type === 'checkItem') {
+            return;
+          }
+          initialValues[field.name] = '';
+          initialValues[field.name] = [
+            'natureOfActivity',
+            'businessMode',
+            'paymentModes',
+          ].includes(field.name)
+            ? []
+            : '';
+        });
+      });
+      setInitialValuesState(initialValues);
+      // const validationSchema = buildValidationSchema(updatedFData);
 
-    //       let updatedFields = category.fields;
-
-    //       if (selectedDropDownValue === 'High Risk Business / Person') {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
-    //         );
-    //       } else if (
-    //         selectedDropDownValue === 'Medium Risk Business / Person'
-    //       ) {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'lowRiskType' && field.name !== 'highRiskType',
-    //         );
-    //       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'mediumRiskType' &&
-    //             field.name !== 'highRiskType',
-    //         );
-    //       } else if (
-    //         selectedDropDownValue === 'No' ||
-    //         selectedDropDownValue === '' ||
-    //         selectedDropDownValue === undefined
-    //       ) {
-    //         updatedFields = category.fields.filter(
-    //           (field) => field.name !== 'currentSalary',
-    //         );
-    //       }
-
-    //       return {
-    //         ...category,
-    //         fields: updatedFields,
-    //       };
-    //     }),
-    //   };
-    // });
-
-    setFilteredData(updatedFormData);
-
-    console.log('filtered data is ', filteredData);
+      // setValidationSchemaState(validationSchema);
+      // }
+    });
   }, [currentTab, selectedDropDownValue]);
 
-  // if (!initialValuesState || !filteredData) {
-  //   // if (!initialValuesState || !validationSchemaState || !filteredData) {
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
+  if (!initialValuesState || !filteredData) {
+    // if (!initialValuesState || !validationSchemaState || !filteredData) {
+    return (
+      <div className="flex w-full flex-col justify-center">
+        <BarLoader color="#21B25F" />
+      </div>
+    );
+  }
 
-  const onSubmit = async (values: any, { setSubmitting }: any) => {
-    // const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
+  const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
@@ -304,8 +270,8 @@ const BusinessInformation = () => {
         setAddStoresValues={setAddStoresValues}
       /> */}
       <Formik
-        initialValues={businessDetailsFormInitialValues}
-        validationSchema={businessDetailsFormSchema}
+        initialValues={initialValuesState}
+        // validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -316,62 +282,7 @@ const BusinessInformation = () => {
               </div>
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
-                  {filteredData?.map((item: any, index: any) => (
-                    <React.Fragment key={index}>
-                      {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
-                      <FormLayoutDynamic key={item} heading={item.categoryName}>
-                        {item.fields.map((field: any, fieldIndex: any) => {
-                          return field.type === 'text' ? (
-                            <Input
-                              key={fieldIndex}
-                              label={field.label}
-                              name={field.name}
-                              type={field.type}
-                              formik={formik}
-                              asterik={field.required}
-                              error={field.validation?.errorMessage}
-                            />
-                          ) : field?.type === 'checkBoxInputMulti' ? (
-                            <CheckboxInput
-                              key={fieldIndex}
-                              isMulti
-                              name={field.name}
-                              options={field.options}
-                              form={formik}
-                              error={field.validation?.errorMessage}
-                              setSelectedCheckValue={setSelectedCheckValue}
-                            />
-                          ) : field?.type === 'dropdown' ? (
-                            <DropdownNew
-                              asterik={field.required}
-                              key={fieldIndex} // Add a key prop to DropdownInput as well
-                              label={field.label}
-                              name={field?.name}
-                              options={field.options}
-                              formik={formik}
-                              setSelectedDropDownValue={
-                                setSelectedDropDownValue
-                              }
-                              // error={field.validation.errorMessage}
-                            />
-                          ) : field?.type === 'date' ? (
-                            <DateInputNew
-                              asterik={field.required}
-                              key={fieldIndex}
-                              formik={formik}
-                              label={field.label}
-                              name={field.name}
-                              // error={field.validation.errorMessage}
-                            />
-                          ) : (
-                            <p key={fieldIndex}>nothing to show</p>
-                          );
-                        })}
-                      </FormLayoutDynamic>
-                      {/* // ))} */}
-                    </React.Fragment>
-                  ))}
-                  {/* {filteredData?.map(
+                  {filteredData?.map(
                     (pageItem) => (
                       // pageItem.name === "Business Details" && (
                       <React.Fragment key={pageItem.name}>
@@ -593,7 +504,7 @@ const BusinessInformation = () => {
                       </React.Fragment>
                     ),
                     // )
-                  )} */}
+                  )}
                 </div>
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}

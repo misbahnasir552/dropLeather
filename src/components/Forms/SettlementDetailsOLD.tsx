@@ -4,6 +4,7 @@ import type { FormikHelpers } from 'formik';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -14,17 +15,12 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
-// import { BarLoader } from 'react-spinners';
-import { SettlementDetailsFormData } from '@/utils/onboardingForms/settlementDetails';
+import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
 
 import DropdownInput from '../UI/Inputs/DropdownInput';
 import ImageInput from '../UI/Inputs/ImageInput';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-// import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
-import settlementDetailsSchema, {
-  settlementDetailsInitialValues,
-} from './validations/settlementForm';
 
 interface Field {
   name: string;
@@ -86,21 +82,18 @@ const SettlementDetails = () => {
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
-  const [formData, setFormData] = useState(
-    SettlementDetailsFormData.categories,
-  );
+
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    console.log(initialValuesState, setFormData);
     const initialValues: InitialValues = {};
     if (currentTab) {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
 
-      let updatedFData = fieldsData?.pages?.page?.filter(
+      let updatedFData = fieldsData.pages.page.filter(
         (item) => convertSlugToTitle(item.name) === title,
       );
 
@@ -139,16 +132,16 @@ const SettlementDetails = () => {
         setInitialValuesState(initialValues);
       });
     }
-  }, [currentTab, fieldsData?.pages?.page, selectedCheckValue]);
+  }, [currentTab, fieldsData.pages.page, selectedCheckValue]);
 
-  // if (!initialValuesState || !filteredData) {
-  //   setTimeout(() => {}, 12000);
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
+  if (!initialValuesState || !filteredData) {
+    setTimeout(() => {}, 12000);
+    return (
+      <div className="flex w-full flex-col justify-center">
+        <BarLoader color="#21B25F" />
+      </div>
+    );
+  }
 
   const onSubmit = async (
     values: any,
@@ -214,8 +207,8 @@ const SettlementDetails = () => {
         // routeName="/merchant/home"
       />
       <Formik
-        initialValues={settlementDetailsInitialValues}
-        validationSchema={settlementDetailsSchema}
+        initialValues={initialValuesState}
+        validationSchema={SettlementFormInfoSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -226,65 +219,107 @@ const SettlementDetails = () => {
               </div>
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
-                  {formData?.map((item: any, index: any) => (
-                    <React.Fragment key={index}>
-                      {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
-                      <FormLayoutDynamic key={item} heading={item.categoryName}>
-                        {item.fields.map((field: any, fieldIndex: any) => {
-                          return field.type === 'text' ? (
-                            <Input
-                              key={fieldIndex}
-                              label={field.label}
-                              name={field.name}
-                              type={field.type}
-                              formik={formik}
-                              asterik={field.required}
-                              error={field.validation?.errorMessage}
-                            />
-                          ) : field?.type === 'checkBoxInput' ? (
-                            <CheckboxInput
-                              key={fieldIndex}
-                              isMulti
-                              name={field.name}
-                              options={field.options}
-                              form={formik}
-                              error={field.validation?.errorMessage}
-                              setSelectedCheckValue={setSelectedCheckValue}
-                            />
-                          ) : field.type === 'dropdown' ? (
-                            <DropdownInput
-                              key={fieldIndex}
-                              label={field.label}
-                              name={field.name}
-                              options={field.options}
-                              formik={formik}
-                              // error={field.validation.errorMessage}
-                            />
-                          ) : field?.type === 'imageInput' ? (
-                            <ImageInput
-                              key={fieldIndex}
-                              name={field.name}
-                              label={field.label}
-                              type={field.type}
-                              hasImage
-                              image={field.image}
-                              data={{
-                                accNumber: formik?.values?.accountNumber,
-                                // easypaisabankLimited otherwise if otherbanks then selected
-                                bankName:
-                                  selectedCheckValue === 'easypaisabanklimited'
-                                    ? 'easypaisabanklimited'
-                                    : formik?.values?.bankName,
-                              }}
-                              formik={formik}
-                              selectedCheckValue={selectedCheckValue}
-                            />
-                          ) : (
-                            <p key={fieldIndex}>nothing to show</p>
-                          );
-                        })}
-                      </FormLayoutDynamic>
-                      {/* // ))} */}
+                  {filteredData?.map((pageItem) => (
+                    <React.Fragment key={pageItem.name}>
+                      {pageItem.categories.map((item, itemIndex) => (
+                        <FormLayoutDynamic
+                          key={itemIndex}
+                          heading={item.categoryName}
+                        >
+                          {[...item.fields]
+                            .sort((a, b) => a.priority - b.priority)
+                            .map((field, fieldIndex) => {
+                              if (field?.type === 'text') {
+                                return (
+                                  <Input
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    type={field.type}
+                                    error={field.validation.errorMessage}
+                                  />
+                                );
+                              }
+                              if (field?.type === 'checkBoxInput') {
+                                return (
+                                  <CheckboxInput
+                                    // isMulti
+                                    key={fieldIndex}
+                                    name={field.name}
+                                    options={field.validation.options?.map(
+                                      (option) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    form={formik}
+                                    setSelectedCheckValue={
+                                      setSelectedCheckValue
+                                    }
+                                  />
+                                );
+                              }
+                              if (
+                                field?.type === 'dropDown'
+                                //  &&
+                                // selectedCheckValue?.includes('bankaccount')
+                              ) {
+                                return (
+                                  <DropdownInput
+                                    key={fieldIndex}
+                                    label={field.label}
+                                    name={field.name}
+                                    options={field.validation?.options?.map(
+                                      (option: string) => ({
+                                        label: option,
+                                        value: option
+                                          .toLowerCase()
+                                          .replace(/\s+/g, ''),
+                                      }),
+                                    )}
+                                    formik={formik}
+                                    error={field.validation.errorMessage}
+                                  />
+                                );
+                              }
+                              if (field?.type === 'imageInput') {
+                                return (
+                                  <ImageInput
+                                    key={fieldIndex}
+                                    name={field.name}
+                                    label={field.label}
+                                    type={field.type}
+                                    hasImage
+                                    image={field.image}
+                                    data={{
+                                      accNumber: formik?.values?.accountNumber,
+                                      // easypaisabankLimited otherwise if otherbanks then selected
+                                      bankName:
+                                        selectedCheckValue ===
+                                        'easypaisabanklimited'
+                                          ? 'easypaisabanklimited'
+                                          : formik?.values?.bankName,
+                                    }}
+                                    formik={formik}
+                                    selectedCheckValue={selectedCheckValue}
+                                  />
+                                  // <Input
+                                  //   label={field.label}
+                                  //   name={field.name}
+                                  //   type={field.type}
+                                  //   value={formik.values.accountTitle}
+                                  //   // error={formik.errors.accountTitle}
+                                  //   // touched={formik.touched.accountTitle}
+                                  //   isDisabled
+                                  // />
+                                );
+                              }
+                              return null;
+                            })}
+                        </FormLayoutDynamic>
+                      ))}
                     </React.Fragment>
                   ))}
                 </div>

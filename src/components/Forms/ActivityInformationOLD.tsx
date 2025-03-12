@@ -1,24 +1,17 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-import { buildValidationSchema } from '@/components/Forms/validationsOLD/helper';
-import type { FieldsData } from '@/components/Forms/validationsOLD/types';
 import Button from '@/components/UI/Button/PrimaryButton';
-import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 // import H6 from "@/components/UI/Headings/H6";
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
-import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
-import CustomModal from '@/components/UI/Modal/CustomModal';
-import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 // import FormWrapper from "@/components/UI/Wrappers/FormLayout";
 import { useAppSelector } from '@/hooks/redux';
 // import {
@@ -32,12 +25,19 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
-const RequestRevision = () => {
+import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import DropdownNew from '../UI/Inputs/DropDownNew';
+import CustomModal from '../UI/Modal/CustomModal';
+import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import { buildValidationSchema } from './validationsOLD/helper';
+import type { FieldsData } from './validationsOLD/types';
+
+const ActivityInformation = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
-  console.log('userData', userData);
 
   const formData = useAppSelector((state: any) => state.onBoardingForms);
+  console.log('FORM DATA ', formData);
 
   const [isChecked, setChecked] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>();
@@ -53,9 +53,9 @@ const RequestRevision = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  console.log('userdatais', userData);
   const { apiSecret } = userData;
   const router = useRouter();
-  const jwt = Cookies.get('jwt');
   // const dispatch = useAppDispatch();
   console.log('selected value checkbox input: ', selectedCheckValue);
 
@@ -72,6 +72,8 @@ const RequestRevision = () => {
         return convertSlugToTitle(item.name) === title;
       });
       setFilteredData(fData);
+      console.log('FDATAAAA:', fData);
+
       fData?.forEach((item) => {
         // if (item.name === "Activity Information") {
         item.categories.forEach((category) => {
@@ -85,40 +87,12 @@ const RequestRevision = () => {
         // }
       });
       const validationSchema = buildValidationSchema(fData);
+      console.log('Vaidation schema result', validationSchema);
 
       setValidationSchemaState(validationSchema);
     }
   }, [currentTab]);
-  const fetchUserDetails = async () => {
-    try {
-      if (userData?.email && jwt) {
-        const getDetailResponse = await apiClient.get(
-          `merchant/requestRevisionDynamicFieldsTest?email=${userData?.email}`,
-        );
-        console.log('getDetailResponse', getDetailResponse);
-        if (getDetailResponse?.data?.responseCode === '009') {
-          // router.push('/merchant/home');
-        } else if (getDetailResponse?.data?.responseCode === '000') {
-          setTitle('Failed to fetch records');
-          setDescription('Unable to get positive response');
-          setShowModal(true);
-        } else {
-          setTitle('Failed to fetch records');
-          setDescription('Some Network Issue');
-          setShowModal(true);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching details:', error);
-      setTitle('Network Error');
-      setDescription('Error fetching merchant details. Please try again!');
-      setShowModal(true);
-      // router.push('/login');
-    }
-  };
-  useEffect(() => {
-    fetchUserDetails();
-  }, []);
+
   console.log('INITAIL VALUES STATE', initialValuesState);
   if (!initialValuesState || !validationSchemaState || !filteredData) {
     return (
@@ -178,6 +152,7 @@ const RequestRevision = () => {
   };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
+    console.log('activity valuesssssssssssss', values);
     // router.push('?activeTab=additional-information');
 
     const currentIndex = endpointArray.findIndex(
@@ -185,6 +160,8 @@ const RequestRevision = () => {
     );
 
     if (currentIndex !== -1) {
+      console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
+
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
       const additionalValues = {
         ...values,
@@ -405,4 +382,4 @@ const RequestRevision = () => {
   );
 };
 
-export default RequestRevision;
+export default ActivityInformation;
