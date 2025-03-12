@@ -5,7 +5,6 @@ export interface IViewProductQr {
 }
 
 export interface IQrPayments {
-  qrDateBetween: string;
   storeName: string;
   transactionPointNumber: string;
   storeId: string;

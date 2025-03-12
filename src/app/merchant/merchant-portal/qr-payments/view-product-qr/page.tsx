@@ -191,6 +191,10 @@ function ViewProductQR() {
     base64ToJpg(qrCode);
     setStoreName(name);
   };
+  const handleReset = (formik: any) => {
+    formik.resetForm();
+    fetchRecords();
+  };
   return (
     <div>
       <>
@@ -271,8 +275,8 @@ function ViewProductQR() {
                     <Button
                       label="Reset"
                       onClickHandler={() => {
-                        formik.resetForm();
-                        fetchRecords();
+                        handleReset(formik);
+                        setFilteredParams(undefined);
                       }}
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
                     />

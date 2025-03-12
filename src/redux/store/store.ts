@@ -27,6 +27,7 @@ import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
 import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
 import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
 import merchantIntegrationReducer from '../features/merchantSlice/merchantIntegration';
+import transferFundsReducer from '../features/merchantSlice/transferFunds';
 // import sessionSliceReducer from '../features/sessionSlice/sessionSlice';
 
 const persistConfig = {
@@ -49,6 +50,7 @@ const persistConfig = {
     'corporateJourneyType',
     // 'session',
     'loginCredentials',
+    'transferFunds',
   ],
 };
 
@@ -69,6 +71,7 @@ const rootReducer = combineReducers({
   corporateJourneyType: corporateJourneyTypeReducer,
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
+  transferFunds: transferFundsReducer,
 });
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);
