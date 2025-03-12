@@ -245,6 +245,12 @@ const SearchTransaction = () => {
                 onClickHandler={() => handleReset(formik)}
                 className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
               />
+              <Button
+                label="Bulk Reversal"
+                routeName="/merchant/merchant-portal/configuration/transactions-history/bulk-reversal"
+                type="submit"
+                className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+              />
             </div>
           </Form>
         )}

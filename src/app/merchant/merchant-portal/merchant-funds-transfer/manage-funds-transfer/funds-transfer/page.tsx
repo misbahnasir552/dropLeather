@@ -1,6 +1,7 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -11,7 +12,10 @@ import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { transferFundsData } from '@/redux/features/merchantSlice/transferFunds';
+// import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
+// import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
 import { generateMD5Hash } from '@/utils/helper';
 import {
   fundsTransferInitialValues,
@@ -20,7 +24,8 @@ import {
 
 function FundsTranfer() {
   const userData = useAppSelector((state: any) => state.auth);
-
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -31,21 +36,13 @@ function FundsTranfer() {
   const fetchBeneficiariesRecords = async () => {
     try {
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
-      console.log(response.data.beneficiaryList, 'RESPONSE');
-      if (response?.data.responseCode === '009') {
-        setRecords(response.data.beneficiaryList);
+      if (response?.data?.responseCode === '009') {
+        setRecords(response?.data?.beneficiaryList);
       } else {
-        setTitle('Failure');
-        setDescription(response.data.responseDescription);
-        setApierror(response.data.responseDescription);
-        // setShowModal(true);
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      console.log('Error in fetching dynamic QR list', e);
-      setTitle('Network Failure');
-      setDescription(e.message);
       setApierror(e?.message);
-      // setShowModal(true);
     }
   };
 
@@ -53,66 +50,103 @@ function FundsTranfer() {
     fetchBeneficiariesRecords();
   }, []);
 
-  const onSubmit = async (values: any, { resetForm }: any) => {
-    console.log('Fund transfer values: ', values);
-    const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
-    console.log('RECORDS', records);
-    // const splitStringLastPart = values.beneficiaryAccountNumber?.split('-').pop();
-    const splitStringLastPart = values.beneficiaryAccountNumber
-      ?.split('-')
-      .pop()
-      ?.trim();
-    console.log('splitStringLastPart', `${splitStringLastPart}`);
-
-    const selectedOption: any = records?.find(
-      (option: any) => option.mobileNumber === splitStringLastPart,
-    );
-    console.log(selectedOption, 'SELECTED OPTION');
-
+  const fetchOTP = async () => {
     try {
+      setIsLoading(true);
       const additionalValues = {
-        ...rest,
-        beneficiaryAccountNumber: selectedOption?.mobileNumber,
-        beneficiaryBank: selectedOption?.bankName,
         managerMobile: userData?.managerMobile,
+        email: userData?.email,
       };
-      console.log('additional values', additionalValues);
-
       const mdRequest = {
         ...additionalValues,
         apisecret: userData?.apiSecret,
       };
       const md5Hash = generateMD5Hash(mdRequest);
-      const requestBody = {
-        request: additionalValues,
-        signature: md5Hash,
-      };
-      setIsLoading(true);
+      const requestBody = { request: additionalValues, signature: md5Hash };
       const response = await apiClient.post(
-        `/merchant/fundsTransfer?email=${userData?.email}`,
+        'merchant/sendOtpMerchant',
         requestBody,
-        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+        {
+          headers: { Authorization: `Bearer ${userData?.jwt}` },
+        },
       );
-      console.log('Added Successfully', response);
-      if (response?.data.responseCode === '009') {
-        setShowModal(true);
-
-        setTitle(response?.data?.responseMessage);
-        setDescription(response?.data.responseDescription);
-        resetForm();
-      } else {
-        setTitle('Failure');
-        setDescription(response.data.responseDescription);
-        setApierror(response.data.responseDescription);
+      console.log(response, 'FETCH OTP RESPONSE');
+      if (response.data.responseCode === '009') {
+        return true;
       }
+      setTitle('Error fetching OTP');
+      setShowModal(true);
+      return false;
     } catch (e: any) {
-      setTitle('Network Failure');
+      console.log(e);
+      setTitle('Network Failed');
       setDescription(e.message);
-      setApierror(e?.message);
+      setShowModal(true);
+      return false;
     } finally {
       setIsLoading(false);
-      // setShowModal(true);
     }
+  };
+  const onSubmit = async (values: any) => {
+    const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
+    console.log(rest);
+
+    // const splitStringLastPart = values.beneficiaryAccountNumber?.split('-').pop();
+    const splitStringLastPart = values.beneficiaryAccountNumber
+      ?.split('-')
+      .pop()
+      ?.trim();
+
+    const selectedOption: any = records?.find(
+      (option: any) => option.mobileNumber === splitStringLastPart,
+    );
+    dispatch(transferFundsData({ ...values, selectedOption }));
+    const res = await fetchOTP();
+    if (res) {
+      router.push('otp');
+    }
+    // try {
+    //   const additionalValues = {
+    //     ...rest,
+    //     beneficiaryAccountNumber: selectedOption?.mobileNumber,
+    //     beneficiaryBank: selectedOption?.bankName,
+    //     managerMobile: userData?.managerMobile,
+    //   };
+
+    //   const mdRequest = {
+    //     ...additionalValues,
+    //     apisecret: userData?.apiSecret,
+    //   };
+    //   const md5Hash = generateMD5Hash(mdRequest);
+    //   const requestBody = {
+    //     request: additionalValues,
+    //     signature: md5Hash,
+    //   };
+    //   setIsLoading(true);
+    //   const response = await apiClient.post(
+    //     `/merchant/fundsTransfer?email=${userData?.email}`,
+    //     requestBody,
+    //     { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+    //   );
+    //   if (response?.data?.responseCode === '009') {
+    //     setShowModal(true);
+
+    //     setTitle(response?.data?.responseMessage);
+    //     setDescription(response?.data.responseDescription);
+    //     resetForm();
+    //   } else {
+    //     setTitle('Failure');
+    //     setDescription(response.data.responseDescription);
+    //     setApierror(response.data.responseDescription);
+    //   }
+    // } catch (e: any) {
+    //   setTitle('Network Failure');
+    //   setDescription(e.message);
+    //   setApierror(e?.message);
+    // } finally {
+    //   setIsLoading(false);
+    //   // setShowModal(true);
+    // }
   };
 
   return (
@@ -124,10 +158,7 @@ function FundsTranfer() {
         setShowModal={setShowModal}
         routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
       />
-      <HeaderWrapper
-        heading="Funds Transfer"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-      />
+      <HeaderWrapper heading="Funds Transfer" />
       <Formik
         initialValues={fundsTransferInitialValues}
         validationSchema={fundsTransferSchema}
@@ -148,17 +179,17 @@ function FundsTranfer() {
                   asterik={true}
                   placeholder={'92XXXXXXXXXX'}
                 /> */}
-                <Input
+                {/* <Input
                   // isDisabled
                   value={'923458496384'}
                   label="Transfer To"
                   name={'transferTo'}
                   type="text"
-                  // error={formik.errors.transferTo}
-                  // touched={formik.touched.transferTo}
+                  error={formik.errors.transferTo}
+                  touched={formik.touched.transferTo}
                   asterik={true}
                   placeholder={'92XXXXXXXXXX'}
-                />
+                /> */}
                 {/* <Input
                   label="Beneficiary Account Details"
                   name={'beneficiaryAccountNumber'}
@@ -202,7 +233,6 @@ function FundsTranfer() {
                   label="Transfer Purpose"
                   name={'transferPurpose'}
                   type="text"
-                  asterik={true}
                   error={formik.errors.transferPurpose}
                   touched={formik.touched.transferPurpose}
                 />
@@ -220,10 +250,11 @@ function FundsTranfer() {
               <Button
                 label="Cancel"
                 type="button"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
-                label="Transfer Amount"
+                label="Next"
                 type="submit"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />

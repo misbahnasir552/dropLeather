@@ -12,8 +12,8 @@ import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import type { IReversalBulkBatch } from '@/validations/merchant/merchant-portal/reversal-module/interfaces';
 import {
-  reversalBulkBatchInitialValues,
-  reversalBulkBatchSchema,
+  searchBulkInitialValues,
+  searchBulkSchema,
 } from '@/validations/merchant/merchant-portal/reversal-module/reversal-bulk-batch';
 
 function page() {
@@ -64,8 +64,8 @@ function page() {
           />
           <MerchantFormLayout>
             <Formik
-              initialValues={reversalBulkBatchInitialValues}
-              validationSchema={reversalBulkBatchSchema}
+              initialValues={searchBulkInitialValues}
+              validationSchema={searchBulkSchema}
               onSubmit={onSubmit}
             >
               {(formik) => (

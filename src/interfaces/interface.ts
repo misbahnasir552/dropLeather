@@ -52,6 +52,7 @@ export interface IButton {
   isDisabled?: boolean;
   routeName?: string;
   onClickHandler?: (values?: any) => void;
+  disable?: boolean;
 }
 
 export interface IFormLayout {
@@ -142,6 +143,12 @@ export interface ISuccessModalProps {
   description?: string;
   show: boolean;
   setShowModal?: (value: boolean) => void;
+}
+export interface IErrorModalProps {
+  title?: string;
+  description?: string;
+  show: boolean;
+  setShow: (value: boolean) => void;
 }
 export interface ICustomModalProps {
   title?: string;
@@ -289,7 +296,13 @@ export interface BusinessFormInfo {
   expectedSalesVolume: string;
   // status?: string;
 }
-
+export interface ISearchBulk {
+  batchId: string;
+  file: string;
+  fromDate: string;
+  toDate: string;
+  status: string;
+}
 export interface ActivityFormInfo {
   fatherName: string;
   businessOwner: string;

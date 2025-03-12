@@ -1,24 +1,26 @@
 'use client';
 
-import { Form, Formik } from 'formik';
+// import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-import Button from '@/components/UI/Button/PrimaryButton';
-import DateInputNew from '@/components/UI/Inputs/DateInputNew';
-import Input from '@/components/UI/Inputs/Input';
+// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+// import Button from '@/components/UI/Button/PrimaryButton';
+// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+// import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
+// import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+// import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
-import type { IQrPayments } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
-import {
-  qrPaymentsInitialValues,
-  qrPaymentsSchema,
-} from '@/validations/merchant/merchant-portal/qr-payments/qr-payments';
+// import type { IQrPayments } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
+// import {
+//   qrPaymentsInitialValues,
+//   qrPaymentsSchema,
+// } from '@/validations/merchant/merchant-portal/qr-payments/qr-payments';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -29,6 +31,7 @@ function StaticQr() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [stores, setStores] = useState([]);
+  const [tillNum, setTillNum] = useState<string>('');
   const [isLoading, setIsloading] = useState(false);
 
   const base64ToJpg = (base64String: any) => {
@@ -81,7 +84,8 @@ function StaticQr() {
     setImageUrl(imageUrl); // Update the state to display the image
     setShowModal(true);
   };
-  const handleView = (qrCode: string, name: string) => {
+  const handleView = (qrCode: string, name: string, tillId?: string) => {
+    setTillNum(tillId || '');
     base64ToJpg(qrCode);
     setStoreName(name);
   };
@@ -95,12 +99,18 @@ function StaticQr() {
       });
       // setTitle('merchantPortalProfile');
 
-      console.log('STORESS', response?.data);
       if (response.data.responseCode === '009') {
         const filterValues = response?.data?.merchantStores.map(
           (item: any) => item,
         );
-        setStores(filterValues);
+        setStores(
+          filterValues?.map((item: any) => {
+            return {
+              ...item,
+              tillNumber: item?.transactionPointNumber,
+            };
+          }),
+        );
       } else if (response.data.responseCode === '000') {
         setTitle('Error');
         setDescription(response.data.responseDescription);
@@ -131,17 +141,18 @@ function StaticQr() {
     'Website URL',
     'Payment Enabled',
     'Status',
+    'Transaction Point Number',
+    'Store Address',
+    'QR Generation Date/Time',
+    'SMS Notification Number',
     'Actions',
   ];
-
-  const onSubmit = (values: IQrPayments) => {
-    console.log('StaticQr', values);
-  };
-  const handleReset = (Formik: any) => {
-    console.log('RESET', Formik);
-
-    Formik.resetForm();
-  };
+  // const onSubmit = (values: IQrPayments) => {
+  //   console.log('StaticQr', values);
+  // };
+  // const handleReset = (Formik: any) => {
+  //   Formik.resetForm();
+  // };
   return (
     <div>
       <>
@@ -156,12 +167,13 @@ function StaticQr() {
           />
         )}
         {imageUrl && showModal && (
-          <DynamicQRModal
+          <QRModal
             title={storeName}
             description="Your static QR Code has been created. You can now share the below QR code to receive money."
             show={showModal}
             setShowModal={setShowModal}
             imageUrl={imageUrl} // Pass the QR code image URL here
+            tilNum={tillNum}
             // amount={amount}
             // expirationTime={expirationTime}
           />
@@ -171,7 +183,7 @@ function StaticQr() {
             heading="View QR"
             // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
           />
-          <MerchantFormLayout>
+          {/* <MerchantFormLayout>
             <Formik
               initialValues={qrPaymentsInitialValues}
               validationSchema={qrPaymentsSchema}
@@ -180,21 +192,13 @@ function StaticQr() {
               {(formik) => (
                 <Form className="bg-screen-grey">
                   <div className="mb-9 grid gap-5 bg-screen-grey sm:grid-cols-1 md:grid-cols-3 ">
-                    {/* <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3"></div> */}
-                    <DateInputNew
-                      formik={formik}
-                      label="QR Generation Date Between"
-                      name="qrDateBetween"
-                      error={formik.errors.qrDateBetween}
-                      touched={formik.touched.qrDateBetween}
-                    />
                     <Input
                       label="Store Name"
                       name="storeName"
                       type="text"
                       // error={"hi"}
                       formik={formik}
-                      // touched={formik.touched.CardNumber}
+                    // touched={formik.touched.CardNumber}
                     />
                     <Input
                       label="Transaction Point Number"
@@ -210,7 +214,16 @@ function StaticQr() {
                       type="text"
                       // error={"hi"}
                       formik={formik}
-                      // touched={formik.touched.CardNumber}
+                    // touched={formik.touched.CardNumber}
+                    />
+                    <DropdownInput
+                      label="Status"
+                      options={[
+                        { label: 'Active', value: 'Active' },
+                        { label: 'In-Active', value: 'InActive' },
+                      ]}
+                      name="status"
+                      formik={formik}
                     />
                   </div>
                   <div className="flex w-full justify-start gap-6">
@@ -219,11 +232,6 @@ function StaticQr() {
                       type="submit"
                       className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
-                    {/* <Button
-                      label="Export"
-                      routeName="/login"
-                      className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
-                    /> */}
                     <Button
                       label="Reset"
                       // routeName="/login"
@@ -234,18 +242,21 @@ function StaticQr() {
                 </Form>
               )}
             </Formik>
-            {/* <Input name="asd" label="ASD" formik='xyz'/> */}
-          </MerchantFormLayout>
+          </MerchantFormLayout> */}
           {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
         </div>
-        <div className="flex pt-[40px]">
-          <IconTable
-            tableHeadings={qrPaymentsTableHeadings}
-            tableData={stores}
-            // hasEdit
-            handleView={handleView}
-            hasShare
-          />
+        <div className="flex justify-center pt-[40px]">
+          {stores?.length > 0 ? (
+            <IconTable
+              tableHeadings={qrPaymentsTableHeadings}
+              tableData={stores}
+              // hasEdit
+              handleView={handleView}
+              hasShare
+            />
+          ) : (
+            <div className="text-center">No Data Available</div>
+          )}
         </div>
       </>
     </div>

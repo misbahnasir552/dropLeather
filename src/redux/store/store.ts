@@ -24,8 +24,10 @@ import signupReducer from '@/redux/features/signUpSlice';
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
 import fieldReducer from '../features/formSlices/fieldSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
+import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
 import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
 import merchantIntegrationReducer from '../features/merchantSlice/merchantIntegration';
+import transferFundsReducer from '../features/merchantSlice/transferFunds';
 // import sessionSliceReducer from '../features/sessionSlice/sessionSlice';
 
 const persistConfig = {
@@ -39,6 +41,7 @@ const persistConfig = {
     'onBoardingForms',
     'merchantDetails',
     'merchantIntegration',
+    'fundsTransfer',
     'fields',
     'adminAuth',
     'corporateAccountDetails',
@@ -47,6 +50,7 @@ const persistConfig = {
     'corporateJourneyType',
     // 'session',
     'loginCredentials',
+    'transferFunds',
   ],
 };
 
@@ -59,6 +63,7 @@ const rootReducer = combineReducers({
   merchantDetails: merchantDetailsReducer,
   corporateAccountDetails: corporateAccountDetailsReducer,
   merchantIntegration: merchantIntegrationReducer,
+  fundsTransfer: fundsTransferReducer,
   fields: fieldReducer,
   adminAuth: adminAuthReducer,
   updateUser: updateUserReducer,
@@ -66,6 +71,7 @@ const rootReducer = combineReducers({
   corporateJourneyType: corporateJourneyTypeReducer,
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
+  transferFunds: transferFundsReducer,
 });
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);

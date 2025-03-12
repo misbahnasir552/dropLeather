@@ -5,7 +5,6 @@ export interface IViewProductQr {
 }
 
 export interface IQrPayments {
-  qrDateBetween: string;
   storeName: string;
   transactionPointNumber: string;
   storeId: string;
@@ -15,8 +14,8 @@ export interface IDynamicQR {
   productName: string;
   amount: string;
   productDetails: string;
-  // productNumber: string;
+  productNumber: string;
   storeId: string;
   // categoryCode: string;
-  expirationTime: number;
+  qrExpirationTime: number;
 }

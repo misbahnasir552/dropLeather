@@ -1,15 +1,18 @@
 import * as Yup from 'yup';
 
-import type { IReversalBulkBatch } from './interfaces';
+// import type { ISearchBulk } from '@/interfaces/interface';
 
-export const reversalBulkBatchInitialValues: IReversalBulkBatch = {
+export const searchBulkInitialValues: any = {
   batchId: '',
-  reversalDateBetween: '',
+  file: '',
+  fromDate: '',
+  toDate: '',
   status: '',
 };
-
-export const reversalBulkBatchSchema = Yup.object().shape({
+export const searchBulkSchema = Yup.object().shape({
   batchId: Yup.string(),
-  reversalDateBetween: Yup.string(),
+  file: Yup.string(),
+  fromDate: Yup.string(),
+  toDate: Yup.string(),
   status: Yup.string(),
 });

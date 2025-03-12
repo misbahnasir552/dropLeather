@@ -9,14 +9,14 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { resetTransferFundsFormData } from '@/redux/features/merchantSlice/transferFunds';
 import { generateMD5Hash } from '@/utils/helper';
 
 const OtpInputWithValidation = () => {
   const userData = useAppSelector((state) => state.auth);
-  const addBeneficiaryForm = useAppSelector((state) => state.addBeneficiary);
-  const [route, setRoute] = useState('');
-
+  const fundsTransferForm = useAppSelector((state) => state.transferFunds);
+  const dispatch = useAppDispatch();
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
   const [showModal, setShowModal] = useState(false);
@@ -30,64 +30,54 @@ const OtpInputWithValidation = () => {
       setIsLoading(true);
 
       const response = await apiClient.post('merchant/verifyotp', {
-        // rewuest: {
         managerMobile: userData?.managerMobile,
-        // email: userData?.email,
         numberOtp: smsOtp.join(''),
         emailOtp: emailOtp.join(''),
-        // },
       });
-      console.log(response);
 
       if (response?.data?.responseCode === '009') {
-        const additionalValues = {
-          ...addBeneficiaryForm,
-          managerMobile: userData?.managerMobile,
-        };
-        const mdRequest = {
-          ...additionalValues,
-          apisecret: userData?.apiSecret,
-        };
-        const md5Hash = generateMD5Hash(mdRequest);
-        const requestBody = { request: additionalValues, signature: md5Hash };
         try {
+          const additionalValues = {
+            transferAmount: fundsTransferForm?.transferAmount,
+            transferPurpose: fundsTransferForm?.transferPurpose,
+            beneficiaryAccountNumber:
+              fundsTransferForm?.selectedOption?.mobileNumber,
+            beneficiaryBank: fundsTransferForm?.selectedOption?.bankName,
+            managerMobile: userData?.managerMobile,
+          };
+
+          const mdRequest = {
+            ...additionalValues,
+            apisecret: userData?.apiSecret,
+          };
+          const md5Hash = generateMD5Hash(mdRequest);
+          const requestBody = {
+            request: additionalValues,
+            signature: md5Hash,
+          };
           setIsLoading(true);
           const response = await apiClient.post(
-            '/merchant/addBeneficiary',
+            `/merchant/fundsTransfer?email=${userData?.email}`,
             requestBody,
-            {
-              headers: { Authorization: `Bearer ${userData?.jwt}` },
-              params: { merchantEmail: userData?.email },
-            },
+            { headers: { Authorization: `Bearer ${userData?.jwt}` } },
           );
-          console.log('Added Successfully', response);
-          if (response?.data.responseCode === '009') {
-            setTitle('Beneficiary Added Successfully');
-            setDescription(response?.data.responseDescription);
-            setRoute(
-              '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
-            );
+          if (response?.data?.responseCode === '009') {
             setShowModal(true);
-            // router.push("")
+            setTitle(response?.data?.responseMessage);
+            setDescription(response?.data.responseDescription);
+            dispatch(resetTransferFundsFormData());
           } else {
-            setTitle(response?.data?.errorMessage);
-            setDescription(response?.data?.errorDescription);
-            setApierror(response?.data?.errorDescription);
+            setApierror(response.data.responseDescription);
           }
         } catch (e: any) {
-          setDescription(e?.message);
           setApierror(e?.message);
         } finally {
           setIsLoading(false);
         }
       } else {
-        setTitle(response?.data?.responseMessage);
-        setDescription(response?.data?.responseMessage);
         setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
-      console.log(e);
-      setDescription(e?.message);
       setApierror(e?.message);
     } finally {
       setIsLoading(false);
@@ -96,17 +86,16 @@ const OtpInputWithValidation = () => {
 
   return (
     <>
-      {isLoading && (
-        <BarLoader color="#21B25F" />
-        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
-      )}
+      {isLoading && <BarLoader color="#21B25F" />}
       {showModal && (
         <SuccessModal
           title={title}
           description={description}
           show={showModal}
           setShowModal={setShowModal}
-          routeName={route}
+          routeName={
+            '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/'
+          }
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">
@@ -134,7 +123,6 @@ const OtpInputWithValidation = () => {
             </div>
             <div className="flex justify-center">
               <Button
-                // routeName="/login"
                 label="Verify"
                 className="button-primary w-[270px] px-3 py-[19px]"
                 onClickHandler={handleVerify}

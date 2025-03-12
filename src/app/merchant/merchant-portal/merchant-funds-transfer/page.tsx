@@ -2,27 +2,29 @@
 
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { BarLoader } from 'react-spinners';
 
+// import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
 import Button from '@/components/UI/Button/PrimaryButton';
-import SuccessModal from '@/components/UI/Modal/CustomModal';
+// import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { otpSuccess } from '@/redux/features/merchantSlice/FundsTransfer';
 import { generateMD5Hash } from '@/utils/helper';
 
 function MerchantFundsTransfer() {
   const userData = useAppSelector((state) => state.auth);
   const router = useRouter();
+  const dispatch = useAppDispatch();
   const [otp, setOtp] = useState(new Array(6).fill(''));
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
 
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
+  // const [showModal, setShowModal] = useState(false);
+  // const [title, setTitle] = useState('');
   const [apierror, setApierror] = useState('');
-  const [description, setDescription] = useState('');
+  // const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const isOtpComplete = () => {
     // const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
@@ -42,21 +44,16 @@ function MerchantFundsTransfer() {
       });
       console.log(response);
       if (response.data.responseCode === '009') {
+        dispatch(otpSuccess({ isAuthenticated: true }));
         router.push(
           '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
         );
       } else {
-        setTitle('Failed');
-        setDescription(response.data.errorDescription);
-        // setShowModal(true);
         setApierror(response?.data?.errorDescription);
       }
     } catch (e: any) {
       console.log(e);
-      setTitle('Network Failed');
-      setDescription(e.message);
       setApierror(e?.message);
-      // setShowModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -83,23 +80,23 @@ function MerchantFundsTransfer() {
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
-      setShowModal(true);
+      // setShowModal(true);
       console.log(response);
 
       if (response.data.responseCode === '009') {
-        setTitle('Success');
-        setDescription(response.data.responseDescription);
-        setShowModal(true);
+        // setTitle('Success');
+        // setDescription(response.data.responseDescription);
+        // setShowModal(true);
       } else {
-        setTitle('Failure');
-        setDescription(response.data.errorDescription);
+        // setTitle('Failure');
+        // setDescription(response.data.errorDescription);
         setApierror(response?.data?.errorDescription);
         // setShowModal(true);
       }
     } catch (e: any) {
       console.log(e);
-      setTitle('Network Failure');
-      setDescription(e.message);
+      // setTitle('Network Failure');
+      // setDescription(e.message);
       setApierror(e?.message);
       // setShowModal(true);
     } finally {
@@ -114,19 +111,24 @@ function MerchantFundsTransfer() {
 
   return (
     <div className="flex flex-col gap-6 pt-9">
-      {isLoading && <BarLoader color="#21B25F" />}
-      <SuccessModal
+      {/* <SuccessModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/login"
-      />
+      // routeName="/login"
+      /> */}
       <HeaderWrapper
         heading="Enter One Time Password (OTP)"
-        description={`We have sent the OTP Verification number to email ${userData?.email} and mobile number +(${userData?.managerMobile})`}
+        description={`We have sent the OTP Verification number to email (${userData?.email}) and mobile number (${userData?.managerMobile})`}
       />
       <FormLayout>
+        {/* {isLoading ?
+          <div className='flex items-center gap-3 flex-col justify-between'>
+            <BarLoader color="#21B25F" />
+            <p>{`We are sending the OTP Verification number to email ${userData?.email} and mobile number +(${userData?.managerMobile})`}</p>
+          </div>
+          : */}
         <div className="flex flex-col items-center justify-center gap-12">
           <OTP
             otp={emailOtp}
@@ -152,6 +154,7 @@ function MerchantFundsTransfer() {
             onClickHandler={handleVerify}
           />
         </div>
+        {/* } */}
       </FormLayout>
     </div>
   );

@@ -11,8 +11,11 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import { useAppSelector } from '@/hooks/redux';
 import type { IViewProductQr } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 import {
   viewProductQrInitialValues,
@@ -20,13 +23,17 @@ import {
 } from '@/validations/merchant/merchant-portal/qr-payments/view-product-qr';
 
 function ViewProductQR() {
+  const userData = useAppSelector((state: any) => state.auth);
   const [qrFilteredData, setQrFilteredData] = useState([]);
   const [filteredParams, setFilteredParams] = useState();
   const [loading, setLoading] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [storeName, setStoreName] = useState('');
+  const [tillNum, setTillNum] = useState<string>('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -43,32 +50,36 @@ function ViewProductQR() {
         // setData(['Item 1', 'Item 2', 'Item 3']);
         setLoading(false);
       }, 2000);
-      const response = await apiClient.get('/merchantportal/searchDynamicQr', {
-        params: filteredParams,
-      });
-      console.log(response.data.dynamicQrResponse, 'RESPONSE');
-      const filteredValues = response?.data?.dynamicQrResponse.map(
+      const response = await apiClient.get(
+        `/merchantportal/searchDynamicQr?email=${userData?.email}`,
+        {
+          params: filteredParams,
+        },
+      );
+      const filteredValues = response?.data?.dynamicQrResponse?.map(
         ({
-          id,
+          // id,
+          isDeleted,
           qrFormatIndicator,
           branchCode,
-          qrCode,
+          // qrCode,
+          // tillNumber,
           createdAt,
           updatedAt,
           ...rest
         }: any) => rest,
       );
+
       setQrFilteredData(filteredValues);
       // setLoading(false);
     } catch (e: any) {
       setTitle('Network Failure!');
-      setDescription(e.message);
+      setDescription(e?.message);
       console.log('Error in fetching dynamic QR list', e);
     }
   };
   const exportToExcel = () => {
     if (!qrFilteredData) {
-      console.error('No data available to export');
       return;
     }
 
@@ -83,29 +94,30 @@ function ViewProductQR() {
     XLSX.writeFile(wb, 'products_qr.xlsx');
   };
   const handleDelete = async (id: any) => {
-    console.log('Delete row with id:', id);
     try {
       const response = await apiClient.get('/merchantportal/removeDynamicQr', {
-        params: { storeId: id },
+        params: { id },
       });
-      console.log(response, 'Deleted response');
       if (response?.data?.responseCode === '009') {
         setTitle('Deleted Successfully');
         setDescription(response?.data?.responseMessage);
+        setShowModal(true);
         fetchRecords();
       } else if (response?.data?.responseCode === '000') {
         setTitle('Failure!');
-        setDescription(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       } else {
         setTitle('Failure!');
-        setDescription(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       }
     } catch (e: any) {
       setTitle('Network Failure!');
-      setDescription(e.message);
-      console.log('Error in fetching dynamic QR list', e);
+      setDescription(e?.message);
+      setShowErrorModal(true);
     } finally {
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -114,7 +126,6 @@ function ViewProductQR() {
   }, [filteredParams]);
 
   const onSubmit = async (values: IViewProductQr) => {
-    console.log('i am VIEW PRODUCT QR ViewProductQR', values);
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -124,18 +135,97 @@ function ViewProductQR() {
     });
     setFilteredParams(filteredValues);
   };
+  const base64ToJpg = (base64String: any) => {
+    if (!base64String) {
+      return;
+    }
 
+    let byteString;
+
+    // Check if the Base64 string contains the header
+    if (base64String.includes('base64,')) {
+      // Ensure the Base64 string is correctly formatted and split
+      try {
+        [, byteString] = base64String.split(','); // Use array destructuring
+      } catch (error) {
+        console.error('Error decoding Base64 string:', error);
+        return;
+      }
+    } else {
+      try {
+        const cleanBase64String = base64String.replace(/[^A-Za-z0-9+/=]/g, '');
+        byteString = atob(cleanBase64String);
+        // byteString = atob(base64String); // Assume it’s already clean Base64
+      } catch (error) {
+        console.error('Error decoding Base64 string:', error);
+        return;
+      }
+    }
+
+    // Extract MIME type from the string if available
+    let mimeString = 'image/jpeg'; // Default to JPEG
+    if (base64String.includes('data:')) {
+      [mimeString] = base64String.split(',')[0].split(':')[1].split(';'); // Use array destructuring
+    }
+
+    // Convert the Base64 string to an ArrayBuffer and create a Blob
+    const arrayBuffer = new ArrayBuffer(byteString.length);
+    const uint8Array = new Uint8Array(arrayBuffer);
+
+    for (let i = 0; i < byteString.length; i += 1) {
+      // Replace ++ with i += 1
+      uint8Array[i] = byteString.charCodeAt(i);
+    }
+
+    const blob = new Blob([uint8Array], { type: mimeString });
+    const imageUrl = URL.createObjectURL(blob);
+
+    setImageUrl(imageUrl); // Update the state to display the image
+    setShowModal(true);
+  };
+  const handleView = (qrCode: string, name: string, tillId?: string) => {
+    setTillNum(tillId || '');
+    base64ToJpg(qrCode);
+    setStoreName(name);
+  };
+  const handleReset = (formik: any) => {
+    formik.resetForm();
+    fetchRecords();
+  };
   return (
     <div>
       <>
         <div className="flex flex-col gap-6">
-          <CustomModal
-            title={title}
-            description={description}
-            show={showModal}
-            setShowModal={setShowModal}
-            // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
-          />
+          {showModal && (
+            <CustomModal
+              title={title}
+              description={description}
+              show={showModal}
+              setShowModal={setShowModal}
+              // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+            />
+          )}
+          {showErrorModal && (
+            <ErrorModal
+              title={title}
+              description={description}
+              show={showErrorModal}
+              setShow={setShowErrorModal}
+              // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
+            />
+          )}
+          {imageUrl && showModal && (
+            <QRModal
+              title={storeName}
+              description="Your QR Code has been created. You can now share the below QR code to receive payments."
+              show={showModal}
+              setShowModal={setShowModal}
+              imageUrl={imageUrl} // Pass the QR code image URL here
+              tilNum={tillNum}
+              // amount={amount}
+              // expirationTime={expirationTime}
+            />
+          )}
           <HeaderWrapper
             heading="View Product QR"
             // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -181,7 +271,10 @@ function ViewProductQR() {
                     />
                     <Button
                       label="Reset"
-                      routeName="/login"
+                      onClickHandler={() => {
+                        handleReset(formik);
+                        setFilteredParams(undefined);
+                      }}
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
                     />
                   </div>
@@ -195,15 +288,16 @@ function ViewProductQR() {
             <BarLoader color="#21B25F" />
           ) : (
             <>
-              {qrFilteredData.length > 0 ? (
+              {qrFilteredData?.length > 0 ? (
                 <IconTable
                   tableHeadings={viewProductQrTableHeadings}
                   tableData={qrFilteredData}
-                  hasEdit
                   hasShare
                   hasDelete
                   // hasIcons
                   handleDelete={handleDelete}
+                  handleView={handleView}
+                  isDynamicQr={true}
                 />
               ) : (
                 <H4>No Records Found</H4>

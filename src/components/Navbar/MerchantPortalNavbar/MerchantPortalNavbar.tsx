@@ -6,9 +6,12 @@ import React, { useState } from 'react';
 import {
   getAccountSettingsDropDownMenu,
   getConfigurationDropDownMenu,
+  getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
+  getReversalModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
 import B2 from '@/components/UI/Body/B2';
+import { useAppSelector } from '@/hooks/redux';
 
 import ConfigurationDropDown from '../NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
 
@@ -17,6 +20,7 @@ const MerchantPortalNavbar = () => {
   const configurationList = getConfigurationDropDownMenu();
   const accountSettingsList = getAccountSettingsDropDownMenu();
   const qrList = getQRPaymentsDropDownMenu();
+  const otpSuccess = useAppSelector((state: any) => state.fundsTransfer);
 
   const merchantPortalNavMenu = [
     {
@@ -39,10 +43,10 @@ const MerchantPortalNavbar = () => {
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
-    {
-      title: 'Integration Guide',
-      link: '/merchant/merchant-portal/home',
-    },
+    // {
+    //   title: 'Integration Guide',
+    //   link: '/merchant/merchant-portal/home',
+    // },
     {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
@@ -55,11 +59,16 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Reversal Module',
-      link: '/merchant/merchant-portal/reversal-module',
+      // link: '/merchant/merchant-portal/reversal-module',
+      dropdown: getReversalModuleDropDownMenu(),
+      className: 'top-[20%]',
     },
     {
       title: 'Merchant Funds Transfer',
-      link: '/merchant/merchant-portal/merchant-funds-transfer',
+      dropdown: getMerchantFundsTransferDropDownMenu(
+        otpSuccess?.isAuthenticated,
+      ),
+      className: 'top-[20%]',
     },
   ];
   return (

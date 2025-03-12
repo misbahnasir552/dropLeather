@@ -48,8 +48,8 @@ const FundsTransferTable = ({ tableHeadings, tableData }: any) => {
                     >
                       {value === 'SUCCESS' ? (
                         <B3 textColor="text-primary-base">{'Success'}</B3>
-                      ) : value === 'FAILED' ? (
-                        <B3 textColor="text-danger-base">{value || 'N/A'}</B3>
+                      ) : value === 'FAILURE' ? (
+                        <B3 textColor="text-danger-base">{'Failed'}</B3>
                       ) : (
                         <B3 textColor="text-secondary-base">
                           {value || 'N/A'}

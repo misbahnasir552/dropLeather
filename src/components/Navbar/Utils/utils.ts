@@ -99,3 +99,31 @@ export const getQRPaymentsDropDownMenu = () => [
   },
   { title: 'View Product QR', link: 'qr-payments/view-product-qr' },
 ];
+
+export const getReversalModuleDropDownMenu = () => [
+  {
+    title: 'Reversal Report',
+    link: 'reversal-module/reversal-report',
+  },
+  {
+    title: 'Bulk Reversal Report',
+    link: 'reversal-module/bulk-reversal-report',
+  },
+];
+export const getMerchantFundsTransferDropDownMenu = (
+  isAuthenticated: boolean,
+) => [
+  {
+    title: 'Manage Funds Transfer',
+    link: isAuthenticated
+      ? '/merchant-funds-transfer/manage-funds-transfer'
+      : '/merchant-funds-transfer',
+    //  'merchant-funds-transfer/manage-funds-transfer',
+  },
+  {
+    title: 'Bulk Funds Transfer',
+    link: isAuthenticated
+      ? '/merchant-funds-transfer/bulk-funds-transfer-report'
+      : '/merchant-funds-transfer',
+  },
+];
