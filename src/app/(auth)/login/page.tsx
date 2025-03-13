@@ -90,6 +90,7 @@ const NewLogin = () => {
       const loginResponse: any = await apiClient.get('auth/sendLoginOtp', {
         params: {
           channel: 'merchant',
+          userType: 'merchant',
         },
         headers: {
           username: values.Username,
