@@ -14,35 +14,12 @@ import { setcorporateAccountDetailEmpty } from '@/redux/features/adminSlices/cor
 import { clearCredentials } from '@/redux/features/adminSlices/corporateSlices/loginCredentials';
 
 function AdminPortalNav() {
-  // const [clickedItem, setClickedItem] = useState(null);
   const [clickedItem, setClickedItem] = useState<string | null>(null);
-
   const adminData = useAppSelector((state: any) => state.adminAuth);
   const pathname = usePathname();
-  //  const pathAfterAdmin = pathname.replace('/admin', '');
-
-  // const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);
-  // const [capitalLetter, setCapitalLetter]=useState<string | null>('')
-
-  useEffect(() => {
-    console.log('hi');
-
-    // // Function to capitalize the first letter
-    // const capitalizeFirstLetter = (name: string) => {
-    //   if (!name) return '';
-    //   return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-    // };
-
-    // const name = adminData?.firstName || '';  // or adminData?.name
-    // const capitalized = capitalizeFirstLetter(name);
-
-    // setCapitalLetter(capitalized);  // Set the capitalized value in state
-  }, [adminData]);
-
   const dispatch = useAppDispatch();
   const router = useRouter();
   const adminJwt = adminData.jwt;
-  // const name=adminData.firstName
 
   const adminPortalNavMenu = [
     {
@@ -87,21 +64,6 @@ function AdminPortalNav() {
       link: '',
     },
   ];
-
-  // useEffect(() => {
-  //   const pathAfterAdmin = pathname.replace('/admin', '');
-  //   console.log(pathAfterAdmin, "pathAfterAdmin")
-  //   setClickedItem(pathAfterAdmin);
-  //   console.log(clickedItem, "clicked item")
-  // }, []);
-
-  // useEffect(() => {
-  //   const pathAfterAdmin = pathname.split('/admin/')[1]?.replace(/\/$/, '') || '';
-  //   // Splits the path at "/admin/", takes the part after it, and removes any trailing "/"
-  //   console.log(pathAfterAdmin, "pathAfterAdmin")
-  //   setClickedItem(pathAfterAdmin); // Update state
-  //   console.log(clickedItem, "clicked item")
-  // }, [pathname]);
 
   useEffect(() => {
     const pathAfterAdmin =

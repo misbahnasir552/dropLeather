@@ -5,14 +5,11 @@ import React from 'react';
 import B2 from '@/components/UI/Body/B2';
 import type { IMerchantNavDropdownProps } from '@/interfaces/interface';
 
-// import { getConfigurationDropDownMenu } from '../../Utils/utils';
-
 function ConfigurationDropDown({
   className,
   hoveredMenu,
   data,
 }: IMerchantNavDropdownProps) {
-  // const dropDownList = getConfigurationDropDownMenu();
   const pathname = usePathname();
 
   const handleClickItem = () => {

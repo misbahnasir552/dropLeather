@@ -76,9 +76,6 @@ function ViewProductQR() {
     }
   };
   const exportToExcel = () => {
-    // if (!response) return;
-
-    // if (!response || response.length === 0) {
     if (!qrFilteredData) {
       return;
     }

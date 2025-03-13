@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import type { ISearchBulk } from '@/interfaces/interface';
+// import type { ISearchBulk } from '@/interfaces/interface';
 
-export const searchBulkInitialValues: ISearchBulk = {
+export const searchBulkInitialValues: any = {
   batchId: '',
   file: '',
   fromDate: '',

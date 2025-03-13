@@ -59,26 +59,28 @@ const BusinessNature = () => {
       label: 'Partnership',
       endpoint: 'partnershipBusinessDetails',
     },
-    {
-      value: 'other',
-      label: 'Other',
-      endpoint: 'otherBusinessDetails',
-    },
-    {
-      value: 'trusts',
-      label: 'Trusts',
-      endpoint: 'nncBusinessDetails',
-    },
-    {
-      value: 'clubSocietiesAssociations',
-      label: 'Clubs, Societies, Associations',
-      endpoint: 'nncBusinessDetails',
-    },
-    {
-      value: 'ngoNpoCharities',
-      label: 'NGO, NPO, Charities',
-      endpoint: 'nncBusinessDetails',
-    },
+    // DO NOT REMOVE THIS CODE
+
+    // {
+    //   value: 'other',
+    //   label: 'Other',
+    //   endpoint: 'otherBusinessDetails',
+    // },
+    // {
+    //   value: 'trusts',
+    //   label: 'Trusts',
+    //   endpoint: 'nncBusinessDetails',
+    // },
+    // {
+    //   value: 'clubSocietiesAssociations',
+    //   label: 'Clubs, Societies, Associations',
+    //   endpoint: 'nncBusinessDetails',
+    // },
+    // {
+    //   value: 'ngoNpoCharities',
+    //   label: 'NGO, NPO, Charities',
+    //   endpoint: 'nncBusinessDetails',
+    // },
   ];
 
   useEffect(() => {
@@ -99,7 +101,7 @@ const BusinessNature = () => {
     };
   }, []);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: any, { setFieldValue }: any) => {
     console.log('BUSINESS NATURE LOGS', values);
     setIsSubmitting(true);
     const selectedOption = options.find(
@@ -109,7 +111,9 @@ const BusinessNature = () => {
     const businessType = selectedOption?.value;
     const businessEndpoint = selectedOption?.endpoint || '';
 
-    values.businessTypeNature = businessType;
+    // values.businessTypeNature = businessType;
+    setFieldValue('businessTypeNature', businessType);
+
     // values.businessEndpoint = businessEndpoint;
 
     // if (values.typeOfRequest) {
@@ -117,12 +121,14 @@ const BusinessNature = () => {
     dispatch(setBusinessEndpoint(businessEndpoint));
     dispatch(setMerchantEntity(values?.businessTypeNature));
     try {
-      console.log('<Merchant> USER ', userData);
+      console.log('<Merchant> USER ', userData.email, values.businessNature);
 
-      if (userData?.email && businessType) {
-        const response = await apiClient.get(
-          `/merchant/getPageInfo/${businessType}`,
-        );
+      if (userData?.email && values.businessNature) {
+        const response = await apiClient.get(`/merchant/getPageInfo`, {
+          params: {
+            natureOfBusiness: values.businessNature,
+          },
+        });
         console.log('FIELDS DATA Corporate: ', response);
         if (response?.data?.responseCode === '009') {
           dispatch(setPageData(response.data));

@@ -11,24 +11,16 @@ import { buildValidationSchema } from '@/components/Forms/validations/helper';
 import type { FieldsData } from '@/components/Forms/validations/types';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
-// import H6 from "@/components/UI/Headings/H6";
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
-// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
-// import FormWrapper from "@/components/UI/Wrappers/FormLayout";
 import { useAppSelector } from '@/hooks/redux';
-// import {
-//   // ActivityFormInfoSchema,
-//   GetActivityInfoDetails,
-// } from "@/validations/merchant/onBoarding/activityInfo";
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { ActivityFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
-// import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
@@ -45,7 +37,6 @@ const RequestRevision = () => {
   const [initialValuesState, setInitialValuesState] = useState<any>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
-  //  const [selectedCheckValue, setSelectedCheckValue] = useState();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -56,10 +47,8 @@ const RequestRevision = () => {
   const { apiSecret } = userData;
   const router = useRouter();
   const jwt = Cookies.get('jwt');
-  // const dispatch = useAppDispatch();
   console.log('selected value checkbox input: ', selectedCheckValue);
 
-  // const ActivityFormInfoInitialValues = GetActivityInfoDetails();
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
     console.log('Field DATA:::', fieldData);
@@ -269,8 +258,6 @@ const RequestRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
-        // routeName="/merchant/home"
       />
       <Formik
         initialValues={initialValuesState}

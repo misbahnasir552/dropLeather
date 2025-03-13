@@ -24,8 +24,6 @@ import { useAppSelector } from '@/hooks/redux';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
-  // const { apiSecret } = userData;
-
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
 

@@ -11,10 +11,8 @@ import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
-// import { adminLoginSuccess } from '@/redux/features/adminSlices/adminLoginSlice';
 import { loginSuccess } from '@/redux/features/authSlice';
 import { clearApplicants } from '@/redux/features/formSlices/onBoardingForms';
-// import { generateExpiryTime } from '@/utils/helper';
 
 const OtpLogin = () => {
   const [apierror, setApierror] = useState('');
@@ -63,22 +61,16 @@ const OtpLogin = () => {
         console.log('Login success. Redirecting...');
 
         Cookies.set('jwt', response?.data?.jwt, {
-          expires: 1, // 1 day
-          // secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === 'false',
+          expires: 1,
           path: '/',
-          // domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         });
         Cookies.set('browser_number', response?.data?.apiSecret, {
-          expires: 1, // 1 day
-          // secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === 'false',
+          expires: 1,
           path: '/',
-          // domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         });
         Cookies.set('username', response?.data?.email, {
-          expires: 1, // 1 day
-          // secure: process.env.NEXT_PUBLIC_COOKIE_SECURE === 'false',
+          expires: 1,
           path: '/',
-          // domain: process.env.NEXT_PUBLIC_COOKIE_DOMAIN,
         });
         dispatch(clearApplicants());
         router.push('/merchant/home');

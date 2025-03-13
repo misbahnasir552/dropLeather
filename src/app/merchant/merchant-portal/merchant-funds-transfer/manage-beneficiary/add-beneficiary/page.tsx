@@ -5,7 +5,6 @@ import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
-// import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
@@ -24,14 +23,12 @@ import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/add-beneficiary';
-// import ImageInput from '@/components/UI/Inputs/ImageInput';
 
 function AddBeneficiary() {
   // const router = useRouter();
   // const dispatch = useAppDispatch();
 
   const userData = useAppSelector((state: any) => state.auth);
-  // const { apiSecret } = userData;
   const [isChecked, setIsChecked] = useState(false);
   const [checkedError, setCheckedError] = useState<string>('');
   const [showModal, setShowModal] = useState(false);

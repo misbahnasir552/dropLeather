@@ -41,54 +41,6 @@ const Footer = () => {
         </B1>
       </div>
     </footer>
-    // <footer className="sm:max-md:px-[24px] flex w-full flex-col items-center justify-center gap-[60px] px-[150px] pb-[60px]">
-    //   <div className="h-[1px] w-full bg-border-light"></div>
-    //   <div className="sm:max-md:flex-col sm:max-md:gap-[36px] flex w-full items-start justify-between gap-[499px]">
-    //     <div className="flex flex-col items-start gap-[60px]">
-    //       <div>
-    //         <Image
-    //           src={Logo}
-    //           alt="logo"
-    //           height={36}
-    //           width={173}
-    //           className="sm:max-md:h-[24px] sm:max-md:w-[116px]  h-[36px] w-[173px]"
-    //         />
-    //       </div>
-    //       <div
-    //         id="Copyright"
-    //         className="sm:max-md:hidden sm:max-md:text-sm block text-base font-normal leading-tight text-secondary-600"
-    //       >
-    //         Copyright © 2023 Easypaisa | All Rights Reserved{' '}
-    //       </div>
-    //     </div>
-    //     <div className="sm:max-md:gap-4 flex flex-col items-start justify-between gap-6">
-    //       <div
-    //         id="FooterTitle"
-    //         className="sm:max-md:text-base sm:max-md:leading-5 text-2xl font-semibold text-secondary-base"
-    //       >
-    //         Contact us
-    //       </div>
-    //       <div className="flex flex-row items-start gap-3">
-    //         <Image src={emailIcon} alt="email" height={20} width={20} />
-    //         <div className=" sm:max-md:text-sm text-base font-normal leading-tight text-secondary-600">
-    //           businesspartnersupport@telenorbank.pk
-    //         </div>
-    //       </div>
-    //       <div className="flex flex-row items-center gap-3">
-    //         <Image src={phoneIcon} alt="phone" height={20} width={20} />
-    //         <div className=" sm:max-md:text-sm text-base font-normal leading-tight text-secondary-600">
-    //           62632 (10 AM to 5 PM)
-    //         </div>
-    //       </div>
-    //     </div>
-    //     <div
-    //       id="Copyright"
-    //       className="sm:max-md:block sm:max-md:text-sm hidden text-base font-normal leading-tight text-secondary-600"
-    //     >
-    //       Copyright © 2023 Easypaisa | All Rights Reserved{' '}
-    //     </div>
-    //   </div>
-    // </footer>
   );
 };
 

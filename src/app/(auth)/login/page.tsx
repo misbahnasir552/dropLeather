@@ -28,7 +28,7 @@ const NewLogin = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false); // Added state to track button state
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const session = null;
   const jwt = Cookies.get('jwt');
 
@@ -57,7 +57,6 @@ const NewLogin = () => {
       setTitle('Network Error');
       setDescription('Error fetching merchant details. Please try again!');
       setShowModal(true);
-      // router.push('/login');
     }
   };
 
@@ -111,8 +110,6 @@ const NewLogin = () => {
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         setApierror(loginResponse?.data?.responseMessage);
-        // setDescription(loginResponse?.data?.responseMessage);
-        // setShowModal(true);
       } else {
         console.log('LOGIN OTP FAIL ');
         setTitle(loginResponse?.data?.responseMessage);

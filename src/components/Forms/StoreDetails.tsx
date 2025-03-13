@@ -580,8 +580,18 @@ const AddStore = () => {
     try {
       const response = await apiClient.get('admin/getCategoryCode');
       if (response?.data?.responseCode === '009') {
-        setStoreCategories(response?.data?.categoryCode); // Store regions data
+        // setStoreCategories(response?.data?.categoryCode);
         // console.log("categories are", storeCategories)
+
+        const finalCategories = response.data.categoryCode.map(
+          (categoryCode: any) => ({
+            value: categoryCode.value,
+            label: categoryCode.label,
+          }),
+        );
+
+        setStoreCategories(finalCategories);
+        console.log('categories are', storeCategories);
       } else {
         setApierror(response?.data.responseDescription);
       }
@@ -645,7 +655,7 @@ const AddStore = () => {
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
-    console.log('values >>>', values, addStoresValues);
+    console.log('values >>>', values);
 
     // console.log('BUSINESS NATURE DATAAA:', businessNatureData);
     // if (addStoresValues.length < 1) {
@@ -658,13 +668,27 @@ const AddStore = () => {
     if (currentIndex !== -1) {
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
       const dynamicCurrentEndpoint = `${currentEndpoint}`;
+
+      const categoryValue = values.category;
+
+      console.log('category values is', categoryValue);
+
       const additionalValues = {
-        // ...values,
-        stores: [values],
-        // managerMobile: userData?.managerMobile,
-        // businessNature: businessNatureData?.businessTypeNature,
+        stores: [
+          {
+            ...values,
+            category: categoryValue, // Store the `value`, not the `label`
+          },
+        ],
         status: 'Completed',
       };
+      // const additionalValues = {
+      //   // ...values,
+      //   stores: [values],
+      //   // managerMobile: userData?.managerMobile,
+      //   // businessNature: businessNatureData?.businessTypeNature,
+      //   status: 'Completed',
+      // };
       console.log('ADDITIONAL VALUES', additionalValues);
 
       const mdRequest = {

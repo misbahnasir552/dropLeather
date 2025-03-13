@@ -1,6 +1,5 @@
 'use client';
 
-// import axios from 'axios';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -11,9 +10,7 @@ import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
-// import { resetFormData } from '@/redux/features/signUpSlice';
 import { generateMD5Hash } from '@/utils/helper';
-// import apiClient from "@/api/apiClient";
 
 const OtpInputWithValidation = () => {
   const userData = useAppSelector((state) => state.auth);
@@ -25,35 +22,6 @@ const OtpInputWithValidation = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
-
-  // const fetchOTP = async () => {
-  //   try {
-  //     const additionalValues = {
-  //       managerMobile: userData?.managerMobile,
-  //       email: userData?.email,
-  //     };
-  //     const mdRequest = {
-  //       ...additionalValues,
-  //       apisecret: userData?.apiSecret,
-  //     };
-  //     const md5Hash = generateMD5Hash(mdRequest);
-  //     const requestBody = { request: additionalValues, signature: md5Hash };
-  //     const response = await apiClient.post(
-  //       'merchant/sendOtpMerchant',
-  //       requestBody,
-  //       {
-  //         headers: { Authorization: `Bearer ${userData?.jwt}` },
-  //       },
-  //     );
-  //     console.log(response, 'FETCH OTP RESPONSE');
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchOTP();
-  // }, []);
 
   const handleVerify = async () => {
     try {
@@ -107,25 +75,6 @@ const OtpInputWithValidation = () => {
         } finally {
           setIsLoading(false);
         }
-        // try {
-        //   const res = await apiClient.post(
-        //     '/merchant/onboard/register',
-        //     signUpForm,
-        //   );
-
-        //   if (res.data.responseCode == '009') {
-        //     setTitle(res.data.responseDescription);
-        //     setDescription(
-        //       'Congratulations! You have signed up successfully for the Sandbox account.',
-        //     );
-        //     dispatch(resetFormData);
-        //   } else if (res.data.responseCode == '000') {
-        //     setTitle(res.data.responseCode);
-        //     setDescription(res.data.responseDescription);
-        //   }
-        // } catch (e) {
-        //   console.log(e);
-        // }
       } else {
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseMessage);

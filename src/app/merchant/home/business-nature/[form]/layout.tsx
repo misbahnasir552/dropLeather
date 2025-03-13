@@ -2,11 +2,8 @@
 
 import React from 'react';
 
-// import BreadCrumb from '@/components/UI/BreadCrumb/BreadCrumb';
 import CorporateTimeline from '@/components/Timeline/CorporateTimeline/Timeline';
-// import Navbar from '@/components/Navbar/Navbar';
 import Timeline from '@/components/Timeline/Timeline';
-// import H7 from '@/components/UI/Headings/H7';
 import { useAppSelector } from '@/hooks/redux';
 
 const Layout = ({ children }: any) => {
@@ -14,17 +11,12 @@ const Layout = ({ children }: any) => {
 
   return (
     <>
-      {/* <Navbar /> */}
       <div className="flex flex-col gap-6 pb-[120px]">
-        {/* <BreadCrumb /> */}
         {userData?.userType == 'Corporate' ? (
           <CorporateTimeline />
         ) : (
           <Timeline />
         )}
-
-        {/* <H7 textColor="text-secondary-600">Ticket ID: {userData?.ticketId}</H7> */}
-        {/* <Timeline /> */}
         {children}
       </div>
     </>

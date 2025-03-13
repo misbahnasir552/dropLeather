@@ -14,8 +14,6 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { resetFormData } from '@/redux/features/signUpSlice';
 import { replaceCountryCodeWithZero } from '@/utils/helper';
 
-// import apiClient from "@/api/apiClient";
-
 const OtpInputWithValidation = () => {
   const [apierror, setApierror] = useState('');
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
@@ -26,7 +24,6 @@ const OtpInputWithValidation = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [route, setRoute] = useState('');
-  // const router=useRouter();
   const signUpForm = useAppSelector((state: any) => state.signup);
   const dispatch = useAppDispatch();
   const option = useSearchParams().get('option');
@@ -49,8 +46,6 @@ const OtpInputWithValidation = () => {
           numberOtp: smsOtp.join(''),
           emailOtp: emailOtp.join(''),
         });
-        // setShowModal(true);
-        console.log(response);
         // merchant verify otp success
         if (response?.data?.responseCode === '009') {
           try {
@@ -73,12 +68,7 @@ const OtpInputWithValidation = () => {
               setRoute('/login');
             } else if (res?.data?.responseCode === '000') {
               // merchant register failure
-              // setShowModal(true);
               setApierror(response?.data?.responseMessage);
-              // setTitle();
-              // setDescription(res.data.responseDescription);
-              // router.push('/sign-up/personal-information/')
-              // setRoute('/sign-up/personal-information/');
             } else {
               setShowModal(true);
               setTitle('Failure!');
@@ -98,7 +88,6 @@ const OtpInputWithValidation = () => {
           setTitle('Failure!');
           setDescription(response.data.errorDescription);
           setShowModal(true);
-          // setRoute('/sign-up/personal-information/otp/');
         }
       } catch (e) {
         // merchant verify otp request failure
@@ -113,16 +102,12 @@ const OtpInputWithValidation = () => {
       setDescription(e.message);
     } finally {
       setIsLoading(false);
-      // setShowModal(true);
     }
   };
 
   return (
     <>
-      {isLoading && (
-        <BarLoader color="#21B25F" />
-        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
-      )}
+      {isLoading && <BarLoader color="#21B25F" />}
       <SuccessModal
         title={title}
         description={description}
@@ -148,7 +133,6 @@ const OtpInputWithValidation = () => {
                 )})`
               : ''
           }`}
-          // option === 'corporatePortal
           show={true}
         />
         <FormLayout>
@@ -172,7 +156,6 @@ const OtpInputWithValidation = () => {
             </div>
             <div className="flex justify-center">
               <Button
-                // routeName="/login"
                 isDisabled={!isOtpComplete() || isLoading}
                 label="Verify"
                 className="button-primary w-[270px] px-3 py-[19px]"

@@ -1,13 +1,11 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-// import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-// import H2 from '@/components/UI/Headings/H2';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import ErrorModal from '@/components/UI/Modal/ErrorModal';
@@ -22,9 +20,6 @@ import {
   dynamicQRSchema,
 } from '@/validations/merchant/merchant-portal/qr-payments/dynamic-qr';
 import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
-
-// import DropdownNew from '@/components/UI/Inputs/DropDownNew';
-// import { categories } from '../utils/utils';
 
 function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
@@ -125,10 +120,6 @@ function AddDynamicQR() {
     }
   }, [userData?.email]);
 
-  // useEffect(() => {
-  //   base64ToJpg(base64String);
-  //   console.log('Image URL', imageUrl);
-  // }, []);
   const onSubmit = async (values: IDynamicQR) => {
     console.log('AddDynamicQR', values);
     const {
@@ -138,10 +129,6 @@ function AddDynamicQR() {
     } = values;
 
     const outlet: any = stores.find((store: any) => store.label === storeId);
-    // const categoryNum: any = categories.find(
-    //   (category: any) => category.label === categoryCode,
-    // );
-
     const additionalValues = {
       ...rest,
       storeId: outlet.value,
@@ -241,14 +228,6 @@ function AddDynamicQR() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
-                {/* <DropdownInput
-                  label="Category"
-                  name="categoryCode"
-                  formik={formik}
-                  error={formik.errors.categoryCode}
-                  touched={formik.touched.categoryCode}
-                  options={categories}
-                /> */}
                 <Input
                   asterik
                   label="Product Name"
@@ -332,7 +311,7 @@ function AddDynamicQR() {
           description="Your custom QR Code has been created. You can now share the below QR code to receive money."
           show={showModal}
           setShowModal={setShowModal}
-          imageUrl={imageUrl} // Pass the QR code image URL here
+          imageUrl={imageUrl}
           amount={amount}
           expirationTime={qrExpirationTime}
           tilNum={tillNum}

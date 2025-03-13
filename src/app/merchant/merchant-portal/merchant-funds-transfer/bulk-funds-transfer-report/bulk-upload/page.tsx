@@ -7,9 +7,7 @@ import apiClient from '@/api/apiClient';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
-// import FileInput from '@/components/UI/Inputs/FileInput';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
-// import Input from '@/components/UI/Inputs/Input';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -43,7 +41,7 @@ function BulkFileUpload() {
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data', // Make sure to set the correct content type for FormData
+              'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${userData?.jwt}`,
             },
           },

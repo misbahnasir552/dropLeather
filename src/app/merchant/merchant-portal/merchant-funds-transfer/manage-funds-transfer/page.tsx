@@ -118,29 +118,7 @@ function ManageFundsTransfer() {
     // 'Transaction ID',
     // 'Channel',
   ];
-  // const onSubmit = (values: IManageFundsTransfer) => {
-  //   console.log(values);
-  //   // Using map to process records
-  //   const mappedRecords = allRecords.map(record => {
-  //     const matchesAccountType = values.accountType ? record.accountType === values.accountType : true;
-  //     const matchesMsisdn = values.msisdn ? record.msisdn.includes(values.msisdn) : true;
-  //     const matchesBeneficiaryName = values.beneficiaryName ? record.beneficiaryName.includes(values.beneficiaryName) : true;
-  //     const matchesPaymentStatus = values.paymentStatus ? record.paymentStatus === values.paymentStatus : true;
-  //     const matchesDate = values.dateBetween ? record.transferDate >= values.dateBetween[0] && record.transferDate <= values.dateBetween[1] : true;
 
-  //     // Only return records that match all conditions
-  //     if (matchesAccountType && matchesMsisdn && matchesBeneficiaryName && matchesPaymentStatus && matchesDate) {
-  //       // Return the record without msisdn and accountType
-  //       const { msisdn, accountType, ...filteredRecord } = record;
-  //       return filteredRecord;
-  //     }
-  //     return null; // Return null for records that don't match
-  //   }).filter(record => record !== null); // Remove null entries
-
-  //   // Update filtered data for the table
-  //   setBeneficiaryFilteredData(mappedRecords);
-
-  // };
   const onSubmit = (values: IManageFundsTransfer) => {
     const filteredValues: any = {};
 
@@ -166,7 +144,6 @@ function ManageFundsTransfer() {
         const matchesPaymentStatus = values.status
           ? record.paymentStatus === values.status
           : true;
-        // const matchesDate = values.dateBetween ? record.transferDate >= values.dateBetween[0] && record.transferDate <= values.dateBetween[1] : true;
         const matchesTransferAmount = values.transferAmount
           ? record.transferAmount === values.transferAmount
           : true; // Filter for transferAmount
