@@ -7,6 +7,8 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
+// import H7 from '@/components/UI/Headings/H7';
+// import CheckboxInput from '@/components/UI/Inputs/CheckboxRadioInput';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -14,6 +16,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import {
   setBusinessEndpoint,
+  // setApplicants,
+  // setApplicationForm,
   setBusinessNature,
   setMerchantEntity,
 } from '@/redux/features/formSlices/onBoardingForms';
@@ -78,7 +82,14 @@ const BusinessNature = () => {
   ];
 
   useEffect(() => {
-    const handleResize = () => {};
+    // fetchData();
+
+    const handleResize = () => {
+      // setWindowSize({
+      //   width: window.innerWidth,
+      //   height: window.innerHeight,
+      // });
+    };
 
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -88,7 +99,7 @@ const BusinessNature = () => {
     };
   }, []);
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: any, { setFieldValue }: any) => {
     console.log('BUSINESS NATURE LOGS', values);
     setIsSubmitting(true);
     const selectedOption = options.find(
@@ -98,7 +109,9 @@ const BusinessNature = () => {
     const businessType = selectedOption?.value;
     const businessEndpoint = selectedOption?.endpoint || '';
 
-    values.businessTypeNature = businessType;
+    // values.businessTypeNature = businessType;
+    setFieldValue('businessTypeNature', businessType);
+
     // values.businessEndpoint = businessEndpoint;
 
     // if (values.typeOfRequest) {
@@ -106,12 +119,14 @@ const BusinessNature = () => {
     dispatch(setBusinessEndpoint(businessEndpoint));
     dispatch(setMerchantEntity(values?.businessTypeNature));
     try {
-      console.log('<Merchant> USER ', userData);
+      console.log('<Merchant> USER ', userData.email, values.businessNature);
 
-      if (userData?.email && businessType) {
-        const response = await apiClient.get(
-          `/merchant/getPageInfo/${businessType}`,
-        );
+      if (userData?.email && values.businessNature) {
+        const response = await apiClient.get(`/merchant/getPageInfo`, {
+          params: {
+            natureOfBusiness: values.businessNature,
+          },
+        });
         console.log('FIELDS DATA Corporate: ', response);
         if (response?.data?.responseCode === '009') {
           dispatch(setPageData(response.data));
@@ -143,6 +158,7 @@ const BusinessNature = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        // routeName="/merchant/home/business-nature/application-form"
       />
       <Formik
         initialValues={businessNatureInitialValues}
