@@ -18,8 +18,6 @@ import { generateMD5Hash } from '@/utils/helper';
 const OtpInputWithValidation = () => {
   const userData = useAppSelector((state) => state.auth);
   const addBeneficiaryForm = useAppSelector((state) => state.addBeneficiary);
-  const [route, setRoute] = useState('');
-
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
   const [showModal, setShowModal] = useState(false);
@@ -96,9 +94,6 @@ const OtpInputWithValidation = () => {
           if (response?.data.responseCode === '009') {
             setTitle('Beneficiary Added Successfully');
             setDescription(response?.data.responseDescription);
-            setRoute(
-              '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
-            );
             setShowModal(true);
             // router.push("")
           } else {
@@ -157,7 +152,10 @@ const OtpInputWithValidation = () => {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
-          routeName={route}
+          routeName={
+            '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/'
+          }
+          isVisible={true}
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">

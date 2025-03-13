@@ -8,7 +8,7 @@ export const dynamicQRInitialValues: IDynamicQR = {
   productDetails: '',
   productNumber: '',
   storeId: '',
-  qrExpirationTime: 0,
+  qrExpirationTime: '',
   // categoryCode: '',
 };
 

@@ -302,12 +302,11 @@ function ManageFundsTransfer() {
                 <Button
                   label={`Funds Transfer`}
                   routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/funds-transfer"
-                  className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
+                  className="button-secondary h-9 w-[160px] px-3 py-[19px] text-sm"
                 />
                 <Button
                   label="Manage Beneficiary"
                   routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
-                  type="submit"
                   className="button-secondary h-9 w-[160px] px-3 py-[19px] text-sm"
                 />
                 {/* <Button

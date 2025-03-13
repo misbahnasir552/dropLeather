@@ -140,7 +140,7 @@ function StaticQr() {
   const qrPaymentsTableHeadings: string[] = [
     'Store ID',
     'Store Name',
-    'Website URL',
+    // 'Website URL',
     'Payment Enabled',
     'Status',
     'Transaction Point Number',

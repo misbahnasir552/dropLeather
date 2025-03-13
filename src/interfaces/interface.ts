@@ -101,6 +101,7 @@ export interface IInput {
   onBlur?: any;
   formik?: FormikProps<any>;
   placeholder?: any;
+  onKeyDown?: (event: any) => void;
 }
 
 export interface IComment {
@@ -157,6 +158,7 @@ export interface ICustomModalProps {
   setShowModal: (value: boolean) => void;
   routeName?: string;
   image?: any;
+  isVisible?: boolean;
 }
 
 // export  interface ICustomModalHookProps{

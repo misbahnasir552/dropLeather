@@ -39,7 +39,7 @@ function AddBeneficiary() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
-
+  const [submitError, setSubmitError] = useState('');
   const handleCheckboxChange = () => {
     setCheckedError('');
     setIsChecked(!isChecked);
@@ -82,6 +82,7 @@ function AddBeneficiary() {
   //     setIsLoading(false);
   //   }
   // };
+  console.log('userData', userData);
 
   const handleFetchTitle = async (formik: any) => {
     console.log('FETCH TITLEeeee');
@@ -129,6 +130,8 @@ function AddBeneficiary() {
 
   const onSubmit = async (values: any) => {
     console.log('Add beneficiary values', values);
+    setApierror('');
+    setSubmitError('');
     if (!isChecked) {
       setCheckedError('Select Terms & Conditions to continue');
     } else {
@@ -160,20 +163,17 @@ function AddBeneficiary() {
         console.log('Added Successfully', response);
         if (response?.data.responseCode === '009') {
           setTitle('Beneficiary Added Successfully');
-          setDescription(response?.data.responseDescription);
+          setDescription(response?.data?.responseDescription);
           // setRoute(
           //   '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
           // );
           setShowModal(true);
           // router.push("")
         } else {
-          setTitle(response?.data?.errorMessage);
-          setDescription(response?.data?.errorDescription);
-          setApierror(response?.data?.errorDescription);
+          setSubmitError(response?.data?.responseMessage);
         }
       } catch (e: any) {
-        setDescription(e?.message);
-        setApierror(e?.message);
+        setSubmitError(e?.message);
       } finally {
         setIsLoading(false);
       }
@@ -226,6 +226,7 @@ function AddBeneficiary() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        isVisible={true}
         routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
       />
 
@@ -343,6 +344,9 @@ function AddBeneficiary() {
                 <BarLoader color="#21B25F" />
               </div>
             )} */}
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {submitError}
+            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"

@@ -17,6 +17,7 @@ const CustomModal = ({
   setShowModal,
   routeName,
   image,
+  isVisible,
 }: ICustomModalProps) => {
   const router = useRouter();
   const handleClose = () => {
@@ -49,13 +50,15 @@ const CustomModal = ({
       {show ? (
         <div
           className="overlay fixed left-0 top-0 z-50 flex h-full w-full  items-center justify-center bg-secondary-base/75 sm:px-6"
-          onClick={handleOverlayClick}
+          onClick={isVisible ? () => {} : handleOverlayClick}
         >
           <div className="flex w-[600px] flex-col gap-12 rounded-2xl border-[1px] border-border-dark bg-screen-white p-5">
             <div className="flex flex-col">
-              <div className="flex justify-end" onClick={handleClose}>
-                <Image src={closeIcon} alt="close-icon" />
-              </div>
+              {isVisible ? null : (
+                <div className="flex justify-end" onClick={handleClose}>
+                  <Image src={closeIcon} alt="close-icon" />
+                </div>
+              )}
               <div className="md:px-[78px] md:py-[40px]">
                 <div className="flex flex-col gap-12">
                   <div>

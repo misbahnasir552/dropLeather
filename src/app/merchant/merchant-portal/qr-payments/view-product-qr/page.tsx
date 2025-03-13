@@ -46,10 +46,6 @@ function ViewProductQR() {
   const fetchRecords = async () => {
     try {
       setLoading(true);
-      setTimeout(() => {
-        // setData(['Item 1', 'Item 2', 'Item 3']);
-        setLoading(false);
-      }, 2000);
       const response = await apiClient.get(
         `/merchantportal/searchDynamicQr?email=${userData?.email}`,
         {
@@ -71,10 +67,11 @@ function ViewProductQR() {
       );
 
       setQrFilteredData(filteredValues);
-      // setLoading(false);
+      setLoading(false);
     } catch (e: any) {
       setTitle('Network Failure!');
       setDescription(e?.message);
+      setLoading(false);
       console.log('Error in fetching dynamic QR list', e);
     }
   };

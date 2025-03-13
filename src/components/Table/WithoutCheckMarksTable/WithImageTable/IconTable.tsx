@@ -77,7 +77,14 @@ const IconTable: React.FC<IconTableProps> = ({
         <tbody>
           {tableData?.map(
             (
-              { id, staticQRCode, qrCode, tillNumber, ...tableItem },
+              {
+                id,
+                staticQRCode,
+                qrCode,
+                webSiteUrl,
+                tillNumber,
+                ...tableItem
+              },
               rowIndex,
             ) => (
               <tr
