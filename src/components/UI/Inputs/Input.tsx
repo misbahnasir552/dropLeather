@@ -28,6 +28,7 @@ const Input = ({
   isDisabled = false,
   // value,
   placeholder = '',
+  onKeyDown,
 }: IInput) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [showPlaceholder, setShowPlaceholder] = useState(false);
@@ -62,6 +63,7 @@ const Input = ({
           disabled={isDisabled}
           onFocus={() => setShowPlaceholder(true)}
           onBlur={() => setShowPlaceholder(false)}
+          onKeyDown={onKeyDown}
         />
         {/* <label
           htmlFor={label}

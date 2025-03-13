@@ -36,7 +36,7 @@ function AddBeneficiary() {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
-
+  const [submitError, setSubmitError] = useState('');
   const handleCheckboxChange = () => {
     setCheckedError('');
     setIsChecked(!isChecked);
@@ -79,6 +79,7 @@ function AddBeneficiary() {
   //     setIsLoading(false);
   //   }
   // };
+  console.log('userData', userData);
 
   const handleFetchTitle = async (formik: any) => {
     console.log('FETCH TITLEeeee');
@@ -126,11 +127,88 @@ function AddBeneficiary() {
 
   const onSubmit = async (values: any) => {
     console.log('Add beneficiary values', values);
-
-    // dispatch(addBeneficiaryData(values));
-    // const res = await fetchOTP();
-    // if (res) {
-    //   router.push('otp');
+    setApierror('');
+    setSubmitError('');
+    if (!isChecked) {
+      setCheckedError('Select Terms & Conditions to continue');
+    } else {
+      // dispatch(addBeneficiaryData(values));
+      // const res = await fetchOTP();
+      // if (res) {
+      //   router.push('otp');
+      // }
+      const additionalValues = {
+        ...values,
+        managerMobile: userData?.managerMobile,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = { request: additionalValues, signature: md5Hash };
+      try {
+        setIsLoading(true);
+        const response = await apiClient.post(
+          '/merchant/addBeneficiary',
+          requestBody,
+          {
+            headers: { Authorization: `Bearer ${userData?.jwt}` },
+            params: { merchantEmail: userData?.email },
+          },
+        );
+        console.log('Added Successfully', response);
+        if (response?.data.responseCode === '009') {
+          setTitle('Beneficiary Added Successfully');
+          setDescription(response?.data?.responseDescription);
+          // setRoute(
+          //   '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
+          // );
+          setShowModal(true);
+          // router.push("")
+        } else {
+          setSubmitError(response?.data?.responseMessage);
+        }
+      } catch (e: any) {
+        setSubmitError(e?.message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    // const additionalValues = {
+    //   ...values,
+    //   managerMobile: userData?.managerMobile,
+    // };
+    // const mdRequest = {
+    //   ...additionalValues,
+    //   apisecret: apiSecret,
+    // };
+    // const md5Hash = generateMD5Hash(mdRequest);
+    // const requestBody = { request: additionalValues, signature: md5Hash };
+    // try {
+    //   setIsLoading(true);
+    //   const response = await apiClient.post(
+    //     '/merchant/addBeneficiary',
+    //     requestBody,
+    //     {
+    //       headers: { Authorization: `Bearer ${userData?.jwt}` },
+    //       params: { merchantEmail: userData?.email },
+    //     },
+    //   );
+    //   console.log('Added Successfully', response);
+    //   if (response?.data.responseCode === '00') {
+    //     setTitle(response?.data.responseCode);
+    //     setDescription(response?.data.responseDescription);
+    //   } else {
+    //     setTitle(response.data.errorDescription);
+    //     setDescription(response.data.errorDescription);
+    //   }
+    // } catch (e: any) {
+    //   setTitle(e.code);
+    //   setDescription(e.message);
+    // } finally {
+    //   setIsLoading(false);
+    //   setShowModal(true);
     // }
   };
   const handleTermsAndConditionsChange = () => {
@@ -145,6 +223,7 @@ function AddBeneficiary() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
+        isVisible={true}
         routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
       />
 
@@ -262,6 +341,9 @@ function AddBeneficiary() {
                 <BarLoader color="#21B25F" />
               </div>
             )} */}
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {submitError}
+            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"

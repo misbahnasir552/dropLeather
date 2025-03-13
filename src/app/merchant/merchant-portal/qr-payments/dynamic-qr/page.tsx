@@ -152,7 +152,7 @@ function AddDynamicQR() {
       );
       if (response?.data.responseCode === '009') {
         setAmount(values.amount);
-        setQrExpirationTime(values?.qrExpirationTime);
+        setQrExpirationTime(Number(values?.qrExpirationTime));
         base64ToJpg(response?.data.qrCode);
         setTillNum(response?.data?.transactionPointNum);
         // setTitle("Success");
@@ -175,6 +175,25 @@ function AddDynamicQR() {
       setImageUrl('');
       setShowErrorModal(true);
       // setShowModal(true);
+    }
+  };
+
+  const handleKeyDown = (event: any) => {
+    // Allow: backspace, delete, tab, escape, enter, and arrow keys
+    if (
+      event.key === 'Backspace' ||
+      event.key === 'Delete' ||
+      event.key === 'Tab' ||
+      event.key === 'Escape' ||
+      event.key === 'Enter' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'ArrowRight'
+    ) {
+      return; // Allow these keys
+    }
+    // Ensure that it is a number and stop the keypress
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
     }
   };
   return (
@@ -229,9 +248,11 @@ function AddDynamicQR() {
                   asterik
                   label="Expiration Time (in seconds)"
                   name="qrExpirationTime"
-                  type="number"
+                  type="text"
+                  placeholder={'0'}
                   error={formik.errors.qrExpirationTime}
                   touched={formik.touched.qrExpirationTime}
+                  onKeyDown={handleKeyDown}
                 />
                 <Input
                   asterik
@@ -278,7 +299,6 @@ function AddDynamicQR() {
               <Button
                 label="Save"
                 type="submit"
-                // isDisabled={formik.isValid}
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
             </div>

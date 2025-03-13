@@ -148,7 +148,28 @@ function FundsTranfer() {
     //   // setShowModal(true);
     // }
   };
-
+  const tranferPurposeList = [
+    {
+      label: 'Supplier/Vendor Payment',
+      value: 'Supplier/Vendor Payment',
+    },
+    {
+      label: 'Business',
+      value: 'Business',
+    },
+    {
+      label: 'Family Support',
+      value: 'Family Support',
+    },
+    {
+      label: 'Investment',
+      value: 'Investment',
+    },
+    {
+      label: 'Personal Expense',
+      value: 'Personal Expense',
+    },
+  ];
   return (
     <div className="flex flex-col gap-6">
       <SuccessModal
@@ -229,12 +250,20 @@ function FundsTranfer() {
                   error={formik.errors.transferAmount}
                   touched={formik.touched.transferAmount}
                 />
-                <Input
+                {/* <Input
                   label="Transfer Purpose"
                   name={'transferPurpose'}
                   type="text"
                   error={formik.errors.transferPurpose}
                   touched={formik.touched.transferPurpose}
+                /> */}
+                <DropdownInput
+                  label="Transfer Purpose"
+                  name={'transferPurpose'}
+                  error={formik.errors.transferPurpose}
+                  touched={formik.touched.transferPurpose}
+                  formik={formik}
+                  options={tranferPurposeList}
                 />
               </div>
             </FormLayout>

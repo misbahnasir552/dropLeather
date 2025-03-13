@@ -65,6 +65,7 @@ function BulkFundsTransferReport() {
     'Batch ID',
     'Batch File Name',
     'Bulk Upload Date',
+    'Detail',
     'Status',
   ];
 
@@ -74,6 +75,7 @@ function BulkFundsTransferReport() {
       batchId: item?.batchId,
       fileName: item?.fileName,
       batchUploadDate: item?.createdAt,
+      detail: item?.responseDescription || 'N/A',
       status: item.status,
     }));
   };
@@ -239,7 +241,6 @@ function BulkFundsTransferReport() {
                     <Button
                       label="Bulk Transfer"
                       routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
-                      type="submit"
                       className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                   </div>
