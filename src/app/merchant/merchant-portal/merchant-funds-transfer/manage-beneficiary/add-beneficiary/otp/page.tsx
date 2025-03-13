@@ -60,7 +60,7 @@ const OtpInputWithValidation = () => {
           );
           console.log('Added Successfully', response);
           if (response?.data.responseCode === '009') {
-            setTitle('Beneficiary Added Successfully');
+            setTitle(response?.data?.responseMessage);
             setDescription(response?.data.responseDescription);
             setShowModal(true);
             // router.push("")
