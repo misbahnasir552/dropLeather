@@ -58,10 +58,7 @@ function page() {
     <div>
       <>
         <div className="flex flex-col gap-6">
-          <HeaderWrapper
-            heading="Reversal Bulk Batch"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-          />
+          <HeaderWrapper heading="Reversal Bulk Batch" />
           <MerchantFormLayout>
             <Formik
               initialValues={searchBulkInitialValues}
