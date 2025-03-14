@@ -127,11 +127,11 @@ function AddDynamicQR() {
       // categoryCode,
       ...rest
     } = values;
+    const outlet: any = stores?.find((store: any) => store?.value === storeId);
 
-    const outlet: any = stores.find((store: any) => store.label === storeId);
     const additionalValues = {
       ...rest,
-      storeId: outlet.value,
+      storeId: outlet?.value,
       // categoryCode: categoryNum.categoryCode,
       managerMobile: userData?.managerMobile,
     };
@@ -150,7 +150,7 @@ function AddDynamicQR() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      if (response?.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         setAmount(values.amount);
         setQrExpirationTime(Number(values?.qrExpirationTime));
         base64ToJpg(response?.data.qrCode);

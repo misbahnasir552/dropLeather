@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import type { IFundsTransfer } from './interfaces';
 
 export const fundsTransferInitialValues: IFundsTransfer = {
-  // transferFrom: '',
+  transferFrom: '',
   // beneficiaryName: '',
   beneficiaryAccountNumber: '',
   beneficiaryBank: '',
@@ -24,5 +24,5 @@ export const fundsTransferSchema = Yup.object().shape({
     .positive('Amount must be positive.') // Ensures the value is positive
     .min(1, 'Minimum amount is 1.') // Ensures minimum value
     .max(1000000, 'Maximum amount is 1000000.'), // Ensures maximum value
-  transferPurpose: Yup.string(),
+  transferPurpose: Yup.string().required('Please Select Transfer Purpose.'),
 });
