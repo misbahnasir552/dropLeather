@@ -25,7 +25,6 @@ import {
 function FundsTranfer() {
   const userData = useAppSelector((state: any) => state.auth);
   console.log('userData', userData);
-  
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
@@ -190,9 +189,13 @@ function FundsTranfer() {
       >
         {(formik) => {
           // useEffect to set values after the component mounts
+          // eslint-disable-next-line react-hooks/rules-of-hooks
           useEffect(() => {
             if (userData) {
-              formik.setFieldValue('transferFrom', userData.managerMobile || '');
+              formik.setFieldValue(
+                'transferFrom',
+                userData.managerMobile || '',
+              );
             }
           }, [userData, formik.setFieldValue]); // Add userData and setFieldValue to the dependency array
 
@@ -215,7 +218,7 @@ function FundsTranfer() {
                     error={formik.errors.beneficiaryAccountNumber}
                     touched={formik.touched.beneficiaryAccountNumber}
                     formik={formik}
-                    options={records.map((option:any) => ({
+                    options={records?.map((option: any) => ({
                       label: `${option.bankName} - ${option.beneficiaryName} - ${option.mobileNumber}`,
                       value: `${option.mobileNumber}`,
                     }))}
