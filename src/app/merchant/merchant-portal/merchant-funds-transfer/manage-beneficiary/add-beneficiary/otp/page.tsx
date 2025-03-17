@@ -65,9 +65,9 @@ const OtpInputWithValidation = () => {
             setShowModal(true);
             // router.push("")
           } else {
-            setTitle(response?.data?.errorMessage);
-            setDescription(response?.data?.errorDescription);
-            setApierror(response?.data?.errorDescription);
+            setTitle(response?.data?.responseMessage);
+            setDescription(response?.data?.responseMessage);
+            setApierror(response?.data?.responseMessage);
           }
         } catch (e: any) {
           setDescription(e?.message);
@@ -110,7 +110,7 @@ const OtpInputWithValidation = () => {
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper
           heading={'Enter One Time Password (OTP)'}
-          description={`we've sent verification on your email address (${userData?.email}) and your mobile number (+${userData?.managerMobile})`}
+          description={`we've sent verification on your email address (${userData?.email}) and your mobile number (${userData?.managerMobile})`}
           show={true}
         />
         <FormLayout>
