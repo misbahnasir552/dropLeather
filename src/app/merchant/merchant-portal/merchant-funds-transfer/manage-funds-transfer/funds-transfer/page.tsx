@@ -24,6 +24,8 @@ import {
 
 function FundsTranfer() {
   const userData = useAppSelector((state: any) => state.auth);
+  console.log('userData', userData);
+  
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
@@ -170,6 +172,7 @@ function FundsTranfer() {
       value: 'Personal Expense',
     },
   ];
+
   return (
     <div className="flex flex-col gap-6">
       <SuccessModal
@@ -185,111 +188,81 @@ function FundsTranfer() {
         validationSchema={fundsTransferSchema}
         onSubmit={onSubmit}
       >
-        {(formik) => (
-          <Form className="flex flex-col gap-6">
-            <FormLayout formHeading="Account Details">
-              <div className="flex flex-col gap-4">
-                {/* <Input
-                  // isDisabled
-                  value={'923458496384'}
-                  label="Transfer From"
-                  name={'transferFrom'}
-                  type="text"
-                  error={formik.errors.transferFrom}
-                  touched={formik.touched.transferFrom}
-                  asterik={true}
-                  placeholder={'92XXXXXXXXXX'}
-                /> */}
-                {/* <Input
-                  // isDisabled
-                  value={'923458496384'}
-                  label="Transfer To"
-                  name={'transferTo'}
-                  type="text"
-                  error={formik.errors.transferTo}
-                  touched={formik.touched.transferTo}
-                  asterik={true}
-                  placeholder={'92XXXXXXXXXX'}
-                /> */}
-                {/* <Input
-                  label="Beneficiary Account Details"
-                  name={'beneficiaryAccountNumber'}
-                  type="text"
-                  error={formik.errors.beneficiaryAccountNumber}
-                  touched={formik.touched.beneficiaryAccountNumber}
-                /> */}
-                <DropdownInput
-                  label="Beneficiary Account Details"
-                  name={'beneficiaryAccountNumber'}
-                  asterik={true}
-                  error={formik.errors.beneficiaryAccountNumber}
-                  touched={formik.touched.beneficiaryAccountNumber}
-                  formik={formik}
-                  options={records.map((option: any) => ({
-                    label: `${option.bankName} - ${option.beneficiaryName} - ${option.mobileNumber}`,
-                    value: `${option.mobileNumber}`,
-                  }))}
-                />
+        {(formik) => {
+          // useEffect to set values after the component mounts
+          useEffect(() => {
+            if (userData) {
+              formik.setFieldValue('transferFrom', userData.managerMobile || '');
+            }
+          }, [userData, formik.setFieldValue]); // Add userData and setFieldValue to the dependency array
 
-                {/* <DropdownInput
-                  label="Beneficiary Bank"
-                  name={'beneficiaryBank'}
-                  error={formik.errors.beneficiaryBank}
-                  touched={formik.touched.beneficiaryBank}
-                  formik={formik}
-                  options={bankAccountsDTO.map((option: BankAccountDTO) => ({
-                    label: option.bankName,
-                    value: option.bankPrefix,
-                  }))}
-                /> */}
-                <Input
-                  label="Transfer Amount"
-                  name={'transferAmount'}
-                  type="number"
-                  asterik={true}
-                  error={formik.errors.transferAmount}
-                  touched={formik.touched.transferAmount}
+          return (
+            <Form className="flex flex-col gap-6">
+              <FormLayout formHeading="Account Details">
+                <div className="flex flex-col gap-4">
+                  <Input
+                    isDisabled
+                    value={userData?.managerMobile}
+                    label="Transfer From"
+                    name={'transferFrom'}
+                    type="text"
+                    placeholder={'92XXXXXXXXXX'}
+                  />
+                  <DropdownInput
+                    label="Beneficiary Account Details"
+                    name={'beneficiaryAccountNumber'}
+                    asterik={true}
+                    error={formik.errors.beneficiaryAccountNumber}
+                    touched={formik.touched.beneficiaryAccountNumber}
+                    formik={formik}
+                    options={records.map((option:any) => ({
+                      label: `${option.bankName} - ${option.beneficiaryName} - ${option.mobileNumber}`,
+                      value: `${option.mobileNumber}`,
+                    }))}
+                  />
+                  <Input
+                    label="Transfer Amount"
+                    name={'transferAmount'}
+                    type="number"
+                    asterik={true}
+                    error={formik.errors.transferAmount}
+                    touched={formik.touched.transferAmount}
+                  />
+                  <DropdownInput
+                    label="Transfer Purpose"
+                    name={'transferPurpose'}
+                    asterik
+                    error={formik.errors.transferPurpose}
+                    touched={formik.touched.transferPurpose}
+                    formik={formik}
+                    options={tranferPurposeList}
+                  />
+                </div>
+              </FormLayout>
+              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                {apierror}
+              </div>
+              {isLoading && (
+                <div className="flex w-full justify-center">
+                  <BarLoader color="#21B25F" />
+                </div>
+              )}
+              <div className="flex w-full justify-end gap-6 pb-9">
+                <Button
+                  label="Cancel"
+                  type="button"
+                  routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
+                  className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />
-                {/* <Input
-                  label="Transfer Purpose"
-                  name={'transferPurpose'}
-                  type="text"
-                  error={formik.errors.transferPurpose}
-                  touched={formik.touched.transferPurpose}
-                /> */}
-                <DropdownInput
-                  label="Transfer Purpose"
-                  name={'transferPurpose'}
-                  error={formik.errors.transferPurpose}
-                  touched={formik.touched.transferPurpose}
-                  formik={formik}
-                  options={tranferPurposeList}
+                <Button
+                  label="Next"
+                  type="submit"
+                  className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
                 />
               </div>
-            </FormLayout>
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
-            {isLoading && (
-              <div className="flex w-full justify-center">
-                <BarLoader color="#21B25F" />
-              </div>
-            )}
-            <div className="flex w-full justify-end gap-6 pb-9">
-              <Button
-                label="Cancel"
-                type="button"
-                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
-                className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
-              />
-              <Button
-                label="Next"
-                type="submit"
-                className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
-              />
-            </div>
-          </Form>
-        )}
+            </Form>
+          );
+        }}
       </Formik>
     </div>
   );

@@ -14,7 +14,7 @@ export interface IBulkUpload {
 }
 
 export interface IFundsTransfer {
-  // transferFrom: string;
+  transferFrom: string;
   // beneficiaryName: string;
   beneficiaryAccountNumber: string;
   beneficiaryBank: string;
