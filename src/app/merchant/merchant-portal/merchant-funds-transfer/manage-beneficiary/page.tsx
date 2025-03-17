@@ -27,7 +27,6 @@ function ManageBeneficiary() {
         setLoading(false);
       }, 2000);
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
-      console.log(response.data.beneficiaryList, 'RESPONSE');
       if (response?.data.responseCode === '009') {
         const filteredValues = response?.data?.beneficiaryList.map(
           ({ ...rest }) => rest,

@@ -52,9 +52,13 @@ function BulkFileUpload() {
           setShowModal(true);
           resetForm();
         } else if (response?.data.responseCode === '000') {
-          setApierror(response?.data?.responseMessage);
+          setApierror(
+            `${response?.data?.responseMessage}. ${response?.data?.responseDescription}`,
+          );
         } else {
-          setApierror(response?.data?.responseMessage);
+          setApierror(
+            `${response?.data?.responseMessage}. ${response?.data?.responseDescription}`,
+          );
         }
       }
     } catch (e: any) {

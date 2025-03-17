@@ -35,8 +35,6 @@ const IconTable: React.FC<IconTableProps> = ({
   handleDelete,
   handleView,
 }) => {
-  console.log('tableData', tableData);
-
   const handleEdit = (id: any) => {
     console.log('Edit row with id:', id);
   };

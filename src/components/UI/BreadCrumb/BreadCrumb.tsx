@@ -27,6 +27,8 @@ function BreadCrumb() {
             otpSuccess?.isAuthenticated &&
             url === '/merchant/merchant-portal/merchant-funds-transfer'
               ? '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/'
+              : title === 'Merchant Portal'
+              ? '/merchant/merchant-portal/home'
               : url;
           if (value === 'admin' || (value === 'merchant' && !lastItem)) {
             return null;

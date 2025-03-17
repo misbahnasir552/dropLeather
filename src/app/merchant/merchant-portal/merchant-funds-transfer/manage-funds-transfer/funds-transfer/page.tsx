@@ -24,7 +24,6 @@ import {
 
 function FundsTranfer() {
   const userData = useAppSelector((state: any) => state.auth);
-  console.log('userData', userData);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [showModal, setShowModal] = useState(false);
@@ -71,17 +70,15 @@ function FundsTranfer() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log(response, 'FETCH OTP RESPONSE');
       if (response.data.responseCode === '009') {
-        return true;
+        return response?.data;
       }
       setTitle('Error fetching OTP');
       setShowModal(true);
       return false;
     } catch (e: any) {
       console.log(e);
-      setTitle('Network Failed');
-      setDescription(e.message);
+      setDescription(e?.message);
       setShowModal(true);
       return false;
     } finally {
@@ -103,8 +100,8 @@ function FundsTranfer() {
     );
     dispatch(transferFundsData({ ...values, selectedOption }));
     const res = await fetchOTP();
-    if (res) {
-      router.push('otp');
+    if (res?.responseCode === '009') {
+      router.push(`otp?expiry=${res?.expirationTime}`);
     }
     // try {
     //   const additionalValues = {

@@ -117,13 +117,13 @@ export const getMerchantFundsTransferDropDownMenu = (
     title: 'Manage Funds Transfer',
     link: isAuthenticated
       ? '/merchant-funds-transfer/manage-funds-transfer'
-      : '/merchant-funds-transfer',
+      : '/merchant-funds-transfer?expiry=2',
     //  'merchant-funds-transfer/manage-funds-transfer',
   },
   {
     title: 'Bulk Funds Transfer',
     link: isAuthenticated
       ? '/merchant-funds-transfer/bulk-funds-transfer-report'
-      : '/merchant-funds-transfer',
+      : '/merchant-funds-transfer?expiry=2',
   },
 ];
