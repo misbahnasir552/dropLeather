@@ -25,7 +25,7 @@ function IntegrationForm() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
-  const [filteredData, setFilteredData] = useState<Page[]>();
+  const [filteredData, setFilteredData] = useState<Page[]>([]);
   const [pageTitle, setPageTitle] = useState('');
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
@@ -50,7 +50,7 @@ function IntegrationForm() {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
       const fData = fieldData.pages?.page.filter((item) => {
-        return convertSlugToTitle(item.name) === title;
+        return convertSlugToTitle(item.pageName) === title;
       });
       setFilteredData(fData);
       console.log('FDATAAA:', fData);
@@ -185,7 +185,7 @@ function IntegrationForm() {
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
                   {filteredData?.map((pageItem, index) => (
-                    <React.Fragment key={`${pageItem.name}-${index}`}>
+                    <React.Fragment key={`${pageItem.pageName}-${index}`}>
                       {pageItem?.categories
                         ?.slice()
                         .sort(
@@ -194,7 +194,7 @@ function IntegrationForm() {
                         )
                         .map((item, itemIndex) => (
                           <FormLayoutDynamic
-                            key={`${pageItem.name}-${itemIndex}`}
+                            key={`${pageItem.pageName}-${itemIndex}`}
                             heading={item.categoryName}
                           >
                             {[...item.fields]

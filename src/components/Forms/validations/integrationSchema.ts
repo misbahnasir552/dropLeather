@@ -23,7 +23,7 @@ type Category = {
 };
 
 type Page = {
-  name: string;
+  pageName: string;
   categories: Category[];
 };
 

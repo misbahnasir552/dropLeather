@@ -1,0 +1,1075 @@
+'use client';
+
+import { Form, Formik } from 'formik';
+import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
+
+// import { BarLoader } from 'react-spinners';
+// import * as Yup from 'yup';
+import apiClient from '@/api/apiClient';
+import Button from '@/components/UI/Button/PrimaryButton';
+import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import Input from '@/components/UI/Inputs/Input';
+import { useAppSelector } from '@/hooks/redux';
+import useCurrentTab from '@/hooks/useCurrentTab';
+import type { AddStoreInfo, BusinessFormInfo } from '@/interfaces/interface';
+import { convertSlugToTitle } from '@/services/urlService/slugServices';
+import { generateMD5Hash } from '@/utils/helper';
+import { endpointArray } from '@/utils/merchantForms/helper';
+
+import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
+import CheckboxItem from '../UI/Inputs/CheckboxItem';
+// import DateInput from '../UI/Inputs/DateInput';
+import DateInputNew from '../UI/Inputs/DateInputNew';
+// import DateInputNew from '../UI/Inputs/DateInputNew';
+import DropdownInput from '../UI/Inputs/DropdownInput';
+// import DropdownNew from '../UI/Inputs/DropDownNew';
+import CustomModal from '../UI/Modal/CustomModal';
+import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+// import AddStore from './AddStore';
+// import { buildValidationSchema } from './validations/helper';
+import type { FieldsData } from './validations/types';
+
+const BusinessInformationReqRevision = () => {
+  const userData = useAppSelector((state: any) => state.auth);
+  const fieldsData: FieldsData = useAppSelector((state: any) => state.fields);
+  const businessNatureData = useAppSelector(
+    (state: any) => state.onBoardingForms,
+  );
+  console.log('businessNatureData', businessNatureData);
+  const router = useRouter();
+  const [isChecked, setChecked] = useState(false);
+
+  const { apiSecret } = userData;
+  const [filteredData, setFilteredData] = useState<any[]>([]);
+  const [addStoresValues, setAddStoresValues] = useState<AddStoreInfo[]>([]);
+
+  const [pageTitle, setPageTitle] = useState('');
+  // const [selectedCheckValue, setSelectedCheckValue] = useState();
+  const [selectedCheckValue, setSelectedCheckValue] = useState<
+    string | undefined | string[]
+  >(undefined);
+  const [selectedDropDownValue, setSelectedDropDownValue] =
+    useState<any>(undefined);
+  const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
+    Array(5).fill(null),
+  );
+  const [initialValuesState, setInitialValuesState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const { currentTab } = useCurrentTab();
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
+  // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
+  // const BusinessInfoInitialValues = GetBusinessDetails();
+  const handleCheckboxChange = () => {
+    setChecked(!isChecked);
+  };
+  // console.log(
+  //   'selected value checkbox input',
+  //   selectedCheckValue,
+  //   setAddStoresValues,
+  // );
+  console.log(addStoresValues);
+
+  const BusinessDetailsFormData = {
+    pageName: 'Business Details',
+    categories: [
+      {
+        categoryName: 'Business Particulars',
+        fields: [
+          {
+            name: 'accountBusinessDocumentationType',
+            label: 'Account/Business Documentation Type',
+            type: 'dropdown',
+            options: [
+              { label: 'Sole Proprietor', value: 'Sole Proprietor' },
+              {
+                label: 'Public and Private Ltd.',
+                value: 'Public and Private Ltd.',
+              },
+              { label: 'Partnership', value: 'Partnership' },
+              { label: 'Other', value: 'Other' },
+              { label: 'Trusts', value: 'Trusts' },
+              { label: 'Clubs,Societies', value: 'Clubs,Societies' },
+              { label: 'NGO,NPO,Charities', value: 'NGO,NPO,Charities' },
+            ],
+            required: true,
+          },
+          {
+            name: 'limitCategory',
+            label: 'Limit Category',
+            type: 'dropdown',
+            options: [
+              {
+                label: 'C5 (limit of max 500k)',
+                value: 'C5 (limit of max 500k)',
+              },
+              {
+                label: 'C10 (limit above than 500k)',
+                value: 'C10 (limit above than 500k)',
+              },
+            ],
+            required: true,
+          },
+          {
+            name: 'natureofBusiness',
+            label: 'Nature of Business',
+            type: 'dropdown',
+            options: [
+              {
+                label: 'C5 (limit of max 500k)',
+                value: 'C5 (limit of max 500k)',
+              },
+              {
+                label: 'C10 (limit above than 500k)',
+                value: 'C10 (limit above than 500k)',
+              },
+            ],
+            required: true,
+          },
+          {
+            name: 'raastEnabled',
+            label: 'Raast Enabled',
+            type: 'dropdown',
+            options: [
+              { label: 'Yes', value: 'Yes' },
+              { label: 'No', value: 'No' },
+            ],
+            required: true,
+          },
+          {
+            name: 'Established Since',
+            label: 'establishedSince',
+            type: 'date',
+            required: false,
+          },
+        ],
+      },
+      {
+        categoryName: 'Business Mode',
+        fields: [
+          {
+            name: 'businessMode',
+            label: 'Business Mode',
+            type: 'checkBoxInputMulti',
+            required: true,
+            options: [
+              { label: 'Retail Payment', value: 'Retail Payment' },
+              { label: 'Online Payment', value: 'Online Payment' },
+            ],
+          },
+        ],
+      },
+      {
+        categoryName: 'Payment Modes',
+        fields: [
+          {
+            name: 'paymentModes',
+            label: 'Payment Modes',
+            type: 'checkBoxInputMulti',
+            required: true,
+            options: [
+              { label: 'Mobile Account', value: 'Mobile Account' },
+              { label: 'Easypaisa shop', value: 'Easypaisa shop' },
+              { label: 'QR', value: 'QR' },
+              { label: 'TILL', value: 'TILL' },
+              { label: 'Direct Debit', value: 'Direct Debit' },
+              { label: 'Debit/Credit Card', value: 'Debit/Credit Card' },
+            ],
+          },
+        ],
+      },
+      {
+        categoryName: 'Business Type Details',
+        fields: [
+          {
+            name: 'permanentAddress',
+            label: 'Permanent Address',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'fatcaStatus',
+            label: 'FATCA Status',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'crsStatus',
+            label: 'CRS status',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'mandateName',
+            label: 'Mandate Name',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'mandateIdCardNumber',
+            label: 'Mandate Id Card Number',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'mandateRelationshipWithAccountHolder',
+            label: 'Mandate relationship with account holder',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'dateOfIssuanceOfApplicableIdentityDocument',
+            label: 'Date of issuance of applicable identity document',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'beneficialOwnerControllingRights',
+            label: 'Beneficial Owner/Controlling Rights',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'mandateDateOfBirth',
+            label: 'Mandate Date of Birth',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'mandatePlaceOfBirth',
+            label: 'Mandate Place of Birth',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'cityAndCountry',
+            label: 'City and Country',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'nextOfKinCnic',
+            label: 'Next of KIN CNIC',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'nextOfKinRelationship',
+            label: 'Next of KIN Relationship',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'nextOfKinName',
+            label: 'Next of Kin Name',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'dateOfBirth',
+            label: 'Date Of Birth',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'registerUnRegister',
+            label: 'Register/UnRegister',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'specialCustomer',
+            label: 'Special Customer',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'registrationIncorporationNo',
+            label: 'Registration/Incorporation No',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'placeOfIncorporationOrRegistration',
+            label: 'Place of Incorporation or Registration',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'geographiesInvolved',
+            label: 'Geographies Involved',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'expectedTypeOfCounterParties',
+            label: 'Expected Type of Counter-Parties',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'intendedNatureOfBusinessRelations',
+            label: 'Intended nature of business relations',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'expectedModesOfTransactionsDeliveryChannels',
+            label: 'Expected modes of transactions/ delivery channels',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'industrySegment',
+            label: 'Industry/Segment',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'product',
+            label: 'Product',
+            type: 'dropdown',
+            options: [
+              { label: 'Cash', value: 'Cash' },
+              { label: 'Loan', value: 'Loan' },
+              { label: 'Deposit', value: 'Deposit' },
+              { label: 'Bills Payment', value: 'Bills Payment' },
+              {
+                label: 'Foreign Inward Remittance',
+                value: 'Foreign Inward Remittance',
+              },
+              { label: ' Branchless', value: ' Branchless' },
+              { label: ' IBFT', value: ' IBFT' },
+              { label: ' Online Transfer', value: ' Online Transfer' },
+              { label: ' Other', value: ' Other' },
+            ],
+            required: true,
+          },
+          {
+            name: 'nationality',
+            label: 'Nationality',
+            type: 'dropdown',
+            options: [
+              { label: 'Resident', value: 'Resident' },
+              { label: 'Non-Resident', value: 'Non-Resident' },
+            ],
+            required: true,
+          },
+        ],
+      },
+      {
+        categoryName: 'Nature of Activity',
+        fields: [
+          {
+            name: 'natureOfActivity',
+            label: 'Nature of Activity',
+            type: 'checkBoxInputMulti',
+            required: true,
+            options: [
+              {
+                label: 'Payment to Suppliers/Vendors',
+                value: 'Payment to Suppliers/Vendors',
+              },
+              {
+                label: 'Receiving & Payments From / To Customers',
+                value: 'Receiving & Payments From / To Customers',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        categoryName: 'Customer Details',
+        fields: [
+          {
+            name: 'incomeStatusSalaried',
+            label: 'Income Status (Salaried)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'currentDailyTransactionPKR',
+            label: 'Current Daily Transaction (PKR)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'anyOtherDetails',
+            label: 'Any Other Details',
+            type: 'text',
+            required: false,
+          },
+          {
+            name: 'associationToHighRiskBusiness',
+            label: 'Association to High Risk Business',
+            type: 'dropdown',
+            options: [
+              {
+                label: 'High Risk Business / Person',
+                value: 'High Risk Business / Person',
+              },
+              {
+                label: 'Medium Risk Business / Person',
+                value: 'Medium Risk Business / Person',
+              },
+              {
+                label: 'Low Risk Business / Person',
+                value: '   Low Risk Business / Person',
+              },
+            ],
+            required: true,
+          },
+          {
+            name: 'highRiskType',
+            label: 'High Risk Type',
+            type: 'dropdown',
+            options: [{ label: 'High Risk Type', value: 'High Risk Type' }],
+            required: true,
+          },
+          {
+            name: 'mediumRiskType',
+            label: 'Medium Risk Type',
+            type: 'dropdown',
+            options: [{ label: 'Medium Risk Type', value: 'Medium Risk Type' }],
+            required: true,
+          },
+          {
+            name: 'lowRiskType',
+            label: 'Low Risk Type',
+            type: 'dropdown',
+            options: [{ label: 'Low Risk Type', value: 'Low Risk Type' }],
+            required: true,
+          },
+
+          {
+            name: 'sourceOfFunds',
+            label: 'Source of Funds',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'currentMonthlyTransactionPKR',
+            label: 'Current Monthly Transaction (PKR)',
+            type: 'dropdown',
+            required: true,
+          },
+
+          // Sole Above
+          // { label: 'Current Salar/Income', value: 'abc' },
+        ],
+      },
+      {
+        categoryName: 'Account Profile / Transaction Activity',
+        fields: [
+          {
+            name: 'expectedMonthlyDebitTransactions',
+            label: 'Expected monthly Debit turnover (No. of transactions)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'expectedMonthlyDebitAmount',
+            label: 'Expected monthly Debit turnover (amount)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'expectedMonthlyCreditTransactions',
+            label: 'Expected monthly credit turnover (No. of transactions)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'expectedMonthlyCreditAmount',
+            label: 'Expected monthly credit turnover (amount)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'annualTurnoverCredit',
+            label: 'Annual Turnover (Credit)',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'annualTurnoverDebit',
+            label: 'Annual Turnover (Debit)',
+            type: 'text',
+            required: true,
+          },
+        ],
+      },
+    ],
+  };
+
+  useEffect(() => {
+    console.log(
+      'dropdown value is',
+      selectedDropDownValue,
+      selectedCheckValue,
+      setAddStoresValues,
+    );
+  }, [selectedDropDownValue]);
+
+  useEffect(() => {
+    if (!currentTab) return;
+
+    const title = convertSlugToTitle(currentTab);
+    setPageTitle(title);
+
+    const initialValues: { [key: string]: any } = {};
+
+    // Step 1: Filter based on page title
+    let updatedFData = fieldsData?.pages?.page?.filter(
+      (item) => convertSlugToTitle(item.pageName) === title,
+    );
+
+    // Step 2: Apply conditional filtering based on selectedDropDownValue
+    updatedFData = updatedFData?.map((item) => {
+      return {
+        ...item,
+        categories: item.categories.map((category) => {
+          const hasAssociationField = category.fields.some(
+            (field) =>
+              field.name === 'associationToHighRiskBusiness' &&
+              field.type === 'dropdown',
+          );
+
+          if (!hasAssociationField) return category;
+
+          let updatedFields = category.fields;
+
+          if (selectedDropDownValue === 'High Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'Medium Risk Business / Person'
+          ) {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+            );
+          } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+            updatedFields = category.fields.filter(
+              (field) =>
+                field.name !== 'mediumRiskType' &&
+                field.name !== 'highRiskType',
+            );
+          } else if (
+            selectedDropDownValue === 'No' ||
+            selectedDropDownValue === '' ||
+            selectedDropDownValue === undefined
+          ) {
+            updatedFields = category.fields.filter(
+              (field) => field.name !== 'currentSalary',
+            );
+          }
+
+          return {
+            ...category,
+            fields: updatedFields,
+          };
+        }),
+      };
+    });
+
+    console.log('Updated FData:', updatedFData);
+
+    // Step 3: Apply your mapping logic to transform updatedFData
+    const mappedData = updatedFData?.map((item) => {
+      const mappedCategories = item.categories.map((filteredCategory) => {
+        // Find matching category in ActivityInformationFormData
+        const matchingCategory = BusinessDetailsFormData.categories.find(
+          (category) => category.categoryName === filteredCategory.categoryName,
+        );
+
+        if (matchingCategory) {
+          // Collect matched fields with full field info
+          const matchedFields = filteredCategory.fields.map((fieldLabel) => {
+            // Find full field info based on label
+            const matchedField = matchingCategory.fields.find(
+              (field: { label: any }) => field.label === fieldLabel,
+            );
+
+            if (matchedField) {
+              if (matchedField?.type !== 'checkItem') {
+                initialValues[matchedField.name] = '';
+              }
+
+              return {
+                name: matchedField.name,
+                label: matchedField.label,
+                type: matchedField.type,
+                required: matchedField.required || false,
+                options: matchedField.options || [],
+              };
+            }
+
+            return null; // Ignore unmatched fields
+          });
+
+          return {
+            categoryName: filteredCategory.categoryName,
+            fields: matchedFields.filter(Boolean), // Remove null values
+          };
+        }
+
+        return null; // Ignore unmatched categories
+      });
+
+      return {
+        pageName: item.pageName,
+        categories: mappedCategories.filter(Boolean), // Remove null categories
+      };
+    });
+
+    console.log('Mapped Data:', mappedData);
+
+    // Step 4: Set transformed data and initial values
+    setFilteredData(mappedData || []);
+    setInitialValuesState(initialValues);
+  }, [currentTab, selectedDropDownValue]);
+
+  console.log('initialValuesState', initialValuesState);
+
+  console.log('selectedDropDownValue', selectedDropDownValue);
+
+  // if (!initialValuesState || !filteredData) {
+  //   // if (!initialValuesState || !validationSchemaState || !filteredData) {
+  //   return (
+  //     <div className="flex w-full flex-col justify-center">
+  //       <BarLoader color="#21B25F" />
+  //     </div>
+  //   );
+  // }
+
+  const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
+    try {
+      const currentIndex = endpointArray.findIndex(
+        (item) => item.tab === currentTab,
+      );
+
+      console.log('Form Values:', values);
+
+      if (currentIndex === -1) {
+        console.error('Invalid tab. Submission halted.');
+        return;
+      }
+
+      const currentEndpoint = endpointArray[currentIndex]?.endpoint;
+      console.log(currentEndpoint);
+      const dynamicCurrentEndpoint = `merchant/${businessNatureData?.businessEndpoint}`;
+
+      // ✅ Prepare the payload with only form values
+      const requestPayload = {
+        request: values,
+        apisecret: apiSecret,
+      };
+
+      const signature = generateMD5Hash(requestPayload);
+      console.log('Signature:', signature);
+
+      // ✅ Submit only form values
+      const response = await apiClient.post(
+        dynamicCurrentEndpoint,
+        {
+          request: values,
+          signature,
+        },
+        {
+          params: { username: userData?.email },
+          headers: { Authorization: `Bearer ${userData.jwt}` },
+        },
+      );
+
+      console.log('API Response:', response);
+
+      if (response?.data?.responseCode === '009') {
+        // ✅ Navigate to the next tab if available
+        const nextTab = endpointArray[currentIndex + 1]?.tab;
+        if (nextTab) {
+          router.push(`/merchant/home/request-revision/${nextTab}`);
+        } else {
+          console.log('Form submission completed, no more tabs to navigate.');
+        }
+      } else {
+        setApierror(
+          response?.data?.responseMessage || 'Unexpected error occurred',
+        );
+        setTitle('Error Occurred');
+        setDescription(
+          response?.data?.responseDescription || 'An unknown error occurred.',
+        );
+        setShowModal(true);
+      }
+    } catch (error: any) {
+      console.error('Error during submission:', error);
+      setApierror(error.message || 'Network error occurred.');
+      setTitle('Network Failed');
+      setDescription('Network failed! Please try again later.');
+      setShowModal(true);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+  console.log('Initial Values State:', initialValuesState);
+
+  // console.log(checkboxData);
+  return (
+    <div className="flex flex-col gap-5">
+      <CustomModal
+        title={title}
+        description={description}
+        show={showModal}
+        setShowModal={setShowModal}
+        // routeName={attachRoute}
+        // routeName="/merchant/home"
+      />
+      {/* <AddStore
+        addStoresValues={addStoresValues}
+        setAddStoresValues={setAddStoresValues}
+      /> */}
+      <Formik
+        enableReinitialize
+        initialValues={initialValuesState}
+        // validationSchema={validationSchemaState}
+        onSubmit={onSubmit}
+      >
+        {(formik) => (
+          <div className="flex flex-col pb-[120px]">
+            <Form className="flex flex-col gap-5">
+              <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
+                {pageTitle}
+              </div>
+              <div className="flex flex-col gap-9">
+                <div className="flex flex-col gap-6">
+                  {filteredData?.map((pageItem) => (
+                    <React.Fragment key={pageItem.pageName}>
+                      {pageItem?.categories
+                        ?.slice()
+                        .sort(
+                          (a: { priority: any }, b: { priority: any }) =>
+                            Number(a.priority) - Number(b.priority),
+                        )
+                        .map(
+                          (
+                            item: { categoryName: any; fields: any[] },
+                            itemIndex: any,
+                          ) => (
+                            <FormLayoutDynamic
+                              key={`${pageItem.pageName}-${item.categoryName}-${itemIndex}`}
+                              heading={item.categoryName}
+                            >
+                              {[...item.fields]
+                                .sort((a, b) => a.priority - b.priority)
+                                .map((field, fieldIndex) => {
+                                  // Ensure a unique key by combining all dynamic variables
+
+                                  const uniqueKey = `${pageItem.pageName}-${
+                                    item.categoryName
+                                  }-${field.name || fieldIndex}`;
+
+                                  if (field?.type === 'text') {
+                                    return (
+                                      <Input
+                                        key={uniqueKey}
+                                        label={field.label}
+                                        name={field.name}
+                                        type={field.type}
+                                        asterik={field?.required || false}
+                                      />
+                                    );
+                                  }
+
+                                  if (field?.type === 'dropdown') {
+                                    const dropdownKey = `${uniqueKey}-dropdown`;
+
+                                    if (
+                                      field.name ===
+                                      'associationToHighRiskBusiness'
+                                    ) {
+                                      return (
+                                        <DropdownInput
+                                          key={dropdownKey}
+                                          label={field.label}
+                                          name={field.name}
+                                          options={
+                                            field?.options?.map(
+                                              (option: {
+                                                label: any;
+                                                value: any;
+                                              }) => ({
+                                                label: option.label,
+                                                value: option.value,
+                                              }),
+                                            ) || []
+                                          }
+                                          formik={formik}
+                                          asterik={field?.required || false}
+                                          setSelectedDropDownValue={(
+                                            value: any,
+                                          ) => {
+                                            console.log(
+                                              'Updating selectedDropDownValue:',
+                                              value,
+                                            );
+                                            setSelectedDropDownValue(value);
+                                          }}
+                                        />
+                                      );
+                                    }
+
+                                    if (
+                                      (field.name === 'highRiskType' &&
+                                        selectedDropDownValue ===
+                                          'High Risk Business / Person') ||
+                                      (field.name === 'mediumRiskType' &&
+                                        selectedDropDownValue ===
+                                          'Medium Risk Business / Person') ||
+                                      (field.name === 'lowRiskType' &&
+                                        selectedDropDownValue ===
+                                          'Low Risk Business / Person')
+                                    ) {
+                                      return (
+                                        <DropdownInput
+                                          key={dropdownKey}
+                                          label={field.label}
+                                          name={field.name}
+                                          options={
+                                            field?.options?.map(
+                                              (option: {
+                                                label: any;
+                                                value: any;
+                                              }) => ({
+                                                label: option.label,
+                                                value: option.value,
+                                              }),
+                                            ) || []
+                                          }
+                                          formik={formik}
+                                          asterik={field?.required || false}
+                                          setSelectedDropDownValue={(
+                                            value: any,
+                                          ) => {
+                                            console.log(
+                                              'Updating selectedDropDownValue:',
+                                              value,
+                                            );
+                                            setSelectedDropDownValue(value);
+                                          }}
+                                        />
+                                      );
+                                    }
+
+                                    if (
+                                      ![
+                                        'associationToHighRiskBusiness',
+                                        'highRiskType',
+                                        'mediumRiskType',
+                                        'lowRiskType',
+                                      ].includes(field.name)
+                                    ) {
+                                      return (
+                                        <DropdownInput
+                                          key={dropdownKey}
+                                          label={field.label}
+                                          name={field.name}
+                                          options={
+                                            field?.options?.map(
+                                              (option: {
+                                                label: any;
+                                                value: any;
+                                              }) => ({
+                                                label: option.label,
+                                                value: option.value,
+                                              }),
+                                            ) || []
+                                          }
+                                          formik={formik}
+                                          asterik={field?.required || false}
+                                          setSelectedDropDownValue={(
+                                            value: any,
+                                          ) => {
+                                            console.log(
+                                              'Updating selectedDropDownValue:',
+                                              value,
+                                            );
+                                            setSelectedDropDownValue(value);
+                                          }}
+                                        />
+                                      );
+                                    }
+                                  }
+
+                                  if (!field || !field.name) {
+                                    console.error(
+                                      '❌ Error: `field` or `field.name` is undefined!',
+                                      field,
+                                    );
+                                  }
+                                  if (
+                                    field.name ===
+                                    'accountBusinessDocumentationType'
+                                  ) {
+                                    console.log(
+                                      '✅ Rendering DropdownNew for:',
+                                      field.name,
+                                    );
+                                    return (
+                                      <DropdownInput
+                                        key={uniqueKey}
+                                        label={field.label}
+                                        name={field.name}
+                                        options={field.options}
+                                        formik={formik} // ✅ Ensure formik is passed
+                                        asterik={field.required}
+                                        setSelectedDropDownValue={(
+                                          value: any,
+                                        ) => {
+                                          console.log(
+                                            'Updating selectedDropDownValue:',
+                                            value,
+                                          );
+                                          setSelectedDropDownValue(value);
+                                        }}
+                                      />
+                                    );
+                                  }
+
+                                  if (field?.type === 'date') {
+                                    return (
+                                      <DateInputNew
+                                        key={uniqueKey}
+                                        formik={formik}
+                                        label={field.label}
+                                        name={field.name}
+                                        asterik={field?.required || false}
+                                      />
+                                    );
+                                  }
+
+                                  if (field?.type === 'checkItem') {
+                                    return (
+                                      <CheckboxItem
+                                        key={uniqueKey}
+                                        description={field.label}
+                                        isChecked={isChecked}
+                                        handleCheckboxChange={
+                                          handleCheckboxChange
+                                        }
+                                      />
+                                    );
+                                  }
+
+                                  if (field?.type === 'checkBoxInput') {
+                                    return (
+                                      <CheckboxInput
+                                        key={uniqueKey}
+                                        isMulti={false}
+                                        name={field.name}
+                                        options={
+                                          field?.options?.map(
+                                            (option: {
+                                              label: any;
+                                              value: any;
+                                            }) => ({
+                                              label: option.label,
+                                              value: option.value,
+                                            }),
+                                          ) || []
+                                        }
+                                        form={formik}
+                                        setSelectedCheckValue={
+                                          setSelectedCheckValue
+                                        }
+                                      />
+                                    );
+                                  }
+
+                                  if (field?.type === 'checkBoxInputMulti') {
+                                    return (
+                                      <div key={uniqueKey}>
+                                        <CheckboxInput
+                                          layout="grid grid-cols-2 gap-4"
+                                          isMulti={true}
+                                          name={field.name}
+                                          options={
+                                            field?.options?.map(
+                                              (option: {
+                                                label: any;
+                                                value: any;
+                                              }) => ({
+                                                label: option.label,
+                                                value: option.value,
+                                              }),
+                                            ) || []
+                                          }
+                                          form={formik}
+                                          setSelectedCheckValue={
+                                            setSelectedCheckValue
+                                          }
+                                        />
+                                      </div>
+                                    );
+                                  }
+
+                                  if (field?.type === 'file') {
+                                    return (
+                                      <BulkRegisterInput
+                                        key={uniqueKey}
+                                        selectedFiles={selectedFiles}
+                                        setSelectedFiles={setSelectedFiles}
+                                        index={fieldIndex}
+                                        formik={formik}
+                                        item={field}
+                                      />
+                                    );
+                                  }
+
+                                  return null;
+                                })}
+                            </FormLayoutDynamic>
+                          ),
+                        )}
+                    </React.Fragment>
+                  ))}
+                </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
+                <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
+                  {/* <Button
+                    label={`Save & Continue Later`}
+                    // onClickHandler={() =>
+                    //   saveAndContinue(
+                    //     formik.values,
+                    //     formik.setSubmitting,
+                    //     formik.validateForm,
+                    //   )
+                    // }
+                    type="button"
+                    className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                  /> */}
+                  <Button
+                    label={`Next`}
+                    type="submit"
+                    className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                  />
+                </div>
+              </div>
+              {/* <FormControlButtons /> */}
+              {/* <AddStore formik={formik}/> */}
+            </Form>
+          </div>
+        )}
+      </Formik>
+    </div>
+  );
+};
+
+export default BusinessInformationReqRevision;

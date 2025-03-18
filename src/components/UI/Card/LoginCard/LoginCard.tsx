@@ -9,6 +9,8 @@ import arrowRight from '@/assets/icons/arrow-right.svg';
 import arrowRightWhite from '@/assets/icons/arrow-rightWhite.svg';
 // import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { ILoginCard } from '@/interfaces/interface';
+// import apiClient from '@/api/apiClient';
+// import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 // import { setJourneyType } from '@/redux/features/adminSlices/corporateSlices/corporateJourneyTypeSlice';
 
@@ -63,7 +65,7 @@ export default function LoginCard({
 
     // else {
     router.push(routeName);
-    // }
+
     // }
     // router.push(routeName);
     // dispatch(setJourneyType(type));
