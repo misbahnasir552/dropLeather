@@ -50,6 +50,8 @@ function BulkFileUpload() {
           setTitle(response?.data?.responseMessage);
           setDescription(response?.data?.responseDescription);
           setShowModal(true);
+          setApierror('');
+          setSelectedFiles([]);
           resetForm();
         } else if (response?.data.responseCode === '000') {
           setApierror(
@@ -76,6 +78,7 @@ function BulkFileUpload() {
         show={showModal}
         setShowModal={setShowModal}
         routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/"
+        isVisible
       />
       <HeaderWrapper
         heading="Bulk Upload"

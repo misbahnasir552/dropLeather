@@ -2,26 +2,33 @@
 
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import LineChartGraph from '@/components/Charts/LineChartGraph';
+import MPPriceBar from '@/components/MPPriceBar';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import { useAppSelector } from '@/hooks/redux';
+import { generateMD5Hash } from '@/utils/helper';
 import {
   merchantHomeInitialValues,
   merchantHomeSchema,
 } from '@/validations/merchant/home/merchantHome';
 
 const MerchantPortalHome = () => {
+  const userData = useAppSelector((state: any) => state.auth);
   const [graphData, setGraphData] = useState({});
   const [filteredGraphData, setFilteredGraphData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [apierror, setApierror] = useState('');
+  const [accountBalance, setAccountBalance] = useState<string>('');
 
   const fetchGraphRecords = async () => {
     try {
       const response = await apiClient.get('/merchant/lastThirtyDays');
-      console.log(response.data);
       setGraphData(response?.data);
     } catch (e) {
       console.log(e);
@@ -50,9 +57,44 @@ const MerchantPortalHome = () => {
 
     return filteredGraph;
   };
-
+  const getAccountBalance = async () => {
+    try {
+      setIsLoading(true);
+      const additionalValues = {
+        msisdn: userData?.managerMobile,
+        managerMobile: userData?.managerMobile,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = {
+        request: additionalValues,
+        signature: md5Hash,
+      };
+      const response = await apiClient.post(
+        '/qrcode/getAccountBalance',
+        requestBody,
+        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+      );
+      if (response?.data) {
+        setAccountBalance(response?.data?.amount);
+      } else {
+        setApierror(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      console.log('Fetch details failed', e);
+      setApierror(e?.message);
+      // setShowModal(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  useEffect(() => {
+    getAccountBalance();
+  }, []);
   const onSubmit = (values: any) => {
-    console.log('hellewwwwwwwww', values);
     //  if (values.graphType) {
     //    router.push("/login");
     //  }
@@ -70,55 +112,64 @@ const MerchantPortalHome = () => {
   };
   return (
     <>
-      <div className="flex flex-col gap-6">
-        <HeaderWrapper
-          heading="Welcome to Merchant Portal"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-        />
-        {/* <div className="flex flex-col gap-9 rounded-lg border-[0.5px] border-border-light bg-screen-grey px-6 pb-[24px] pt-[60px]"> */}
-        <Formik
-          initialValues={merchantHomeInitialValues}
-          validationSchema={merchantHomeSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => (
-            <Form>
-              <MerchantFormLayout>
-                <div className="grid grid-cols-2 gap-5">
-                  <DropdownInput
-                    name="graphType"
-                    label="Graph Type"
-                    options={[{ label: 'option1', value: 'option1' }]}
-                    error={'payment method is false'}
-                    touched={false}
+      {isLoading ? (
+        <BarLoader />
+      ) : (
+        <div className="flex flex-col gap-6">
+          <MPPriceBar accountBalance={accountBalance} />
+          <HeaderWrapper
+            heading="Welcome to Merchant Portal"
+            // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
+          />
+          {/* <div className="flex flex-col gap-9 rounded-lg border-[0.5px] border-border-light bg-screen-grey px-6 pb-[24px] pt-[60px]"> */}
+          <Formik
+            initialValues={merchantHomeInitialValues}
+            validationSchema={merchantHomeSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <Form>
+                <MerchantFormLayout>
+                  <div className="grid grid-cols-2 gap-5">
+                    <DropdownInput
+                      name="graphType"
+                      label="Graph Type"
+                      options={[{ label: 'option1', value: 'option1' }]}
+                      error={'payment method is false'}
+                      touched={false}
+                    />
+                    <DropdownInput
+                      name="graphDuration"
+                      label="Graph Duration"
+                      options={[
+                        { label: 'Weekly', value: 'Weekly' },
+                        { label: 'Daily', value: 'Daily' },
+                        { label: 'Monthly', value: 'Monthly' },
+                      ]}
+                      error={'payment method is false'}
+                      touched={false}
+                      formik={formik}
+                    />
+                  </div>
+                  <Button
+                    label="Generate"
+                    type="submit"
+                    className="button-primary h-9 w-[120px] text-xs"
                   />
-                  <DropdownInput
-                    name="graphDuration"
-                    label="Graph Duration"
-                    options={[
-                      { label: 'Weekly', value: 'Weekly' },
-                      { label: 'Daily', value: 'Daily' },
-                      { label: 'Monthly', value: 'Monthly' },
-                    ]}
-                    error={'payment method is false'}
-                    touched={false}
-                    formik={formik}
-                  />
-                </div>
-                <Button
-                  label="Generate"
-                  type="submit"
-                  className="button-primary h-9 w-[120px] text-xs"
-                />
-              </MerchantFormLayout>
-            </Form>
+                </MerchantFormLayout>
+              </Form>
+            )}
+          </Formik>
+          {apierror && (
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
           )}
-        </Formik>
-
-        {/* </div> */}
-        {/* <TableComponent /> */}
-        <LineChartGraph filteredGraphData={filteredGraphData} />
-      </div>
+          {/* </div> */}
+          {/* <TableComponent /> */}
+          <LineChartGraph filteredGraphData={filteredGraphData} />
+        </div>
+      )}
     </>
   );
 };
