@@ -2,7 +2,7 @@ import React from 'react';
 
 const MPPriceBar = ({ accountBalance }: { accountBalance: string }) => {
   return (
-    <div className="flex  items-center justify-between bg-screen-grey py-[16px] sm:px-6 md:px-[150px]">
+    <div className="flex  items-center justify-between bg-screen-grey py-[16px] sm:px-6 ">
       <div className="text-base font-normal leading-10 text-secondary-base">
         Mobile Account Balance
       </div>

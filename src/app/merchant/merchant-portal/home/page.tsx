@@ -116,7 +116,9 @@ const MerchantPortalHome = () => {
         <BarLoader />
       ) : (
         <div className="flex flex-col gap-6">
-          <MPPriceBar accountBalance={accountBalance} />
+          <div className="my-6">
+            <MPPriceBar accountBalance={accountBalance} />
+          </div>
           <HeaderWrapper
             heading="Welcome to Merchant Portal"
             // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"

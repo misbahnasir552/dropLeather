@@ -220,6 +220,11 @@ function BulkFundsTransferReport() {
                   </div>
                   <div className="flex w-full items-end justify-end gap-5 px-6">
                     <Button
+                      label="Bulk Transfer"
+                      routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
+                      className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                    />
+                    <Button
                       label="Reset"
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={() => {
@@ -237,11 +242,6 @@ function BulkFundsTransferReport() {
                       onClickHandler={() => onSubmit(formik.values)}
                       // type="submit"
                       className="button-primary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                    />
-                    <Button
-                      label="Bulk Transfer"
-                      routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
-                      className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                   </div>
                 </div>
