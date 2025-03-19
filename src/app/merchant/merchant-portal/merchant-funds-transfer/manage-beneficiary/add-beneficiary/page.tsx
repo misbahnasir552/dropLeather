@@ -58,7 +58,7 @@ function AddBeneficiary() {
       const md5Hash = generateMD5Hash(mdRequest);
       const requestBody = { request: additionalValues, signature: md5Hash };
       const response = await apiClient.post(
-        'merchant/sendOtpMerchant',
+        `merchant/sendOtpMerchant?actionType=addbeneficiary`,
         requestBody,
         {
           headers: { Authorization: `Bearer ${userData?.jwt}` },

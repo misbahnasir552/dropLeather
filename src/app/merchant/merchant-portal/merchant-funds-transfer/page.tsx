@@ -76,7 +76,7 @@ function MerchantFundsTransfer() {
         signature: md5Hash,
       };
       const response = await apiClient.post(
-        'merchant/sendOtpMerchant',
+        `merchant/sendOtpMerchant?actionType=managefundtransfer`,
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
