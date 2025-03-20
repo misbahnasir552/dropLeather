@@ -12,12 +12,14 @@ import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { useAppSelector } from '@/hooks/redux';
 import {
   searchBulkInitialValues,
   searchBulkSchema,
 } from '@/validations/merchant/merchant-portal/reversal-module/reversal-bulk-batch';
 
 function BulkFundsTransferReport() {
+  const userData = useAppSelector((state: any) => state.auth);
   const [apierror, setApierror] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
   const [fileNames, setFileNames] = useState([]);
@@ -37,6 +39,9 @@ function BulkFundsTransferReport() {
               : {}), // Spread existing filtered data
             page: pageNumber, // Add page parameter
             size: +envPageSize, // Add size parameter
+          },
+          headers: {
+            merchantEmail: userData?.email,
           },
         },
       );
@@ -216,13 +221,15 @@ function BulkFundsTransferReport() {
                       formik={formik}
                       error={formik.errors.toDate}
                       touched={formik.touched.toDate}
+                      minDate={formik.values.fromDate}
                     />
                   </div>
-                  <div className="flex w-full items-end justify-end gap-5 px-6">
+                  <div className="flex w-full items-end gap-5 px-6">
                     <Button
-                      label="Bulk Transfer"
-                      routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
-                      className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                      label="Search"
+                      onClickHandler={() => onSubmit(formik.values)}
+                      type="submit"
+                      className="button-primary w-[120px] px-2 py-[13px] text-xs leading-tight transition duration-300"
                     />
                     <Button
                       label="Reset"
@@ -238,10 +245,9 @@ function BulkFundsTransferReport() {
                       onClickHandler={exportToExcel} // Export button click handler
                     />
                     <Button
-                      label="Search"
-                      onClickHandler={() => onSubmit(formik.values)}
-                      // type="submit"
-                      className="button-primary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                      label="Bulk Transfer"
+                      routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
+                      className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                   </div>
                 </div>

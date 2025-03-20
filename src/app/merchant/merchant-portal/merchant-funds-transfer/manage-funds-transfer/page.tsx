@@ -9,13 +9,14 @@ import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
-import H4 from '@/components/UI/Headings/H4';
+import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import { useAppSelector } from '@/hooks/redux';
 import type { IManageFundsTransfer } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/interfaces';
 import {
   manageFundsTransferInitialValues,
@@ -23,6 +24,7 @@ import {
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/manage-funds-transfer';
 
 function ManageFundsTransfer() {
+  const userData = useAppSelector((state: any) => state.auth);
   const [allRecords, setAllRecords] = useState<any[]>([]);
   const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
     [],
@@ -53,6 +55,9 @@ function ManageFundsTransfer() {
             page: pageNumber, // Add page parameter
             size: +envPageSize, // Add size parameter
           },
+          headers: {
+            merchantEmail: userData?.email,
+          },
         },
       );
       if (response?.data?.responseCode === '009') {
@@ -75,7 +80,6 @@ function ManageFundsTransfer() {
       }
       // setLoading(false);
     } catch (e: any) {
-      console.log('Error in fetching dynamic QR list', e);
       // setTitle('Network Failed');
       setDescription(e?.message);
       setApierror(e?.message);
@@ -223,30 +227,14 @@ function ManageFundsTransfer() {
                   label="MSISDN"
                   name={'msisdn'}
                   type="text"
-                  error={'hi'}
                   touched={false}
                 />
-                {/* <Input
-                  label="Available Balance"
-                  name={'availableBalance'}
-                  type="text"
-                  error={'hi'}
-                  touched={false}
-                /> */}
                 <Input
                   label="Current Balance"
                   name={'currentBalance'}
                   type="number"
-                  error={'hi'}
                   touched={false}
                 />
-                {/* <Input
-                  label="Transfer Amount"
-                  name={'transferAmount'}
-                  type="number"
-                  error={'hi'}
-                  touched={false}
-                /> */}
                 <Input
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
@@ -277,6 +265,20 @@ function ManageFundsTransfer() {
                   className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
                 <Button
+                  label="Reset"
+                  type="button"
+                  onClickHandler={() => {
+                    handleReset(formik);
+                    setFilteredData(undefined);
+                  }}
+                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
+                />
+                <Button
+                  label="Export"
+                  className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                  onClickHandler={exportToExcel} // Export button click handler
+                />
+                <Button
                   label={`Funds Transfer`}
                   routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/funds-transfer"
                   className="button-secondary h-9 w-[160px] px-3 py-[19px] text-sm"
@@ -291,20 +293,6 @@ function ManageFundsTransfer() {
                   type="submit"
                   className="button-secondary h-9 w-[250px] px-3 py-[19px] text-sm"
                 /> */}
-                <Button
-                  label="Export"
-                  className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                  onClickHandler={exportToExcel} // Export button click handler
-                />
-                <Button
-                  label="Reset"
-                  type="button"
-                  onClickHandler={() => {
-                    handleReset(formik);
-                    setFilteredData(undefined);
-                  }}
-                  className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
-                />
               </div>
             </Form>
           )}
@@ -333,7 +321,7 @@ function ManageFundsTransfer() {
               </div>
             </div>
           ) : (
-            <H4>No Records Found</H4>
+            <H7 className="text-center">No Records Found</H7>
           )}
         </>
       )}
