@@ -46,7 +46,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
         },
       );
       if (response.data.responseCode === '009') {
-        console.log('success response', response?.data);
       } else if (response?.data?.responseCode === '000') {
         setTitle('Error Occured');
         setDescription(response?.data?.responseDescription);
@@ -63,7 +62,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
     }
     // setSubmitting(false);
   };
-  console.log('apierror', apierror);
 
   return (
     <>

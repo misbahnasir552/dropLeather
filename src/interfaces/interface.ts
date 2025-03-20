@@ -411,7 +411,8 @@ export interface SearchTransactionsForm {
   customerCellPhone: string;
   otcToken: string;
   orderDate: string;
-  merchantName: string;
+  customerName: string;
+  merchantName:string;
   authId: string;
   batch: string;
   paymentDate: string;
@@ -425,7 +426,7 @@ export interface SearchTransactionsForm {
   ccOrderId: string;
   ddBankName: string;
   transactionReference: string;
-  transactionStatus: string;
+  status: string;
   escrowStatus: string;
   settlementtransactionStatus: string;
   value3d: string;
@@ -434,6 +435,8 @@ export interface SearchTransactionsForm {
   transactionPoint: string;
   channel: string;
   storeID: string;
+  fromDate: string;
+  toDate: string;
 }
 
 export interface AddOutletForm {
