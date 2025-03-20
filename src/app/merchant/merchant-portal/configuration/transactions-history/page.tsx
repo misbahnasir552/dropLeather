@@ -3,6 +3,8 @@
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as XLSX from 'xlsx';
+
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
@@ -18,7 +20,6 @@ import {
   searchTransactionsInitialValues,
   searchTransactionsSchema,
 } from '@/validations/merchant/transactions/searchTransactionsSchema';
-import * as XLSX from 'xlsx';
 
 const SearchTransaction = () => {
   const userData = useAppSelector((state: any) => state.auth);
@@ -132,7 +133,7 @@ const SearchTransaction = () => {
     formik.resetForm();
     fetchRecords();
   };
- const exportToExcel = () => {
+  const exportToExcel = () => {
     // if (!response) return;
 
     // if (!response || response.length === 0) {
@@ -150,7 +151,7 @@ const SearchTransaction = () => {
     // Generate an Excel file and download it
     XLSX.writeFile(wb, 'qr_reporting.xlsx');
   };
-  
+
   return (
     <div className="flex flex-col gap-6">
       <HeaderWrapper heading="Search Transactions" />
@@ -257,8 +258,9 @@ const SearchTransaction = () => {
               <Button
                 label="Reset"
                 // routeName="/sign-up"
-                onClickHandler={() => {handleReset(formik)
-                  setFilteredData(undefined)
+                onClickHandler={() => {
+                  handleReset(formik);
+                  setFilteredData(undefined);
                 }}
                 className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
               />
@@ -282,7 +284,7 @@ const SearchTransaction = () => {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {data?.length>0 ? (
+          {data?.length > 0 ? (
             <>
               <SearchTransactionTable
                 tableHeadings={tableHeadings}
@@ -296,7 +298,7 @@ const SearchTransaction = () => {
               />
             </>
           ) : (
-            <H7 className='text-center'>No Records found.</H7>
+            <H7 className="text-center">No Records found.</H7>
           )}
           <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
             {apierror}
