@@ -412,7 +412,7 @@ export interface SearchTransactionsForm {
   otcToken: string;
   orderDate: string;
   customerName: string;
-  merchantName:string;
+  merchantName: string;
   authId: string;
   batch: string;
   paymentDate: string;

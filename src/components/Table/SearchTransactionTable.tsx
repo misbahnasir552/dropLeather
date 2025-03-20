@@ -46,6 +46,7 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
         },
       );
       if (response.data.responseCode === '009') {
+        console.log(response?.data);
       } else if (response?.data?.responseCode === '000') {
         setTitle('Error Occured');
         setDescription(response?.data?.responseDescription);

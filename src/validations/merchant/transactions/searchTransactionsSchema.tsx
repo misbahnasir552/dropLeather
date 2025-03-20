@@ -10,7 +10,7 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   otcToken: '',
   orderDate: '',
   customerName: '',
-  merchantName:'',
+  merchantName: '',
   authId: '',
   batch: '',
   paymentDate: '',
@@ -74,6 +74,7 @@ export const searchTransactionsSchema = Yup.object().shape({
     'To Date is required',
     // eslint-disable-next-line func-names
     function (value) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
       const { fromDate } = this?.parent;
       return !fromDate || (fromDate && value); // If fromDate exists, toDate must also exist
     },
