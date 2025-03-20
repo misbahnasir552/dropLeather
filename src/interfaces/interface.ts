@@ -123,6 +123,7 @@ export interface IDate {
   error?: string | undefined | string[];
   touched?: boolean | undefined;
   formik?: FormikProps<any>;
+  minDate?: any;
 }
 
 export interface ICheckboxInput {

@@ -14,6 +14,8 @@ const DateInputNew = ({
   error,
   touched,
   asterik,
+  isDisabled,
+  minDate,
 }: IDate) => {
   const handleDateChange = (event: any) => {
     const selectedDate = event.target.value;
@@ -46,6 +48,8 @@ const DateInputNew = ({
           placeholder=" "
           onClick={handleDateClick}
           onChange={handleDateChange}
+          disabled={isDisabled}
+          min={minDate}
           // onBlur={handleBlur}
           className="h-[60px] w-full rounded-lg p-5 font-medium text-neutral-black-base focus:outline-none"
         />

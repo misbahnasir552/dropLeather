@@ -192,7 +192,8 @@ const SearchTransaction = () => {
                 formik={formik}
                 error={formik.errors.toDate}
                 touched={formik.touched.toDate}
-                isDisabled
+                isDisabled={!formik.values.fromDate}
+                minDate={formik.values.fromDate}
               />
               {/* <DateInputNew
                 label="Payment Date Between"
