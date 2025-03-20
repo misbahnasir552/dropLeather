@@ -91,6 +91,7 @@ const NewLogin = () => {
         params: {
           channel: 'merchant',
           userType: 'merchant',
+          actionType: 'login',
         },
         headers: {
           username: values.Username,

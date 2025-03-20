@@ -6,7 +6,6 @@ import home from '@/assets/icons/home-sign-up.svg';
 
 export const getHeaderTextForSegment = (segment: string) => {
   const lowercasedSegment = segment.toLowerCase();
-  // console.log('LOWER SEGMENT: ', lowercasedSegment);
 
   switch (lowercasedSegment) {
     case 'sign-up':
@@ -102,7 +101,6 @@ function convertObjectToUpperCase(obj: MyObject) {
 export const generateMD5Hash = (bodyRequest: any) => {
   const body = convertObjectToUpperCase(bodyRequest);
   const bodyString = JSON.stringify(body);
-  console.log(bodyString, 'BODYSTRING MD5');
   const hash = CryptoJS.MD5(bodyString).toString();
 
   return hash;

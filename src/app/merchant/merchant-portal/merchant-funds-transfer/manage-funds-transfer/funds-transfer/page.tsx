@@ -10,6 +10,7 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -32,6 +33,7 @@ function FundsTranfer() {
   const [isLoading, setIsLoading] = useState(false);
   const [records, setRecords] = useState([]);
   const [apierror, setApierror] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const fetchBeneficiariesRecords = async () => {
     try {
@@ -73,13 +75,17 @@ function FundsTranfer() {
       if (response.data.responseCode === '009') {
         return response?.data;
       }
-      setTitle('Error fetching OTP');
-      setShowModal(true);
+      console.log('response', response);
+      setTitle(response?.data?.responseMessage);
+      setDescription(response?.data?.responseDescription);
+      setShowErrorModal(true);
+      // setShowModal(true);
       return false;
     } catch (e: any) {
       console.log(e);
-      setDescription(e?.message);
-      setShowModal(true);
+      setTitle(e?.message);
+      setShowErrorModal(true);
+      // setShowModal(true);
       return false;
     } finally {
       setIsLoading(false);
@@ -171,13 +177,23 @@ function FundsTranfer() {
 
   return (
     <div className="flex flex-col gap-6">
-      <SuccessModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
-      />
+      {showModal && (
+        <SuccessModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/"
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
       <HeaderWrapper heading="Funds Transfer" />
       <Formik
         initialValues={fundsTransferInitialValues}

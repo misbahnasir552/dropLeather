@@ -7,6 +7,7 @@ import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
 import Button from '@/components/UI/Button/PrimaryButton';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -20,10 +21,10 @@ const OtpInputWithValidation = () => {
   const [emailOtp, setEmailOtp] = useState(new Array(6).fill(''));
   const [smsOtp, setSmsOtp] = useState(new Array(6).fill(''));
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apierror, setApierror] = useState('');
 
   const handleVerify = async () => {
     try {
@@ -67,18 +68,24 @@ const OtpInputWithValidation = () => {
             setDescription(response?.data.responseDescription);
             dispatch(resetTransferFundsFormData());
           } else {
-            setApierror(response.data.responseDescription);
+            setTitle(response?.data?.responseMessage);
+            setDescription(response?.data.responseDescription);
+            setShowErrorModal(true);
           }
         } catch (e: any) {
-          setApierror(e?.message);
+          setTitle(e?.message);
+          setShowErrorModal(true);
         } finally {
           setIsLoading(false);
         }
       } else {
-        setApierror(response?.data?.responseMessage);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data.responseDescription);
+        setShowErrorModal(true);
       }
     } catch (e: any) {
-      setApierror(e?.message);
+      setTitle(e?.message);
+      setShowErrorModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -96,6 +103,14 @@ const OtpInputWithValidation = () => {
           routeName={
             '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/'
           }
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">
@@ -118,9 +133,6 @@ const OtpInputWithValidation = () => {
               otp={smsOtp}
               medium="sms"
             />
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
             <div className="flex justify-center">
               <Button
                 label="Verify"

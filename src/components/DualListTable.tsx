@@ -40,9 +40,7 @@ const DualListTable = ({
   const [initialData, setInitialData] = useState<IInitialData[]>([]);
   // const [selectedItems, setSelectedItems] = useState<IInitialData[]>([]);
 
-  useEffect(() => {
-    console.log('items are', selectedItems);
-  }, [selectedItems]);
+  useEffect(() => {}, [selectedItems]);
 
   useEffect(() => {
     const getForms = async () => {
@@ -51,7 +49,6 @@ const DualListTable = ({
           const response = await apiClient.get(
             `corporate/getPageInfo/soleProprietor`,
           );
-          console.log('Get Forms', response);
           const responseData = response?.data?.page;
           // const initialItems = responseData?.flatMap((item: any) =>
           //   item.categories.flatMap((category: any) =>
@@ -78,13 +75,10 @@ const DualListTable = ({
           if (initialItems) {
             setInitialData(initialItems);
           }
-          console.log('Initial items:', initialItems);
-          console.log('initial data', initialData);
         } else {
           const response = await apiClient.get(
             `merchant/getPageInfo/soleProprietor`,
           );
-          console.log('Get Forms', response);
           const responseData = response?.data?.page;
           const initialItems = responseData?.flatMap((item: any) =>
             item.categories.flatMap((category: any) =>
@@ -98,8 +92,6 @@ const DualListTable = ({
           if (initialItems) {
             setInitialData(initialItems);
           }
-          console.log('Initial items:', initialItems);
-          console.log('initial data', initialData);
         }
         // const response = await apiClient.get(
         //   `merchant/getPageInfo/soleProprietor`,
@@ -146,20 +138,16 @@ const DualListTable = ({
   const handleSelectAllAvailable = () => {
     if (checkedAvailableItems.length === availableItems.length) {
       setCheckedAvailableItems([]);
-      // console.log("selected items are", checkedSelectedItems)
     } else {
-      // console.log("selected items are", checkedSelectedItems)
       setCheckedAvailableItems(availableItems);
     }
   };
 
   const handleSelectAllSelected = () => {
     if (checkedSelectedItems.length === selectedItems.length) {
-      console.log('selected items are', checkedSelectedItems);
       setCheckedSelectedItems([]);
     } else {
       setCheckedSelectedItems(selectedItems);
-      console.log('selected items are', checkedSelectedItems);
     }
   };
 

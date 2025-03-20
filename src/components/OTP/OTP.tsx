@@ -40,7 +40,6 @@ function OTP({
   useEffect(() => {
     const expiryQueryParam = searchParams.get('expiry');
     if (expiryQueryParam) {
-      console.log('expiry time', expiryQueryParam);
       const expTime = Number(expiryQueryParam) * 60;
       setExpiryTime(expTime);
     }
@@ -65,16 +64,12 @@ function OTP({
         } else {
           setOtpError(response.data.responseDescription);
         }
-        console.log('sms otp response is', response);
       } else {
-        console.log('userdata email', userData.email);
-
         const response = await apiClient.post('merchant/emailotp', {
           managerMobile:
             signupForm.managerMobile || userData?.managerMobile || paramNumber,
           email: signupForm.email || userData?.email || paramEmail,
         });
-        console.log('email otp response is', response);
         if (response.data.responseCode === '000') {
           setOtpError(response.data.responseDescription);
         } else if (response.data.responseCode === '009') {
