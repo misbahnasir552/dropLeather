@@ -7,6 +7,7 @@ import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
 import Button from '@/components/UI/Button/PrimaryButton';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -21,21 +22,17 @@ const OtpInputWithValidation = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [apierror, setApierror] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
 
   const handleVerify = async () => {
     try {
       setIsLoading(true);
 
       const response = await apiClient.post('merchant/verifyotp', {
-        // rewuest: {
         managerMobile: userData?.managerMobile,
-        // email: userData?.email,
         numberOtp: smsOtp.join(''),
         emailOtp: emailOtp.join(''),
-        // },
       });
-      console.log(response);
 
       if (response?.data?.responseCode === '009') {
         const additionalValues = {
@@ -58,32 +55,27 @@ const OtpInputWithValidation = () => {
               params: { merchantEmail: userData?.email },
             },
           );
-          console.log('Added Successfully', response);
           if (response?.data.responseCode === '009') {
             setTitle(response?.data?.responseMessage);
             setDescription(response?.data.responseDescription);
             setShowModal(true);
-            // router.push("")
           } else {
-            setTitle(response?.data?.responseMessage);
             setDescription(response?.data?.responseMessage);
-            setApierror(response?.data?.responseMessage);
+            setShowErrorModal(true);
           }
         } catch (e: any) {
           setDescription(e?.message);
-          setApierror(e?.message);
+          setShowErrorModal(true);
         } finally {
           setIsLoading(false);
         }
       } else {
-        setTitle(response?.data?.responseMessage);
-        setDescription(response?.data?.responseMessage);
-        setApierror(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       }
     } catch (e: any) {
-      console.log(e);
       setDescription(e?.message);
-      setApierror(e?.message);
+      setShowErrorModal(true);
     } finally {
       setIsLoading(false);
     }
@@ -91,10 +83,7 @@ const OtpInputWithValidation = () => {
 
   return (
     <>
-      {isLoading && (
-        <BarLoader color="#21B25F" />
-        // <p className="bg-primary-base p-4 font-semibold">LOADING....</p>
-      )}
+      {isLoading && <BarLoader color="#21B25F" />}
       {showModal && (
         <SuccessModal
           title={title}
@@ -105,6 +94,14 @@ const OtpInputWithValidation = () => {
             '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/'
           }
           isVisible={true}
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">
@@ -127,9 +124,6 @@ const OtpInputWithValidation = () => {
               otp={smsOtp}
               medium="sms"
             />
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
             <div className="flex justify-center">
               <Button
                 // routeName="/login"

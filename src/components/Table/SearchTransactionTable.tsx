@@ -1,6 +1,5 @@
 'use client';
 
-// import Image from 'next/image';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -12,13 +11,14 @@ import { useAppSelector } from '@/hooks/redux';
 import { generateMD5Hash } from '@/utils/helper';
 
 import CustomModal from '../UI/Modal/CustomModal';
+import ErrorModal from '../UI/Modal/ErrorModal';
 
 const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
   const userData = useAppSelector((state: { auth: any }) => state.auth);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [apierror, setApierror] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const onSubmit = async (transactionID: any) => {
     const req = {
       managerMobile: userData.managerMobile,
@@ -39,27 +39,27 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
           signature: md5Hash,
         },
         {
-          // params: {
-          //   username: userData?.email,
-          // },
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
       if (response.data.responseCode === '009') {
-        console.log(response?.data);
-      } else if (response?.data?.responseCode === '000') {
-        setTitle('Error Occured');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
-        setApierror(response?.data?.responseDescription);
-        // setShowModal(true);
+        setShowModal(true);
+      } else if (response?.data?.responseCode === '000') {
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       } else {
-        setTitle('Error Occured');
-        setDescription(response?.data?.errorDescription);
-        setApierror(response?.data?.errorCategory);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
         // setShowModal(true);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log(e, 'Error');
+      setDescription(e?.message);
+      setShowErrorModal(true);
     }
     // setSubmitting(false);
   };
@@ -68,12 +68,22 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
     <>
       <div className="scrollbar-thin scrollbar-thumb-primary-400 scrollbar-track-primary-100 hover:scrollbar-thumb-primary-base max-h-[500px] w-full overflow-auto">
         {' '}
-        <CustomModal
-          title={title}
-          description={description}
-          setShowModal={setShowModal}
-          show={showModal}
-        />
+        {showModal && (
+          <CustomModal
+            title={title}
+            description={description}
+            setShowModal={setShowModal}
+            show={showModal}
+          />
+        )}
+        {showErrorModal && (
+          <ErrorModal
+            title={title}
+            description={description}
+            show={showErrorModal}
+            setShow={setShowErrorModal}
+          />
+        )}
         {/* Adjust max height as needed */}
         <table className="w-full border-collapse">
           <thead className="sticky top-0 z-10 bg-screen-grey">
@@ -141,7 +151,7 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                   </td>
                 ) : (
                   <td className="w-32 p-[18px] text-center">
-                    N/A
+                    <B3>N/A</B3>
                     {/* Empty cell for rows without "Success" */}
                   </td>
                 )}
@@ -149,9 +159,6 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
             ))}
           </tbody>
         </table>
-      </div>
-      <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-        {apierror}
       </div>
     </>
   );

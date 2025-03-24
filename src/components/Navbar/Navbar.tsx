@@ -55,7 +55,6 @@ const Navbar = () => {
   };
 
   const logOut = () => {
-    console.log("here i'm to log out");
     dispatch(setLogout());
     dispatch(resetForms());
     router.push('/login');

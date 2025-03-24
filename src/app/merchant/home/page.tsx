@@ -18,14 +18,6 @@ const LoginSucessHome = () => {
 
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
-
-  const applicantsStore = useAppSelector(
-    (state: any) => state.onBoardingForms.addApplicants,
-  );
-
-  console.log('APP STORE BUSINESS ', applicantsStore);
-
-  console.log('user data is', userData);
   const router = useRouter();
 
   if (userData?.temp) {
@@ -98,8 +90,6 @@ const LoginSucessHome = () => {
       //   setTitle('Network Issue');
       //   setDescription(response.data.responseDescription);
       // }
-
-      console.log('FETCH RES ', response.data);
 
       // const pageStatuses = [
       //   {

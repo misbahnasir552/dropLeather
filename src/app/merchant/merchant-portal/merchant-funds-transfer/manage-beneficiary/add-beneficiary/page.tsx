@@ -2,7 +2,6 @@
 
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
-// import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -12,12 +11,11 @@ import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
-import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
-// import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
 import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
 import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
 import { generateMD5Hash } from '@/utils/helper';
@@ -33,12 +31,10 @@ function AddBeneficiary() {
   const userData = useAppSelector((state: any) => state.auth);
   const [isChecked, setIsChecked] = useState(false);
   const [checkedError, setCheckedError] = useState<string>('');
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
-  const [submitError, setSubmitError] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const handleCheckboxChange = () => {
     setCheckedError('');
     setIsChecked(!isChecked);
@@ -64,27 +60,22 @@ function AddBeneficiary() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log(response, 'FETCH OTP RESPONSE');
       if (response.data.responseCode === '009') {
         return true;
       }
-      setTitle('Error fetching OTP');
-      setShowModal(true);
+      setDescription(response?.data?.responseDescription);
+      setShowErrorModal(true);
       return false;
     } catch (e: any) {
-      console.log(e);
-      setTitle('Network Failed');
       setDescription(e.message);
-      setShowModal(true);
+      setShowErrorModal(true);
       return false;
     } finally {
       setIsLoading(false);
     }
   };
-  console.log('userData', userData);
 
   const handleFetchTitle = async (formik: any) => {
-    console.log('FETCH TITLEeeee');
     setApierror('');
     try {
       setIsLoading(true);
@@ -107,20 +98,14 @@ function AddBeneficiary() {
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
-      console.log(response, 'FETCH OTHER BANK TITLE');
-      console.log(response?.data?.accountTitle, 'accountTitle');
       if (response?.data.responseCode === '009') {
         formik?.setFieldValue('accountTitle', response?.data?.accountTitle);
       } else {
-        setTitle('Error fetching Title');
-        setDescription(response.data.responseDescription);
         setApierror(response?.data?.responseDescription);
         // setShowModal(true);
       }
-    } catch (e) {
-      console.log('Fetch details failed', e);
-      setTitle('Network Failed');
-      setApierror('Network Failed');
+    } catch (e: any) {
+      setApierror(e?.message);
       // setShowModal(true);
     } finally {
       setIsLoading(false);
@@ -128,9 +113,7 @@ function AddBeneficiary() {
   };
 
   const onSubmit = async (values: any) => {
-    console.log('Add beneficiary values', values);
     setApierror('');
-    setSubmitError('');
     if (!isChecked) {
       setCheckedError('Select Terms & Conditions to continue');
     } else {
@@ -220,19 +203,15 @@ function AddBeneficiary() {
   return (
     <div className="flex flex-col gap-6">
       {isLoading && <BarLoader color="#21B25F" />}
-      <SuccessModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        isVisible={true}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
-      />
-
-      <HeaderWrapper
-        heading="Add Beneficiary"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-      />
+      {showErrorModal && (
+        <ErrorModal
+          title={''}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
+      <HeaderWrapper heading="Add Beneficiary" />
       <Formik
         initialValues={addBeneficiaryInitialValues}
         validationSchema={addBeneficiarySchema}
@@ -349,14 +328,6 @@ function AddBeneficiary() {
                 </div>
               )}
             </FormLayout>
-            {/* {isLoading && (
-              <div className="flex w-full justify-center">
-                <BarLoader color="#21B25F" />
-              </div>
-            )} */}
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {submitError}
-            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
@@ -366,7 +337,6 @@ function AddBeneficiary() {
               <Button
                 label="Next"
                 type="submit"
-                // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
             </div>

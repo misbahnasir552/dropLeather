@@ -68,7 +68,6 @@ const OtpInputWithValidation = () => {
             setDescription(response?.data.responseDescription);
             dispatch(resetTransferFundsFormData());
           } else {
-            setTitle(response?.data?.responseMessage);
             setDescription(response?.data.responseDescription);
             setShowErrorModal(true);
           }

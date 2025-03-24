@@ -8,6 +8,7 @@ import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -23,16 +24,15 @@ function BulkFileUpload() {
   const formData = new FormData();
 
   const [showModal, setShowModal] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [apierror, setApierror] = useState<string>('');
 
   const onSubmit = async (
     values: IBulkUpload,
     { resetForm }: { resetForm: () => void },
   ) => {
     const { bulkFile } = values;
-    setApierror('');
     try {
       if (bulkFile) {
         formData.append('file', bulkFile);
@@ -50,21 +50,21 @@ function BulkFileUpload() {
           setTitle(response?.data?.responseMessage);
           setDescription(response?.data?.responseDescription);
           setShowModal(true);
-          setApierror('');
           setSelectedFiles([]);
           resetForm();
         } else if (response?.data.responseCode === '000') {
-          setApierror(
-            `${response?.data?.responseMessage}. ${response?.data?.responseDescription}`,
-          );
+          setTitle(response?.data?.responseMessage);
+          setDescription(response?.data?.responseDescription);
+          setShowErrorModal(true);
         } else {
-          setApierror(
-            `${response?.data?.responseMessage}. ${response?.data?.responseDescription}`,
-          );
+          setTitle(response?.data?.responseMessage);
+          setDescription(response?.data?.responseDescription);
+          setShowErrorModal(true);
         }
       }
     } catch (e: any) {
-      setApierror(e?.message);
+      setDescription(e?.message);
+      setShowErrorModal(true);
     } finally {
       // setShowModal(true);
     }
@@ -72,14 +72,24 @@ function BulkFileUpload() {
 
   return (
     <div className="flex flex-col gap-6 pt-12">
-      <SuccessModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/"
-        isVisible
-      />
+      {showModal && (
+        <SuccessModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/"
+          isVisible
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
       <HeaderWrapper
         heading="Bulk Upload"
         description="File Should include Following fields: Beneficiary Account Number, Beneficiary Bank, Transfer Amount, Transfer Purpose"
@@ -110,9 +120,6 @@ function BulkFileUpload() {
                 />
               </div>
             </FormLayout>
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
