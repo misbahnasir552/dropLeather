@@ -1,5 +1,5 @@
 // import { renderCustomAxisTick } from '@/utils/graph/helper';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -11,37 +11,33 @@ import {
   YAxis,
 } from 'recharts';
 
-import CustomTick from './custom/CustomTick';
-
-// const data = [
-//   { name: '1', uv: 1500, },
-//   { name: '2', uv: 3000,  },
-//   { name: '3', uv: 1000,  },
-//   { name: '4', uv: 2000,  },
-//   { name: '5', uv: 8200,  },
-//   { name: '6', uv: 8200,  },
-//   { name: '7', uv: 8200,  },
-
-//   // More data points...
-// ];
+// import CustomTick from './custom/CustomTick';
 
 const LineChartGraph = (filteredGraphData: any) => {
-  console.log(filteredGraphData, 'LINECHART');
-  useEffect(() => {}, [filteredGraphData]);
-  return (
-    <ResponsiveContainer width={1200} height={500}>
-      <LineChart data={filteredGraphData}>
-        <XAxis dataKey="name" tick={<CustomTick />} />
-        <YAxis />
-        <CartesianGrid strokeDasharray="7 3" />
+  return filteredGraphData ? (
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart
+        width={1200}
+        height={500}
+        data={filteredGraphData?.filteredGraphData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis dataKey="transactions/revenue" />
         <Tooltip />
         <Legend />
-        {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" /> */}
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        {/* <Line type="monotone" dataKey="pv" stroke="#82ca0p" /> */}
+        <Line type="monotone" dataKey="rejected" stroke="#8884d8" />
+        <Line type="monotone" dataKey="approved" stroke="#82ca9d" />
+        <Line type="monotone" dataKey="pending" stroke="#FF0000" />
       </LineChart>
     </ResponsiveContainer>
-  );
+  ) : null;
 };
 
 export default LineChartGraph;
