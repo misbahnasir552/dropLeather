@@ -1,4 +1,4 @@
-export const soleBusinessDetailsFormData = {
+export const partnershipBusinessDetailsFormData = {
   pageName: 'Business Details',
   categories: [
     {
@@ -64,12 +64,12 @@ export const soleBusinessDetailsFormData = {
           ],
           required: true,
         },
-        // {
-        //   name: 'Established Since',
-        //   label: 'establishedSince',
-        //   type: 'date',
-        //   required: false,
-        // },
+        {
+          name: 'establishedSince',
+          label: 'Established Since',
+          type: 'date',
+          required: true,
+        },
       ],
     },
     {
@@ -109,96 +109,98 @@ export const soleBusinessDetailsFormData = {
     {
       categoryName: 'Business Type Details',
       fields: [
-        // {
-        //   name: 'permanentAddress',
-        //   label: 'Permanent Address',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'fatcaStatus',
-        //   label: 'FATCA Status',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'crsStatus',
-        //   label: 'CRS status',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'mandateName',
-        //   label: 'Mandate Name',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'mandateIdCardNumber',
-        //   label: 'Mandate Id Card Number',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'mandateRelationshipWithAccountHolder',
-        //   label: 'Mandate relationship with account holder',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'dateOfIssuanceOfApplicableIdentityDocument',
-        //   label: 'Date of issuance of applicable identity document',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'beneficialOwnerControllingRights',
-        //   label: 'Beneficial Owner/Controlling Rights',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'mandateDateOfBirth',
-        //   label: 'Mandate Date of Birth',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'mandatePlaceOfBirth',
-        //   label: 'Mandate Place of Birth',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'cityAndCountry',
-        //   label: 'City and Country',
-        //   type: 'text',
-        //   required: false,
-        // },
         {
-          name: 'nextOfKinCnic',
-          label: 'Next of KIN CNIC',
+          name: 'signatoryName',
+          label: 'Signatory Name',
           type: 'text',
           required: true,
         },
         {
-          name: 'nextOfKinRelationship',
-          label: 'Next of KIN Relationship',
+          name: 'signatoryDateOfBirth',
+          label: 'Signatory Date Of Birth',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'signatoryIdCardNo',
+          label: 'Signatory Id Card No',
           type: 'text',
           required: true,
         },
         {
-          name: 'nextOfKinName',
-          label: 'Next of Kin Name',
+          name: 'signatoryCityAndCountry',
+          label: 'Signatory City & Country',
           type: 'text',
           required: true,
         },
-        // {
-        //   name: 'dateOfBirth',
-        //   label: 'Date Of Birth',
-        //   type: 'text',
-        //   required: false,
-        // },
+        {
+          name: 'beneficialOwnerName',
+          label: 'Beneficial Owner Name',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'beneficialOwnerIDCardNo',
+          label: 'Beneficial Owner ID Card No',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'beneficialOwnerDateOfBirth',
+          label: 'Beneficial Owner Date Of Birth',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'beneficialOwnerCityAndCountry',
+          label: 'Beneficial Owner City & Country',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'partnersName',
+          label: 'Partners Name',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'partnersIdCardNo',
+          label: 'Partners Id Card No',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'partnersDateOfBirth',
+          label: 'Partners Date Of Birth',
+          type: 'date',
+          required: true,
+        },
+        {
+          name: 'partnersCityAndCountry',
+          label: 'Partners City And Country',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'permanentAddress',
+          label: 'Permanent Address',
+          type: 'text',
+          required: true,
+        },
+
+        {
+          name: 'dateOfIssuanceOfApplicableIdentityDocument',
+          label: 'Date of issuance of applicable identity document',
+          type: 'text',
+          required: false,
+        },
+
+        {
+          name: 'dateOfBirth',
+          label: 'Date Of Birth',
+          type: 'date',
+          required: true,
+        },
         {
           name: 'registerUnRegister',
           label: 'Register/UnRegister',
@@ -215,48 +217,48 @@ export const soleBusinessDetailsFormData = {
           type: 'text',
           required: true,
         },
-        // {
-        //   name: 'registrationIncorporationNo',
-        //   label: 'Registration/Incorporation No',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'placeOfIncorporationOrRegistration',
-        //   label: 'Place of Incorporation or Registration',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'geographiesInvolved',
-        //   label: 'Geographies Involved',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'expectedTypeOfCounterParties',
-        //   label: 'Expected Type of Counter-Parties',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'intendedNatureOfBusinessRelations',
-        //   label: 'Intended nature of business relations',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'expectedModesOfTransactionsDeliveryChannels',
-        //   label: 'Expected modes of transactions/ delivery channels',
-        //   type: 'text',
-        //   required: false,
-        // },
-        // {
-        //   name: 'industrySegment',
-        //   label: 'Industry/Segment',
-        //   type: 'text',
-        //   required: false,
-        // },
+        {
+          name: 'registrationIncorporationNo',
+          label: 'Registration/Incorporation No',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'placeOfIncorporationOrRegistration',
+          label: 'Place of Incorporation or Registration',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'geographiesInvolved',
+          label: 'Geographies Involved',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'expectedTypeOfCounterParties',
+          label: 'Expected Type of Counter-Parties',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'intendedNatureOfBusinessRelations',
+          label: 'Intended nature of business relations',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'expectedModesOfTransactionsDeliveryChannels',
+          label: 'Expected modes of transactions/ delivery channels',
+          type: 'text',
+          required: true,
+        },
+        {
+          name: 'industrySegment',
+          label: 'Industry/Segment',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'product',
           label: 'Product',
@@ -325,12 +327,12 @@ export const soleBusinessDetailsFormData = {
           type: 'text',
           required: true,
         },
-        // {
-        //   name: 'anyOtherDetails',
-        //   label: 'Any Other Details',
-        //   type: 'text',
-        //   required: false,
-        // },
+        {
+          name: 'anyOtherDetails',
+          label: 'Any Other Details',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'associationToHighRiskBusiness',
           label: 'Association to High Risk Business',

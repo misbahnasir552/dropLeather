@@ -59,7 +59,7 @@ const Attachments = () => {
 
   console.log(
     'businessNature',
-    businessNature.businessTypeNature,
+    businessNature.businessNature,
     apierror,
     setFilteredData,
   );
@@ -81,11 +81,11 @@ const Attachments = () => {
   }, [initialValuesState, validationSchemaState]);
 
   useEffect(() => {
-    if (businessNature?.businessTypeNature === 'soleProprietor') {
+    if (businessNature?.businessNature === 'soleProprietor') {
       setInitialValuesState(soleAttachmentFormInitialValues);
       setValidationSchemaState(soleAttachmentFormSchema);
       setAttachmentData(soleProprietorAttachmentsFormData.categories);
-    } else if (businessNature?.businessTypeNature === 'partnership') {
+    } else if (businessNature?.businessNature === 'partnership') {
       setInitialValuesState(partnershipAttachmentsFormInitialValues);
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData.categories);
@@ -101,21 +101,6 @@ const Attachments = () => {
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
     }
   }, [currentTab, businessNature]);
-
-  // const formikConfig = {
-  //   initialValues:
-  //     businessNature === "soleProprietor"
-  //       ? soleAttachmentFormInitialValues
-  //       : businessNature === "partnership"
-  //         ? partnershipAttachmentsFormInitialValues
-  //         : null,
-  //   validationSchema:
-  //     businessNature === "soleProprietor"
-  //       ? soleAttachmentFormSchema
-  //       : businessNature === "partnership"
-  //         ? partnershipAttachmentsFormSchema
-  //         : null,
-  // };
 
   const onSubmit = async (
     // values: AttachmentFormInfo,
@@ -139,20 +124,25 @@ const Attachments = () => {
           console.log('OB VAL ', value, key);
 
           // Find the corresponding label from filteredData
-          let label: string | undefined;
-          filteredData?.forEach((item: any) => {
-            item.categories.forEach((category: any) => {
-              category.fields.forEach((field: any) => {
-                if (field?.name === key) {
-                  label = field?.label; // Match the key with the field's name
-                }
-              });
-            });
-          });
+          console.log('filtered data is', filteredData);
+          // let label: string | undefined;
+          // filteredData?.forEach((item: any) => {
+          //   item.categories.forEach((category: any) => {
+          //     category.fields.forEach((field: any) => {
+          //       if (field?.name === key) {
+          //         label = field?.label; // Match the key with the field's name
+          //       }
+          //     });
+          //   });
+          // });
+          const label = attachmentData
+            ?.flatMap((category: any) => category.fields)
+            ?.find((field: any) => field?.name === key)?.label;
           if (label && Array.isArray(value)) {
             console.log('LABEL ', label);
 
             value.forEach((file: any) => {
+              console.log('file is', file);
               formData.append(label!, file); // Use the label here
             });
           }

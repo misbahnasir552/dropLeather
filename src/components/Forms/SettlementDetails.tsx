@@ -26,33 +26,33 @@ import settlementDetailsSchema, {
   settlementDetailsInitialValues,
 } from './validations/settlementForm';
 
-interface Field {
-  name: string;
-  label: string;
-  type: string;
-  validation: {
-    errorMessage: string;
-    options?: string[];
-  };
-  image?: string;
-  priority: number;
-}
+// interface Field {
+//   name: string;
+//   label: string;
+//   type: string;
+//   validation: {
+//     errorMessage: string;
+//     options?: string[];
+//   };
+//   image?: string;
+//   priority: number;
+// }
 
-interface Category {
-  categoryName: string;
-  fields: Field[];
-}
+// interface Category {
+//   categoryName: string;
+//   fields: Field[];
+// }
 
-interface PageItem {
-  name: string;
-  categories: Category[];
-}
+// interface PageItem {
+//   name: string;
+//   categories: Category[];
+// }
 
-interface FieldsData {
-  pages: {
-    page: PageItem[];
-  };
-}
+// interface FieldsData {
+//   pages: {
+//     page: PageItem[];
+//   };
+// }
 
 interface UserData {
   managerMobile: string;
@@ -73,15 +73,15 @@ interface InitialValues {
 // }
 
 const SettlementDetails = () => {
-  const fieldsData = useAppSelector(
-    (state: { fields: FieldsData }) => state.fields,
-  );
+  // const fieldsData = useAppSelector(
+  //   (state: { fields: FieldsData }) => state.fields,
+  // );
   const userData = useAppSelector((state: { auth: UserData }) => state.auth);
   const dispatch = useAppDispatch();
   const { currentTab } = useCurrentTab();
   const router = useRouter();
   const [pageTitle, setPageTitle] = useState<string | undefined>();
-  const [filteredData, setFilteredData] = useState<PageItem[] | undefined>();
+  const [filteredData, setFilteredData] = useState<any[]>();
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
@@ -94,52 +94,53 @@ const SettlementDetails = () => {
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    console.log(initialValuesState, setFormData);
-    const initialValues: InitialValues = {};
+    console.log(
+      initialValuesState,
+      setFormData,
+      formData,
+      setInitialValuesState,
+    );
+    // const initialValues: InitialValues = {};
     if (currentTab) {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
 
-      let updatedFData = fieldsData?.pages?.page?.filter(
-        (item) => convertSlugToTitle(item.name) === title,
+      // let updatedFData = fieldsData?.pages?.page?.filter(
+      //   (item) => convertSlugToTitle(item.name) === title,
+      // );
+
+      const updatedFormData = SettlementDetailsFormData.categories?.map(
+        (category) => {
+          let updatedFields = category.fields;
+          const hasAssociationField = category.fields.some(
+            (field: any) =>
+              field.name === 'bank' && field.type === 'checkBoxInput',
+          );
+
+          if (!hasAssociationField) return category;
+          if (
+            selectedCheckValue === 'easypaisaBankLimited' ||
+            selectedCheckValue === '' ||
+            selectedCheckValue === undefined
+          ) {
+            console.log('here i am ');
+            // console.log("updated fields",updatedFields)
+            updatedFields = category.fields.filter(
+              (field: any) => field.name !== 'bankName',
+            );
+            console.log('updated fields ', updatedFields);
+          }
+
+          return {
+            ...category,
+            fields: updatedFields,
+          };
+        },
       );
 
-      updatedFData = updatedFData?.map((item) => {
-        return {
-          ...item,
-          categories: item.categories.map((category) => {
-            let updatedFields = category.fields;
-
-            if (
-              selectedCheckValue === 'easypaisabanklimited' ||
-              selectedCheckValue === '' ||
-              selectedCheckValue === undefined
-            ) {
-              updatedFields = category.fields.filter(
-                (field) => field.name !== 'bankName',
-              );
-            }
-
-            return {
-              ...category,
-              fields: updatedFields,
-            };
-          }),
-        };
-      });
-
-      setFilteredData(updatedFData);
-
-      updatedFData?.forEach((item) => {
-        item.categories.forEach((category) => {
-          category.fields.forEach((field) => {
-            initialValues[field.name] = '';
-          });
-        });
-        setInitialValuesState(initialValues);
-      });
+      setFilteredData(updatedFormData);
     }
-  }, [currentTab, fieldsData?.pages?.page, selectedCheckValue]);
+  }, [currentTab, selectedCheckValue]);
 
   // if (!initialValuesState || !filteredData) {
   //   setTimeout(() => {}, 12000);
@@ -154,18 +155,43 @@ const SettlementDetails = () => {
     values: any,
     { setSubmitting }: FormikHelpers<any>,
   ) => {
-    const req = {
+    // const req = {
+    //   managerMobile: userData.managerMobile,
+    //   account: values.accounts,
+    //   bankName:
+    //     values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
+    //   accountNumber: values.accountNumber,
+    //   accountTitle: values.accountTitle,
+    //   status: 'Completed',
+    // };
+
+    const transformedRequest = {
+      // request: {
       managerMobile: userData.managerMobile,
-      account: values.accounts,
-      bankName:
-        values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
-      accountNumber: values.accountNumber,
-      accountTitle: values.accountTitle,
-      status: 'Completed',
+      page: {
+        pageName: SettlementDetailsFormData?.pageName,
+        categories: SettlementDetailsFormData?.categories.map(
+          (category: any) => ({
+            categoryName: `Settlement Details`,
+            data: category.fields.map((field: any) => ({
+              label: field.label,
+              // value: values[field.name] || '', // Fetching value from formik.values
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}), // Add options only if it's a checkbox
+            })),
+          }),
+        ),
+        status: 'Completed',
+      },
+      // },
     };
 
     const mdRequest = {
-      ...req,
+      ...transformedRequest,
       apisecret: userData.apiSecret,
     };
 
@@ -174,14 +200,17 @@ const SettlementDetails = () => {
       const response: any = await apiClient.post(
         `merchant/settlementdetails`,
         {
-          request: req,
+          request: transformedRequest,
           signature: md5Hash,
         },
         {
           params: {
             username: userData?.email,
           },
-          headers: { Authorization: `Bearer ${userData?.jwt}` },
+          headers: {
+            Authorization: `Bearer ${userData?.jwt}`,
+            username: userData.email,
+          },
         },
       );
       if (response.data.responseCode === '009') {
@@ -201,7 +230,7 @@ const SettlementDetails = () => {
     }
     setSubmitting(false);
   };
-  console.log('asdads', filteredData, selectedCheckValue);
+  console.log('asdads', selectedCheckValue);
 
   return (
     <div>
@@ -226,7 +255,7 @@ const SettlementDetails = () => {
               </div>
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
-                  {formData?.map((item: any, index: any) => (
+                  {filteredData?.map((item: any, index: any) => (
                     <React.Fragment key={index}>
                       {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
                       <FormLayoutDynamic key={item} heading={item.categoryName}>
@@ -244,7 +273,7 @@ const SettlementDetails = () => {
                           ) : field?.type === 'checkBoxInput' ? (
                             <CheckboxInput
                               key={fieldIndex}
-                              isMulti
+                              isMulti={false}
                               name={field.name}
                               options={field.options}
                               form={formik}

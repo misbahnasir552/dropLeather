@@ -7,13 +7,14 @@ export const storeDetailsFormData = {
       categoryName: 'Store ',
       fields: [
         {
-          label: 'Store Type *',
+          label: 'Store Type',
           name: 'storeType',
           type: 'checkBoxInputMulti',
           options: [
             // { value: 'Online', label: 'Online' },
             { value: 'Retail', label: 'Retail' },
           ],
+          required: true,
         },
         // {
         //   label: 'Web Store Name *',
@@ -22,10 +23,11 @@ export const storeDetailsFormData = {
         //   show: ['Online'],
         // },
         {
-          label: 'Store Name *',
+          label: 'Store Name',
           name: 'storeName',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
         // {
         //   label: 'Website URL *',
@@ -35,41 +37,50 @@ export const storeDetailsFormData = {
         // },
 
         {
-          label: 'Street Address *',
+          label: 'Street Address',
           name: 'streetAddress',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
         {
-          label: 'City *',
+          label: 'City',
           name: 'city',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
         {
-          label: 'Store Category *',
+          label: 'Store Category',
           name: 'category',
           type: 'dropdown',
           show: ['Online', 'Retail'],
-          // options: storeCategoryList,
+          options: [
+            // { value: 'Online', label: 'Online' },
+            { value: 'Retail', label: 'Retail' },
+          ],
+          required: true,
         },
         {
-          label: 'Country Code *',
+          label: 'Country Code',
           name: 'countryCode',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
         {
-          label: 'State *',
+          label: 'State',
           name: 'state',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
         {
-          label: 'POS Country Code *',
+          label: 'POS Country Code',
           name: 'posCountryCode',
           type: 'text',
           show: ['Online', 'Retail'],
+          required: true,
         },
       ],
     },

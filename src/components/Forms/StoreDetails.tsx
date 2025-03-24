@@ -57,7 +57,7 @@ const AddStore = () => {
     string | undefined | string[]
   >([]);
 
-  console.log('chechkbox', setCheckboxValue, setFormData);
+  console.log('chechkbox', setCheckboxValue, setFormData, checkboxValue);
 
   // const handleCheckboxValueChange = (value: any) => {
   //   console.log('Value from CheckboxInput:', value);
@@ -122,32 +122,51 @@ const AddStore = () => {
     getRegions();
   }, [regions.length, storeCategories.length]);
 
-  useEffect(() => {
-    console.log('store type is', checkboxValue);
-  }, [checkboxValue]);
+  // useEffect(() => {
+  //   console.log('store type is', checkboxValue);
+  // }, [checkboxValue]);
 
   // const updatedStoreFields = formData.map((field: any) => {
-  //   if (field.name === 'region') {
+  //   // if (field.name === 'region') {
+  //   //   return {
+  //   //     ...field,
+  //   //     options: regions,
+  //   //   };
+  //   // }
+  //   console.log("field is", field)
+  //   console.log(field.fields.name,"fields")
+  //   if (field.fields.name === 'category') {
+  //     console.log("store category ;ist", storeCategories)
   //     return {
   //       ...field,
-  //       options: regions,
-  //     };
-  //   }
-  //   if (field.name === 'category') {
-  //     return {
-  //       ...field,
-  //       options: storeCategories, // Set the fetched regions as options for 'region'
+  //       options: storeCategories,
+  //      // Set the fetched regions as options for 'region'
   //     };
   //   }
 
   //   return field;
   // });
 
-  // useEffect(() => {
-  //   console.log('stores are:', addStoresValues); // Track state changes
+  const updatedStoreFields = formData.map((field: any) => {
+    console.log('field is', field);
 
-  //   //  getRegions();
-  // }, [addStoresValues]);
+    // Iterate over `fields` array
+    field.fields.forEach((subField: any) => {
+      console.log(subField.name, 'fields');
+
+      if (subField.name === 'category') {
+        console.log('store category list', storeCategories);
+        subField.options = storeCategories; // Update options
+      }
+    });
+
+    return field;
+  });
+  useEffect(() => {
+    console.log('stores are:', addStoresValues); // Track state changes
+
+    //  getRegions();
+  }, [addStoresValues]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('hoi');
@@ -186,7 +205,13 @@ const AddStore = () => {
               categoryName: `${category.categoryName} + ${index + 1}`,
               data: category.fields.map((field: any) => ({
                 label: field.label,
-                value: values[field.name] || '', // Fetching value from formik.values
+                // value: values[field.name] || '', // Fetching value from formik.values
+                value:
+                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+                ...(field.type === 'checkboxInput' ||
+                field.type === 'checkBoxInputMulti'
+                  ? { options: values[field.name] || '' }
+                  : {}), // Add options only if it's a checkbox
               })),
             }),
           ),
@@ -294,73 +319,81 @@ const AddStore = () => {
                         <>
                           {/* <div className=""> */}
                           <div>
-                            {formData?.map((item: any, index: any) => (
-                              <React.Fragment key={index}>
-                                {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
-                                <div
-                                  // className="grid grid-cols-2 gap-6"
+                            {updatedStoreFields?.map(
+                              (item: any, index: any) => (
+                                <React.Fragment key={index}>
+                                  {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
+                                  <div
+                                    // className="grid grid-cols-2 gap-6"
 
-                                  className={`grid ${
-                                    item.fields?.name === 'storeType'
-                                      ? 'grid-cols-1'
-                                      : 'grid-cols-2 gap-6'
-                                  }`}
-                                >
-                                  {/* <FormLayoutDynamic key={item} heading={item.categoryName}> */}
-                                  {item.fields.map(
-                                    (field: any, fieldIndex: any) => {
-                                      return field.type === 'text' ? (
-                                        <Input
-                                          key={fieldIndex}
-                                          label={field.label}
-                                          name={field.name}
-                                          type={field.type}
-                                          formik={formik}
-                                          asterik={field.required}
-                                          error={field.validation?.errorMessage}
-                                        />
-                                      ) : field?.type ===
-                                        'checkBoxInputMulti' ? (
-                                        <CheckboxInput
-                                          key={fieldIndex}
-                                          isMulti
-                                          name={field.name}
-                                          options={field.options}
-                                          form={formik}
-                                          error={field.validation?.errorMessage}
-                                          setSelectedCheckValue={
-                                            setSelectedCheckValue
-                                          }
-                                        />
-                                      ) : field?.type === 'dropdown' ? (
-                                        <DropdownNew
-                                          asterik={field.required}
-                                          key={fieldIndex} // Add a key prop to DropdownInput as well
-                                          label={field.label}
-                                          name={field?.name}
-                                          options={field.options}
-                                          formik={formik}
-                                          // error={field.validation.errorMessage}
-                                        />
-                                      ) : field?.type === 'date' ? (
-                                        <DateInputNew
-                                          asterik={field.required}
-                                          key={fieldIndex}
-                                          formik={formik}
-                                          label={field.label}
-                                          name={field.name}
-                                          // error={field.validation.errorMessage}
-                                        />
-                                      ) : (
-                                        <p key={fieldIndex}>nothing to show</p>
-                                      );
-                                    },
-                                  )}
-                                </div>
-                                {/* </FormLayoutDynamic> */}
-                                {/* // ))} */}
-                              </React.Fragment>
-                            ))}
+                                    className={`grid ${
+                                      item.fields?.name === 'storeType'
+                                        ? 'grid-cols-1'
+                                        : 'grid-cols-2 gap-6'
+                                    }`}
+                                  >
+                                    {/* <FormLayoutDynamic key={item} heading={item.categoryName}> */}
+                                    {item.fields.map(
+                                      (field: any, fieldIndex: any) => {
+                                        return field.type === 'text' ? (
+                                          <Input
+                                            key={fieldIndex}
+                                            label={field.label}
+                                            name={field.name}
+                                            type={field.type}
+                                            formik={formik}
+                                            asterik={field.required}
+                                            error={
+                                              field.validation?.errorMessage
+                                            }
+                                          />
+                                        ) : field?.type ===
+                                          'checkBoxInputMulti' ? (
+                                          <CheckboxInput
+                                            key={fieldIndex}
+                                            isMulti
+                                            name={field.name}
+                                            options={field.options}
+                                            form={formik}
+                                            error={
+                                              field.validation?.errorMessage
+                                            }
+                                            setSelectedCheckValue={
+                                              setSelectedCheckValue
+                                            }
+                                          />
+                                        ) : field?.type === 'dropdown' ? (
+                                          <DropdownNew
+                                            asterik={field.required}
+                                            key={fieldIndex} // Add a key prop to DropdownInput as well
+                                            label={field.label}
+                                            name={field?.name}
+                                            options={field.options}
+                                            formik={formik}
+                                            // error={field.validation.errorMessage}
+                                          />
+                                        ) : field?.type === 'date' ? (
+                                          <DateInputNew
+                                            asterik={field.required}
+                                            key={fieldIndex}
+                                            formik={formik}
+                                            label={field.label}
+                                            name={field.name}
+                                            // error={field.validation.errorMessage}
+                                          />
+                                        ) : (
+                                          <p key={fieldIndex}>
+                                            nothing to show
+                                          </p>
+                                        );
+                                      },
+                                    )}
+                                  </div>
+                                  {/* </FormLayoutDynamic> */}
+                                  {/* // ))} */}
+                                </React.Fragment>
+                              ),
+                            )}
                             {/* {updatedStoreFields.map(
                               ({ label, name, type, options }: any) => (
                                 <div

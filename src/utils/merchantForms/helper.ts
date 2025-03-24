@@ -13,11 +13,11 @@ export const endpointArray = [
   },
   {
     tab: 'settlement-details',
-    endpoint: `/merchant/settlementdetails`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   {
     tab: 'integration',
-    endpoint: `/merchant/integration`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   { tab: 'attachments', endpoint: `/merchant/upload` },
   { tab: 'review-form', endpoint: null },

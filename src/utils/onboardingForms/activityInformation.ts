@@ -135,6 +135,13 @@ export const ActivityInformationFormData = {
         },
         {
           name: 'correspondenceAddress',
+          label:
+            'Click here if correspondence address is same as business address',
+          type: 'checkItem',
+          required: true,
+        },
+        {
+          name: 'correspondenceAddress',
           label: 'Correspondence Address',
           type: 'text',
           required: true,
@@ -144,7 +151,10 @@ export const ActivityInformationFormData = {
           label: 'Account Handler is different from Owner/Account Holder',
           type: 'dropdown',
           required: true,
-          options: [{ label: 'API', value: 'API' }],
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'primaryPhoneNo',

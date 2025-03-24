@@ -19,6 +19,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
@@ -46,7 +47,7 @@ const ActivityInformation = () => {
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
-
+  const [isChecked, setChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -95,6 +96,19 @@ const ActivityInformation = () => {
       setValidationSchemaState(validationSchema);
     }
   }, [currentTab]);
+
+  const handleCheckboxChange = (name: string, formik: any) => {
+    const newChecked = !isChecked;
+    console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
+    if (formik.values.businessAddress) {
+      setChecked(newChecked);
+    }
+    if (newChecked && formik.values.businessAddress) {
+      formik.setFieldValue(name, formik.values.businessAddress);
+    } else {
+      formik.setFieldValue(name, '');
+    }
+  };
 
   console.log('INITAIL VALUES STATE', initialValuesState);
   // if (!initialValuesState || !validationSchemaState || !filteredData) {
@@ -299,6 +313,18 @@ const ActivityInformation = () => {
                           formik={formik}
                           asterik={field.required}
                           error={field.validation?.errorMessage}
+                        />
+                      ) : field?.type === 'checkItem' ? (
+                        <CheckboxItem
+                          key={fieldIndex}
+                          description={field.label}
+                          isChecked={isChecked}
+                          handleCheckboxChange={() =>
+                            handleCheckboxChange(
+                              'correspondenceAddress',
+                              formik,
+                            )
+                          }
                         />
                       ) : field?.type === 'checkBoxInputMulti' ? (
                         <CheckboxInput

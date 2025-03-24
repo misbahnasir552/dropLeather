@@ -59,26 +59,26 @@ const BusinessNature = () => {
       label: 'Partnership',
       endpoint: 'partnershipBusinessDetails',
     },
-    {
-      value: 'other',
-      label: 'Other',
-      endpoint: 'otherBusinessDetails',
-    },
-    {
-      value: 'trusts',
-      label: 'Trusts',
-      endpoint: 'nncBusinessDetails',
-    },
-    {
-      value: 'clubSocietiesAssociations',
-      label: 'Clubs, Societies, Associations',
-      endpoint: 'nncBusinessDetails',
-    },
-    {
-      value: 'ngoNpoCharities',
-      label: 'NGO, NPO, Charities',
-      endpoint: 'nncBusinessDetails',
-    },
+    // {
+    //   value: 'other',
+    //   label: 'Other',
+    //   endpoint: 'otherBusinessDetails',
+    // },
+    // {
+    //   value: 'trusts',
+    //   label: 'Trusts',
+    //   endpoint: 'nncBusinessDetails',
+    // },
+    // {
+    //   value: 'clubSocietiesAssociations',
+    //   label: 'Clubs, Societies, Associations',
+    //   endpoint: 'nncBusinessDetails',
+    // },
+    // {
+    //   value: 'ngoNpoCharities',
+    //   label: 'NGO, NPO, Charities',
+    //   endpoint: 'nncBusinessDetails',
+    // },
   ];
 
   useEffect(() => {

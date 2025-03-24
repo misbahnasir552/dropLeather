@@ -4,7 +4,6 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-// import * as Yup from 'yup';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
@@ -12,37 +11,44 @@ import Input from '@/components/UI/Inputs/Input';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo } from '@/interfaces/interface';
-import { convertSlugToTitle } from '@/services/urlService/slugServices';
+// import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
+import { partnershipBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/partnershipBusinessDetails';
+import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/pnpLtdBusinessDetails';
 // import { BarLoader } from 'react-spinners';
-import { BusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
+import { soleBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
 
-// import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
-// import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-// import AddStore from './AddStore';
-// import { buildValidationSchema } from './validations/helper';
-// import type { FieldsData,  } from './validationsOLD/types';
-// import { businessDetailsInitialValues }, from './validations/businessForm';
-// import businessDetailsSchema,{businessDetailsInitialValues}  from './validations/businessForm'
-// import { businessDetailsFormSchema } from './validations/businessForm';
 import {
-  businessDetailsFormInitialValues,
-  businessDetailsFormSchema,
-} from './validations/businessForm';
+  partnershipBusinessDetailsFormInitialValues,
+  partnershipBusinessDetailsFormSchema,
+} from './validations/businessDetailsForm/partnershipBusinessForm';
+import {
+  pnpLtdBusinessDetailsFormInitialValues,
+  pnpLtdBusinessDetailsFormSchema,
+} from './validations/businessDetailsForm/pnpLtdBusinessForm';
+import {
+  soleBusinessDetailsFormInitialValues,
+  soleBusinessDetailsFormSchema,
+} from './validations/businessDetailsForm/soleBusinessForm';
 
 const BusinessInformation = () => {
-  const [formData, setFormData] = useState(BusinessDetailsFormData.categories);
+  const [formData, setFormData] = useState(
+    soleBusinessDetailsFormData.categories,
+  );
   const userData = useAppSelector((state: any) => state.auth);
+  const [businessDetailsData, setBusinessDetailsData] = useState<any[]>();
   // const fieldsData: FieldsData = useAppSelector((state: any) => state.fields);
   const businessNatureData = useAppSelector(
     (state: any) => state.onBoardingForms,
   );
-  console.log('businessNatureData', businessNatureData, setFormData);
+  const [initialValuesState, setInitialValuesState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  console.log('businessNatureData', businessNatureData, setFormData, formData);
   const router = useRouter();
   // const [isChecked, setChecked] = useState(false);
 
@@ -57,74 +63,145 @@ const BusinessInformation = () => {
   >(undefined);
   const [selectedDropDownValue, setSelectedDropDownValue] =
     useState<any>(undefined);
-  // const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(
-  //   Array(5).fill(null),
-  // );
-  // const [initialValuesState, setInitialValuesState] = useState<any>();
-  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const businessNature = useAppSelector(
+    (state: any) => state.onBoardingForms.businessNature,
+  );
   const { currentTab } = useCurrentTab();
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [apierror, setApierror] = useState('');
-  // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
-  // const BusinessInfoInitialValues = GetBusinessDetails();
-  // const handleCheckboxChange = () => {
-  //   setChecked(!isChecked);
-  // };
-  // console.log(
-  //   'selected value checkbox input',
-  //   selectedCheckValue,
-  //   setAddStoresValues,
-  // );
+  const [natureOfBusiness, setNatureOfBusiness] = useState([]);
+  const [lowRiskType, setLowRiskType] = useState([]);
+  const [mediumRiskType, setMediumRiskType] = useState([]);
+  const [highRiskType, setHighRiskType] = useState([]);
+  // useEffect(()=>{
+  //   console.log("nature of business got", natureOfBusiness)
+  // }, [natureOfBusiness])
+
+  const getNatureOfBusiness = async () => {
+    try {
+      const response = await apiClient.get('merchant/getAllNatureOfBusiness');
+      // if (response?.data?.responseCode === '009') {
+      if (response?.data) {
+        setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+
+        console.log(
+          'nature of business is',
+          natureOfBusiness,
+          selectedCheckValue,
+          setPageTitle,
+          setAddStoresValues,
+        );
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  const getRiskTypes = async () => {
+    try {
+      const response = await apiClient.get('merchant/getAllLowRiskType');
+      if (response?.data) {
+        setLowRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+
+    try {
+      const response = await apiClient.get('merchant/getAllHighRiskType');
+      if (response?.data) {
+        setHighRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+    try {
+      const response = await apiClient.get('merchant/getAllMediumRiskType');
+      if (response?.data) {
+        setMediumRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
 
   useEffect(() => {
-    console.log(
-      'dropdown value is',
-      selectedDropDownValue,
-      selectedCheckValue,
-      setAddStoresValues,
-    );
-  }, [selectedDropDownValue]);
+    if (businessNature?.businessNature === 'soleProprietor') {
+      setBusinessDetailsData(soleBusinessDetailsFormData?.categories);
+      setInitialValuesState(soleBusinessDetailsFormInitialValues);
+      setValidationSchemaState(soleBusinessDetailsFormSchema);
+    } else if (businessNature?.businessNature === 'partnership') {
+      setInitialValuesState(partnershipBusinessDetailsFormInitialValues);
+      setValidationSchemaState(partnershipBusinessDetailsFormSchema);
+      setBusinessDetailsData(partnershipBusinessDetailsFormData?.categories);
+    } else if (businessNature?.businessNature === 'publicAndPrivateLtd') {
+      setInitialValuesState(pnpLtdBusinessDetailsFormInitialValues);
+      setValidationSchemaState(pnpLtdBusinessDetailsFormSchema);
+      setBusinessDetailsData(pnpLtdBusinessDetailsFormData?.categories);
+    } else {
+      setBusinessDetailsData([]); // Set a default empty state to avoid undefined errors
+    }
+  }, [businessNature]);
 
   useEffect(() => {
-    // console.log(selectedDropDownValue, "selected drop value")
-    // const initialValues: { [key: string]: any } = {};
-    if (!currentTab) return;
+    getNatureOfBusiness();
+    getRiskTypes();
+    console.log('hereeeeeeeeeeeeeeeee');
+    console.log('business details data', businessDetailsData);
+    const updatedFormData = businessDetailsData?.map((category) => {
+      // const hasAssociationField = category.fields.some(
+      //   (field: any) =>
+      //     field.name === 'associationToHighRiskBusiness' &&
+      //     field.type === 'dropdown',
+      // );
 
-    const title = convertSlugToTitle(currentTab);
-    setPageTitle(title);
-
-    // let updatedFData = fieldsData?.pages?.page?.filter(
-    //   (item) => convertSlugToTitle(item.name) === title,
-    // );
-
-    // Find the category containing "associationToHighRiskBusiness"
-
-    const updatedFormData = formData.map((category) => {
-      const hasAssociationField = category.fields.some(
-        (field) =>
-          field.name === 'associationToHighRiskBusiness' &&
-          field.type === 'dropdown',
-      );
-
-      if (!hasAssociationField) return category;
+      // if (!hasAssociationField) return category;
 
       let updatedFields = category.fields;
-
+      console.log('updated fields', updatedFields.name);
+      updatedFields.forEach((field: any) => {
+        if (field.name === 'natureofBusiness') {
+          console.log('Found natureOfBusiness:');
+          field.options = natureOfBusiness;
+          // Perform your action here
+        } else if (field.name === 'lowRiskType') {
+          field.options = lowRiskType;
+        } else if (field.name === 'mediumRiskType') {
+          field.options = mediumRiskType;
+        } else if (field.name === 'highRiskType') {
+          field.options = highRiskType;
+        }
+      });
       if (selectedDropDownValue === 'High Risk Business / Person') {
         updatedFields = category.fields.filter(
-          (field) =>
+          (field: any) =>
             field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
         );
       } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
         updatedFields = category.fields.filter(
-          (field) =>
+          (field: any) =>
             field.name !== 'lowRiskType' && field.name !== 'highRiskType',
         );
       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
         updatedFields = category.fields.filter(
-          (field) =>
+          (field: any) =>
             field.name !== 'mediumRiskType' && field.name !== 'highRiskType',
         );
       } else if (
@@ -133,7 +210,7 @@ const BusinessInformation = () => {
         selectedDropDownValue === undefined
       ) {
         updatedFields = category.fields.filter(
-          (field) =>
+          (field: any) =>
             field.name !== 'mediumRiskType' &&
             field.name !== 'highRiskType' &&
             field.name !== 'lowRiskType',
@@ -146,69 +223,68 @@ const BusinessInformation = () => {
       };
     });
 
-    // updatedFData = updatedFData?.map((item) => {
+    setFilteredData(updatedFormData);
+
+    // if (currentTab) {
+    //   const title = convertSlugToTitle(currentTab);
+    //   setPageTitle(title);
+    //   console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
+    // }
+
+    // if (!currentTab) return;
+
+    // const title = convertSlugToTitle(currentTab);
+    // setPageTitle(title);
+
+    // const updatedFormData = businessDetailsData?.map((category) => {
+    //   const hasAssociationField = category.fields.some(
+    //     (field: any) =>
+    //       field.name === 'associationToHighRiskBusiness' &&
+    //       field.type === 'dropdown',
+    //   );
+
+    //   if (!hasAssociationField) return category;
+
+    //   let updatedFields = category.fields;
+
+    //   if (selectedDropDownValue === 'High Risk Business / Person') {
+    //     updatedFields = category.fields.filter(
+    //       (field: any) =>
+    //         field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+    //     );
+    //   } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
+    //     updatedFields = category.fields.filter(
+    //       (field: any) =>
+    //         field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+    //     );
+    //   } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+    //     updatedFields = category.fields.filter(
+    //       (field: any) =>
+    //         field.name !== 'mediumRiskType' && field.name !== 'highRiskType',
+    //     );
+    //   } else if (
+    //     selectedDropDownValue === 'No' ||
+    //     selectedDropDownValue === '' ||
+    //     selectedDropDownValue === undefined
+    //   ) {
+    //     updatedFields = category.fields.filter(
+    //       (field: any) =>
+    //         field.name !== 'mediumRiskType' &&
+    //         field.name !== 'highRiskType' &&
+    //         field.name !== 'lowRiskType',
+    //     );
+    //   }
+
     //   return {
-    //     ...item,
-    //     categories: item.categories.map((category) => {
-    //       const hasAssociationField = category.fields.some(
-    //         (field) =>
-    //           field.name === 'associationToHighRiskBusiness' &&
-    //           field.type === 'dropDown',
-    //       );
-
-    //       if (!hasAssociationField) return category;
-
-    //       let updatedFields = category.fields;
-
-    //       if (selectedDropDownValue === 'High Risk Business / Person') {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
-    //         );
-    //       } else if (
-    //         selectedDropDownValue === 'Medium Risk Business / Person'
-    //       ) {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'lowRiskType' && field.name !== 'highRiskType',
-    //         );
-    //       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
-    //         updatedFields = category.fields.filter(
-    //           (field) =>
-    //             field.name !== 'mediumRiskType' &&
-    //             field.name !== 'highRiskType',
-    //         );
-    //       } else if (
-    //         selectedDropDownValue === 'No' ||
-    //         selectedDropDownValue === '' ||
-    //         selectedDropDownValue === undefined
-    //       ) {
-    //         updatedFields = category.fields.filter(
-    //           (field) => field.name !== 'currentSalary',
-    //         );
-    //       }
-
-    //       return {
-    //         ...category,
-    //         fields: updatedFields,
-    //       };
-    //     }),
+    //     ...category,
+    //     fields: updatedFields,
     //   };
     // });
 
-    setFilteredData(updatedFormData);
+    // setFilteredData(updatedFormData);
 
-    console.log('filtered data is ', filteredData);
-  }, [currentTab, selectedDropDownValue]);
-
-  // if (!initialValuesState || !filteredData) {
-  //   // if (!initialValuesState || !validationSchemaState || !filteredData) {
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
+    // console.log('filtered data is ', filteredData);
+  }, [selectedDropDownValue, businessDetailsData, natureOfBusiness.length]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     // const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
@@ -224,19 +300,31 @@ const BusinessInformation = () => {
       console.log('currentEndpoint', currentEndpoint);
       console.log('businessNatureData', businessNatureData);
 
-      const dynamicCurrentEndpoint = `merchant/${businessNatureData?.businessEndpoint}`;
-      // const dynamicCurrentEndpoint = `${currentEndpoint}`;
-      const additionalValues = {
-        ...values,
-        // stores: addStoresValues,
-        managerMobile: userData?.managerMobile,
+      const transformedData = {
+        managerMobile: userData.managerMobile,
         businessNature: businessNatureData?.businessTypeNature,
         status: 'Completed',
+        page: {
+          pageName: 'Business Details',
+          categories: soleBusinessDetailsFormData.categories.map(
+            (category) => ({
+              categoryName: category.categoryName,
+              data: category.fields.map((field) => ({
+                label: field.label,
+                value:
+                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+                ...(field.type === 'checkboxInput' ||
+                field.type === 'checkBoxInputMulti'
+                  ? { options: values[field.name] || '' }
+                  : {}), // Add options only if it's a checkbox
+              })),
+            }),
+          ),
+        },
       };
-      console.log('ADDITIONAL VALUES', additionalValues);
 
       const mdRequest = {
-        ...additionalValues,
+        ...transformedData,
         apisecret: apiSecret,
       };
 
@@ -246,16 +334,20 @@ const BusinessInformation = () => {
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(
-            dynamicCurrentEndpoint,
+            currentEndpoint,
+
             {
-              request: additionalValues,
+              request: transformedData,
               signature: md5Hash,
             },
             {
               params: {
                 username: userData?.email,
               },
-              headers: { Authorization: `Bearer ${userData.jwt}` },
+              headers: {
+                Authorization: `Bearer ${userData.jwt}`,
+                username: userData.email,
+              },
             },
           );
           console.log(response);
@@ -303,327 +395,109 @@ const BusinessInformation = () => {
         addStoresValues={addStoresValues}
         setAddStoresValues={setAddStoresValues}
       /> */}
-      <Formik
-        initialValues={businessDetailsFormInitialValues}
-        validationSchema={businessDetailsFormSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => (
-          <div className="flex flex-col pb-[120px]">
-            <Form className="flex flex-col gap-5">
-              <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
-                {pageTitle}
-              </div>
-              <div className="flex flex-col gap-9">
-                <div className="flex flex-col gap-6">
-                  {filteredData?.map((item: any, index: any) => (
-                    <React.Fragment key={index}>
-                      {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
-                      <FormLayoutDynamic key={item} heading={item.categoryName}>
-                        {item.fields.map((field: any, fieldIndex: any) => {
-                          return field.type === 'text' ? (
-                            <Input
-                              key={fieldIndex}
-                              label={field.label}
-                              name={field.name}
-                              type={field.type}
-                              formik={formik}
-                              asterik={field.required}
-                              error={field.validation?.errorMessage}
-                            />
-                          ) : field?.type === 'checkBoxInputMulti' ? (
-                            <CheckboxInput
-                              key={fieldIndex}
-                              isMulti
-                              name={field.name}
-                              options={field.options}
-                              form={formik}
-                              error={field.validation?.errorMessage}
-                              setSelectedCheckValue={setSelectedCheckValue}
-                            />
-                          ) : field?.type === 'dropdown' ? (
-                            <DropdownNew
-                              asterik={field.required}
-                              key={fieldIndex} // Add a key prop to DropdownInput as well
-                              label={field.label}
-                              name={field?.name}
-                              options={field.options}
-                              formik={formik}
-                              setSelectedDropDownValue={
-                                setSelectedDropDownValue
-                              }
-                              // error={field.validation.errorMessage}
-                            />
-                          ) : field?.type === 'date' ? (
-                            <DateInputNew
-                              asterik={field.required}
-                              key={fieldIndex}
-                              formik={formik}
-                              label={field.label}
-                              name={field.name}
-                              // error={field.validation.errorMessage}
-                            />
-                          ) : (
-                            <p key={fieldIndex}>nothing to show</p>
-                          );
-                        })}
-                      </FormLayoutDynamic>
-                      {/* // ))} */}
-                    </React.Fragment>
-                  ))}
-                  {/* {filteredData?.map(
-                    (pageItem) => (
-                      // pageItem.name === "Business Details" && (
-                      <React.Fragment key={pageItem.name}>
-                        {pageItem.categories
-                          .sort(
-                            (a: any, b: any) =>
-                              Number(a.priority) - Number(b.priority),
-                          )
-                          .map((item, itemIndex) => (
-                            <FormLayoutDynamic
-                              // key={itemIndex}
-                              key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
-                              heading={item.categoryName}
-                            >
-                              {[...item.fields]
-                                .sort((a, b) => a.priority - b.priority)
-                                .map((field, fieldIndex) => {
-                                  return field?.type === 'text' ? (
-                                    <Input
-                                      key={fieldIndex}
-                                      label={field.label}
-                                      name={field.name}
-                                      type={field.type}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                    />
-                                  ) : field?.type === 'dropDown' &&
-                                    field.name !==
-                                      'associationToHighRiskBusiness' &&
-                                    field.name !== 'highRiskType' &&
-                                    field.name !== 'mediumRiskType' &&
-                                    field.name !== 'lowRiskType' ? (
-                                    <DropdownNew
-                                      key={fieldIndex} // Add a key prop to DropdownInput as well
-                                      label={field.label}
-                                      name={field.name}
-                                      options={field.validation?.options?.map(
-                                        (option: string) => ({
-                                          label: option,
-                                          value: option,
-                                          // .toLowerCase()
-                                          // .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      formik={formik}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                      setSelectedDropDownValue={
-                                        setSelectedDropDownValue
-                                      }
-                                    />
-                                  ) : field?.type === 'dropDown' &&
-                                    field.name ===
-                                      'associationToHighRiskBusiness' ? (
-                                    <DropdownNew
-                                      key={fieldIndex}
-                                      label={field.label}
-                                      name={field.name}
-                                      options={field.validation?.options?.map(
-                                        (option: string) => ({
-                                          label: option,
-                                          value: option
-                                            .toLowerCase()
-                                            .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      formik={formik}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                      setSelectedDropDownValue={(
-                                        value: string,
-                                      ) => {
-                                        // setSelectedAssociation(value);
-                                        setSelectedDropDownValue(value);
-                                      }}
-                                    />
-                                  ) : field?.type === 'dropDown' &&
-                                    field.name === 'highRiskType' &&
-                                    selectedDropDownValue ===
-                                      'High Risk Business / Person' ? (
-                                    <DropdownNew
-                                      key={fieldIndex}
-                                      label={field.label}
-                                      name={field.name}
-                                      options={field.validation?.options?.map(
-                                        (option: string) => ({
-                                          label: option,
-                                          value: option
-                                            .toLowerCase()
-                                            .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      formik={formik}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                      setSelectedDropDownValue={
-                                        setSelectedDropDownValue
-                                      }
-                                    />
-                                  ) : field?.type === 'dropDown' &&
-                                    field.name === 'mediumRiskType' &&
-                                    selectedDropDownValue ===
-                                      'Medium Risk Business / Person' ? (
-                                    <DropdownNew
-                                      key={fieldIndex}
-                                      label={field.label}
-                                      name={field.name}
-                                      options={field.validation?.options?.map(
-                                        (option: string) => ({
-                                          label: option,
-                                          value: option
-                                            .toLowerCase()
-                                            .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      formik={formik}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                      setSelectedDropDownValue={
-                                        setSelectedDropDownValue
-                                      }
-                                    />
-                                  ) : field?.type === 'dropDown' &&
-                                    field.name === 'lowRiskType' &&
-                                    selectedDropDownValue ===
-                                      'Low Risk Business / Person' ? (
-                                    <DropdownNew
-                                      key={fieldIndex}
-                                      label={field.label}
-                                      name={field.name}
-                                      options={field.validation?.options?.map(
-                                        (option: string) => ({
-                                          label: option,
-                                          value: option
-                                            .toLowerCase()
-                                            .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      formik={formik}
-                                      error={field.validation.errorMessage}
-                                      asterik={field.validation.required}
-                                      setSelectedDropDownValue={
-                                        setSelectedDropDownValue
-                                      }
-                                    />
-                                  ) : field?.type === 'date' ? (
-                                    <DateInputNew
-                                      formik={formik}
-                                      label={field.label}
-                                      name={field.name}
-                                      asterik={field.validation.required}
-                                    />
-                                  ) : field?.type === 'checkItem' ? (
-                                    <CheckboxItem
-                                      description={field.label}
-                                      isChecked={isChecked}
-                                      // asterik={field.validation.required}
-                                      handleCheckboxChange={
-                                        handleCheckboxChange
-                                      }
-                                    />
-                                  ) : field?.type === 'checkBoxInput' ? (
-                                    <CheckboxInput
-                                      isMulti={false}
-                                      name={field.name}
-                                      options={field.validation.options?.map(
-                                        (option) => ({
-                                          label: option,
-                                          value: option,
-                                          // value: option
-                                          //   .toLowerCase()
-                                          //   .replace(/\s+/g, ''),
-                                        }),
-                                      )}
-                                      error={field.validation.errorMessage}
-                                      form={formik}
-                                      setSelectedCheckValue={
-                                        setSelectedCheckValue
-                                      }
-                                    />
-                                  ) : field?.type === 'checkBoxInputMulti' ? (
-                                    <div>
-                                      <CheckboxInput
-                                        layout="grid grid-cols-2 gap-4"
-                                        isMulti={true}
-                                        name={field.name}
-                                        options={field.validation.options?.map(
-                                          (option) => ({
-                                            label: option,
-                                            value: option,
-                                            // value: option
-                                            //   .toLowerCase()
-                                            //   .replace(/\s+/g, ''),
-                                          }),
-                                        )}
-                                        error={field.validation.errorMessage}
-                                        form={formik}
-                                        setSelectedCheckValue={
-                                          setSelectedCheckValue
-                                        }
-                                      />
-                                    </div>
-                                  ) : field?.type === 'file' ? (
-                                    <BulkRegisterInput
-                                      key={field.name}
-                                      selectedFiles={selectedFiles}
-                                      setSelectedFiles={setSelectedFiles}
-                                      index={fieldIndex}
-                                      formik={formik}
-                                      item={field}
-                                    />
-                                  ) : null;
-                                  // (
-                                  //   <p key={fieldIndex}>nothing to show</p>
-                                  // );
-                                })}
-                            </FormLayoutDynamic>
-                          ))}
+      {initialValuesState && validationSchemaState ? (
+        <Formik
+          initialValues={initialValuesState}
+          validationSchema={validationSchemaState}
+          onSubmit={onSubmit}
+        >
+          {(formik) => (
+            <div className="flex flex-col pb-[120px]">
+              <Form className="flex flex-col gap-5">
+                <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
+                  {pageTitle}
+                </div>
+                <div className="flex flex-col gap-9">
+                  <div className="flex flex-col gap-6">
+                    {filteredData?.map((item: any, index: any) => (
+                      <React.Fragment key={index}>
+                        {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
+                        <FormLayoutDynamic
+                          key={item}
+                          heading={item.categoryName}
+                        >
+                          {item.fields.map((field: any, fieldIndex: any) => {
+                            return field.type === 'text' ? (
+                              <Input
+                                key={fieldIndex}
+                                label={field.label}
+                                name={field.name}
+                                type={field.type}
+                                formik={formik}
+                                asterik={field.required}
+                                error={field.validation?.errorMessage}
+                              />
+                            ) : field?.type === 'checkBoxInputMulti' ? (
+                              <CheckboxInput
+                                key={fieldIndex}
+                                isMulti
+                                name={field.name}
+                                options={field.options}
+                                form={formik}
+                                error={field.validation?.errorMessage}
+                                setSelectedCheckValue={setSelectedCheckValue}
+                              />
+                            ) : field?.type === 'dropdown' ? (
+                              <DropdownNew
+                                asterik={field.required}
+                                key={fieldIndex} // Add a key prop to DropdownInput as well
+                                label={field.label}
+                                name={field?.name}
+                                options={field.options}
+                                formik={formik}
+                                setSelectedDropDownValue={
+                                  setSelectedDropDownValue
+                                }
+                                // error={field.validation.errorMessage}
+                              />
+                            ) : field?.type === 'date' ? (
+                              <DateInputNew
+                                asterik={field.required}
+                                key={fieldIndex}
+                                formik={formik}
+                                label={field.label}
+                                name={field.name}
+                                // error={field.validation.errorMessage}
+                              />
+                            ) : (
+                              <p key={fieldIndex}>nothing to show</p>
+                            );
+                          })}
+                        </FormLayoutDynamic>
+                        {/* // ))} */}
                       </React.Fragment>
-                    ),
-                    // )
-                  )} */}
+                    ))}
+                  </div>
+                  <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                    {apierror}
+                  </div>
+                  <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
+                    <Button
+                      label={`Save & Continue Later`}
+                      // onClickHandler={() =>
+                      //   saveAndContinue(
+                      //     formik.values,
+                      //     formik.setSubmitting,
+                      //     formik.validateForm,
+                      //   )
+                      // }
+                      type="button"
+                      className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                    />
+                    <Button
+                      label={`Next`}
+                      type="submit"
+                      className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                    />
+                  </div>
                 </div>
-                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-                  {apierror}
-                </div>
-                <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
-                  <Button
-                    label={`Save & Continue Later`}
-                    // onClickHandler={() =>
-                    //   saveAndContinue(
-                    //     formik.values,
-                    //     formik.setSubmitting,
-                    //     formik.validateForm,
-                    //   )
-                    // }
-                    type="button"
-                    className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                  />
-                  <Button
-                    label={`Next`}
-                    type="submit"
-                    className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                  />
-                </div>
-              </div>
-              {/* <FormControlButtons /> */}
-              {/* <AddStore formik={formik}/> */}
-            </Form>
-          </div>
-        )}
-      </Formik>
+                {/* <FormControlButtons /> */}
+                {/* <AddStore formik={formik}/> */}
+              </Form>
+            </div>
+          )}
+        </Formik>
+      ) : null}
     </div>
   );
 };

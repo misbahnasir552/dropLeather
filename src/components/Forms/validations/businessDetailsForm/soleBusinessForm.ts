@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const businessDetailsFormInitialValues = {
+export const soleBusinessDetailsFormInitialValues = {
   accountBusinessDocumentationType: '',
   limitCategory: '',
   natureofBusiness: '',
@@ -44,9 +44,15 @@ export const businessDetailsFormInitialValues = {
   lowRiskType: '',
   sourceOfFunds: '',
   currentMonthlyTransactionPKR: '',
+  expectedMonthlyDebitTransactions: '',
+  expectedMonthlyDebitAmount: '',
+  expectedMonthlyCreditTransactions: '',
+  expectedMonthlyCreditAmount: '',
+  annualTurnoverCredit: '',
+  annualTurnoverDebit: '',
 };
 
-export const businessDetailsFormSchema = Yup.object().shape({
+export const soleBusinessDetailsFormSchema = Yup.object().shape({
   accountBusinessDocumentationType: Yup.string().required(
     'Account/Business Documentation Type is required',
   ),
@@ -141,6 +147,24 @@ export const businessDetailsFormSchema = Yup.object().shape({
   sourceOfFunds: Yup.string().required('Source of Funds is required'),
   currentMonthlyTransactionPKR: Yup.string().required(
     'Current Monthly Transaction (PKR) is required',
+  ),
+  expectedMonthlyDebitTransactions: Yup.string().required(
+    'Expected monthly Debit turnover (No. of transactions) is required',
+  ),
+  expectedMonthlyDebitAmount: Yup.string().required(
+    'Expected monthly Debit turnover (amount) is required',
+  ),
+  expectedMonthlyCreditTransactions: Yup.string().required(
+    'Expected monthly credit turnover (No. of transactions) is required',
+  ),
+  expectedMonthlyCreditAmount: Yup.string().required(
+    'Expected monthly credit turnover (amount) is required',
+  ),
+  annualTurnoverCredit: Yup.string().required(
+    'Annual Turnover (Credit) is required',
+  ),
+  annualTurnoverDebit: Yup.string().required(
+    'Annual Turnover (Debit) is required',
   ),
 });
 
