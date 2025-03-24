@@ -35,8 +35,6 @@ const MerchantPortalHome = () => {
     }
   };
 
-  console.log('userData===', userData);
-
   useEffect(() => {
     fetchGraphRecords();
   }, []);
