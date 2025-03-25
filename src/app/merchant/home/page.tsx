@@ -156,7 +156,7 @@ const LoginSucessHome = () => {
       routeName: 'business-nature',
     },
     {
-      title: 'Production Onboarding',
+      title: 'Merchant Onboarding',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
@@ -165,7 +165,7 @@ const LoginSucessHome = () => {
 
   const LoginCardData = [
     {
-      title: 'Production Onboarding',
+      title: 'Merchant Onboarding',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
@@ -206,7 +206,7 @@ const LoginSucessHome = () => {
                 Corporate Onboarding Portal{' '}
               </span>
             ) : (
-              <span className="text-primary-base"> Developer Portal </span>
+              <span className="text-primary-base"> Merchant Portal </span>
             )}
           </p>
           <p className="text-base font-normal leading-5 text-secondary-600 sm:max-md:text-sm sm:max-md:leading-[18px] ">

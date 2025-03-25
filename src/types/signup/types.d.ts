@@ -4,7 +4,7 @@ interface SignupForm {
   merchantName: string;
   email: string;
   managerMobile: string;
-  website: string;
+  // website: string;
   password: string;
   confirmPassword?: string;
   merchantType: string | null;
