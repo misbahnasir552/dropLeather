@@ -35,13 +35,17 @@ const MerchantPortalHome = () => {
 
   const fetchGraphRecords = async (values: any) => {
     setButtonLoader(true);
+    setApierror('');
     try {
       const graphResponse: any = await apiClient.get('qrcode/graph', {
         params: {
-          // fromDate: values?.fromDate,
-          // toDate: values?.toDate,
-          fromDate: '2025-03-24',
-          toDate: '2025-03-24',
+          fromDate: values?.fromDate,
+          toDate:
+            values?.graphDuration == 'daily'
+              ? values?.fromDate
+              : values?.toDate,
+          // fromDate: '2025-03-24',
+          // toDate: '2025-03-24',
           duration: values?.graphDuration,
           graphType: values?.graphType,
         },
@@ -54,7 +58,10 @@ const MerchantPortalHome = () => {
       if (graphResponse?.data?.responseCode === '009') {
         const transformedData = graphResponse?.data?.transactionGraphData.map(
           (item: any) => ({
-            name: item.name,
+            name:
+              values.graphDuration == 'monthly'
+                ? item.name.split('-')[2].padStart(2, '0')
+                : item.name,
             type: item.type,
             total:
               item.type === 'revenue' ? item.total : parseInt(item.total, 10),
@@ -66,6 +73,28 @@ const MerchantPortalHome = () => {
               item.type === 'revenue' ? item.failed : parseInt(item.failed, 10),
           }),
         );
+
+        if (values?.graphDuration === 'daily') {
+          transformedData.sort((a: any, b: any) => {
+            const convertTo24Hour = (time: string) => {
+              let hour = parseInt(time.slice(0, -2), 10); // Extract hour
+              const period = time.slice(-2); // Extract AM/PM
+
+              if (period === 'AM' && hour === 12) hour = 0; // 12AM -> 00
+              if (period === 'PM' && hour !== 12) hour += 12; // Convert PM hours (except 12PM)
+
+              return hour;
+            };
+
+            return convertTo24Hour(a.name) - convertTo24Hour(b.name);
+          });
+        }
+
+        if (values?.graphDuration === 'monthly') {
+          transformedData.sort(
+            (a: any, b: any) => parseInt(a.name, 10) - parseInt(b.name, 10),
+          );
+        }
         setGraphData(transformedData);
         setButtonLoader(false);
       } else {
@@ -122,8 +151,14 @@ const MerchantPortalHome = () => {
 
     // for case of montly setting to and from dates
     if (values?.graphDuration == 'monthly') {
+      const year = values?.year;
+      const month = values?.month; // This will be in 'MM' format (e.g., '02' for February)
+
+      // Get the number of days in the month
+      const daysInMonth = new Date(year, month, 0).getDate();
+
       values.fromDate = `${values?.year}-${values?.month}-01`; // Set fromDate to January 1st of that year
-      values.toDate = `${values?.year}-${values?.month}-31`;
+      values.toDate = `${values?.year}-${values?.month}-${daysInMonth}`;
     }
 
     fetchGraphRecords(values);
@@ -245,6 +280,11 @@ const MerchantPortalHome = () => {
                     className="button-primary h-9 w-[120px] text-xs"
                     isDisabled={buttonLoader}
                   />
+                  {/* {Object.keys(formik.errors).length > 0 && (
+                    <div className="text-red-500 text-sm">
+                      <pre>{JSON.stringify(formik.errors, null, 2)}</pre>
+                    </div>
+                  )} */}
                 </MerchantFormLayout>
               </Form>
             )}

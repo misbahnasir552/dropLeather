@@ -14,13 +14,13 @@ export const merchantHomeInitialValues: any = {
 export const merchantHomeSchema = Yup.object().shape({
   graphType: Yup.string().required('Graph type is required'),
   graphDuration: Yup.string().required('Graph Duration is required'),
-  fromDate: Yup.date()
-    .when('graphDuration', (graphDuration: any, schema) =>
-      ['daily', 'weekly'].includes(graphDuration[0])
-        ? schema.required('Date is required')
-        : schema.nullable(),
-    )
-    .max(new Date(), 'From Date cannot be in the future'),
+  fromDate: Yup.date().when('graphDuration', (graphDuration: any, schema) =>
+    ['daily', 'weekly'].includes(graphDuration[0])
+      ? schema
+          .required('Date is required')
+          .max(new Date(), 'From Date cannot be in the future')
+      : schema.nullable(),
+  ),
   // toDate: Yup.date().when('graphDuration', (graphDuration: any, schema) =>
   //   graphDuration[0] === 'Weekly'
   //     ? schema.required('To Date is required.')

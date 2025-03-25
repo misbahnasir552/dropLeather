@@ -68,7 +68,7 @@ const LineChartGraph = ({
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="name" interval={0} />
         <YAxis
           dataKey="total"
           // label={{
