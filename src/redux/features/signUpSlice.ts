@@ -7,7 +7,7 @@ const initialState: SignupForm = {
   merchantName: '',
   email: '',
   managerMobile: '',
-  website: '',
+  // website: '',
   password: '',
   merchantType: '',
 };
