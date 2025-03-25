@@ -12,7 +12,7 @@ export const genderArray: TSelect[] = [
 
 export const purposeAccountArray: TSelect[] = [
   { value: 'Retail Payments', text: 'Retail Payments' },
-  { value: 'Online Payments', text: 'Online Payments' },
+  // { value: 'Online Payments', text: 'Online Payments' },
   { value: 'Other', text: 'Other' },
 ];
 
