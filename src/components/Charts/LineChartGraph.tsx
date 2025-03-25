@@ -84,7 +84,7 @@ const LineChartGraph = ({
           type="monotone"
           dataKey="success"
           stroke="#82ca9d"
-          name={`Success ${nameKey}`}
+          name={`Successful ${nameKey}`}
         />
         <Line
           type="monotone"
