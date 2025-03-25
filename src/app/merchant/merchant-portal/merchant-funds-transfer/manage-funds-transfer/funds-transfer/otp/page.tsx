@@ -78,12 +78,11 @@ const OtpInputWithValidation = () => {
           setIsLoading(false);
         }
       } else {
-        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         setShowErrorModal(true);
       }
     } catch (e: any) {
-      setTitle(e?.message);
+      setDescription(e?.message);
       setShowErrorModal(true);
     } finally {
       setIsLoading(false);
@@ -99,6 +98,7 @@ const OtpInputWithValidation = () => {
           description={description}
           show={showModal}
           setShowModal={setShowModal}
+          isVisible
           routeName={
             '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/'
           }
