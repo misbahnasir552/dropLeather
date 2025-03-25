@@ -1,11 +1,61 @@
 import * as Yup from 'yup';
 
+const currentDate = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
 export const merchantHomeInitialValues: any = {
-  graphType: 'byTransaction',
-  graphDuration: 'Weekly',
+  graphType: 'transaction',
+  graphDuration: 'daily',
+  fromDate: currentDate,
+  toDate: currentDate,
+  year: '',
+  month: '',
 };
 
 export const merchantHomeSchema = Yup.object().shape({
   graphType: Yup.string().required('Graph type is required'),
   graphDuration: Yup.string().required('Graph Duration is required'),
+  fromDate: Yup.date()
+    .when('graphDuration', (graphDuration: any, schema) =>
+      ['daily', 'weekly'].includes(graphDuration[0])
+        ? schema.required('Date is required')
+        : schema.nullable(),
+    )
+    .max(new Date(), 'From Date cannot be in the future'),
+  // toDate: Yup.date().when('graphDuration', (graphDuration: any, schema) =>
+  //   graphDuration[0] === 'Weekly'
+  //     ? schema.required('To Date is required.')
+  //     : schema.nullable(),
+  // ),
+  toDate: Yup.date()
+    .when('graphDuration', (graphDuration: any, schema) =>
+      graphDuration[0] === 'weekly'
+        ? schema.required('To Date is required.')
+        : schema.nullable(),
+    )
+    .min(Yup.ref('fromDate'), 'To Date cannot be before From Date')
+    .test(
+      'min-7-days',
+      'There should be 7 days between From Date and To Date',
+      function (toDate) {
+        const { fromDate, graphDuration } = this.parent;
+        if (graphDuration === 'weekly' && fromDate && toDate) {
+          const diff =
+            (new Date(toDate).getTime() - new Date(fromDate).getTime()) /
+            (1000 * 60 * 60 * 24);
+          return diff == 7;
+        }
+        return true;
+      },
+    ),
+  month: Yup.string().when('graphDuration', (graphDuration: any, schema) =>
+    graphDuration[0] === 'monthly'
+      ? schema.required('Month is required')
+      : schema.nullable(),
+  ),
+
+  year: Yup.string().when('graphDuration', (graphDuration: any, schema) =>
+    ['monthly', 'yearly'].includes(graphDuration[0])
+      ? schema.required('Year is required')
+      : schema.nullable(),
+  ),
 });
