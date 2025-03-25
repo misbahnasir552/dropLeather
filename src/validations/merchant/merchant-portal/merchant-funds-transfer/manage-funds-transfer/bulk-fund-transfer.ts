@@ -11,10 +11,12 @@ export const bulkUploadSchema = Yup.object().shape({
     .required('Please attach a file.')
     .test(
       'fileFormat',
-      'Only .xlsx files are allowed.',
+      'Only .xlsx and .csv files are allowed.',
       (value: any) =>
         value &&
-        value.type ===
-          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        (value.type ===
+          'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
+          value.type === 'text/csv' ||
+          value.type === 'application/csv'),
     ),
 });

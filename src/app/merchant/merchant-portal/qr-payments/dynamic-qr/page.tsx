@@ -108,7 +108,6 @@ function AddDynamicQR() {
         setShowModal(true);
       }
     } catch (error: any) {
-      console.error('Error fetching merchant stores:', error);
       setDescription(error?.message);
       setShowModal(true);
     }
@@ -121,7 +120,6 @@ function AddDynamicQR() {
   }, [userData?.email]);
 
   const onSubmit = async (values: IDynamicQR) => {
-    console.log('AddDynamicQR', values);
     const {
       storeId,
       // categoryCode,
@@ -169,7 +167,6 @@ function AddDynamicQR() {
         setShowErrorModal(true);
       }
     } catch (e: any) {
-      console.log('Network Failure!', e);
       setTitle(e?.code);
       setDescription(e?.message);
       setImageUrl('');

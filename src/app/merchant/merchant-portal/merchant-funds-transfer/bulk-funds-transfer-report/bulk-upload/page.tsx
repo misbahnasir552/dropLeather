@@ -127,7 +127,7 @@ function BulkFileUpload() {
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
-                label="View Batch"
+                label="Process Bulk Transfer"
                 type="submit"
                 // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"

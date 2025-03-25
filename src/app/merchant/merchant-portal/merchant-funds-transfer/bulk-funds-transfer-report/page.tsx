@@ -181,7 +181,7 @@ function BulkFundsTransferReport() {
             {(formik: any) => (
               <Form>
                 <div className="border-px w-full rounded-lg border-screen-grey bg-screen-grey py-6">
-                  <div className="grid w-full grid-cols-4 gap-5 p-9 pl-6">
+                  <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey px-4 md:grid-cols-3 md:px-6">
                     <Input
                       label={'Batch Id'}
                       type={'text'}
