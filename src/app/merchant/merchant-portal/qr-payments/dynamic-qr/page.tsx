@@ -34,6 +34,7 @@ function AddDynamicQR() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [imageString, setImageString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -148,7 +149,10 @@ function AddDynamicQR() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      if (response?.data?.responseCode === '009') {
+      console.log('response', response);
+
+      if (response?.status === 200) {
+        setImageString(response?.data);
         setAmount(values.amount);
         setQrExpirationTime(Number(values?.qrExpirationTime));
         base64ToJpg(response?.data.qrCode);
@@ -312,6 +316,7 @@ function AddDynamicQR() {
           amount={amount}
           expirationTime={qrExpirationTime}
           tilNum={tillNum}
+          imageString={imageString}
         />
       )}
     </div>

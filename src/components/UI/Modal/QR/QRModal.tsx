@@ -24,6 +24,7 @@ interface QRModalProps {
   amount?: string;
   expirationTime?: number;
   tilNum?: string;
+  imageString?: string;
 }
 
 const QRModal: React.FC<QRModalProps> = ({
@@ -36,6 +37,7 @@ const QRModal: React.FC<QRModalProps> = ({
   amount,
   expirationTime,
   tilNum,
+  imageString,
 }) => {
   const router = useRouter();
 
@@ -125,6 +127,11 @@ const QRModal: React.FC<QRModalProps> = ({
                       </div>
                     </div>
                   </div>
+                  <img
+                    src={`data:image/png;base64,${imageString}`}
+                    alt="Base64 Preview"
+                    style={{ maxWidth: '100%' }}
+                  />
                   {amount && (
                     <div className="flex flex-col items-center justify-center gap-2">
                       <H1 textColor="text-primary-base">Rs. {amount}</H1>

@@ -6,6 +6,7 @@ import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
+import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
@@ -34,6 +35,9 @@ function ViewProductQR() {
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
   const [tillNum, setTillNum] = useState<string>('');
+  const [pageNumber, setPageNumber] = useState(0);
+  const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
+  const [totalPages, setTotalPages] = useState<number>(+envPageSize);
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -49,7 +53,11 @@ function ViewProductQR() {
       const response = await apiClient.get(
         `/merchantportal/searchDynamicQr?email=${userData?.email}`,
         {
-          params: filteredParams,
+          params: {
+            filteredParams,
+            page: pageNumber,
+            size: +envPageSize,
+          },
         },
       );
       const filteredValues = response?.data?.dynamicQrResponse?.map(
@@ -67,6 +75,7 @@ function ViewProductQR() {
       );
 
       setQrFilteredData(filteredValues);
+      setTotalPages(response?.data?.totalPages);
       setLoading(false);
     } catch (e: any) {
       setTitle('Network Failure!');
@@ -189,6 +198,14 @@ function ViewProductQR() {
     formik.resetForm();
     fetchRecords();
   };
+  const showNextPage = () => {
+    setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
+    // fetchRecords()
+  };
+
+  const showPrevPage = () => {
+    setPageNumber((prev) => Math.max(prev - 1, 0));
+  };
   return (
     <div>
       <>
@@ -280,22 +297,30 @@ function ViewProductQR() {
             </Formik>
           </MerchantFormLayout>
         </div>
-        <div className="flex flex-col items-center justify-center pt-[40px]">
+        <div className="flex flex-col justify-center gap-3 pt-[30px]">
           {loading ? (
             <BarLoader color="#21B25F" />
           ) : (
             <>
               {qrFilteredData?.length > 0 ? (
-                <IconTable
-                  tableHeadings={viewProductQrTableHeadings}
-                  tableData={qrFilteredData}
-                  hasShare
-                  hasDelete
-                  // hasIcons
-                  handleDelete={handleDelete}
-                  handleView={handleView}
-                  isDynamicQr={true}
-                />
+                <>
+                  <IconTable
+                    tableHeadings={viewProductQrTableHeadings}
+                    tableData={qrFilteredData}
+                    hasShare
+                    hasDelete
+                    // hasIcons
+                    handleDelete={handleDelete}
+                    handleView={handleView}
+                    isDynamicQr={true}
+                  />
+                  <Pagination
+                    pageNumber={pageNumber}
+                    totalPages={totalPages}
+                    onNext={showNextPage}
+                    onPrev={showPrevPage}
+                  />
+                </>
               ) : (
                 <H4>No Records Found</H4>
               )}

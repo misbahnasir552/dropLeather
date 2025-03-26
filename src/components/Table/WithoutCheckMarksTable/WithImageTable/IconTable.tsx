@@ -74,6 +74,7 @@ const IconTable: React.FC<IconTableProps> = ({
                 qrCode,
                 webSiteUrl,
                 tillNumber,
+                paymentEnabled,
                 ...tableItem
               },
               rowIndex,
