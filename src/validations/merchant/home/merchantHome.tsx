@@ -6,7 +6,7 @@ export const merchantHomeInitialValues: any = {
   graphType: 'transaction',
   graphDuration: 'daily',
   fromDate: currentDate,
-  toDate: currentDate,
+  toDate: '',
   year: '',
   month: '',
 };
@@ -21,32 +21,27 @@ export const merchantHomeSchema = Yup.object().shape({
           .max(new Date(), 'From Date cannot be in the future')
       : schema.nullable(),
   ),
-  // toDate: Yup.date().when('graphDuration', (graphDuration: any, schema) =>
-  //   graphDuration[0] === 'Weekly'
-  //     ? schema.required('To Date is required.')
-  //     : schema.nullable(),
-  // ),
-  toDate: Yup.date()
-    .when('graphDuration', (graphDuration: any, schema) =>
-      graphDuration[0] === 'weekly'
-        ? schema.required('To Date is required.')
-        : schema.nullable(),
-    )
-    .min(Yup.ref('fromDate'), 'To Date cannot be before From Date')
-    .test(
-      'min-7-days',
-      'There should be 7 days between From Date and To Date',
-      function (toDate) {
-        const { fromDate, graphDuration } = this.parent;
-        if (graphDuration === 'weekly' && fromDate && toDate) {
-          const diff =
-            (new Date(toDate).getTime() - new Date(fromDate).getTime()) /
-            (1000 * 60 * 60 * 24);
-          return diff == 7;
-        }
-        return true;
-      },
-    ),
+  toDate: Yup.date().when('graphDuration', (graphDuration: any, schema) =>
+    graphDuration[0] === 'weekly'
+      ? schema
+          .required('To Date is required.')
+          .min(Yup.ref('fromDate'), 'To Date cannot be before From Date')
+          .test(
+            'min-7-days',
+            'There should be 7 days between From Date and To Date',
+            function (toDate) {
+              const { fromDate } = this.parent;
+              if (fromDate && toDate) {
+                const diff =
+                  (new Date(toDate).getTime() - new Date(fromDate).getTime()) /
+                  (1000 * 60 * 60 * 24);
+                return diff === 7;
+              }
+              return true;
+            },
+          )
+      : schema.nullable(),
+  ),
   month: Yup.string().when('graphDuration', (graphDuration: any, schema) =>
     graphDuration[0] === 'monthly'
       ? schema.required('Month is required')

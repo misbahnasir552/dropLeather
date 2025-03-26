@@ -76,7 +76,9 @@ const MerchantPortalHome = () => {
 
         if (values?.graphDuration === 'daily') {
           transformedData.sort((a: any, b: any) => {
-            const convertTo24Hour = (time: string) => {
+            const convertTo24Hour = (time: string | undefined) => {
+              if (!time || !/(AM|PM)$/.test(time)) return NaN; // Ensure valid time format
+
               let hour = parseInt(time.slice(0, -2), 10); // Extract hour
               const period = time.slice(-2); // Extract AM/PM
 
@@ -86,7 +88,13 @@ const MerchantPortalHome = () => {
               return hour;
             };
 
-            return convertTo24Hour(a.name) - convertTo24Hour(b.name);
+            const hourA = convertTo24Hour(a?.name);
+            const hourB = convertTo24Hour(b?.name);
+
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(hourA) || isNaN(hourB)) return 0; // Skip sorting if invalid time
+
+            return hourA - hourB;
           });
         }
 
@@ -184,118 +192,121 @@ const MerchantPortalHome = () => {
             <MPPriceBar accountBalance={accountBalance} />
           </div>
           <HeaderWrapper heading="Welcome to Merchant Portal" />
+
           <Formik
             initialValues={merchantHomeInitialValues}
             validationSchema={merchantHomeSchema}
             onSubmit={onSubmit}
           >
-            {(formik: any) => (
-              <Form>
-                <MerchantFormLayout>
-                  <div className="grid grid-cols-2 gap-5">
-                    <DropdownInput
-                      name="graphType"
-                      label="Graph Type"
-                      options={transactionOptions}
-                      error={formik.errors.graphType}
-                      touched={formik.touched.graphType}
-                      formik={formik}
-                    />
-                    <DropdownInput
-                      name="graphDuration"
-                      label="Graph Duration"
-                      options={graphDurationOptions}
-                      error={formik.errors.graphDuration}
-                      touched={formik.touched.graphDuration}
-                      formik={formik}
-                    />
-                  </div>
-                  {formik?.values?.graphDuration == 'daily' && (
-                    <div className="grid grid-cols-2">
-                      <DateInputNew
-                        formik={formik}
-                        label="Select Date"
-                        name="fromDate"
-                        error={formik.errors.fromDate}
-                        touched={formik.touched.fromDate}
-                      />
-                    </div>
-                  )}
-                  {formik?.values?.graphDuration == 'weekly' && (
-                    <div className="grid grid-cols-2 gap-5">
-                      <DateInputNew
-                        formik={formik}
-                        label="Select Start Date"
-                        name="fromDate"
-                        error={formik.errors.fromDate}
-                        touched={formik.touched.fromDate}
-                      />
-                      <DateInputNew
-                        formik={formik}
-                        label="Select End Date"
-                        name="toDate"
-                        error={formik.errors.toDate}
-                        touched={formik.touched.toDate}
-                      />
-                    </div>
-                  )}
+            {(formik: any) => {
+              const { graphDuration } = formik.values;
 
-                  {formik?.values?.graphDuration == 'monthly' && (
-                    <div className="grid grid-cols-2 gap-5">
-                      <DropdownInput
-                        name="month"
-                        label="Select Month"
-                        options={monthOptions}
-                        error={formik.errors.month}
-                        touched={formik.touched.month}
-                        formik={formik}
-                      />
-                      <DropdownInput
-                        name="year"
-                        label="Select Year"
-                        options={yearOptions}
-                        error={formik.errors.year}
-                        touched={formik.touched.year}
-                        formik={formik}
-                      />
-                    </div>
-                  )}
-
-                  {formik?.values?.graphDuration == 'yearly' && (
-                    <div className="grid grid-cols-2 gap-5">
-                      <DropdownInput
-                        name="year"
-                        label="Select Year"
-                        options={yearOptions}
-                        error={formik.errors.year}
-                        touched={formik.touched.year}
-                        formik={formik}
-                      />
-                    </div>
-                  )}
-
-                  <Button
-                    label="Generate"
-                    type="submit"
-                    className="button-primary h-9 w-[120px] text-xs"
-                    isDisabled={buttonLoader}
+              const durationInputs: Record<string, JSX.Element> = {
+                daily: (
+                  <DateInputNew
+                    formik={formik}
+                    label="Select Date"
+                    name="fromDate"
+                    error={formik.errors.fromDate}
+                    touched={formik.touched.fromDate}
                   />
-                  {/* {Object.keys(formik.errors).length > 0 && (
-                    <div className="text-red-500 text-sm">
-                      <pre>{JSON.stringify(formik.errors, null, 2)}</pre>
+                ),
+                weekly: (
+                  <>
+                    <DateInputNew
+                      formik={formik}
+                      label="Select Start Date"
+                      name="fromDate"
+                      error={formik.errors.fromDate}
+                      touched={formik.touched.fromDate}
+                    />
+                    <DateInputNew
+                      formik={formik}
+                      label="Select End Date"
+                      name="toDate"
+                      error={formik.errors.toDate}
+                      touched={formik.touched.toDate}
+                    />
+                  </>
+                ),
+                monthly: (
+                  <>
+                    <DropdownInput
+                      name="month"
+                      label="Select Month"
+                      options={monthOptions}
+                      error={formik.errors.month}
+                      touched={formik.touched.month}
+                      formik={formik}
+                    />
+                    <DropdownInput
+                      name="year"
+                      label="Select Year"
+                      options={yearOptions}
+                      error={formik.errors.year}
+                      touched={formik.touched.year}
+                      formik={formik}
+                    />
+                  </>
+                ),
+                yearly: (
+                  <DropdownInput
+                    name="year"
+                    label="Select Year"
+                    options={yearOptions}
+                    error={formik.errors.year}
+                    touched={formik.touched.year}
+                    formik={formik}
+                  />
+                ),
+              };
+
+              return (
+                <Form>
+                  <MerchantFormLayout>
+                    <div className="grid grid-cols-2 gap-5">
+                      <DropdownInput
+                        name="graphType"
+                        label="Graph Type"
+                        options={transactionOptions}
+                        error={formik.errors.graphType}
+                        touched={formik.touched.graphType}
+                        formik={formik}
+                      />
+                      <DropdownInput
+                        name="graphDuration"
+                        label="Graph Duration"
+                        options={graphDurationOptions}
+                        error={formik.errors.graphDuration}
+                        touched={formik.touched.graphDuration}
+                        formik={formik}
+                      />
                     </div>
-                  )} */}
-                </MerchantFormLayout>
-              </Form>
-            )}
+
+                    {graphDuration && (
+                      <div className="grid grid-cols-2 gap-5">
+                        {durationInputs[graphDuration]}
+                      </div>
+                    )}
+
+                    <Button
+                      label="Generate"
+                      type="submit"
+                      className="button-primary h-9 w-[120px] text-xs"
+                      isDisabled={buttonLoader}
+                    />
+                  </MerchantFormLayout>
+                </Form>
+              );
+            }}
           </Formik>
+
           {apierror && (
             <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
             </div>
           )}
-          {/* </div> */}
-          {/* <TableComponent /> */}
+
           <LineChartGraph filteredGraphData={graphData} />
         </div>
       )}
