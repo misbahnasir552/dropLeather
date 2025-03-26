@@ -201,64 +201,34 @@ const MerchantPortalHome = () => {
             {(formik: any) => {
               const { graphDuration } = formik.values;
 
-              const durationInputs: Record<string, JSX.Element> = {
-                daily: (
-                  <DateInputNew
-                    formik={formik}
-                    label="Select Date"
-                    name="fromDate"
-                    error={formik.errors.fromDate}
-                    touched={formik.touched.fromDate}
-                  />
-                ),
-                weekly: (
-                  <>
-                    <DateInputNew
-                      formik={formik}
-                      label="Select Start Date"
-                      name="fromDate"
-                      error={formik.errors.fromDate}
-                      touched={formik.touched.fromDate}
-                    />
-                    <DateInputNew
-                      formik={formik}
-                      label="Select End Date"
-                      name="toDate"
-                      error={formik.errors.toDate}
-                      touched={formik.touched.toDate}
-                    />
-                  </>
-                ),
-                monthly: (
-                  <>
-                    <DropdownInput
-                      name="month"
-                      label="Select Month"
-                      options={monthOptions}
-                      error={formik.errors.month}
-                      touched={formik.touched.month}
-                      formik={formik}
-                    />
-                    <DropdownInput
-                      name="year"
-                      label="Select Year"
-                      options={yearOptions}
-                      error={formik.errors.year}
-                      touched={formik.touched.year}
-                      formik={formik}
-                    />
-                  </>
-                ),
-                yearly: (
-                  <DropdownInput
-                    name="year"
-                    label="Select Year"
-                    options={yearOptions}
-                    error={formik.errors.year}
-                    touched={formik.touched.year}
-                    formik={formik}
-                  />
-                ),
+              // Configuration for date-based inputs
+              const dateFields: Record<
+                string,
+                { name: string; label: string }[]
+              > = {
+                daily: [{ name: 'fromDate', label: 'Select Date' }],
+                weekly: [
+                  { name: 'fromDate', label: 'Select Start Date' },
+                  { name: 'toDate', label: 'Select End Date' },
+                ],
+              };
+
+              // Configuration for dropdown-based inputs
+              const dropdownFields: Record<
+                string,
+                { name: string; label: string; options: any[] }[]
+              > = {
+                monthly: [
+                  {
+                    name: 'month',
+                    label: 'Select Month',
+                    options: monthOptions,
+                  },
+                  { name: 'year', label: 'Select Year', options: yearOptions },
+                ],
+                yearly: [
+                  { name: 'year', label: 'Select Year', options: yearOptions },
+                ],
               };
 
               return (
@@ -285,7 +255,32 @@ const MerchantPortalHome = () => {
 
                     {graphDuration && (
                       <div className="grid grid-cols-2 gap-5">
-                        {durationInputs[graphDuration]}
+                        {/* Render Date Inputs */}
+                        {dateFields[graphDuration]?.map(({ name, label }) => (
+                          <DateInputNew
+                            key={name}
+                            formik={formik}
+                            label={label}
+                            name={name}
+                            error={formik.errors[name]}
+                            touched={formik.touched[name]}
+                          />
+                        ))}
+
+                        {/* Render Dropdown Inputs */}
+                        {dropdownFields[graphDuration]?.map(
+                          ({ name, label, options }) => (
+                            <DropdownInput
+                              key={name}
+                              name={name}
+                              label={label}
+                              options={options}
+                              error={formik.errors[name]}
+                              touched={formik.touched[name]}
+                              formik={formik}
+                            />
+                          ),
+                        )}
                       </div>
                     )}
 
@@ -312,6 +307,136 @@ const MerchantPortalHome = () => {
       )}
     </>
   );
+
+  //   <>
+  //     {isLoading ? (
+  //       <BarLoader />
+  //     ) : (
+  //       <div className="flex flex-col gap-6">
+  //         <div className="my-6">
+  //           <MPPriceBar accountBalance={accountBalance} />
+  //         </div>
+  //         <HeaderWrapper heading="Welcome to Merchant Portal" />
+
+  //         <Formik
+  //           initialValues={merchantHomeInitialValues}
+  //           validationSchema={merchantHomeSchema}
+  //           onSubmit={onSubmit}
+  //         >
+  //           {(formik: any) => {
+  //             const { graphDuration } = formik.values;
+
+  //             const durationInputs: Record<string, JSX.Element> = {
+  //               daily: (
+  //                 <DateInputNew
+  //                   formik={formik}
+  //                   label="Select Date"
+  //                   name="fromDate"
+  //                   error={formik.errors.fromDate}
+  //                   touched={formik.touched.fromDate}
+  //                 />
+  //               ),
+  //               weekly: (
+  //                 <>
+  //                   <DateInputNew
+  //                     formik={formik}
+  //                     label="Select Start Date"
+  //                     name="fromDate"
+  //                     error={formik.errors.fromDate}
+  //                     touched={formik.touched.fromDate}
+  //                   />
+  //                   <DateInputNew
+  //                     formik={formik}
+  //                     label="Select End Date"
+  //                     name="toDate"
+  //                     error={formik.errors.toDate}
+  //                     touched={formik.touched.toDate}
+  //                   />
+  //                 </>
+  //               ),
+  //               monthly: (
+  //                 <>
+  //                   <DropdownInput
+  //                     name="month"
+  //                     label="Select Month"
+  //                     options={monthOptions}
+  //                     error={formik.errors.month}
+  //                     touched={formik.touched.month}
+  //                     formik={formik}
+  //                   />
+  //                   <DropdownInput
+  //                     name="year"
+  //                     label="Select Year"
+  //                     options={yearOptions}
+  //                     error={formik.errors.year}
+  //                     touched={formik.touched.year}
+  //                     formik={formik}
+  //                   />
+  //                 </>
+  //               ),
+  //               yearly: (
+  //                 <DropdownInput
+  //                   name="year"
+  //                   label="Select Year"
+  //                   options={yearOptions}
+  //                   error={formik.errors.year}
+  //                   touched={formik.touched.year}
+  //                   formik={formik}
+  //                 />
+  //               ),
+  //             };
+
+  //             return (
+  //               <Form>
+  //                 <MerchantFormLayout>
+  //                   <div className="grid grid-cols-2 gap-5">
+  //                     <DropdownInput
+  //                       name="graphType"
+  //                       label="Graph Type"
+  //                       options={transactionOptions}
+  //                       error={formik.errors.graphType}
+  //                       touched={formik.touched.graphType}
+  //                       formik={formik}
+  //                     />
+  //                     <DropdownInput
+  //                       name="graphDuration"
+  //                       label="Graph Duration"
+  //                       options={graphDurationOptions}
+  //                       error={formik.errors.graphDuration}
+  //                       touched={formik.touched.graphDuration}
+  //                       formik={formik}
+  //                     />
+  //                   </div>
+
+  //                   {graphDuration && (
+  //                     <div className="grid grid-cols-2 gap-5">
+  //                       {durationInputs[graphDuration]}
+  //                     </div>
+  //                   )}
+
+  //                   <Button
+  //                     label="Generate"
+  //                     type="submit"
+  //                     className="button-primary h-9 w-[120px] text-xs"
+  //                     isDisabled={buttonLoader}
+  //                   />
+  //                 </MerchantFormLayout>
+  //               </Form>
+  //             );
+  //           }}
+  //         </Formik>
+
+  //         {apierror && (
+  //           <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+  //             {apierror}
+  //           </div>
+  //         )}
+
+  //         <LineChartGraph filteredGraphData={graphData} />
+  //       </div>
+  //     )}
+  //   </>
+  // );
 };
 
 export default MerchantPortalHome;
