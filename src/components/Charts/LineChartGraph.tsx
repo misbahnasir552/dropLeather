@@ -15,12 +15,12 @@ const LineChartGraph = ({
 }: {
   filteredGraphData: any[];
 }) => {
-  if (!filteredGraphData || filteredGraphData.length === 0) {
+  if (!filteredGraphData || filteredGraphData?.length === 0) {
     return <div className="text-gray-500 text-center">No data found</div>;
   }
 
   const nameKey =
-    filteredGraphData.length > 0 && filteredGraphData[0]?.type === 'revenue'
+    filteredGraphData?.length > 0 && filteredGraphData[0]?.type === 'revenue'
       ? 'Revenue'
       : 'Transactions';
 
