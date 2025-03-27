@@ -9,7 +9,7 @@ export const changePasswordInitialValues: IChangePassword = {
 };
 
 export const changePasswordSchema = Yup.object().shape({
-  currentPassword: Yup.string().required('Email is required'),
+  currentPassword: Yup.string().required('Current Password is required'),
   newPassword: Yup.string()
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
