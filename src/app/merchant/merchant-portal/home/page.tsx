@@ -44,14 +44,11 @@ const MerchantPortalHome = () => {
             values?.graphDuration == 'daily'
               ? values?.fromDate
               : values?.toDate,
-          // fromDate: '2025-03-24',
-          // toDate: '2025-03-24',
           duration: values?.graphDuration,
           graphType: values?.graphType,
         },
         headers: {
-          // merchantEmail: userData?.email,
-          merchantEmail: 'misbah55@yopmail.com',
+          merchantEmail: userData?.email,
         },
       });
       // get success reponse and now transform data according to type
@@ -60,17 +57,21 @@ const MerchantPortalHome = () => {
           (item: any) => ({
             name:
               values.graphDuration == 'monthly'
-                ? item.name.split('-')[2].padStart(2, '0')
-                : item.name,
-            type: item.type,
+                ? item?.name.split('-')[2].padStart(2, '0')
+                : item?.name,
+            type: item?.type,
             total:
-              item.type === 'revenue' ? item.total : parseInt(item.total, 10),
+              item?.type === 'revenue'
+                ? item?.total
+                : parseInt(item?.total, 10),
             success:
-              item.type === 'revenue'
-                ? item.success
-                : parseInt(item.success, 10),
+              item?.type === 'revenue'
+                ? item?.success
+                : parseInt(item?.success, 10),
             failed:
-              item.type === 'revenue' ? item.failed : parseInt(item.failed, 10),
+              item?.type === 'revenue'
+                ? item?.failed
+                : parseInt(item?.failed, 10),
           }),
         );
 
@@ -79,8 +80,8 @@ const MerchantPortalHome = () => {
             const convertTo24Hour = (time: string | undefined) => {
               if (!time || !/(AM|PM)$/.test(time)) return NaN; // Ensure valid time format
 
-              let hour = parseInt(time.slice(0, -2), 10); // Extract hour
-              const period = time.slice(-2); // Extract AM/PM
+              let hour = parseInt(time?.slice(0, -2), 10); // Extract hour
+              const period = time?.slice(-2); // Extract AM/PM
 
               if (period === 'AM' && hour === 12) hour = 0; // 12AM -> 00
               if (period === 'PM' && hour !== 12) hour += 12; // Convert PM hours (except 12PM)
@@ -100,7 +101,7 @@ const MerchantPortalHome = () => {
 
         if (values?.graphDuration === 'monthly') {
           transformedData.sort(
-            (a: any, b: any) => parseInt(a.name, 10) - parseInt(b.name, 10),
+            (a: any, b: any) => parseInt(a?.name, 10) - parseInt(b?.name, 10),
           );
         }
         setGraphData(transformedData);
@@ -307,136 +308,6 @@ const MerchantPortalHome = () => {
       )}
     </>
   );
-
-  //   <>
-  //     {isLoading ? (
-  //       <BarLoader />
-  //     ) : (
-  //       <div className="flex flex-col gap-6">
-  //         <div className="my-6">
-  //           <MPPriceBar accountBalance={accountBalance} />
-  //         </div>
-  //         <HeaderWrapper heading="Welcome to Merchant Portal" />
-
-  //         <Formik
-  //           initialValues={merchantHomeInitialValues}
-  //           validationSchema={merchantHomeSchema}
-  //           onSubmit={onSubmit}
-  //         >
-  //           {(formik: any) => {
-  //             const { graphDuration } = formik.values;
-
-  //             const durationInputs: Record<string, JSX.Element> = {
-  //               daily: (
-  //                 <DateInputNew
-  //                   formik={formik}
-  //                   label="Select Date"
-  //                   name="fromDate"
-  //                   error={formik.errors.fromDate}
-  //                   touched={formik.touched.fromDate}
-  //                 />
-  //               ),
-  //               weekly: (
-  //                 <>
-  //                   <DateInputNew
-  //                     formik={formik}
-  //                     label="Select Start Date"
-  //                     name="fromDate"
-  //                     error={formik.errors.fromDate}
-  //                     touched={formik.touched.fromDate}
-  //                   />
-  //                   <DateInputNew
-  //                     formik={formik}
-  //                     label="Select End Date"
-  //                     name="toDate"
-  //                     error={formik.errors.toDate}
-  //                     touched={formik.touched.toDate}
-  //                   />
-  //                 </>
-  //               ),
-  //               monthly: (
-  //                 <>
-  //                   <DropdownInput
-  //                     name="month"
-  //                     label="Select Month"
-  //                     options={monthOptions}
-  //                     error={formik.errors.month}
-  //                     touched={formik.touched.month}
-  //                     formik={formik}
-  //                   />
-  //                   <DropdownInput
-  //                     name="year"
-  //                     label="Select Year"
-  //                     options={yearOptions}
-  //                     error={formik.errors.year}
-  //                     touched={formik.touched.year}
-  //                     formik={formik}
-  //                   />
-  //                 </>
-  //               ),
-  //               yearly: (
-  //                 <DropdownInput
-  //                   name="year"
-  //                   label="Select Year"
-  //                   options={yearOptions}
-  //                   error={formik.errors.year}
-  //                   touched={formik.touched.year}
-  //                   formik={formik}
-  //                 />
-  //               ),
-  //             };
-
-  //             return (
-  //               <Form>
-  //                 <MerchantFormLayout>
-  //                   <div className="grid grid-cols-2 gap-5">
-  //                     <DropdownInput
-  //                       name="graphType"
-  //                       label="Graph Type"
-  //                       options={transactionOptions}
-  //                       error={formik.errors.graphType}
-  //                       touched={formik.touched.graphType}
-  //                       formik={formik}
-  //                     />
-  //                     <DropdownInput
-  //                       name="graphDuration"
-  //                       label="Graph Duration"
-  //                       options={graphDurationOptions}
-  //                       error={formik.errors.graphDuration}
-  //                       touched={formik.touched.graphDuration}
-  //                       formik={formik}
-  //                     />
-  //                   </div>
-
-  //                   {graphDuration && (
-  //                     <div className="grid grid-cols-2 gap-5">
-  //                       {durationInputs[graphDuration]}
-  //                     </div>
-  //                   )}
-
-  //                   <Button
-  //                     label="Generate"
-  //                     type="submit"
-  //                     className="button-primary h-9 w-[120px] text-xs"
-  //                     isDisabled={buttonLoader}
-  //                   />
-  //                 </MerchantFormLayout>
-  //               </Form>
-  //             );
-  //           }}
-  //         </Formik>
-
-  //         {apierror && (
-  //           <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-  //             {apierror}
-  //           </div>
-  //         )}
-
-  //         <LineChartGraph filteredGraphData={graphData} />
-  //       </div>
-  //     )}
-  //   </>
-  // );
 };
 
 export default MerchantPortalHome;
