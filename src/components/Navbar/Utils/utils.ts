@@ -38,7 +38,7 @@ export const getConfigurationDropDownMenu = () => [
     title: 'Transaction History Preferences',
     link: 'configuration/transaction-history-prefereneces',
   },
-  { title: 'Upload Documents', link: 'configuration/upload-documents' },
+  { title: 'Upload Documents', link: 'configuration/uploaded-documents' },
   // { title: 'Add Outlet', link: 'configuration/add-outlet' },
   // { title: "Add Transaction Point", link: "payment-link", icon: Money },
   // {
