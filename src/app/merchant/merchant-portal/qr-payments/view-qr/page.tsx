@@ -28,6 +28,7 @@ function StaticQr() {
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     console.log('base 64 is', base64String);
@@ -82,6 +83,7 @@ function StaticQr() {
   const handleView = (qrCode: string, name: string, tillId?: string) => {
     setTillNum(tillId || '');
     base64ToJpg(qrCode);
+    setQrString(qrCode);
     setStoreName(name);
   };
 
@@ -133,13 +135,13 @@ function StaticQr() {
     if (userData?.email) {
       fetchStores();
     }
-  }, [userData?.email]);
+  }, [userData?.email, pageNumber]);
   const qrPaymentsTableHeadings: string[] = [
     'Store ID',
     'Store Name',
     // 'Website URL',
     // 'Payment Enabled',
-    'Branch',
+    // 'Branch',
     'Transaction Point Number',
     'Store Address',
     'QR Generation Date/Time',
@@ -199,6 +201,7 @@ function StaticQr() {
             setShowModal={setShowModal}
             imageUrl={imageUrl} // Pass the QR code image URL here
             tilNum={tillNum}
+            qrString={qrString}
             // amount={amount}
             // expirationTime={expirationTime}
           />

@@ -38,12 +38,14 @@ function ViewProductQR() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [qrString, setQrString] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
-    'Product Details',
     'Product Number',
     'Store ID',
+    'QR Generation Date',
+    'QR Expiry Date',
     'Actions',
   ];
 
@@ -54,7 +56,9 @@ function ViewProductQR() {
         `/merchantportal/searchDynamicQr?email=${userData?.email}`,
         {
           params: {
-            filteredParams,
+            ...(filteredParams && typeof filteredParams === 'object'
+              ? filteredParams
+              : {}), // Spread existing filtered data
             page: pageNumber,
             size: +envPageSize,
           },
@@ -66,9 +70,10 @@ function ViewProductQR() {
           isDeleted,
           qrFormatIndicator,
           branchCode,
+          productDetails,
           // qrCode,
           // tillNumber,
-          createdAt,
+          // createdAt,
           updatedAt,
           ...rest
         }: any) => rest,
@@ -126,10 +131,6 @@ function ViewProductQR() {
       // setShowModal(true);
     }
   };
-
-  useEffect(() => {
-    fetchRecords();
-  }, [filteredParams]);
 
   const onSubmit = async (values: IViewProductQr) => {
     const filteredValues: any = {};
@@ -192,6 +193,7 @@ function ViewProductQR() {
   const handleView = (qrCode: string, name: string, tillId?: string) => {
     setTillNum(tillId || '');
     base64ToJpg(qrCode);
+    setQrString(qrCode);
     setStoreName(name);
   };
   const handleReset = (formik: any) => {
@@ -206,6 +208,9 @@ function ViewProductQR() {
   const showPrevPage = () => {
     setPageNumber((prev) => Math.max(prev - 1, 0));
   };
+  useEffect(() => {
+    fetchRecords();
+  }, [filteredParams, pageNumber]);
   return (
     <div>
       <>
@@ -236,6 +241,7 @@ function ViewProductQR() {
               setShowModal={setShowModal}
               imageUrl={imageUrl} // Pass the QR code image URL here
               tilNum={tillNum}
+              qrString={qrString}
               // amount={amount}
               // expirationTime={expirationTime}
             />
