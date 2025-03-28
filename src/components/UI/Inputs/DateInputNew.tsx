@@ -19,7 +19,6 @@ const DateInputNew = ({
 }: IDate) => {
   const handleDateChange = (event: any) => {
     const selectedDate = event.target.value;
-    console.log('Selected Date:', selectedDate);
     formik?.setFieldValue(name, selectedDate);
     // console.log ("name and date", name, selectedDate)
   };

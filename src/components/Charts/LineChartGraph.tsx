@@ -1,5 +1,4 @@
-// import { renderCustomAxisTick } from '@/utils/graph/helper';
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   CartesianGrid,
   Legend,
@@ -11,34 +10,58 @@ import {
   YAxis,
 } from 'recharts';
 
-import CustomTick from './custom/CustomTick';
+const LineChartGraph = ({
+  filteredGraphData,
+}: {
+  filteredGraphData: any[];
+}) => {
+  if (!filteredGraphData || filteredGraphData?.length === 0) {
+    return <div className="text-gray-500 text-center">No data found</div>;
+  }
 
-// const data = [
-//   { name: '1', uv: 1500, },
-//   { name: '2', uv: 3000,  },
-//   { name: '3', uv: 1000,  },
-//   { name: '4', uv: 2000,  },
-//   { name: '5', uv: 8200,  },
-//   { name: '6', uv: 8200,  },
-//   { name: '7', uv: 8200,  },
+  const nameKey =
+    filteredGraphData?.length > 0 && filteredGraphData[0]?.type === 'revenue'
+      ? 'Revenue'
+      : 'Transactions';
 
-//   // More data points...
-// ];
-
-const LineChartGraph = (filteredGraphData: any) => {
-  console.log(filteredGraphData, 'LINECHART');
-  useEffect(() => {}, [filteredGraphData]);
   return (
-    <ResponsiveContainer width={1200} height={500}>
-      <LineChart data={filteredGraphData}>
-        <XAxis dataKey="name" tick={<CustomTick />} />
-        <YAxis />
-        <CartesianGrid strokeDasharray="7 3" />
+    <ResponsiveContainer width="100%" height="100%">
+      <LineChart
+        width={1400}
+        height={500}
+        data={filteredGraphData}
+        margin={{
+          top: 5,
+          right: 50,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" interval={0} />
+        <YAxis
+          dataKey="total"
+          // label={{
+          //   value: 'Total Records',
+          //   angle: -90,
+          //   position: 'insideLeft',
+          // }}
+        />
         <Tooltip />
         <Legend />
-        {/* <Line type="monotone" dataKey="pv" stroke="#8884d8" /> */}
-        <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-        {/* <Line type="monotone" dataKey="pv" stroke="#82ca0p" /> */}
+
+        <Line
+          type="monotone"
+          dataKey="success"
+          stroke="#82ca9d"
+          name={`Successful ${nameKey}`}
+        />
+        <Line
+          type="monotone"
+          dataKey="failed"
+          stroke="#FF0000"
+          name={`Failed ${nameKey}`}
+        />
       </LineChart>
     </ResponsiveContainer>
   );
