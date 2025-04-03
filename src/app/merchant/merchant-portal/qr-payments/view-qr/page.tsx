@@ -1,26 +1,17 @@
 'use client';
 
-// import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
+import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
-// import Button from '@/components/UI/Button/PrimaryButton';
-// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-// import Input from '@/components/UI/Inputs/Input';
-import CustomModal from '@/components/UI/Modal/CustomModal';
+import Button from '@/components/UI/Button/PrimaryButton';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import QRModal from '@/components/UI/Modal/QR/QRModal';
-// import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-// import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
-// import type { IQrPayments } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
-// import {
-//   qrPaymentsInitialValues,
-//   qrPaymentsSchema,
-// } from '@/validations/merchant/merchant-portal/qr-payments/qr-payments';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -33,6 +24,11 @@ function StaticQr() {
   const [stores, setStores] = useState([]);
   const [tillNum, setTillNum] = useState<string>('');
   const [isLoading, setIsloading] = useState(false);
+  const [pageNumber, setPageNumber] = useState(0);
+  const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
+  const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     console.log('base 64 is', base64String);
@@ -87,6 +83,7 @@ function StaticQr() {
   const handleView = (qrCode: string, name: string, tillId?: string) => {
     setTillNum(tillId || '');
     base64ToJpg(qrCode);
+    setQrString(qrCode);
     setStoreName(name);
   };
 
@@ -95,7 +92,11 @@ function StaticQr() {
     try {
       const response = await apiClient.get('/merchant/stores', {
         headers: { Authorization: `Bearer ${userData?.jwt}` },
-        params: { merchantEmail: userData?.email },
+        params: {
+          merchantEmail: userData?.email,
+          page: pageNumber,
+          size: +envPageSize,
+        },
       });
       // setTitle('merchantPortalProfile');
 
@@ -111,20 +112,20 @@ function StaticQr() {
             };
           }),
         );
+        setTotalPages(response?.data?.totalPages);
       } else if (response.data.responseCode === '000') {
-        setTitle('Error');
+        setTitle(response?.data?.responseMessage);
         setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setShowErrorModal(true);
       } else {
-        setTitle('Error');
+        setTitle(response?.data?.responseMessage);
         setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setShowErrorModal(true);
       }
     } catch (error: any) {
       console.error('Error fetching merchant stores:', error);
-      setTitle('Network Error');
-      setDescription(error.message);
-      setShowModal(true);
+      setDescription(error?.message);
+      setShowErrorModal(true);
     } finally {
       setIsloading(false);
     }
@@ -134,16 +135,17 @@ function StaticQr() {
     if (userData?.email) {
       fetchStores();
     }
-  }, [userData?.email]);
+  }, [userData?.email, pageNumber]);
   const qrPaymentsTableHeadings: string[] = [
     'Store ID',
     'Store Name',
     // 'Website URL',
-    'Payment Enabled',
-    'Status',
+    // 'Payment Enabled',
+    // 'Branch',
     'Transaction Point Number',
     'Store Address',
     'QR Generation Date/Time',
+    // 'QR Expiry Date',
     'SMS Notification Number',
     'Actions',
   ];
@@ -153,16 +155,41 @@ function StaticQr() {
   // const handleReset = (Formik: any) => {
   //   Formik.resetForm();
   // };
+  const exportToExcel = () => {
+    // if (!stores) return;
+
+    if (!stores) {
+      return;
+    }
+
+    // Create a worksheet from the stores data
+    const ws = XLSX?.utils?.json_to_sheet(stores);
+
+    // Create a new workbook and append the worksheet
+    const wb = XLSX?.utils?.book_new();
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Funds Transfer Report');
+
+    // Generate an Excel file and download it
+    XLSX.writeFile(wb, 'funds_transfer_report.xlsx');
+  };
+  const showNextPage = () => {
+    setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
+    // fetchRecords()
+  };
+
+  const showPrevPage = () => {
+    setPageNumber((prev) => Math.max(prev - 1, 0));
+  };
   return (
     <div>
       <>
         {isLoading && <BarLoader color="#21B25F" />}
-        {!imageUrl && (
-          <CustomModal
+        {showErrorModal && (
+          <ErrorModal
             title={title}
             description={description}
-            show={showModal}
-            setShowModal={setShowModal}
+            show={showErrorModal}
+            setShow={setShowErrorModal}
             // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
           />
         )}
@@ -174,6 +201,7 @@ function StaticQr() {
             setShowModal={setShowModal}
             imageUrl={imageUrl} // Pass the QR code image URL here
             tilNum={tillNum}
+            qrString={qrString}
             // amount={amount}
             // expirationTime={expirationTime}
           />
@@ -245,15 +273,33 @@ function StaticQr() {
           </MerchantFormLayout> */}
           {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
         </div>
-        <div className="flex justify-center pt-[40px]">
-          {stores?.length > 0 ? (
-            <IconTable
-              tableHeadings={qrPaymentsTableHeadings}
-              tableData={stores}
-              // hasEdit
-              handleView={handleView}
-              hasShare
+        {stores?.length > 0 && (
+          <div className="flex justify-end">
+            <Button
+              label="Export"
+              className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+              onClickHandler={exportToExcel} // Export button click handler
             />
+          </div>
+        )}
+        <div className="flex flex-col justify-center gap-3 pt-[30px]">
+          {stores?.length > 0 ? (
+            <>
+              {' '}
+              <IconTable
+                tableHeadings={qrPaymentsTableHeadings}
+                tableData={stores}
+                // hasEdit
+                handleView={handleView}
+                hasShare
+              />
+              <Pagination
+                pageNumber={pageNumber}
+                totalPages={totalPages}
+                onNext={showNextPage}
+                onPrev={showPrevPage}
+              />
+            </>
           ) : (
             <div className="text-center">No Data Available</div>
           )}
