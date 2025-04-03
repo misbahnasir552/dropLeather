@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import DualListTable from '@/components/DualListTable';
 import Button from '@/components/UI/Button/PrimaryButton';
-import SuccessModal from '@/components/UI/Modal/SuccessModal';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
 import { generateMD5Hash } from '@/utils/helper';
@@ -87,6 +87,7 @@ export default function TransactionHistoryPreferences() {
     const transactionHistoryValues = {
       merchantEmail: userData?.email,
       selectedFields: selectedFIleds,
+      managerMobile: userData?.managerMobile,
     };
     const mdRequest = {
       ...transactionHistoryValues,
@@ -104,6 +105,9 @@ export default function TransactionHistoryPreferences() {
       const response = await apiClient.post(
         'qrcode/saveTransactionPreferences',
         requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData.jwt}` },
+        },
       );
       // setShowModal(true);
       if (response.data.responseCode === '009') {
@@ -131,7 +135,7 @@ export default function TransactionHistoryPreferences() {
 
   return (
     <div className="flex flex-col gap-6">
-      <SuccessModal
+      <CustomModal
         title={title}
         description={description}
         show={showModal}
