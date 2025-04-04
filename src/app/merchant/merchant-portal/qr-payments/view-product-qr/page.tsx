@@ -44,8 +44,8 @@ function ViewProductQR() {
     'Amount (Rs.)',
     'Product Number',
     'Store ID',
-    'QR Generation Date',
-    'QR Expiry Date',
+    'QR Generation Date/Time',
+    'QR Expiry Date/Time',
     'Actions',
   ];
 

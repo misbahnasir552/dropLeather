@@ -22,6 +22,10 @@ function MerchantFundsTransfer() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const navbarRoute = useAppSelector(
+    (state: any) => state.fundsTransfer.navbarRoute,
+  );
+
   const isOtpComplete = () => {
     const isSmsOtpFilled = otp.every((digit) => digit !== '');
     const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
@@ -40,7 +44,11 @@ function MerchantFundsTransfer() {
       if (response.data.responseCode === '009') {
         dispatch(otpSuccess({ isAuthenticated: true }));
         router.push(
-          '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/',
+          `/merchant/merchant-portal/merchant-funds-transfer/${
+            navbarRoute === 'Manage Funds Transfer'
+              ? 'manage-funds-transfer'
+              : 'bulk-funds-transfer-report'
+          }`,
         );
       } else {
         setDescription(response?.data?.errorDescription);

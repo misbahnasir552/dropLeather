@@ -55,6 +55,7 @@ type TMerchantDetails = {
 };
 type TFundsTransfer = {
   isAuthenticated: boolean;
+  navbarRoute?: string;
 };
 type TCorporateAccountDetails = {
   accountTitle: null | undefined | string;

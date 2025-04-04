@@ -167,10 +167,10 @@ function StaticQr() {
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
-    XLSX?.utils?.book_append_sheet(wb, ws, 'Funds Transfer Report');
+    XLSX?.utils?.book_append_sheet(wb, ws, 'QR Report');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'funds_transfer_report.xlsx');
+    XLSX.writeFile(wb, 'QR-Report.xlsx');
   };
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
