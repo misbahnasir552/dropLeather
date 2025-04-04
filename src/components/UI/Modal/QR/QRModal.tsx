@@ -140,21 +140,23 @@ const QRModal: React.FC<QRModalProps> = ({
                             height={250}
                           />{' '}
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <span className="text-center text-[#fff] ">
-                            Merchant Till Number
-                          </span>
-                          <div className="flex space-x-2">
-                            {tilNum?.split('')?.map((digit, index) => (
-                              <div
-                                key={index}
-                                className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#000] text-[14px] text-[#fff]"
-                              >
-                                {digit}
-                              </div>
-                            ))}
+                        {tilNum ? (
+                          <div className="flex flex-col gap-2">
+                            <span className="text-center text-[#fff] ">
+                              Merchant Till Number
+                            </span>
+                            <div className="flex space-x-2">
+                              {tilNum?.split('')?.map((digit, index) => (
+                                <div
+                                  key={index}
+                                  className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#000] text-[14px] text-[#fff]"
+                                >
+                                  {digit}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>
