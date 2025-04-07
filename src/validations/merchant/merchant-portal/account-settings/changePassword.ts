@@ -12,6 +12,7 @@ export const changePasswordSchema = Yup.object().shape({
   currentPassword: Yup.string().required('Current Password is required'),
   newPassword: Yup.string()
     .min(8, 'Password must be at least 8 characters long')
+    .max(15, 'Password must be no longer than 15 characters')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
     .matches(/\d/, 'Password must contain at least one number')

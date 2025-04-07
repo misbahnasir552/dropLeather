@@ -164,10 +164,10 @@ const SearchTransaction = () => {
     fetchRecords();
   }, [pageNumber, filteredData]);
 
-  const statusOptions = [
-    { value: 'Success', label: 'Success' },
-    { value: 'Failed', label: 'Failed' },
-  ];
+  // const statusOptions = [
+  //   { value: 'Success', label: 'Success' },
+  //   { value: 'Failed', label: 'Failed' },
+  // ];
 
   // const tableHeadings: string[] = [
   //   'OPS ID',
@@ -208,7 +208,7 @@ const SearchTransaction = () => {
   const handleReset = (formik: any) => {
     formik.resetForm();
     setPageNumber(0);
-    fetchRecords();
+    // fetchRecords();
   };
   const exportToExcel = () => {
     // if (!response) return;
@@ -344,7 +344,7 @@ const SearchTransaction = () => {
                 touched={formik.touched.channel}
                 options={options}
               /> */}
-              <DropdownInput
+              {/* <DropdownInput
                 label="Transaction Status"
                 name="status"
                 formik={formik}
@@ -352,7 +352,7 @@ const SearchTransaction = () => {
                 error={formik.errors.status}
                 touched={formik.touched.status}
                 options={statusOptions}
-              />
+              /> */}
             </div>
             <div className="flex w-full items-center justify-start gap-6">
               <Button
@@ -360,11 +360,11 @@ const SearchTransaction = () => {
                 type="submit"
                 className="button-primary h-9 w-[120px] px-3 py-[19px] text-xs"
               />
-              <Button
+              {/* <Button
                 label="Send IPN"
                 routeName="/merchant/merchant-portal/account-settings/ipn-configuration"
                 className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
-              />
+              /> */}
               <Button
                 label="Reset"
                 // routeName="/sign-up"
@@ -382,7 +382,7 @@ const SearchTransaction = () => {
               <Button
                 label="Bulk Reversal"
                 routeName="/merchant/merchant-portal/configuration/transactions-history/bulk-reversal"
-                type="submit"
+                // type="submit"
                 className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
               />
             </div>
