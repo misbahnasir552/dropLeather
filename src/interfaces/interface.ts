@@ -438,6 +438,7 @@ export interface SearchTransactionsForm {
   storeID: string;
   fromDate: string;
   toDate: string;
+  storeName: string;
 }
 
 export interface AddOutletForm {

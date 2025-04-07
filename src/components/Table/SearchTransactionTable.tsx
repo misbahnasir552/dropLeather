@@ -131,7 +131,9 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                         <B3 textColor="text-danger-base">{value || 'N/A'}</B3>
                       ) : (
                         <B3 textColor="text-secondary-base">
-                          {value || 'N/A'}
+                          {value === null || value === undefined || value === ''
+                            ? 'N/A'
+                            : value}
                         </B3>
                       )}
                     </td>

@@ -29,6 +29,7 @@ export default function ChangePasswordPage() {
   const [route, setRoute] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+  const [apierror, setApierror] = useState('');
 
   const onSubmit = async (values: IChangePassword) => {
     // Your form submission logic here
@@ -56,6 +57,7 @@ export default function ChangePasswordPage() {
       );
 
       if (response?.data.responseCode === '000') {
+        setShowModal(true);
         dispatch(setLogout());
         dispatch(resetForms());
         setIsLoading(false);
@@ -64,16 +66,18 @@ export default function ChangePasswordPage() {
         setDescription(response?.data.responseMessage);
       } else {
         setIsLoading(false);
-        setTitle('Failure');
-        setDescription(response?.data.responseMessage);
+        // setTitle('Failure');
+        // setDescription(response?.data.responseMessage);
+        setApierror(response?.data.responseMessage);
       }
     } catch (e: any) {
-      setTitle('Network Failed');
-      setDescription(e.message);
+      setApierror('An Unexpected Error Occured. Please check your network');
+      // setTitle('Network Failed');
+      // setDescription(e.message);
       setIsLoading(false);
     } finally {
       setIsLoading(false);
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -119,6 +123,9 @@ export default function ChangePasswordPage() {
                   name="confirmPassword"
                   type="password"
                 />
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
               </div>
             </FormLayout>
             {isLoading && <BarLoader color="#21B25F" />}

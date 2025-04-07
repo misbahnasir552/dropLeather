@@ -16,6 +16,7 @@ import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
 import type { SearchTransactionsForm } from '@/interfaces/interface';
+import { generateMD5Hash } from '@/utils/helper';
 import {
   searchTransactionsInitialValues,
   searchTransactionsSchema,
@@ -32,6 +33,7 @@ const SearchTransaction = () => {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [tableHeadings, setTableHeadings] = useState<string[]>([]);
 
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
@@ -42,55 +44,131 @@ const SearchTransaction = () => {
     setPageNumber((prev) => Math.max(prev - 1, 0));
   };
 
+  function convertToLabel(camelCaseString: string): string {
+    if (camelCaseString === 'TTC' || camelCaseString === 'CNIC') {
+      return camelCaseString;
+    }
+
+    return camelCaseString
+      .replace(/([A-Z])/g, ' $1')
+      .replace(/^./, (str) => str.toUpperCase())
+      .trim()
+      .replace(/\bId\b/gi, 'ID')
+      .replace(/\bPkr\b/gi, 'PKR')
+      .replace(/\bMsisdn\b/gi, 'MSISDN');
+  }
+
   const fetchRecords = async () => {
+    // const selectedFIleds = selectedItems?.map((item: any) => item?.key);
+
+    const transactionHistoryValues = {
+      // merchantEmail: 'misbah55@yopmail.com',
+      merchantEmail: userData.email,
+      ...(filteredData || {}),
+      managerMobile: userData?.managerMobile,
+      page: pageNumber,
+      size: +envPageSize,
+    };
+    const mdRequest = {
+      ...transactionHistoryValues,
+      apisecret: userData?.apiSecret,
+    };
+    const md5Hash = generateMD5Hash(mdRequest);
+    const requestBody = {
+      request: transactionHistoryValues,
+      signature: md5Hash,
+    };
+
     try {
+      // merchant verify otp
       setIsLoading(true);
-      const response = await apiClient.get('/qrcode/allRetailQrTransactions', {
-        params: {
-          ...(filteredData && typeof filteredData === 'object'
-            ? filteredData
-            : {}), // Spread existing filtered data
-          page: pageNumber, // Add page parameter
-          size: +envPageSize, // Add size parameter
+      const response = await apiClient.post(
+        'qrcode/getTransactionsHistory',
+        requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData.jwt}` },
         },
-        headers: {
-          merchantEmail: userData?.email, // Pass email in headers
-        },
-      });
-      if (response?.data) {
-        setData(
-          response?.data?.retailTransactions?.map((item: any) => {
-            return {
-              id: item?.id,
-              customerName: item?.customerName,
-              orderId: item?.orderId,
-              orderDate: item?.orderDate,
-              amountPkr: item?.amountPkr,
-              storeName: item?.storeName,
-              storeType: item?.storeType,
-              paymentMode: item?.paymentMode,
-              channel: item?.transactionChannel,
-              tpNumber: item?.transactionPointNumber,
-              status: item?.status,
-              reason: item?.errorCode === '000' ? item?.errorReason : 'N/A',
-              // action: item?.status
-            };
-          }),
-        );
-        setExportedData(response?.data?.retailTransactions);
+      );
+      // setShowModal(true);
+      if (response.data.responseCode === '009') {
+        if (response?.data?.transactions?.length > 0) {
+          const labels = Object.keys(response?.data?.transactions[0]).map(
+            convertToLabel,
+          );
+          setTableHeadings(labels);
+        }
+
+        setData(response?.data?.transactions);
+        setExportedData(response?.data?.transactions);
         setTotalPages(response?.data?.totalPages);
-      } else {
-        setApierror(response?.data?.responseDescription);
         // setShowModal(true);
+        // setTitle(response?.data?.responseMessage);
+        // setDescription(response?.data?.responseDescription);
+        // setRoute('/login');
+      } else {
+        // // merchant verify otp failure
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
+      // merchant verify otp request failure
       setApierror(e?.message);
-      // setShowModal(true);
-      console.log('Error in fetching transactions', e);
+
+      // console.log(e, 'Merchant verification Failed');
     } finally {
+      // console.log('finall ma ah gya');
       setIsLoading(false);
     }
   };
+
+  // const fetchRecords = async () => {
+  //   try {
+  //     setIsLoading(true);
+  //     const response = await apiClient.get('/qrcode/allRetailQrTransactions', {
+  //       params: {
+  //         ...(filteredData && typeof filteredData === 'object'
+  //           ? filteredData
+  //           : {}), // Spread existing filtered data
+  //         page: pageNumber, // Add page parameter
+  //         size: +envPageSize, // Add size parameter
+  //       },
+  //       headers: {
+  //         merchantEmail: userData?.email, // Pass email in headers
+  //       },
+  //     });
+  //     if (response?.data) {
+  //       setData(
+  //         response?.data?.retailTransactions?.map((item: any) => {
+  //           return {
+  //             id: item?.id,
+  //             customerName: item?.customerName,
+  //             orderId: item?.orderId,
+  //             orderDate: item?.orderDate,
+  //             amountPkr: item?.amountPkr,
+  //             storeName: item?.storeName,
+  //             storeType: item?.storeType,
+  //             paymentMode: item?.paymentMode,
+  //             channel: item?.transactionChannel,
+  //             tpNumber: item?.transactionPointNumber,
+  //             status: item?.status,
+  //             reason: item?.errorCode === '000' ? item?.errorReason : 'N/A',
+  //             // action: item?.status
+  //           };
+  //         }),
+  //       );
+  //       setExportedData(response?.data?.retailTransactions);
+  //       setTotalPages(response?.data?.totalPages);
+  //     } else {
+  //       setApierror(response?.data?.responseDescription);
+  //       // setShowModal(true);
+  //     }
+  //   } catch (e: any) {
+  //     setApierror(e?.message);
+  //     // setShowModal(true);
+  //     console.log('Error in fetching transactions', e);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
   useEffect(() => {
     fetchRecords();
   }, [pageNumber, filteredData]);
@@ -100,22 +178,22 @@ const SearchTransaction = () => {
     { value: 'Failed', label: 'Failed' },
   ];
 
-  const tableHeadings: string[] = [
-    'OPS ID',
-    'Customer Name',
-    'Order ID',
-    'Order Date',
-    'Amount (Rs.)',
-    'Store Name',
-    'Store Type',
-    'Payment Mode',
-    // 'Transaction ID',
-    'Channel',
-    'TP Number',
-    'Status',
-    'Reason',
-    // 'Action'
-  ];
+  // const tableHeadings: string[] = [
+  //   'OPS ID',
+  //   'Customer Name',
+  //   'Order ID',
+  //   'Order Date',
+  //   'Amount (Rs.)',
+  //   'Store Name',
+  //   'Store Type',
+  //   'Payment Mode',
+  //   // 'Transaction ID',
+  //   'Channel',
+  //   'TP Number',
+  //   'Status',
+  //   'Reason',
+  //   // 'Action'
+  // ];
 
   const onSubmit = async (values: SearchTransactionsForm) => {
     const filteredValues: any = {};
@@ -131,6 +209,7 @@ const SearchTransaction = () => {
 
   const handleReset = (formik: any) => {
     formik.resetForm();
+    setPageNumber(0);
     fetchRecords();
   };
   const exportToExcel = () => {
@@ -171,23 +250,31 @@ const SearchTransaction = () => {
                 touched={formik.touched.paymentMethod}
                 options={options}
               /> */}
-              <Input
+              {/* <Input
                 label="Customer Name"
                 name="customerName"
                 formik={formik}
                 type="text"
                 error={formik.errors.customerName}
                 touched={formik.touched.customerName}
+              /> */}
+              <Input
+                label="Customer Email"
+                name="customerEmail"
+                formik={formik}
+                type="text"
+                error={formik.errors.customerEmail}
+                touched={formik.touched.customerEmail}
               />
               <DateInputNew
-                label="From Date"
+                label="Order From Date"
                 name="fromDate"
                 formik={formik}
                 error={formik.errors.fromDate}
                 touched={formik.touched.fromDate}
               />
               <DateInputNew
-                label="To Date"
+                label="Order To Date"
                 name="toDate"
                 formik={formik}
                 error={formik.errors.toDate}
@@ -195,6 +282,22 @@ const SearchTransaction = () => {
                 isDisabled={!formik.values.fromDate}
                 minDate={formik.values.fromDate}
               />
+              {/* <DateInputNew
+                label="Payment From Date"
+                name="paymentFromDate"
+                formik={formik}
+                error={formik.errors.paymentFromDate}
+                touched={formik.touched.paymentFromDate}
+              />
+              <DateInputNew
+                label="Payment To Date"
+                name="paymentToDate"
+                formik={formik}
+                error={formik.errors.paymentToDate}
+                touched={formik.touched.paymentToDate}
+                isDisabled={!formik.values.paymentFromDate}
+                minDate={formik.values.paymentFromDate}
+              /> */}
               {/* <DateInputNew
                 label="Payment Date Between"
                 name="paymentDate"
@@ -212,20 +315,28 @@ const SearchTransaction = () => {
               /> */}
               <Input
                 label="Order ID"
-                name="orderId"
+                name="orderID"
                 formik={formik}
                 type="text"
                 error={formik.errors.orderID}
                 touched={formik.touched.orderID}
               />
-              {/* <Input
+              <Input
                 label="Store ID"
-                name="storeId"
+                name="storeID"
                 formik={formik}
                 type="text"
                 error={formik.errors.storeID}
                 touched={formik.touched.storeID}
-              /> */}
+              />
+              <Input
+                label="Store Name"
+                name="storeName"
+                formik={formik}
+                type="text"
+                error={formik.errors.storeName}
+                touched={formik.touched.storeName}
+              />
               {/* <DropdownInput
                 label="Channel"
                 name="channel"
