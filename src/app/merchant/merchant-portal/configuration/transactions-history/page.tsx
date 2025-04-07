@@ -80,7 +80,7 @@ const SearchTransaction = () => {
     };
 
     try {
-      // merchant verify otp
+      // merchant transaction post api call due to filters send in body
       setIsLoading(true);
       const response = await apiClient.post(
         'qrcode/getTransactionsHistory',
@@ -89,7 +89,7 @@ const SearchTransaction = () => {
           headers: { Authorization: `Bearer ${userData.jwt}` },
         },
       );
-      // setShowModal(true);
+      // api success
       if (response.data.responseCode === '009') {
         if (response?.data?.transactions?.length > 0) {
           const labels = Object.keys(response?.data?.transactions[0]).map(
@@ -101,21 +101,12 @@ const SearchTransaction = () => {
         setData(response?.data?.transactions);
         setExportedData(response?.data?.transactions);
         setTotalPages(response?.data?.totalPages);
-        // setShowModal(true);
-        // setTitle(response?.data?.responseMessage);
-        // setDescription(response?.data?.responseDescription);
-        // setRoute('/login');
       } else {
-        // // merchant verify otp failure
         setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      // merchant verify otp request failure
       setApierror(e?.message);
-
-      // console.log(e, 'Merchant verification Failed');
     } finally {
-      // console.log('finall ma ah gya');
       setIsLoading(false);
     }
   };
