@@ -194,6 +194,15 @@ const SearchTransaction = () => {
         filteredValues[key] = value;
       }
     });
+
+    console.log('values===', values, 'filteredValues====', filteredValues);
+
+    if (Object.keys(filteredValues).length === 0) {
+      setApierror('Please enter at least one filter to search.');
+      return;
+    }
+
+    setApierror('');
     setFilteredData(filteredValues);
     // fetchRecords();
   };
@@ -379,6 +388,9 @@ const SearchTransaction = () => {
                 className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
               />
             </div>
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
           </Form>
         )}
       </Formik>
@@ -403,9 +415,6 @@ const SearchTransaction = () => {
           ) : (
             <H7 className="text-center">No Records found.</H7>
           )}
-          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-            {apierror}
-          </div>
         </>
       )}
     </div>
