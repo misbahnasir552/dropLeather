@@ -6,6 +6,7 @@ import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
+import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
@@ -34,12 +35,17 @@ function ViewProductQR() {
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
   const [tillNum, setTillNum] = useState<string>('');
+  const [pageNumber, setPageNumber] = useState(0);
+  const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
+  const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [qrString, setQrString] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
-    'Product Details',
     'Product Number',
     'Store ID',
+    'QR Generation Date/Time',
+    'QR Expiry Date/Time',
     'Actions',
   ];
 
@@ -49,7 +55,13 @@ function ViewProductQR() {
       const response = await apiClient.get(
         `/merchantportal/searchDynamicQr?email=${userData?.email}`,
         {
-          params: filteredParams,
+          params: {
+            ...(filteredParams && typeof filteredParams === 'object'
+              ? filteredParams
+              : {}), // Spread existing filtered data
+            page: pageNumber,
+            size: +envPageSize,
+          },
         },
       );
       const filteredValues = response?.data?.dynamicQrResponse?.map(
@@ -58,15 +70,17 @@ function ViewProductQR() {
           isDeleted,
           qrFormatIndicator,
           branchCode,
+          productDetails,
           // qrCode,
           // tillNumber,
-          createdAt,
+          // createdAt,
           updatedAt,
           ...rest
         }: any) => rest,
       );
 
       setQrFilteredData(filteredValues);
+      setTotalPages(response?.data?.totalPages);
       setLoading(false);
     } catch (e: any) {
       setTitle('Network Failure!');
@@ -117,10 +131,6 @@ function ViewProductQR() {
       // setShowModal(true);
     }
   };
-
-  useEffect(() => {
-    fetchRecords();
-  }, [filteredParams]);
 
   const onSubmit = async (values: IViewProductQr) => {
     const filteredValues: any = {};
@@ -183,12 +193,24 @@ function ViewProductQR() {
   const handleView = (qrCode: string, name: string, tillId?: string) => {
     setTillNum(tillId || '');
     base64ToJpg(qrCode);
+    setQrString(qrCode);
     setStoreName(name);
   };
   const handleReset = (formik: any) => {
     formik.resetForm();
     fetchRecords();
   };
+  const showNextPage = () => {
+    setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
+    // fetchRecords()
+  };
+
+  const showPrevPage = () => {
+    setPageNumber((prev) => Math.max(prev - 1, 0));
+  };
+  useEffect(() => {
+    fetchRecords();
+  }, [filteredParams, pageNumber]);
   return (
     <div>
       <>
@@ -219,6 +241,7 @@ function ViewProductQR() {
               setShowModal={setShowModal}
               imageUrl={imageUrl} // Pass the QR code image URL here
               tilNum={tillNum}
+              qrString={qrString}
               // amount={amount}
               // expirationTime={expirationTime}
             />
@@ -280,22 +303,30 @@ function ViewProductQR() {
             </Formik>
           </MerchantFormLayout>
         </div>
-        <div className="flex flex-col items-center justify-center pt-[40px]">
+        <div className="flex flex-col justify-center gap-3 pt-[30px]">
           {loading ? (
             <BarLoader color="#21B25F" />
           ) : (
             <>
               {qrFilteredData?.length > 0 ? (
-                <IconTable
-                  tableHeadings={viewProductQrTableHeadings}
-                  tableData={qrFilteredData}
-                  hasShare
-                  hasDelete
-                  // hasIcons
-                  handleDelete={handleDelete}
-                  handleView={handleView}
-                  isDynamicQr={true}
-                />
+                <>
+                  <IconTable
+                    tableHeadings={viewProductQrTableHeadings}
+                    tableData={qrFilteredData}
+                    hasShare
+                    hasDelete
+                    // hasIcons
+                    handleDelete={handleDelete}
+                    handleView={handleView}
+                    isDynamicQr={true}
+                  />
+                  <Pagination
+                    pageNumber={pageNumber}
+                    totalPages={totalPages}
+                    onNext={showNextPage}
+                    onPrev={showPrevPage}
+                  />
+                </>
               ) : (
                 <H4>No Records Found</H4>
               )}

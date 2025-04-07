@@ -3,16 +3,18 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 
+import apiClient from '@/api/apiClient';
 import closeIcon from '@/assets/icons/close-icon.svg';
 import ScanImage from '@/assets/images/Scan.png';
 import Button from '@/components/UI/Button/PrimaryButton';
+import { useAppSelector } from '@/hooks/redux';
+import { generateMD5Hash } from '@/utils/helper';
 
 import B1 from '../../Body/B1';
 import H1 from '../../Headings/H1';
 import H6 from '../../Headings/H6';
-// import H2 from '../../Headings/H2';
 
 interface QRModalProps {
   title: string;
@@ -24,6 +26,7 @@ interface QRModalProps {
   amount?: string;
   expirationTime?: number;
   tilNum?: string;
+  qrString?: string;
 }
 
 const QRModal: React.FC<QRModalProps> = ({
@@ -36,19 +39,53 @@ const QRModal: React.FC<QRModalProps> = ({
   amount,
   expirationTime,
   tilNum,
+  qrString,
 }) => {
   const router = useRouter();
+  const userData = useAppSelector((state: any) => state.auth);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleDownload = () => {
-    if (!imageUrl) {
-      console.error('Image URL is not available for download.');
-      return;
+  const downloadQR = async () => {
+    setIsLoading(true);
+    try {
+      const additionalValues = {
+        qr: qrString,
+        storeName: title,
+        tillNo: tilNum || '',
+        managerMobile: userData?.managerMobile,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = {
+        request: additionalValues,
+        signature: md5Hash,
+      };
+
+      const response = await apiClient.post('/merchant/printQR', requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${userData?.jwt}`,
+        },
+        responseType: 'blob', // Important
+      });
+
+      // Create a URL for the blob and initiate the download
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'QR.png'); // Set the desired file name
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Error fetching image:', error);
     }
-
-    const link = document.createElement('a'); // Create a temporary anchor element
-    link.href = imageUrl; // Set the href to the image URL
-    link.download = 'QRCode.jpg'; // Set the download attribute (filename)
-    link.click(); // Programmatically trigger a click on the anchor element
   };
 
   const handleClose = () => {
@@ -79,10 +116,6 @@ const QRModal: React.FC<QRModalProps> = ({
               >
                 <Image src={closeIcon} alt="close-icon" />
               </div>
-              {/* <div className="flex flex-col items-center justify-center gap-2 sm:px-6 md:px-8">
-                <H3>{title}</H3>
-                <B1 className="text-center">{description}</B1>
-              </div> */}
               <div className="md:px-12 md:py-2">
                 <div className="flex flex-col gap-6">
                   <div className="bg-[#00BD5F] px-12 py-6">
@@ -107,21 +140,23 @@ const QRModal: React.FC<QRModalProps> = ({
                             height={250}
                           />{' '}
                         </div>
-                        <div className="flex flex-col gap-2">
-                          <span className="text-center text-[#fff] ">
-                            Merchant Till Number
-                          </span>
-                          <div className="flex space-x-2">
-                            {tilNum?.split('')?.map((digit, index) => (
-                              <div
-                                key={index}
-                                className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#000] text-[14px] text-[#fff]"
-                              >
-                                {digit}
-                              </div>
-                            ))}
+                        {tilNum ? (
+                          <div className="flex flex-col gap-2">
+                            <span className="text-center text-[#fff] ">
+                              Merchant Till Number
+                            </span>
+                            <div className="flex space-x-2">
+                              {tilNum?.split('')?.map((digit, index) => (
+                                <div
+                                  key={index}
+                                  className="flex h-[24px] w-[24px] items-center justify-center rounded-full bg-[#000] text-[14px] text-[#fff]"
+                                >
+                                  {digit}
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>
@@ -141,8 +176,9 @@ const QRModal: React.FC<QRModalProps> = ({
                   )}
                   <div className="flex justify-center">
                     <Button
-                      label="Download"
-                      onClickHandler={handleDownload}
+                      label={isLoading ? 'Downloading...' : 'Download'}
+                      onClickHandler={downloadQR}
+                      disable={isLoading}
                       className="button-primary w-[270px] px-3 py-[19px] text-sm leading-tight"
                     />
                   </div>

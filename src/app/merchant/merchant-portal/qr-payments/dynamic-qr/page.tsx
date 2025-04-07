@@ -34,6 +34,7 @@ function AddDynamicQR() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -101,15 +102,15 @@ function AddDynamicQR() {
       } else if (response?.data?.responseCode === '000') {
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        // setShowModal(true);
       } else {
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        // setShowModal(true);
       }
     } catch (error: any) {
       setDescription(error?.message);
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -148,11 +149,14 @@ function AddDynamicQR() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      if (response?.data?.responseCode === '009') {
+
+      if (response?.data.responseCode === '009') {
         setAmount(values.amount);
         setQrExpirationTime(Number(values?.qrExpirationTime));
         base64ToJpg(response?.data.qrCode);
+        setQrString(response?.data?.qrCode);
         setTillNum(response?.data?.transactionPointNum);
+        setShowModal(true);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
       } else if (response?.data.responseCode === '000') {
@@ -302,7 +306,7 @@ function AddDynamicQR() {
           </Form>
         )}
       </Formik>
-      {imageUrl && showModal && (
+      {showModal && (
         <QRModal
           title="Your Custom QR"
           description="Your custom QR Code has been created. You can now share the below QR code to receive money."
@@ -312,6 +316,7 @@ function AddDynamicQR() {
           amount={amount}
           expirationTime={qrExpirationTime}
           tilNum={tillNum}
+          qrString={qrString}
         />
       )}
     </div>

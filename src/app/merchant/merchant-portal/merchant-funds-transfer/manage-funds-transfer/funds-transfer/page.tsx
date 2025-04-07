@@ -75,7 +75,6 @@ function FundsTranfer() {
       if (response.data.responseCode === '009') {
         return response?.data;
       }
-      console.log('response', response);
       setTitle(response?.data?.responseMessage);
       setDescription(response?.data?.responseDescription);
       setShowErrorModal(true);
@@ -91,67 +90,65 @@ function FundsTranfer() {
       setIsLoading(false);
     }
   };
-  const onSubmit = async (values: any) => {
-    const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
-    console.log(rest);
+  const onSubmit = async (values: any): Promise<boolean> => {
+    try {
+      setIsLoading(true);
+      const { beneficiaryAccountNumber, beneficiaryBank, ...rest } = values;
+      console.log(rest);
 
-    // const splitStringLastPart = values.beneficiaryAccountNumber?.split('-').pop();
-    const splitStringLastPart = values.beneficiaryAccountNumber
-      ?.split('-')
-      .pop()
-      ?.trim();
+      const splitStringLastPart = values.beneficiaryAccountNumber
+        ?.split('-')
+        .pop()
+        ?.trim();
 
-    const selectedOption: any = records?.find(
-      (option: any) => option.mobileNumber === splitStringLastPart,
-    );
-    dispatch(transferFundsData({ ...values, selectedOption }));
-    const res = await fetchOTP();
-    if (res?.responseCode === '009') {
-      router.push(`otp?expiry=${res?.expirationTime}`);
+      const selectedOption: any = records?.find(
+        (option: any) => option.mobileNumber === splitStringLastPart,
+      );
+
+      const additionalValues = {
+        beneficiaryAccountNumber: values?.beneficiaryAccountNumber,
+        beneficiaryBank: selectedOption?.bankName,
+        transferAmount: values?.transferAmount,
+        transferPurpose: values?.transferPurpose,
+        managerMobile: userData?.managerMobile,
+      };
+
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = { request: additionalValues, signature: md5Hash };
+
+      const response = await apiClient.post(
+        `/merchant/fundsTransferInquiry?email=${userData?.email}`,
+        requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData?.jwt}` },
+        },
+      );
+
+      if (response.data.responseCode === '009') {
+        dispatch(transferFundsData({ ...values, selectedOption }));
+        const res = await fetchOTP();
+        if (res?.responseCode === '009') {
+          router.push(`otp?expiry=${res?.expirationTime}`);
+        }
+        return true; // ✅ Returns a value
+      }
+      setDescription(response?.data?.responseDescription);
+      setShowErrorModal(true);
+      return false; // ✅ Returns a value
+    } catch (e: any) {
+      setDescription(e?.message);
+      setShowErrorModal(true);
+      return false; // ✅ Returns a value
+    } finally {
+      setIsLoading(false);
     }
-    // try {
-    //   const additionalValues = {
-    //     ...rest,
-    //     beneficiaryAccountNumber: selectedOption?.mobileNumber,
-    //     beneficiaryBank: selectedOption?.bankName,
-    //     managerMobile: userData?.managerMobile,
-    //   };
-
-    //   const mdRequest = {
-    //     ...additionalValues,
-    //     apisecret: userData?.apiSecret,
-    //   };
-    //   const md5Hash = generateMD5Hash(mdRequest);
-    //   const requestBody = {
-    //     request: additionalValues,
-    //     signature: md5Hash,
-    //   };
-    //   setIsLoading(true);
-    //   const response = await apiClient.post(
-    //     `/merchant/fundsTransfer?email=${userData?.email}`,
-    //     requestBody,
-    //     { headers: { Authorization: `Bearer ${userData?.jwt}` } },
-    //   );
-    //   if (response?.data?.responseCode === '009') {
-    //     setShowModal(true);
-
-    //     setTitle(response?.data?.responseMessage);
-    //     setDescription(response?.data.responseDescription);
-    //     resetForm();
-    //   } else {
-    //     setTitle('Failure');
-    //     setDescription(response.data.responseDescription);
-    //     setApierror(response.data.responseDescription);
-    //   }
-    // } catch (e: any) {
-    //   setTitle('Network Failure');
-    //   setDescription(e.message);
-    //   setApierror(e?.message);
-    // } finally {
-    //   setIsLoading(false);
-    //   // setShowModal(true);
-    // }
   };
+
   const tranferPurposeList = [
     {
       label: 'Supplier/Vendor Payment',
