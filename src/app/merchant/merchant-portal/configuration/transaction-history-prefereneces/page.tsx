@@ -13,7 +13,7 @@ import { generateMD5Hash } from '@/utils/helper';
 
 export default function TransactionHistoryPreferences() {
   const [selectedItems, setSelectedItems] = useState<IInitialData[]>([]);
-  // const [previousItems, setPreviousItems] = useState<IInitialData[]>([]);
+  const [previousItems, setPreviousItems] = useState<IInitialData[]>([]);
   const [intialData, setIntialData] = useState<any[]>([]);
   const [availableItems, setAvailableItems] = useState<IInitialData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +47,14 @@ export default function TransactionHistoryPreferences() {
 
     return { key: camelCaseString, label };
   }
+  // to reduce extra api calls if user has not changed the filters so no save api call
+  function areArraysEqual(columns: any, keys: any) {
+    const columnKeys = columns.map((item: any) => item.key);
+
+    if (columnKeys.length !== keys.length) return false;
+
+    return columnKeys.every((key: any, index: any) => key === keys[index]);
+  }
 
   const getForms = async () => {
     try {
@@ -66,12 +74,12 @@ export default function TransactionHistoryPreferences() {
       const filteredArray = responseData?.filter(
         (key: any) => !previousData?.includes(key),
       );
-
+      // format labels to readable form
       const formattedLabels = filteredArray?.map(convertToLabelObject);
 
       const previousLabels = previousData?.map(convertToLabelObject);
 
-      // setPreviousItems(previousLabels);
+      setPreviousItems(previousLabels);
 
       setIntialData(formattedLabels);
       setAvailableItems(formattedLabels);
@@ -90,6 +98,11 @@ export default function TransactionHistoryPreferences() {
   const handleSaveTransactionsPref = async (customSelectedItems?: any[]) => {
     const itemsToUse = customSelectedItems ?? selectedItems;
     const selectedFIleds = itemsToUse?.map((item: any) => item?.key);
+
+    // save extra api calls
+    if (areArraysEqual(previousItems, selectedFIleds)) {
+      return;
+    }
 
     const transactionHistoryValues = {
       merchantEmail: userData?.email,
