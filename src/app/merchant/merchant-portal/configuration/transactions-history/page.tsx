@@ -195,8 +195,6 @@ const SearchTransaction = () => {
       }
     });
 
-    console.log('values===', values, 'filteredValues====', filteredValues);
-
     if (Object.keys(filteredValues).length === 0) {
       setApierror('Please enter at least one filter to search.');
       return;
