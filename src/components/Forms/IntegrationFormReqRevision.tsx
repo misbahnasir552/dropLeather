@@ -9,8 +9,9 @@ import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
@@ -26,6 +27,11 @@ import type { FieldsData } from './validations/types';
 
 function IntegrationFormReqRevision() {
   const userData = useAppSelector((state: any) => state.auth);
+  const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
+  console.log('islast tab from redux ', isLastTab);
+
+  const dispatch = useAppDispatch();
+
   const { apiSecret } = userData;
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
   const [filteredData, setFilteredData] = useState<any[]>([]);
@@ -38,8 +44,8 @@ function IntegrationFormReqRevision() {
   const router = useRouter();
   const [apierror, setApierror] = useState('');
   const [showModal, setShowModal] = useState(false);
-  const [title] = useState('');
-  const [description] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const { currentTab } = useCurrentTab();
 
   const IntegrationFormData = {
@@ -251,8 +257,14 @@ function IntegrationFormReqRevision() {
 
     try {
       if (currentEndpoint) {
+        let finalEndpoint = currentEndpoint;
+
+        if (isLastTab) {
+          finalEndpoint += '?requestRevision=Completed';
+          dispatch(setIsLastTab(false));
+        }
         const response = await apiClient.post(
-          currentEndpoint,
+          finalEndpoint,
           {
             request: transformedData,
             signature: md5Hash,
@@ -272,6 +284,10 @@ function IntegrationFormReqRevision() {
             router.push(`/merchant/home/business-nature/${nextTab}`);
           } else {
             console.log('Form submission completed.');
+            setTitle('Form submission completed.');
+            setDescription('Form submission completed.');
+            setShowModal(true);
+            router.push(`/merchant/home`);
           }
         } else {
           setApierror(

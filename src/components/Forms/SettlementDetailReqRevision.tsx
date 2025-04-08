@@ -1,6 +1,5 @@
 'use client';
 
-import type { FormikHelpers } from 'formik';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -12,10 +11,12 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
+// import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
+// import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
-import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
+import { endpointArray } from '@/utils/merchantForms/helper';
 
 import DropdownInput from '../UI/Inputs/DropdownInput';
 import ImageInput from '../UI/Inputs/ImageInput';
@@ -42,7 +43,7 @@ interface Category {
 }
 
 interface PageItem {
-  name: string;
+  pageName: string;
   categories: Category[];
 }
 
@@ -76,11 +77,16 @@ const SettlementDetailsReqRevision = () => {
   );
   const userData = useAppSelector((state: { auth: UserData }) => state.auth);
   const dispatch = useAppDispatch();
+
+  const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
+  console.log('islast tab from redux ', isLastTab);
+
   const { currentTab } = useCurrentTab();
   const router = useRouter();
   const [pageTitle, setPageTitle] = useState<string | undefined>();
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
+  const [validationSchemaState] = useState<any>();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -147,7 +153,7 @@ const SettlementDetailsReqRevision = () => {
 
       // ✅ Filter and update fData based on current tab
       let updatedFData = fieldsData?.pages?.page?.filter(
-        (item) => convertSlugToTitle(item.name) === title,
+        (item) => convertSlugToTitle(item.pageName) === title,
       );
 
       updatedFData = updatedFData?.map((item) => ({
@@ -230,7 +236,7 @@ const SettlementDetailsReqRevision = () => {
         });
 
         return {
-          pageName: item.name,
+          pageName: item.pageName,
           categories: mappedCategories,
         };
       });
@@ -262,58 +268,113 @@ const SettlementDetailsReqRevision = () => {
     );
   }
 
-  const onSubmit = async (
-    values: any,
-    { setSubmitting }: FormikHelpers<any>,
-  ) => {
-    const req = {
-      managerMobile: userData.managerMobile,
-      account: values.accounts,
-      bankName:
-        values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
-      accountNumber: values.accountNumber,
-      accountTitle: values.accountTitle,
-      status: 'Completed',
-    };
+  const onSubmit = async (values: any, { setSubmitting }: any) => {
+    console.log('Submitted form values:', values);
 
-    const mdRequest = {
-      ...req,
-      apisecret: userData.apiSecret,
-    };
+    const currentIndex = endpointArray.findIndex(
+      (item) => item.tab === currentTab,
+    );
 
-    const md5Hash = generateMD5Hash(mdRequest);
-    try {
-      const response: any = await apiClient.post(
-        `merchant/settlementdetails`,
-        {
-          request: req,
-          signature: md5Hash,
+    if (currentIndex !== -1) {
+      console.log(currentIndex, 'Current Index');
+
+      const currentEndpoint = endpointArray[currentIndex]?.endpoint;
+
+      // ✅ Extract valid page names from fieldData
+      const validPages = fieldsData.pages.page.map((p) => p.pageName);
+
+      const transformedData = {
+        managerMobile: userData.managerMobile,
+        page: {
+          pageName: 'Settlement Details',
+          categories: SettlementDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  value: values[field.name], // Formik value
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
         },
-        {
-          params: {
-            username: userData?.email,
-          },
-          headers: { Authorization: `Bearer ${userData?.jwt}` },
-        },
-      );
-      if (response.data.responseCode === '009') {
-        dispatch(setSettlementForm(values));
-        router.push('/merchant/home/request-revision/integration');
-      } else if (response?.data?.responseCode === '000') {
-        setTitle('Error Occured');
-        setDescription(response?.data?.responseDescription);
+      };
+
+      const mdRequest = {
+        ...transformedData,
+        apisecret: userData.apiSecret,
+      };
+
+      const md5Hash = generateMD5Hash(mdRequest);
+
+      const requestBody = {
+        request: transformedData,
+        signature: md5Hash,
+      };
+
+      try {
+        if (currentEndpoint) {
+          let finalEndpoint = currentEndpoint;
+
+          if (isLastTab) {
+            finalEndpoint += '?requestRevision=Completed';
+            dispatch(setIsLastTab(false));
+          }
+          const response = await apiClient.post(finalEndpoint, requestBody, {
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              Username: userData?.email,
+            },
+          });
+
+          if (response?.data?.responseCode === '009') {
+            let nextIndex = currentIndex + 1;
+
+            //  Ensure nextIndex is within bounds and valid
+            while (
+              nextIndex < endpointArray.length &&
+              (!endpointArray[nextIndex]?.name ||
+                !validPages.includes(endpointArray[nextIndex]?.name ?? ''))
+            ) {
+              nextIndex += 1;
+            }
+
+            // Ensure nextIndex is valid before accessing tab
+            if (
+              nextIndex < endpointArray.length &&
+              endpointArray[nextIndex]?.tab
+            ) {
+              const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
+              router.push(`/merchant/home/request-revision/${nextTab}`);
+            } else {
+              console.log('Form submission completed.');
+              setTitle('Form submission completed.');
+              setDescription('Form submission completed.');
+              setShowModal(true);
+              router.push(`/merchant/home`);
+            }
+          } else {
+            setTitle('Error Occurred');
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
+        }
+      } catch (e) {
+        console.error('Error in submitting form:', e);
+        setDescription('Network failed! Please try again later.');
         setShowModal(true);
-      } else {
-        setTitle('Error Occured');
-        setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+      } finally {
+        setSubmitting(false);
       }
-    } catch (e) {
-      console.log(e, 'Error');
     }
-    setSubmitting(false);
   };
-  console.log('asdads', filteredData, selectedCheckValue);
 
   return (
     <div>
@@ -327,8 +388,9 @@ const SettlementDetailsReqRevision = () => {
       />
       <Formik
         initialValues={initialValuesState}
-        validationSchema={SettlementFormInfoSchema}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
+        enableReinitialize
       >
         {(formik) => (
           <div className="flex flex-col">

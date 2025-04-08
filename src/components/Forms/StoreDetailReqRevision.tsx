@@ -14,17 +14,15 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 // import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import type { AddStoreInfo } from '@/interfaces/interface';
+// import type { AddStoreInfo } from '@/interfaces/interface';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-import {
-  storeDetailsInitialValues,
-  storeDetailsSchema,
-} from '@/validations/merchant/onBoarding/storeDetails';
+import { storeDetailsInitialValues } from '@/validations/merchant/onBoarding/storeDetails';
 
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
@@ -36,12 +34,17 @@ import type { FieldsData } from './validations/types';
 
 const AddStoreReqRevision = () => {
   const { currentTab } = useCurrentTab();
+  const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
+  console.log('islast tab from redux ', isLastTab);
+
+  const dispatch = useAppDispatch();
+
   // const businessNatureData = useAppSelector(
   //   (state: any) => state.onBoardingForms,
   // );
   // const adminData = useAppSelector((state: any) => state.adminAuth);
   const userData = useAppSelector((state: any) => state.auth);
-  const [addStoresValues] = useState<AddStoreInfo[]>([]);
+  // const [addStoresValues] = useState<AddStoreInfo[]>([]);
   // const [isAddFormVisible, setIsAddFormVisible] = useState(true);
   // const [isStoreAdded, setIsStoreAdded] = useState(false);
   // const [showButton, setShowButton] = useState(false);
@@ -55,7 +58,7 @@ const AddStoreReqRevision = () => {
   const [regions, setRegions] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [apierror, setApierror] = useState('');
-  const { apiSecret, jwt, email, managerMobile } = userData;
+  const { apiSecret } = userData;
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [pageTitle, setPageTitle] = useState('');
   const [initialValuesState, setInitialValuesState] = useState<any>();
@@ -63,6 +66,7 @@ const AddStoreReqRevision = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
+  const [validationSchemaState] = useState<any>();
 
   const storeDetailsFormData = {
     pageName: 'Store Details',
@@ -334,97 +338,107 @@ const AddStoreReqRevision = () => {
   // }, [addStoresValues]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
-    console.log('hoi');
+    console.log('Submitted form values:', values);
+
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
-    console.log('values >>>', values, addStoresValues);
-
-    // console.log('BUSINESS NATURE DATAAA:', businessNatureData);
-    // if (addStoresValues.length < 1) {
-    //   setTitle('No Stores Found');
-    //   setDescription('Please add atleast 1 store to proceed');
-    //   setShowModal(true);
-    //   return;
-    // }
 
     if (currentIndex !== -1) {
+      console.log(currentIndex, 'Current Index');
+
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      const dynamicCurrentEndpoint = `${currentEndpoint}`;
-      // const additionalValues = {
-      // ...values,
-      // stores: [values],
-      // managerMobile: userData?.managerMobile,
-      // businessNature: businessNatureData?.businessTypeNature,
-      // status: 'Completed',
-      // };
-      // console.log('ADDITIONAL VALUES', additionalValues);
-      // const stores = [values]
-      const transformedRequest = {
-        // request: {
-        managerMobile,
+
+      // ✅ Extract valid page names from fieldData
+      const validPages = fieldData.pages.page.map((p) => p.pageName);
+
+      const transformedData = {
+        managerMobile: userData.managerMobile,
         page: {
-          pageName: storeDetailsFormData.pageName,
-          categories: storeDetailsFormData.categories.map(
-            (category: any, index: any) => ({
-              categoryName: `${category.categoryName} + ${index + 1}`,
-              data: category.fields.map((field: any) => ({
-                label: field.label,
-                value: values[field.name] || '', // Fetching value from formik.values
-              })),
-            }),
-          ),
-          status: 'Completed',
+          pageName: 'Store Details',
+          categories: storeDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  value: values[field.name], // Formik value
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
         },
-        // },
       };
+
       const mdRequest = {
-        ...transformedRequest,
+        ...transformedData,
         apisecret: apiSecret,
       };
 
       const md5Hash = generateMD5Hash(mdRequest);
-      console.log('Signature', md5Hash);
+
+      const requestBody = {
+        request: transformedData,
+        signature: md5Hash,
+      };
 
       try {
         if (currentEndpoint) {
-          const response = await apiClient.post(
-            dynamicCurrentEndpoint,
-            {
-              request: transformedRequest,
-              signature: md5Hash,
+          let finalEndpoint = currentEndpoint;
+
+          if (isLastTab) {
+            finalEndpoint += '?requestRevision=Completed';
+            dispatch(setIsLastTab(false));
+          }
+          const response = await apiClient.post(finalEndpoint, requestBody, {
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              Username: userData?.email,
             },
-            {
-              // params: {
-              //   username: email,
-              // },
-              headers: { Authorization: `Bearer ${jwt}`, username: email },
-            },
-          );
-          console.log(response);
+          });
+
           if (response?.data?.responseCode === '009') {
-            // Navigate to the next tab after successful submission
-            const nextTab = endpointArray[currentIndex + 1]?.tab;
-            if (nextTab) {
+            let nextIndex = currentIndex + 1;
+
+            // Ensure nextIndex is within bounds and valid
+            while (
+              nextIndex < endpointArray.length &&
+              (!endpointArray[nextIndex]?.name ||
+                !validPages.includes(endpointArray[nextIndex]?.name ?? ''))
+            ) {
+              nextIndex += 1;
+            }
+
+            //  Ensure nextIndex is valid before accessing tab
+            if (
+              nextIndex < endpointArray.length &&
+              endpointArray[nextIndex]?.tab
+            ) {
+              const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
-              console.log(
-                'Form submission completed, no more tabs to navigate.',
-              );
+              console.log('Form submission completed.');
+              setTitle('Form submission completed.');
+              setDescription('Form submission completed.');
+              setShowModal(true);
+              router.push(`/merchant/home`);
             }
-          } else if (response?.data?.responseCode === '000') {
-            setApierror(response?.data?.responseMessage);
           } else {
-            setTitle('Error Occured');
+            setTitle('Error Occurred');
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
           }
         }
       } catch (e) {
-        // console.log('Error in submitting dynamic form', e);
-        // setTitle('Network Failed');
-        // setDescription('Network failed! Please try again later.');
-        // setShowModal(true);
+        console.error('Error in submitting form:', e);
+        setDescription('Network failed! Please try again later.');
+        setShowModal(true);
       } finally {
         setSubmitting(false);
       }
@@ -447,7 +461,7 @@ const AddStoreReqRevision = () => {
       <Formik
         enableReinitialize
         initialValues={initialValuesState || {}}
-        validationSchema={storeDetailsSchema}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (

@@ -10,9 +10,10 @@ import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import type { AddStoreInfo, BusinessFormInfo } from '@/interfaces/interface';
+import type { AddStoreInfo } from '@/interfaces/interface';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
@@ -36,9 +37,14 @@ const BusinessInformationReqRevision = () => {
   const businessNatureData = useAppSelector(
     (state: any) => state.onBoardingForms,
   );
+
+  const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
+  console.log('islast tab from redux ', isLastTab);
+
   console.log('businessNatureData', businessNatureData);
   const router = useRouter();
   const [isChecked, setChecked] = useState(false);
+  const dispatch = useAppDispatch();
 
   const { apiSecret } = userData;
   const [filteredData, setFilteredData] = useState<any[]>([]);
@@ -648,73 +654,113 @@ const BusinessInformationReqRevision = () => {
   //   );
   // }
 
-  const onSubmit = async (values: BusinessFormInfo, { setSubmitting }: any) => {
-    try {
-      const currentIndex = endpointArray.findIndex(
-        (item) => item.tab === currentTab,
-      );
+  const onSubmit = async (values: any, { setSubmitting }: any) => {
+    console.log('Submitted form values:', values);
 
-      console.log('Form Values:', values);
+    const currentIndex = endpointArray.findIndex(
+      (item) => item.tab === currentTab,
+    );
 
-      if (currentIndex === -1) {
-        console.error('Invalid tab. Submission halted.');
-        return;
-      }
+    if (currentIndex !== -1) {
+      console.log(currentIndex, 'Current Index');
 
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      console.log(currentEndpoint);
-      const dynamicCurrentEndpoint = `merchant/${businessNatureData?.businessEndpoint}`;
 
-      // ✅ Prepare the payload with only form values
-      const requestPayload = {
-        request: values,
+      // ✅ Extract valid page names from fieldData
+      const validPages = fieldsData.pages.page.map((p) => p.pageName);
+
+      const transformedData = {
+        managerMobile: userData.managerMobile,
+        page: {
+          pageName: 'Business Details',
+          categories: BusinessDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  value: values[field.name], // Formik value
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
+        },
+      };
+
+      const mdRequest = {
+        ...transformedData,
         apisecret: apiSecret,
       };
 
-      const signature = generateMD5Hash(requestPayload);
-      console.log('Signature:', signature);
+      const md5Hash = generateMD5Hash(mdRequest);
 
-      // ✅ Submit only form values
-      const response = await apiClient.post(
-        dynamicCurrentEndpoint,
-        {
-          request: values,
-          signature,
-        },
-        {
-          params: { username: userData?.email },
-          headers: { Authorization: `Bearer ${userData.jwt}` },
-        },
-      );
+      const requestBody = {
+        request: transformedData,
+        signature: md5Hash,
+      };
 
-      console.log('API Response:', response);
+      try {
+        if (currentEndpoint) {
+          let finalEndpoint = currentEndpoint;
 
-      if (response?.data?.responseCode === '009') {
-        // ✅ Navigate to the next tab if available
-        const nextTab = endpointArray[currentIndex + 1]?.tab;
-        if (nextTab) {
-          router.push(`/merchant/home/request-revision/${nextTab}`);
-        } else {
-          console.log('Form submission completed, no more tabs to navigate.');
+          if (isLastTab) {
+            finalEndpoint += '?requestRevision=Completed';
+            dispatch(setIsLastTab(false));
+          }
+          console.log('finalEndpoint', finalEndpoint);
+          const response = await apiClient.post(finalEndpoint, requestBody, {
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              Username: userData?.email,
+            },
+          });
+
+          if (response?.data?.responseCode === '009') {
+            let nextIndex = currentIndex + 1;
+
+            //  Ensure nextIndex is within bounds and valid
+            while (
+              nextIndex < endpointArray.length &&
+              (!endpointArray[nextIndex]?.name ||
+                !validPages.includes(endpointArray[nextIndex]?.name ?? ''))
+            ) {
+              nextIndex += 1;
+            }
+
+            // Ensure nextIndex is valid before accessing tab
+            if (
+              nextIndex < endpointArray.length &&
+              endpointArray[nextIndex]?.tab
+            ) {
+              const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
+              router.push(`/merchant/home/request-revision/${nextTab}`);
+            } else {
+              console.log('Form submission completed.');
+              setTitle('Form submission completed.');
+              setDescription('Form submission completed.');
+              setShowModal(true);
+              router.push(`/merchant/home`);
+            }
+          } else {
+            setTitle('Error Occurred');
+            setApierror(response?.data?.responseDescription);
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
         }
-      } else {
-        setApierror(
-          response?.data?.responseMessage || 'Unexpected error occurred',
-        );
-        setTitle('Error Occurred');
-        setDescription(
-          response?.data?.responseDescription || 'An unknown error occurred.',
-        );
+      } catch (e) {
+        console.error('Error in submitting form:', e);
+        setDescription('Network failed! Please try again later.');
         setShowModal(true);
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error: any) {
-      console.error('Error during submission:', error);
-      setApierror(error.message || 'Network error occurred.');
-      setTitle('Network Failed');
-      setDescription('Network failed! Please try again later.');
-      setShowModal(true);
-    } finally {
-      setSubmitting(false);
     }
   };
   console.log('Initial Values State:', initialValuesState);

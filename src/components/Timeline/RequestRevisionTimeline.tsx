@@ -1,71 +1,118 @@
 'use client';
 
 import Link from 'next/link';
-// import { useRouter } from 'next/navigation';
-import React, {
-  useEffect,
-  // useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-// import ActivityInformation from '@/components/Forms/ActivityInformation';
-import AttachmentsForm from '@/components/Forms/Attachments';
-// import BusinessInformation from '@/components/Forms/BusinessDetails';
-// import IntegrationForm from '@/components/Forms/IntegrationForm';
-import ReviewForm from '@/components/Forms/ReviewForm';
-// import SettlementDetailsStatic from '@/components/Forms/SettlementDetails';
-// import StoreDetails from '@/components/Forms/StoreDetails';
-import {
-  ActivityInformationIcon,
-  AttachmentsIcon,
-  BusinessDetailsIcon,
-  IntegrationsIcon,
-  ReviewFormIcon,
-  SettlementDetailsIcon,
-} from '@/components/Timeline/TimelineIcons/Timelineicons';
+// import RequestRevision from '@/app/merchant/home/request-revision/[form]/page';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 
-// import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import ActivityInformationReqRevision from '../Forms/ActivityInformationReqRevision';
 import BusinessInformationReqRevision from '../Forms/BusinessDetailsReqRevision';
 import IntegrationFormReqRevision from '../Forms/IntegrationFormReqRevision';
 import SettlementDetailsReqRevision from '../Forms/SettlementDetailReqRevision';
 import StoreDetailReqRevision from '../Forms/StoreDetailReqRevision';
+import {
+  ActivityInformationIcon,
+  BusinessDetailsIcon,
+  IntegrationsIcon,
+  SettlementDetailsIcon,
+} from './TimelineIcons/Timelineicons';
 
 interface Tab {
   name: string;
   label: string;
   component: JSX.Element;
-  status?: string;
+  status: string;
   svg: JSX.Element;
 }
 
 interface UserData {
   email: string;
-  // Add other properties if needed
 }
 
 interface MerchantData {
-  activityInformation?: { status: string };
-  businessDetails?: { status: string };
-  settlementDetails?: { status: string };
-  integration?: { status: string };
-  documents?: { status: string };
-  reviewForm?: { status: string };
+  page: { pageName: string }[];
 }
+
+const nameToLabelMapping: Record<string, string> = {
+  'Activity Information': 'Activity Information',
+  'Business Details': 'Business Details',
+  'Store Details': 'Store Details',
+  'Settlement Details': 'Settlement Details',
+  Integration: 'Integration',
+  Documents: 'Attachments',
+  'Review Form': 'Review Form',
+};
+
+const allTabs: Tab[] = [
+  {
+    name: 'activity-information',
+    label: 'Activity Information',
+    component: <ActivityInformationReqRevision />,
+    svg: <ActivityInformationIcon color="#6F6B76" />,
+    status: '',
+  },
+  {
+    name: 'business-details',
+    label: 'Business Details',
+    component: <BusinessInformationReqRevision />,
+    svg: <BusinessDetailsIcon color="#6F6B76" />,
+    status: '',
+  },
+  {
+    name: 'store-details',
+    label: 'Store Details',
+    component: <StoreDetailReqRevision />,
+    svg: <BusinessDetailsIcon color="#6F6B76" />,
+    status: '',
+  },
+  {
+    name: 'settlement-details',
+    label: 'Settlement Details',
+    component: <SettlementDetailsReqRevision />,
+    svg: <SettlementDetailsIcon color="#6F6B76" />,
+    status: '',
+  },
+  {
+    name: 'integration',
+    label: 'Integration',
+    component: <IntegrationFormReqRevision />,
+    svg: <IntegrationsIcon color="#6F6B76" />,
+    status: '',
+  },
+];
+
+const getFilteredTabs = (fetchedPages: { pageName: string }[], tabs: Tab[]) => {
+  return fetchedPages
+    .map((page) => {
+      const matchedTab = tabs.find(
+        (tab) => tab.label === nameToLabelMapping[page.pageName],
+      );
+      return matchedTab ? { ...matchedTab, status: 'Completed' } : undefined;
+    })
+    .filter((tab): tab is Tab => tab !== undefined)
+    .sort((a, b) =>
+      a.label === 'Activity Information'
+        ? -1
+        : b.label === 'Activity Information'
+        ? 1
+        : 0,
+    );
+};
 
 const RequestRevisionTimeline: React.FC = () => {
   const userData = useAppSelector((state: { auth: UserData }) => state.auth);
-  const [data, setData] = useState<MerchantData | null>(null);
   const { currentTab } = useCurrentTab();
   const activeTab = currentTab;
+  const [data, setData] = useState<MerchantData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // const router = useRouter();
-  // const dispatch = useAppDispatch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const getDetails = async () => {
@@ -85,7 +132,7 @@ const RequestRevisionTimeline: React.FC = () => {
       } catch (error) {
         console.error('Error fetching data:', error);
       } finally {
-        setIsLoading(false); // End loading
+        setIsLoading(false);
       }
     };
 
@@ -97,168 +144,46 @@ const RequestRevisionTimeline: React.FC = () => {
       <div className="flex w-full items-center justify-center">
         <BarLoader color="#21B25F" />
       </div>
-    ); // Render a loader while waiting for the response
+    );
   }
 
-  if (!data) {
-    return <div>No data available.</div>; // Handle case where data is null
+  if (!data || !data.page) {
+    return <div>No data available.</div>;
   }
-  // useEffect(() => {
-  //   const getDetails = async () => {
-  //     try {
-  //       const response = await apiClient.get(
-  //         `merchant/getdetails/${userData?.email}`,
-  //       );
-  //       console.log('GET DETAILS CHECKINGG:', response?.data);
-  //       //debugger
-  //       setData(response?.data);
-  //     } catch (error) {
-  //       console.log(error, 'error from onboarding forms');
-  //     }
-  //   };
-  //   getDetails();
-  // }, []);
 
-  const tabs: Tab[] = [
-    {
-      name: 'activity-information',
-      label: 'Activity Informations',
-      component: <ActivityInformationReqRevision />,
-      status: data?.activityInformation?.status,
-      svg: (
-        <ActivityInformationIcon
-          color={
-            activeTab === 'activity-information'
-              ? '#21B25F'
-              : activeTab !== 'activity-information' &&
-                data?.activityInformation?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-    {
-      name: 'business-details',
-      label: 'Business Details',
-      component: <BusinessInformationReqRevision />,
-      status: data?.businessDetails?.status,
-      svg: (
-        <BusinessDetailsIcon
-          color={
-            activeTab === 'business-details'
-              ? '#21B25F'
-              : activeTab !== 'business-details' &&
-                data?.businessDetails?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-    {
-      name: 'store-details',
-      label: 'Store Details',
-      component: <StoreDetailReqRevision />,
-      status: data?.businessDetails?.status,
-      svg: (
-        <BusinessDetailsIcon
-          color={
-            activeTab === 'store-details'
-              ? '#21B25F'
-              : activeTab !== 'store-details' &&
-                data?.businessDetails?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
+  const filteredTabs = getFilteredTabs(data.page, allTabs);
 
-    {
-      name: 'settlement-details',
-      label: 'Settlement Details',
-      component: <SettlementDetailsReqRevision />,
-      status: data?.settlementDetails?.status,
-      svg: (
-        <SettlementDetailsIcon
-          color={
-            activeTab === 'settlement-details'
-              ? '#21B25F'
-              : activeTab !== 'settlement-details' &&
-                data?.settlementDetails?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-    {
-      name: 'integration',
-      label: 'Integration',
-      component: <IntegrationFormReqRevision />,
-      status: data?.integration?.status,
-      svg: (
-        <IntegrationsIcon
-          color={
-            activeTab === 'integration'
-              ? '#21B25F'
-              : activeTab !== 'integration' &&
-                data?.integration?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-    {
-      name: 'attachments',
-      label: 'Attachments',
-      component: <AttachmentsForm />,
-      status: data?.documents?.status,
-      svg: (
-        <AttachmentsIcon
-          color={
-            activeTab === 'attachments'
-              ? '#21B25F'
-              : activeTab !== 'attachments' &&
-                data?.documents?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-    {
-      name: 'review-form',
-      label: 'Review Form',
-      component: <ReviewForm />,
-      status: data?.documents?.status,
-      svg: (
-        <ReviewFormIcon
-          color={
-            activeTab === 'review-form'
-              ? '#21B25F'
-              : activeTab !== 'review-form' &&
-                data?.documents?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
-  ];
+  const currentTabIndex = filteredTabs.findIndex(
+    (tab) => tab.name === activeTab,
+  );
+  const isLastTab = currentTabIndex === filteredTabs.length - 1;
+  console.log(' isLastTab', isLastTab);
+
+  if (isLastTab) {
+    dispatch(setIsLastTab(true)); // Dispatch the action to set isLastTab to true
+  }
+
+  if (!isLastTab) {
+    dispatch(setIsLastTab(false)); // Dispatch the action to set isLastTab to true
+  }
+
+  // Update the component prop with the correct isLastTab value
+  const finalTabs = filteredTabs.map((tab) => ({
+    ...tab,
+    component: React.cloneElement(tab.component, { isLastTab }),
+  }));
+
+  console.log('islast tab in timeline', isLastTab);
+  console.log('filtered tabs', filteredTabs);
+  console.log('updated tabs', finalTabs);
 
   return (
     <div className="flex flex-col justify-between py-2">
       <div className="flex w-full justify-between overflow-auto">
-        {tabs?.map((tab, index) => (
+        {finalTabs.map((tab, index) => (
           <React.Fragment key={index}>
             <div className="flex flex-col">
-              {/* {isAccessible(index) ? ( */}
               <Link
-                key={index}
-                // href={`/merchant/home/business-nature/${tab.name}`}
                 href={
                   tab.status === 'Completed'
                     ? `/merchant/home/request-revision/${tab.name}`
@@ -269,15 +194,9 @@ const RequestRevisionTimeline: React.FC = () => {
                     ? 'cursor-pointer'
                     : 'cursor-not-allowed opacity-50'
                 }`}
-                // className={
-                //   tab.name === activeTab
-                //     ? 'text-primary-base'
-                //     : 'text-danger-base'
-                // }
               >
                 <div className="flex justify-center px-[14px] pb-[8px]">
                   <div
-                    key={index}
                     className={`flex w-max rounded-lg border-[1px] ${
                       tab.name === activeTab
                         ? 'border-border-green'
@@ -294,14 +213,10 @@ const RequestRevisionTimeline: React.FC = () => {
                 </div>
               </Link>
             </div>
-            {index < tabs.length - 1 && (
-              <div className="w-full py-[24px]">
-                <div className="h-[1px] w-full bg-border-light"></div>
-              </div>
-            )}
           </React.Fragment>
         ))}
       </div>
+      {/* <RequestRevision isLastTab={isLastTab} /> */}
     </div>
   );
 };

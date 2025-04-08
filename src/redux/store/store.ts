@@ -23,6 +23,7 @@ import signupReducer from '@/redux/features/signUpSlice';
 
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
 import fieldReducer from '../features/formSlices/fieldSlice';
+import lastTabReducer from '../features/formSlices/lastTabSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
 import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
 import merchantIntegrationReducer from '../features/merchantSlice/merchantIntegration';
@@ -66,6 +67,7 @@ const rootReducer = combineReducers({
   corporateJourneyType: corporateJourneyTypeReducer,
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
+  lastTab: lastTabReducer,
 });
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);

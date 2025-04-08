@@ -13,12 +13,13 @@ import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 // import FormWrapper from "@/components/UI/Wrappers/FormLayout";
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import {
 //   // ActivityFormInfoSchema,
 //   GetActivityInfoDetails,
 // } from "@/validations/merchant/onBoarding/activityInfo";
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
 import { generateMD5Hash } from '@/utils/helper';
@@ -33,6 +34,11 @@ import type { FieldsData } from './validations/types';
 const ActivityInformationReqRevision = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
+
+  const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
+  console.log('islast tab from redux ', isLastTab);
+
+  const dispatch = useAppDispatch();
 
   console.log('fieldData1', fieldData);
   const formData = useAppSelector((state: any) => state.onBoardingForms);
@@ -383,7 +389,9 @@ const ActivityInformationReqRevision = () => {
 
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
 
-      // ✅ Only include fields that exist in `values`
+      // ✅ Extract valid page names from fieldData
+      const validPages = fieldData.pages.page.map((p) => p.pageName);
+
       const transformedData = {
         managerMobile: userData.managerMobile,
         page: {
@@ -422,7 +430,13 @@ const ActivityInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          const response = await apiClient.post(currentEndpoint, requestBody, {
+          let finalEndpoint = currentEndpoint;
+
+          if (isLastTab) {
+            finalEndpoint += '?requestRevision=Completed';
+            dispatch(setIsLastTab(false));
+          }
+          const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
               Authorization: `Bearer ${userData.jwt}`,
               Username: userData?.email,
@@ -430,9 +444,23 @@ const ActivityInformationReqRevision = () => {
           });
 
           if (response?.data?.responseCode === '009') {
-            // ✅ Navigate to the next tab
-            const nextTab = endpointArray[currentIndex + 1]?.tab;
-            if (nextTab) {
+            let nextIndex = currentIndex + 1;
+
+            //  Ensure nextIndex is within bounds and valid
+            while (
+              nextIndex < endpointArray.length &&
+              (!endpointArray[nextIndex]?.name ||
+                !validPages.includes(endpointArray[nextIndex]?.name ?? ''))
+            ) {
+              nextIndex += 1;
+            }
+
+            //  Ensure nextIndex is valid before accessing tab
+            if (
+              nextIndex < endpointArray.length &&
+              endpointArray[nextIndex]?.tab
+            ) {
+              const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
