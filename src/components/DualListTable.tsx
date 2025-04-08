@@ -72,7 +72,7 @@ const DualListTable = ({
     const updatedSelectedItems = [...selectedItems, ...checkedAvailableItems];
     onSelectedItemsChange(updatedSelectedItems); // Update in parent
     setAvailableItems(
-      availableItems.filter((i) => !checkedAvailableItems.includes(i)),
+      availableItems.filter((i: any) => !checkedAvailableItems.includes(i)),
     );
     setCheckedAvailableItems([]);
   };
