@@ -7,7 +7,7 @@ const MPPriceBar = ({ accountBalance }: { accountBalance: string }) => {
         Mobile Account Balance
       </div>
       <div className="text-2xl font-semibold leading-[30px]">
-        {accountBalance || 0}
+        PKR {accountBalance || 0}
       </div>
     </div>
   );
