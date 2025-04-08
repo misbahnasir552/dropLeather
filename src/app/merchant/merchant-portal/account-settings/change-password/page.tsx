@@ -98,7 +98,7 @@ export default function ChangePasswordPage() {
         validationSchema={changePasswordSchema}
         onSubmit={onSubmit}
       >
-        {({ resetForm }) => (
+        {({ resetForm, errors, touched, values }) => (
           <Form className="flex flex-col gap-6">
             <FormLayout>
               <div className="flex flex-col gap-4">
@@ -106,12 +106,20 @@ export default function ChangePasswordPage() {
                   label="Current Password"
                   name="currentPassword"
                   type="password"
+                  error={errors?.currentPassword}
+                  onKeyDown={() => {
+                    touched.currentPassword = true;
+                  }}
                   // isDisabled={true} // Disable as it's autofilled
                 />
                 <Input
                   label="New Password"
                   name="newPassword"
                   type="password"
+                  error={errors?.newPassword}
+                  onKeyDown={() => {
+                    touched.newPassword = true;
+                  }}
                 />
                 <span className="px-4 text-xs font-normal">
                   Password should include pattern of - lower case, upper case,
@@ -122,13 +130,21 @@ export default function ChangePasswordPage() {
                   label="Confirm Password"
                   name="confirmPassword"
                   type="password"
+                  error={errors?.confirmPassword}
+                  onKeyDown={() => {
+                    touched.confirmPassword = true;
+                  }}
                 />
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}
                 </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {touched.confirmPassword}
+                </div>
               </div>
             </FormLayout>
             {isLoading && <BarLoader color="#21B25F" />}
+
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Cancel"
@@ -139,6 +155,10 @@ export default function ChangePasswordPage() {
                 disable={isLoading}
                 label="Change Password"
                 type="submit"
+                isDisabled={
+                  Object.values(values).some((v) => v === '') ||
+                  Object.keys(errors).length !== 0
+                }
                 className="button-primary w-[270px] py-[19px] text-sm leading-tight"
               />
             </div>
