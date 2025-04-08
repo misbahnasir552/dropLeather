@@ -62,13 +62,13 @@ export default function ChangePasswordPage() {
         dispatch(resetForms());
         setIsLoading(false);
         setRoute('/login');
-        setTitle(response?.data.responseMessag);
-        setDescription(response?.data.responseDescription);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
       } else {
         setIsLoading(false);
         // setTitle('Failure');
         // setDescription(response?.data.responseMessage);
-        setApierror(response?.data.responseMessage);
+        setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
       setApierror(e?.message);
