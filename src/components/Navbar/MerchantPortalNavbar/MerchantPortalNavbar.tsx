@@ -33,13 +33,13 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Configuration',
-      className: 'top-[17%] left-[24%]',
+      className: 'md:top-[17%] top-[15%] left-[24%]',
       link: '/merchant/merchant-portal/home',
       dropdown: configurationList,
     },
     {
       title: 'Account Settings',
-      className: 'left-[32%] top-[17%]',
+      className: 'left-[32%] md:top-[17%] top-[15%]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
@@ -51,7 +51,7 @@ const MerchantPortalNavbar = () => {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
-      className: 'top-[17%]',
+      className: 'md:top-[17%] top-[15%]',
     },
     {
       title: 'Settlement Module',
@@ -61,14 +61,14 @@ const MerchantPortalNavbar = () => {
       title: 'Reversal Module',
       // link: '/merchant/merchant-portal/reversal-module',
       dropdown: getReversalModuleDropDownMenu(),
-      className: 'top-[17%]',
+      className: 'md:top-[17%] top-[15%]',
     },
     {
       title: 'Merchant Funds Transfer',
       dropdown: getMerchantFundsTransferDropDownMenu(
         otpSuccess?.isAuthenticated,
       ),
-      className: 'top-[17%]',
+      className: 'md:top-[17%] top-[15%]',
     },
   ];
   return (
