@@ -62,8 +62,8 @@ export default function ChangePasswordPage() {
         dispatch(resetForms());
         setIsLoading(false);
         setRoute('/login');
-        setTitle('Success');
-        setDescription(response?.data.responseMessage);
+        setTitle(response?.data.responseMessag);
+        setDescription(response?.data.responseDescription);
       } else {
         setIsLoading(false);
         // setTitle('Failure');
@@ -71,7 +71,7 @@ export default function ChangePasswordPage() {
         setApierror(response?.data.responseMessage);
       }
     } catch (e: any) {
-      setApierror('An Unexpected Error Occured. Please check your network');
+      setApierror(e?.message);
       // setTitle('Network Failed');
       // setDescription(e.message);
       setIsLoading(false);
