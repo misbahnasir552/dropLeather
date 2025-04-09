@@ -380,6 +380,7 @@ export interface IDropdownInput {
   formik?: FormikProps<any>;
   onClick?: any;
   setSelectedDropDownValue?: any;
+  resetGraphFilter?: boolean;
 }
 
 export interface BusinessNatureForm {
