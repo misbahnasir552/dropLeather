@@ -75,6 +75,7 @@ const MerchantProfile = () => {
   };
 
   useEffect(() => {
+    console.log('user data is', userData);
     if (userData.email) {
       setMerchantTitle('merchantPortalProfile');
       fetchMerchantStores();
@@ -104,7 +105,7 @@ const MerchantProfile = () => {
         <H1 className="text-primary-dark">{userData?.name}</H1>
       </div>
       <div className="flex w-full flex-row border-[1px] border-border-light "></div>
-      <div className="flex flex-row py-6">
+      <div className="flex flex-row gap-4 py-6">
         <div className="flex flex-row gap-6">
           <div className="flex h-[16px] w-[2px] bg-border-dark" />
         </div>
@@ -127,33 +128,36 @@ const MerchantProfile = () => {
 
         <Image src={locationIcon} alt="phone" className="h-[24px] w-[24px]" />
 
-        <div className="flex w-[170px]">{userData?.email}</div>
+        {/* <div className="flex w-[170px]">{userData?.email}</div> */}
+        <div className="flex w-[170px]"> Islamabad, Pakistan</div>
       </div>
       <div className="flex w-full border-[1px] border-border-light "></div>
       <div className="flex flex-row py-6">
         <div className="flex flex-row gap-4">
           <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
-          <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
+          {/* <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
             Payment Method MA: <H6>No</H6>
+          </div> */}
+
+          {/* <div className="flex h-[16px] w-[2px] bg-border-dark" /> */}
+
+          <div className="flex h-[20px] text-sm leading-[20px] text-secondary-600">
+            Payment Method QR/Till:
           </div>
+          <H6>No</H6>
+        </div>
 
-          <div className="flex h-[16px] w-[2px] bg-border-dark" />
-
-          <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
-            Payment Method QR: <H6>No</H6>
-          </div>
-
-          <div className="flex h-[16px] w-[2px] bg-border-dark" />
+        {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
           <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
             Payment Via RAAST: <H6>Yes</H6>
-          </div>
+          </div> */}
 
-          <div className="flex h-[16px] w-[2px] bg-border-dark" />
+        {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
           <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
             Payment Via Link: <H6>Yes</H6>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <div className="flex w-full border-b border-border-light"></div>
