@@ -2,6 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
@@ -11,6 +12,8 @@ import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
+import { setLogout } from '@/redux/features/authSlice';
+import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
 import { generateMD5Hash } from '@/utils/helper';
 import {
   changePasswordInitialValues,
@@ -23,13 +26,15 @@ export default function ChangePasswordPage() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [route, setRoute] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [apierror, setApierror] = useState('');
 
   const onSubmit = async (values: IChangePassword) => {
     // Your form submission logic here
-    console.log(values, 'Change PAssword');
     const { confirmPassword, ...rest } = values;
-
+    setIsLoading(true);
     const additionalValues = {
       // ...values,
       ...rest,
@@ -43,7 +48,6 @@ export default function ChangePasswordPage() {
     const md5Hash = generateMD5Hash(mdRequest);
     const requestBody = { request: additionalValues, signature: md5Hash };
     try {
-      // setIsLoading(true);
       const response = await apiClient.post(
         '/merchant/changePassword',
         requestBody,
@@ -51,20 +55,29 @@ export default function ChangePasswordPage() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log('Added Successfully', response);
+
       if (response?.data.responseCode === '000') {
-        setTitle('Failure');
-        setDescription(response?.data.responseMessage);
+        setShowModal(true);
+        dispatch(setLogout());
+        dispatch(resetForms());
+        setIsLoading(false);
+        setRoute('/login');
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
       } else {
-        setTitle('Success');
-        setDescription(response?.data.responseMessage);
+        setIsLoading(false);
+        // setTitle('Failure');
+        // setDescription(response?.data.responseMessage);
+        setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
-      setTitle('Network Failed');
-      setDescription(e.message);
+      setApierror(e?.message);
+      // setTitle('Network Failed');
+      // setDescription(e.message);
+      setIsLoading(false);
     } finally {
       setIsLoading(false);
-      setShowModal(true);
+      // setShowModal(true);
     }
   };
 
@@ -75,7 +88,7 @@ export default function ChangePasswordPage() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/login"
+        routeName={route}
       />
       <HeaderWrapper heading="Change Password" />
 
@@ -85,7 +98,7 @@ export default function ChangePasswordPage() {
         validationSchema={changePasswordSchema}
         onSubmit={onSubmit}
       >
-        {() => (
+        {({ resetForm, errors, touched, values }) => (
           <Form className="flex flex-col gap-6">
             <FormLayout>
               <div className="flex flex-col gap-4">
@@ -93,30 +106,59 @@ export default function ChangePasswordPage() {
                   label="Current Password"
                   name="currentPassword"
                   type="password"
+                  error={errors?.currentPassword}
+                  onKeyDown={() => {
+                    touched.currentPassword = true;
+                  }}
                   // isDisabled={true} // Disable as it's autofilled
                 />
                 <Input
                   label="New Password"
                   name="newPassword"
                   type="password"
+                  error={errors?.newPassword}
+                  onKeyDown={() => {
+                    touched.newPassword = true;
+                  }}
                 />
+                <span className="px-4 text-xs font-normal">
+                  Password should include pattern of - lower case, upper case,
+                  digits (0-9), Special Characters (@,#,$,!).It should contain
+                  between 8 to 15 characters
+                </span>
                 <Input
                   label="Confirm Password"
                   name="confirmPassword"
                   type="password"
+                  error={errors?.confirmPassword}
+                  onKeyDown={() => {
+                    touched.confirmPassword = true;
+                  }}
                 />
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {touched.confirmPassword}
+                </div>
               </div>
             </FormLayout>
             {isLoading && <BarLoader color="#21B25F" />}
+
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Cancel"
-                routeName="/login"
+                onClickHandler={() => resetForm()}
                 className="button-secondary w-[270px] py-[19px] text-xs leading-tight"
               />
               <Button
+                disable={isLoading}
                 label="Change Password"
                 type="submit"
+                isDisabled={
+                  Object.values(values).some((v) => v === '') ||
+                  Object.keys(errors).length !== 0
+                }
                 className="button-primary w-[270px] py-[19px] text-sm leading-tight"
               />
             </div>

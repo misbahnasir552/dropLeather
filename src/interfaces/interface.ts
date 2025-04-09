@@ -52,6 +52,7 @@ export interface IButton {
   isDisabled?: boolean;
   routeName?: string;
   onClickHandler?: (values?: any) => void;
+  disable?: boolean;
 }
 
 export interface IFormLayout {
@@ -100,6 +101,7 @@ export interface IInput {
   onBlur?: any;
   formik?: FormikProps<any>;
   placeholder?: any;
+  onKeyDown?: (event: any) => void;
 }
 
 export interface IComment {
@@ -121,6 +123,7 @@ export interface IDate {
   error?: string | undefined | string[];
   touched?: boolean | undefined;
   formik?: FormikProps<any>;
+  minDate?: any;
 }
 
 export interface ICheckboxInput {
@@ -143,6 +146,12 @@ export interface ISuccessModalProps {
   show: boolean;
   setShowModal?: (value: boolean) => void;
 }
+export interface IErrorModalProps {
+  title?: string;
+  description?: string;
+  show: boolean;
+  setShow: (value: boolean) => void;
+}
 export interface ICustomModalProps {
   title?: string;
   description?: string;
@@ -150,6 +159,7 @@ export interface ICustomModalProps {
   setShowModal: (value: boolean) => void;
   routeName?: string;
   image?: any;
+  isVisible?: boolean;
 }
 
 // export  interface ICustomModalHookProps{
@@ -289,7 +299,13 @@ export interface BusinessFormInfo {
   expectedSalesVolume: string;
   // status?: string;
 }
-
+export interface ISearchBulk {
+  batchId: string;
+  file: string;
+  fromDate: string;
+  toDate: string;
+  status: string;
+}
 export interface ActivityFormInfo {
   fatherName: string;
   businessOwner: string;
@@ -364,6 +380,7 @@ export interface IDropdownInput {
   formik?: FormikProps<any>;
   onClick?: any;
   setSelectedDropDownValue?: any;
+  resetGraphFilter?: boolean;
 }
 
 export interface BusinessNatureForm {
@@ -396,6 +413,7 @@ export interface SearchTransactionsForm {
   customerCellPhone: string;
   otcToken: string;
   orderDate: string;
+  customerName: string;
   merchantName: string;
   authId: string;
   batch: string;
@@ -410,7 +428,7 @@ export interface SearchTransactionsForm {
   ccOrderId: string;
   ddBankName: string;
   transactionReference: string;
-  transactionStatus: string;
+  status: string;
   escrowStatus: string;
   settlementtransactionStatus: string;
   value3d: string;
@@ -419,6 +437,9 @@ export interface SearchTransactionsForm {
   transactionPoint: string;
   channel: string;
   storeID: string;
+  fromDate: string;
+  toDate: string;
+  storeName: string;
 }
 
 export interface AddOutletForm {

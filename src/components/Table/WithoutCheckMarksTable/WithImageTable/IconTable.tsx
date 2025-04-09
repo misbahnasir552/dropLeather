@@ -19,7 +19,8 @@ interface IconTableProps {
   hasEdit?: boolean;
   hasIcons?: boolean;
   handleDelete?: (id: any) => void;
-  handleView?: (staticQRCode: string, name: string) => void;
+  handleView?: (staticQRCode: string, name: string, tillNum?: string) => void;
+  isDynamicQr?: boolean;
 }
 
 const IconTable: React.FC<IconTableProps> = ({
@@ -30,21 +31,13 @@ const IconTable: React.FC<IconTableProps> = ({
   hasDownload = false,
   hasEdit = false,
   hasIcons = true,
+  isDynamicQr = false,
   handleDelete,
   handleView,
 }) => {
-  console.log('ICON TABLE ', tableData);
-
   const handleEdit = (id: any) => {
     console.log('Edit row with id:', id);
-    // Add your edit functionality here
   };
-
-  // const handleShare = (id: any) => {
-  //   console.log('Share row with id:', id);
-
-  //   // Add your share functionality here
-  // };
 
   const handleDownload = (id: any) => {
     console.log('Download row with id:', id);
@@ -73,82 +66,102 @@ const IconTable: React.FC<IconTableProps> = ({
           </tr>
         </thead>
         <tbody>
-          {tableData?.map(({ id, staticQRCode, ...tableItem }, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className="flex w-full items-center justify-between border-b border-border-light px-6"
-            >
-              {Object.values(tableItem).map((value, colIndex, colArr) => (
-                <td
-                  key={colIndex}
-                  className={`${
-                    colIndex === 0
-                      ? 'w-32 text-left'
-                      : colIndex === colArr.length - 1 && hasIcons
-                      ? 'w-32 text-center'
-                      : 'w-32 text-center'
-                  } py-[18px]`}
-                >
-                  <B3 textColor="text-secondary-base">{value || 'N/A'}</B3>
-                </td>
-              ))}
-              {hasIcons && (
-                <td className="w-32 py-[18px] text-right">
-                  <div className="flex w-full items-center justify-center gap-4">
-                    {hasShare && (
-                      <div
-                        onClick={() =>
-                          handleView &&
-                          handleView(staticQRCode, tableItem.storeName)
-                        }
-                      >
-                        <Image
-                          className="cursor-pointer"
-                          src={ShareIcon}
-                          height={20}
-                          width={20}
-                          alt="share-icon"
-                        />
-                      </div>
-                    )}
-                    {hasEdit && (
-                      <div onClick={() => handleEdit(id)}>
-                        <Image
-                          className="cursor-pointer"
-                          src={EditIcon}
-                          height={20}
-                          width={20}
-                          alt="edit-icon"
-                        />
-                      </div>
-                    )}
-                    {hasDownload && (
-                      <div onClick={() => handleDownload(id)}>
-                        <Image
-                          className="cursor-pointer"
-                          src={DownloadIcon}
-                          height={20}
-                          width={20}
-                          alt="download-icon"
-                        />
-                      </div>
-                    )}
-                    {hasDelete && (
-                      <div onClick={() => handleDelete && handleDelete(id)}>
-                        <Image
-                          className="cursor-pointer"
-                          src={DeleteIcon}
-                          height={20}
-                          width={20}
-                          alt="delete-icon"
-                        />
-                      </div>
-                    )}
-                  </div>
-                </td>
-              )}
-            </tr>
-          ))}
+          {tableData?.map(
+            (
+              {
+                id,
+                staticQRCode,
+                qrCode,
+                webSiteUrl,
+                tillNumber,
+                paymentEnabled,
+                status,
+                ...tableItem
+              },
+              rowIndex,
+            ) => (
+              <tr
+                key={rowIndex}
+                className="flex w-full items-center justify-between border-b border-border-light px-6"
+              >
+                {Object.values(tableItem).map((value, colIndex, colArr) => (
+                  <td
+                    key={colIndex}
+                    className={`${
+                      colIndex === 0
+                        ? 'w-32 text-left'
+                        : colIndex === colArr.length - 1 && hasIcons
+                        ? 'w-32 text-center'
+                        : 'w-32 text-center'
+                    } py-[18px]`}
+                  >
+                    <B3 textColor="text-secondary-base">{value || 'N/A'}</B3>
+                  </td>
+                ))}
+                {hasIcons && (
+                  <td className="w-32 py-[18px] text-right">
+                    <div className="flex w-full items-center justify-center gap-4">
+                      {hasShare && (
+                        <div
+                          onClick={() =>
+                            handleView &&
+                            handleView(
+                              isDynamicQr ? qrCode : staticQRCode,
+                              isDynamicQr
+                                ? tableItem?.productName
+                                : tableItem?.storeName,
+                              tillNumber,
+                            )
+                          }
+                        >
+                          <Image
+                            className="cursor-pointer"
+                            src={ShareIcon}
+                            height={20}
+                            width={20}
+                            alt="share-icon"
+                          />
+                        </div>
+                      )}
+                      {hasEdit && (
+                        <div onClick={() => handleEdit(id)}>
+                          <Image
+                            className="cursor-pointer"
+                            src={EditIcon}
+                            height={20}
+                            width={20}
+                            alt="edit-icon"
+                          />
+                        </div>
+                      )}
+                      {hasDownload && (
+                        <div onClick={() => handleDownload(id)}>
+                          <Image
+                            className="cursor-pointer"
+                            src={DownloadIcon}
+                            height={20}
+                            width={20}
+                            alt="download-icon"
+                          />
+                        </div>
+                      )}
+                      {hasDelete && (
+                        <div onClick={() => handleDelete && handleDelete(id)}>
+                          <Image
+                            className="cursor-pointer"
+                            src={DeleteIcon}
+                            height={20}
+                            width={20}
+                            alt="delete-icon"
+                          />
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                )}
+              </tr>
+            ),
+          )}
         </tbody>
       </table>
     </div>

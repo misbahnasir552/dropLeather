@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
-// import * as Yup from 'yup';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';

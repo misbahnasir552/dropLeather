@@ -6,7 +6,6 @@ import home from '@/assets/icons/home-sign-up.svg';
 
 export const getHeaderTextForSegment = (segment: string) => {
   const lowercasedSegment = segment.toLowerCase();
-  // console.log('LOWER SEGMENT: ', lowercasedSegment);
 
   switch (lowercasedSegment) {
     case 'sign-up':
@@ -102,7 +101,6 @@ function convertObjectToUpperCase(obj: MyObject) {
 export const generateMD5Hash = (bodyRequest: any) => {
   const body = convertObjectToUpperCase(bodyRequest);
   const bodyString = JSON.stringify(body);
-  console.log(bodyString, 'BODYSTRING MD5');
   const hash = CryptoJS.MD5(bodyString).toString();
 
   return hash;
@@ -122,4 +120,24 @@ export const generateExpiryTime = (timeInMinutes: number) => {
   const jwtExpirationTime = timeInMinutes * 60 * 1000; // 15 minutes in milliseconds
   const expirationDate = new Date(Date.now() + jwtExpirationTime);
   return expirationDate;
+};
+
+export const generateAESEncryption = (inputString: string) => {
+  const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY || '';
+  const iv = CryptoJS.enc.Utf8.parse(process.env.NEXT_PUBLIC_IV_KEY || '');
+
+  // Encrypt the string using AES with the secret key and IV
+  const encrypted = CryptoJS.AES.encrypt(
+    inputString,
+    CryptoJS.enc.Utf8.parse(secretKey),
+    {
+      iv,
+      mode: CryptoJS.mode.CBC, // CBC mode
+      padding: CryptoJS.pad.Pkcs7, // PKCS7 padding (compatible with PKCS5)
+    },
+  ).toString();
+
+  const encoded = encodeURIComponent(encrypted);
+
+  return encoded;
 };

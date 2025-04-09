@@ -4,7 +4,6 @@ import { Form, Formik } from 'formik';
 import React from 'react';
 
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
@@ -13,8 +12,8 @@ import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import type { IReversalBulkBatch } from '@/validations/merchant/merchant-portal/reversal-module/interfaces';
 import {
-  reversalBulkBatchInitialValues,
-  reversalBulkBatchSchema,
+  searchBulkInitialValues,
+  searchBulkSchema,
 } from '@/validations/merchant/merchant-portal/reversal-module/reversal-bulk-batch';
 
 function page() {
@@ -59,14 +58,11 @@ function page() {
     <div>
       <>
         <div className="flex flex-col gap-6">
-          <HeaderWrapper
-            heading="Reversal Bulk Batch"
-            description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-          />
+          <HeaderWrapper heading="Reversal Bulk Batch" />
           <MerchantFormLayout>
             <Formik
-              initialValues={reversalBulkBatchInitialValues}
-              validationSchema={reversalBulkBatchSchema}
+              initialValues={searchBulkInitialValues}
+              validationSchema={searchBulkSchema}
               onSubmit={onSubmit}
             >
               {(formik) => (

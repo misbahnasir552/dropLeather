@@ -17,13 +17,10 @@ import H6 from '../UI/Headings/H6';
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DateInputNew from '../UI/Inputs/DateInputNew';
-// import apiClient from '@/api/apiClient';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 
-// const AddApplicant = () => {
 const AddApplicant = (onDataChange: any) => {
-  // console.log("VALUES ADD APP ", addApplicant);
   const dispatch = useAppDispatch();
 
   const [applicantForms, setApplicantForms] = useState<any[]>([]);

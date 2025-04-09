@@ -209,32 +209,6 @@ const AdditionalDetails = () => {
                         handleCheckboxChange={handleCheckboxChange}
                       />
                     </div>
-                    {/* <div className="flex flex-col items-start justify-center gap-4"> */}
-                    {/* <div className="flex gap-2">
-                      {isChecked ? (
-                        <div
-                          className="flex h-4 w-4 items-center justify-center rounded-sm border-[1px] border-border-dark bg-primary-base"
-                          onClick={handleCheckboxChange}
-                        >
-                          <Image
-                            src={TickIcon}
-                            alt="checkbox"
-                            height={10}
-                            width={8}
-                            className="bg-primary-base"
-                          />
-                        </div>
-                      ) : (
-                        <div
-                          className="flex h-4 w-4 items-center justify-center rounded-sm border-[1px] border-border-dark bg-neutral-white-base"
-                          onClick={handleCheckboxChange}
-                        ></div>
-                      )}
-                      <p className="text-xs font-semibold leading-tight">
-                        Click here if same as registration address
-                      </p>
-                    </div> */}
-                    {/* </div> */}
                   </FormWrapper>
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">

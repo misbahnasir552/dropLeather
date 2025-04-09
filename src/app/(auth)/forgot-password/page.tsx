@@ -16,7 +16,6 @@ import checkEmailSchema, {
 } from '@/validations/admin/auth/checkEmail';
 
 export default function CheckEmail() {
-  // const [apierror, setApierror] = useState('');
   const router = useRouter();
   const [showModal, setShowModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -32,28 +31,11 @@ export default function CheckEmail() {
       // account exist flow
       if (inquiryResponse?.data.responseCode === '000') {
         try {
-          // send otp call
-          // const otpResponse = await apiClient.post(
-          //   `/merchant/send-otp?email=${values.email}`,
-          //   {},
-          //   {
-          //     headers: {
-          //       'Content-Type': 'application/json',
-          //     },
-          //   },
-          // );
-          // if (otpResponse?.data.success) {
           router.push(
             `otp/?expiry=${inquiryResponse?.data.expirationTime ?? '2'}&email=${
               values.email
             }&number=${inquiryResponse?.data.managerMobile}`,
           );
-          // } else {
-          //   // send otp failure
-          //   setShowModal(true);
-          //   setTitle('Error');
-          //   setDescription(otpResponse?.data.responseDescription);
-          // }
         } catch (e: any) {
           // send otp request failure
           setShowModal(true);
@@ -87,12 +69,9 @@ export default function CheckEmail() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName="/login"
-        // routeName={route}
       />
       <div className="flex flex-col gap-2">
         <H1>Forgot Password</H1>
-        {/* <div className='flex flex-col gap-2'> */}
         <div>
           <B1>
             To reset your password, enter the email you use to sign in to
@@ -120,7 +99,6 @@ export default function CheckEmail() {
               <div className="flex flex-row justify-end">
                 <Button
                   label="Submit"
-                  // routeName="/merchant/home"
                   type="submit"
                   isDisabled={!formik.isValid || isLoading}
                   className={`button-primary mt-[24px] w-[270px] px-3 py-[19px] text-sm leading-tight transition duration-300`}

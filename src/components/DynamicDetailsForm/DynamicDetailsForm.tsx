@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 
-// eyeIcon from '@/assets/icons/Download-Table-Icon.svg';
 import eyeIcon from '@/assets/icons/eye.svg';
 import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
@@ -15,7 +14,7 @@ import { useAppSelector } from '@/hooks/redux';
 import Button from '../UI/Button/PrimaryButton';
 import H7 from '../UI/Headings/H7';
 import ReviewFormDataGridBold from '../UI/Wrappers/ReviewFormDataGridBold';
-// import { useSearchParams } from "next/navigation";
+
 interface IRevieFormData {
   isEditable: boolean;
   merchant: boolean;
@@ -37,12 +36,9 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
   const corporateStatus = corporateAccountDetails.requestStatus;
   console.log('data on review form is,', data);
   console.log('admin Role is Review Form', adminRole);
-  // const corporateEmail = searchParams.get('email');
-  // const corporateStatus = searchParams.get('status');
 
   const handleDownload = (filename: any, email: any, type: any) => {
     console.log('email and file name is', email, filename);
-    // const response = apiClient.get(`/api/files/download?filename=${filename}&email=${email}`)
     const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
 
     window.open(downloadUrl, '_blank');
@@ -50,13 +46,6 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
 
   const handleDecision = () => {
     console.log('adminRole is', adminRole);
-
-    // if (adminRole == 'RM') {
-    //   // if user role is rm and regionalManagerDocuments is empty array
-    //   router.push(`/admin/corporate/documents?email=${corporateEmail}`);
-    //   // if user role is rm and regionalManagerDocuments is not empty array
-    //   // router.push(`/admin/corporate/decision?email=${corporateEmail}`);
-    // }
 
     if (adminRole === 'RM') {
       if (data?.regionalManagerDocuments.length === 0) {
@@ -79,18 +68,7 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
           active="activity-information"
           isEditable={isEditable}
         />
-        {/* <div className="border-t-px border border-border-light " /> */}
-        {/* 
 
-{data?.corporateProducts.map(
-
-          <ReviewInput
-            label="Product "
-            value={data?.mulipleApplicantsData?.accountTitle}
-          />
-          )}
-         
-        </ReviewFormDataGrid> */}
         <ReviewFormDataGrid heading="Corporate Products">
           {data?.mulipleApplicantsData?.corporateProducts?.map(
             (corporateProduct: any, index: number) => (
@@ -299,47 +277,8 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
             ),
           )}
         </div>
-
-        {/* <ReviewFormDataGrid heading="Next of Kin">
-          <ReviewInput
-            label="Relationship"
-            value={data?.applicationForm?.relationship}
-          />
-          <ReviewInput label="Name" value={data?.applicationForm?.fullName} />
-          
-          <ReviewInput
-            label="Identification Number"
-            value={data?.applicationForm?.identificationNumberNextOfKin}
-          />
-          <ReviewInput
-            label="Contact Number"
-            value={data?.applicationForm?.contactNumberNextOfKin}
-          />
-          <ReviewInput
-            label="Address"
-            value={data?.applicationForm?.addressNextOfKin}
-          />
-        </ReviewFormDataGrid> */}
-        {/* <div className="border-t-px border border-border-light" /> */}
-        {/* <ReviewFormDataGrid heading="FATCA Declaration (Foreign Account Tax Compliance Act)">
-          <ReviewInput
-            label="Primary Nationality"
-            value={data?.applicationForm?.primaryNationality}
-          />
-          <ReviewInput
-            label="Secondary Nationality"
-            value={data?.applicationForm?.secondaryNationality}
-          />
-        </ReviewFormDataGrid> */}
       </ReviewFormLayout>
-      {/* <ReviewFormLayout> */}
-      {/* s */}
-      {/* <ReviewFormDataGrid heading="FATCA Declaration (Foreign Account Tax Compliance Act)"> */}
 
-      {/* <ReviewInput
-          label="Applicant Picture"
-          value={data?.businessDetails?.businessDocumentationType}
-        /> */}
       <ReviewFormLayout>
         <ReviewFormMetaData
           heading="Live Picture"
@@ -376,9 +315,6 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
           ))}
         </div>
       </ReviewFormLayout>
-
-      {/* </ReviewFormDataGrid> */}
-      {/* </ReviewFormLayout> */}
 
       <ReviewFormLayout>
         <ReviewFormMetaData

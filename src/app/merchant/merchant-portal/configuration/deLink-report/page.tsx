@@ -3,7 +3,6 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
 
-// import MerchantRecordTable from '@/components/Table/MerchantRecordTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -31,11 +30,6 @@ function page() {
           // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
         />
         <MerchantFormLayout>
-          {/* <H6>Transaction Point Details</H6> */}
-          {/* <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" /> */}
           <Formik
             initialValues={deLinkAccountInitialValues}
             validationSchema={deLinkAccountSchema}
@@ -44,8 +38,6 @@ function page() {
             {(formik) => (
               <Form className=" bg-screen-grey">
                 <div className="mb-9 flex flex-row gap-5  bg-screen-grey ">
-                  {/* <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3"></div> */}
-
                   <Input
                     label="Customer Mobile"
                     name="CustomerMobile"

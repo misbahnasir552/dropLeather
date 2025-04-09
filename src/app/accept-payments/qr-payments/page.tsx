@@ -2,7 +2,6 @@ import React from 'react';
 
 import qrPaymentBG from '@/assets/images/qr-payment.jpg';
 import AcceptPaymentBanner from '@/components/Content/AcceptPaymentBanner/AcceptPaymentBanner';
-// import Info from '@/components/Content/Info/Info';
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import Card from '@/components/UI/Card/Card';

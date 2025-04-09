@@ -37,27 +37,6 @@ const Navbar = () => {
   const [istoggle, setIstoggle] = useState<boolean>(false);
   console.log(istoggle);
 
-  // const [isVisible, setIsVisible] = useState(true);
-  // const [lastScrollY, setLastScrollY] = useState(0);
-
-  // const handleScroll = () => {
-  //   if (window.scrollY > lastScrollY) {
-  //     // Scrolling down
-  //     setIsVisible(false);
-  //   } else {
-  //     // Scrolling up
-  //     setIsVisible(true);
-  //   }
-  //   setLastScrollY(window.scrollY);
-  // };
-
-  // useEffect(() => {
-  //   window.addEventListener('scroll', handleScroll);
-
-  //   return () => {
-  //     window.removeEventListener('scroll', handleScroll);
-  //   };
-  // }, [lastScrollY]);
   const isCurrentTabNotInNavMenu = !navMenu.some(
     (item) => item.name === currentTab,
   );
@@ -75,17 +54,11 @@ const Navbar = () => {
     setIstoggle((prev) => !prev);
   };
 
-  // console.log ("userdata from navvvvvvvvvvvvvv",userData)
   const logOut = () => {
-    console.log("here i'm to log out");
     dispatch(setLogout());
     dispatch(resetForms());
     router.push('/login');
   };
-  //   ${
-  //      // isVisible ? 'translate-y-full' :
-  //    // }`
-  //  }
 
   return (
     <nav

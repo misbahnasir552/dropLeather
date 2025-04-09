@@ -1,19 +1,18 @@
 'use client';
 
-// import Image from "next/image";
-// import Link from "next/link";
 import Link from 'next/link';
 import React, { useState } from 'react';
 
 import {
   getAccountSettingsDropDownMenu,
   getConfigurationDropDownMenu,
+  getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
+  getReversalModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
-// import Logo from "@/assets/icons/logo.svg";
 import B2 from '@/components/UI/Body/B2';
+import { useAppSelector } from '@/hooks/redux';
 
-// import H6 from "@/components/UI/Headings/H6";
 import ConfigurationDropDown from '../NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
 
 const MerchantPortalNavbar = () => {
@@ -21,6 +20,7 @@ const MerchantPortalNavbar = () => {
   const configurationList = getConfigurationDropDownMenu();
   const accountSettingsList = getAccountSettingsDropDownMenu();
   const qrList = getQRPaymentsDropDownMenu();
+  const otpSuccess = useAppSelector((state: any) => state.fundsTransfer);
 
   const merchantPortalNavMenu = [
     {
@@ -33,25 +33,25 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Configuration',
-      className: 'left-[24%]',
+      className: 'sm:top-[17%] top-[15%] left-[24%]',
       link: '/merchant/merchant-portal/home',
       dropdown: configurationList,
     },
     {
       title: 'Account Settings',
-      className: 'left-[32%] top-[20%]',
+      className: 'left-[32%] sm:top-[17%] top-[15%]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
-    {
-      title: 'Integration Guide',
-      link: '/merchant/merchant-portal/home',
-    },
+    // {
+    //   title: 'Integration Guide',
+    //   link: '/merchant/merchant-portal/home',
+    // },
     {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
-      className: 'top-[20%]',
+      className: 'sm:top-[17%] top-[15%]',
     },
     {
       title: 'Settlement Module',
@@ -59,11 +59,16 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Reversal Module',
-      link: '/merchant/merchant-portal/reversal-module',
+      // link: '/merchant/merchant-portal/reversal-module',
+      dropdown: getReversalModuleDropDownMenu(),
+      className: 'sm:top-[17%] top-[15%]',
     },
     {
       title: 'Merchant Funds Transfer',
-      link: '/merchant/merchant-portal/merchant-funds-transfer',
+      dropdown: getMerchantFundsTransferDropDownMenu(
+        otpSuccess?.isAuthenticated,
+      ),
+      className: 'sm:top-[17%] top-[15%]',
     },
   ];
   return (

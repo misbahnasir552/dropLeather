@@ -2,7 +2,6 @@ import React from 'react';
 
 import subscriptionBG from '@/assets/images/subscription.jpg';
 import AcceptPaymentBanner from '@/components/Content/AcceptPaymentBanner/AcceptPaymentBanner';
-// import Info from '@/components/Content/Info/Info';
 import Footer from '@/components/Footer/Footer';
 import Header from '@/components/Header/Header';
 import Card from '@/components/UI/Card/Card';
@@ -22,7 +21,6 @@ const Subscription = () => {
               growth for your subscription based businesses"
       />
       <div className="flex flex-col pb-[120px] sm:max-md:pb-[80px]">
-        {/* <Info title={'subscription'} cardsArray={cards} /> */}
         <UIWrapper>
           <Header
             title={{

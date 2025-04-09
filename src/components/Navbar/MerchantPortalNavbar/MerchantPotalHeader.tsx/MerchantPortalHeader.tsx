@@ -12,6 +12,7 @@ import H6 from '@/components/UI/Headings/H6';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
 import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
+import { setFundsTransferLogout } from '@/redux/features/merchantSlice/FundsTransfer';
 
 function MerchantPortalHeader() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -28,6 +29,7 @@ function MerchantPortalHeader() {
 
       if (response.data.responseCode === '000') {
         dispatch(setLogout());
+        dispatch(setFundsTransferLogout());
         dispatch(resetForms());
 
         router.push('/login');
@@ -38,8 +40,13 @@ function MerchantPortalHeader() {
       console.error('logout Error:', error);
     }
     dispatch(setLogout());
+    dispatch(setFundsTransferLogout());
     dispatch(resetForms());
     router.push('/login');
+  };
+
+  const profileNav = async () => {
+    router.push('/merchant/merchant-portal/profile');
   };
   return (
     <div className="flex w-full border-b-2 border-border-light py-4 sm:px-6 md:px-[150px]">
@@ -56,7 +63,10 @@ function MerchantPortalHeader() {
             <B2 textColor="text-secondary-base cursor-pointer">Logout</B2>
           </div>
           <div className="h-[10px] w-[1px] bg-border-dark" />
-          <div className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-2 bg-secondary-base p-[10px]">
+          <div
+            className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-2 bg-secondary-base p-[10px]"
+            onClick={profileNav}
+          >
             <H6 textColor="text-screen-white">
               {userData?.name?.charAt(0) || ''}
             </H6>

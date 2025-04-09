@@ -15,8 +15,6 @@ function DynamicRecordsTable({
   heading: string[];
   onApprove?: (profileName: string) => void;
 }) {
-  console.log('response hiii is', response);
-
   return (
     <>
       <table className="flex w-full flex-col">
@@ -61,19 +59,21 @@ function DynamicRecordsTable({
                     ) : (
                       <B3
                         textColor={`${
-                          (key === 'status' ||
+                          ((key === 'status' ||
                             key === 'requestStatus' ||
                             key === 'applicationStatus') &&
-                          (value === 'Approved' ||
-                            value === 'Approved By BET' ||
-                            value === 'Approved By RM')
+                            (value === 'Approved' ||
+                              value === 'Approved By BET' ||
+                              value === 'Approved By RM')) ||
+                          value === 'Success'
                             ? 'text-primary-base'
-                            : (key === 'status' ||
+                            : ((key === 'status' ||
                                 key === 'requestStatus' ||
                                 key === 'applicationStatus') &&
-                              (value === 'Rejected' ||
-                                value === 'Rejected By BET' ||
-                                value === 'Rejected By RM')
+                                (value === 'Rejected' ||
+                                  value === 'Rejected By BET' ||
+                                  value === 'Rejected By RM')) ||
+                              value === 'Failure'
                             ? 'text-danger-base'
                             : (key === 'status' ||
                                 key === 'requestStatus' ||

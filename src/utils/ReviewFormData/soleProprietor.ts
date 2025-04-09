@@ -57,7 +57,7 @@ const soleProprietorData = [
         sectionName: 'Business Mode',
         fields: [
           { label: 'Retail Payment', value: 'abc' },
-          { label: 'Online Payment', value: 'abc' },
+          // { label: 'Online Payment', value: 'abc' },
         ],
       },
       {

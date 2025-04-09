@@ -1,162 +1,314 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-// import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import LineChartGraph from '@/components/Charts/LineChartGraph';
-// import { set } from 'date-fns';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
-// import MerchantRecordTable from '@/components/Table/MerchantRecordTable';
+import MPPriceBar from '@/components/MPPriceBar';
 import Button from '@/components/UI/Button/PrimaryButton';
+import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
+import { useAppSelector } from '@/hooks/redux';
+import {
+  graphDurationOptions,
+  monthOptions,
+  transactionOptions,
+  yearOptions,
+} from '@/utils/dropdown-list/helper';
+import { generateMD5Hash } from '@/utils/helper';
 import {
   merchantHomeInitialValues,
   merchantHomeSchema,
 } from '@/validations/merchant/home/merchantHome';
-// import type { MerchantPortalHomePage } from "@/interfaces/interface";
 
 const MerchantPortalHome = () => {
-  const [graphData, setGraphData] = useState({});
-  const [filteredGraphData, setFilteredGraphData] = useState({});
+  const userData = useAppSelector((state: any) => state.auth);
+  const [graphData, setGraphData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [apierror, setApierror] = useState('');
+  const [accountBalance, setAccountBalance] = useState<string>('');
+  const [buttonLoader, setButtonLoader] = useState(false);
 
-  const fetchGraphRecords = async () => {
+  const fetchGraphRecords = async (values: any) => {
+    setButtonLoader(true);
+    setApierror('');
     try {
-      const response = await apiClient.get('/merchant/lastThirtyDays');
-      console.log(response.data);
-      setGraphData(response?.data);
-    } catch (e) {
+      const graphResponse: any = await apiClient.get('qrcode/graph', {
+        params: {
+          fromDate: values?.fromDate,
+          toDate:
+            values?.graphDuration == 'daily'
+              ? values?.fromDate
+              : values?.toDate,
+          duration: values?.graphDuration,
+          graphType: values?.graphType,
+        },
+        headers: {
+          merchantEmail: userData?.email,
+        },
+      });
+      // get success reponse and now transform data according to type
+      if (graphResponse?.data?.responseCode === '009') {
+        const transformedData = graphResponse?.data?.transactionGraphData.map(
+          (item: any) => ({
+            name:
+              values.graphDuration == 'monthly'
+                ? item?.name.split('-')[2].padStart(2, '0')
+                : item?.name,
+            type: item?.type,
+            total:
+              item?.type === 'revenue'
+                ? item?.total
+                : parseInt(item?.total, 10),
+            success:
+              item?.type === 'revenue'
+                ? item?.success
+                : parseInt(item?.success, 10),
+            failed:
+              item?.type === 'revenue'
+                ? item?.failed
+                : parseInt(item?.failed, 10),
+          }),
+        );
+
+        if (values?.graphDuration === 'daily') {
+          transformedData.sort((a: any, b: any) => {
+            const convertTo24Hour = (time: string | undefined) => {
+              if (!time || !/(AM|PM)$/.test(time)) return NaN; // Ensure valid time format
+
+              let hour = parseInt(time?.slice(0, -2), 10); // Extract hour
+              const period = time?.slice(-2); // Extract AM/PM
+
+              if (period === 'AM' && hour === 12) hour = 0; // 12AM -> 00
+              if (period === 'PM' && hour !== 12) hour += 12; // Convert PM hours (except 12PM)
+
+              return hour;
+            };
+
+            const hourA = convertTo24Hour(a?.name);
+            const hourB = convertTo24Hour(b?.name);
+
+            // eslint-disable-next-line no-restricted-globals
+            if (isNaN(hourA) || isNaN(hourB)) return 0; // Skip sorting if invalid time
+
+            return hourA - hourB;
+          });
+        }
+
+        if (values?.graphDuration === 'monthly') {
+          transformedData.sort(
+            (a: any, b: any) => parseInt(a?.name, 10) - parseInt(b?.name, 10),
+          );
+        }
+        setGraphData(transformedData);
+        setButtonLoader(false);
+      } else {
+        setButtonLoader(false);
+        setApierror(graphResponse?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setApierror(e?.message);
+      setButtonLoader(false);
       console.log(e);
     }
   };
 
-  useEffect(() => {
-    fetchGraphRecords();
-  }, []);
-
-  const filterWeeklyData = (data: { [key: string]: number }) => {
-    const today = new Date();
-    const sevenDaysAgo = new Date(today);
-    sevenDaysAgo.setDate(today.getDate() - 7);
-
-    // Filter the data for the last 7 days
-    const filteredGraph = Object.keys(data)
-      .filter((date) => {
-        const currentDate = new Date(date);
-        return currentDate >= sevenDaysAgo && currentDate <= today;
-      })
-      .reduce((acc: { [key: string]: number | undefined }, date) => {
-        acc[date] = data[date];
-        return acc;
-      }, {});
-
-    return filteredGraph;
+  const getAccountBalance = async () => {
+    try {
+      setIsLoading(true);
+      const additionalValues = {
+        msisdn: userData?.managerMobile,
+        managerMobile: userData?.managerMobile,
+      };
+      const mdRequest = {
+        ...additionalValues,
+        apisecret: userData?.apiSecret,
+      };
+      const md5Hash = generateMD5Hash(mdRequest);
+      const requestBody = {
+        request: additionalValues,
+        signature: md5Hash,
+      };
+      const response = await apiClient.post(
+        '/qrcode/getAccountBalance',
+        requestBody,
+        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+      );
+      if (response?.data) {
+        setAccountBalance(response?.data?.amount);
+      } else {
+        setApierror(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      console.log('Fetch details failed', e);
+      setApierror(e?.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onSubmit = (values: any) => {
-    console.log('hellewwwwwwwww', values);
-    //  if (values.graphType) {
-    //    router.push("/login");
-    //  }
-    if (values.graphDuration === 'Weekly') {
-      const filteredGraph = filterWeeklyData(graphData);
-      console.log('Filtered Weekly Data:', filteredGraph);
-      const transformedData = Object.keys(filteredGraph).map((date, index) => ({
-        name: (index + 1).toString(), // index as 'name'
-        uv: filteredGraph[date], // the value for 'uv'
-      }));
-      console.log('Transformed data', transformedData);
-
-      setFilteredGraphData(transformedData);
+    // for case of yearly setting to and from dates
+    if (values?.graphDuration == 'yearly') {
+      values.fromDate = `${values?.year}-01-01`; // Set fromDate to January 1st of that year
+      values.toDate = `${values?.year}-12-31`;
     }
+
+    // for case of montly setting to and from dates
+    if (values?.graphDuration == 'monthly') {
+      const year = values?.year;
+      const month = values?.month; // This will be in 'MM' format (e.g., '02' for February)
+
+      // Get the number of days in the month
+      const daysInMonth = new Date(year, month, 0).getDate();
+
+      values.fromDate = `${values?.year}-${values?.month}-01`; // Set fromDate to January 1st of that year
+      values.toDate = `${values?.year}-${values?.month}-${daysInMonth}`;
+    }
+
+    fetchGraphRecords(values);
   };
+
+  useEffect(() => {
+    fetchGraphRecords({
+      graphType: 'transaction',
+      graphDuration: 'daily',
+      toDate: new Date().toISOString().split('T')[0],
+      fromDate: new Date().toISOString().split('T')[0],
+    });
+    getAccountBalance();
+  }, []);
+
   return (
     <>
-      <div className="flex flex-col gap-6">
-        <HeaderWrapper
-          heading="Welcome to Merchant Portal"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-        />
-        {/* <div className="flex flex-col gap-9 rounded-lg border-[0.5px] border-border-light bg-screen-grey px-6 pb-[24px] pt-[60px]"> */}
-        <Formik
-          initialValues={merchantHomeInitialValues}
-          validationSchema={merchantHomeSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => (
-            <Form>
-              <MerchantFormLayout>
-                <div className="grid grid-cols-2 gap-5">
-                  <DropdownInput
-                    name="graphType"
-                    label="Graph Type"
-                    options={[{ label: 'option1', value: 'option1' }]}
-                    error={'payment method is false'}
-                    touched={false}
-                  />
-                  <DropdownInput
-                    name="graphDuration"
-                    label="Graph Duration"
-                    options={[
-                      { label: 'Weekly', value: 'Weekly' },
-                      { label: 'Daily', value: 'Daily' },
-                      { label: 'Monthly', value: 'Monthly' },
-                    ]}
-                    error={'payment method is false'}
-                    touched={false}
-                    formik={formik}
-                  />
-                </div>
-                <Button
-                  label="Generate"
-                  type="submit"
-                  className="button-primary h-9 w-[120px] text-xs"
-                />
-              </MerchantFormLayout>
-            </Form>
-          )}
-        </Formik>
+      {isLoading ? (
+        <BarLoader />
+      ) : (
+        <div className="flex flex-col gap-6">
+          <div className="my-6">
+            <MPPriceBar accountBalance={accountBalance} />
+          </div>
+          <HeaderWrapper heading="Welcome to Merchant Portal" />
 
-        {/* </div> */}
-        {/* <TableComponent /> */}
-        <LineChartGraph filteredGraphData={filteredGraphData} />
-      </div>
-      {/* <div className="flex pt-[40px]">
-        <SearchTransactionTable
-          tableHeadings={tableHeadings}
-          tableData={tableData}
-        />
-      </div> */}
+          <Formik
+            initialValues={merchantHomeInitialValues}
+            validationSchema={merchantHomeSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik: any) => {
+              const { graphDuration } = formik.values;
+
+              // Configuration for date-based inputs
+              const dateFields: Record<
+                string,
+                { name: string; label: string }[]
+              > = {
+                daily: [{ name: 'fromDate', label: 'Select Date' }],
+                weekly: [
+                  { name: 'fromDate', label: 'Select Start Date' },
+                  { name: 'toDate', label: 'Select End Date' },
+                ],
+              };
+
+              // Configuration for dropdown-based inputs
+              const dropdownFields: Record<
+                string,
+                { name: string; label: string; options: any[] }[]
+              > = {
+                monthly: [
+                  {
+                    name: 'month',
+                    label: 'Select Month',
+                    options: monthOptions,
+                  },
+                  { name: 'year', label: 'Select Year', options: yearOptions },
+                ],
+                yearly: [
+                  { name: 'year', label: 'Select Year', options: yearOptions },
+                ],
+              };
+
+              return (
+                <Form>
+                  <MerchantFormLayout>
+                    <div className="grid grid-cols-2 gap-5">
+                      <DropdownInput
+                        name="graphType"
+                        label="Graph Type"
+                        options={transactionOptions}
+                        error={formik.errors.graphType}
+                        touched={formik.touched.graphType}
+                        formik={formik}
+                      />
+                      <DropdownInput
+                        name="graphDuration"
+                        label="Graph Duration"
+                        options={graphDurationOptions}
+                        error={formik.errors.graphDuration}
+                        touched={formik.touched.graphDuration}
+                        formik={formik}
+                        resetGraphFilter={true}
+                      />
+                    </div>
+
+                    {graphDuration && (
+                      <div className="grid grid-cols-2 gap-5">
+                        {/* Render Date Inputs */}
+                        {dateFields[graphDuration]?.map(({ name, label }) => (
+                          <DateInputNew
+                            key={name}
+                            formik={formik}
+                            label={label}
+                            name={name}
+                            error={formik.errors[name]}
+                            touched={formik.touched[name]}
+                          />
+                        ))}
+
+                        {/* Render Dropdown Inputs */}
+                        {dropdownFields[graphDuration]?.map(
+                          ({ name, label, options }) => (
+                            <DropdownInput
+                              key={name}
+                              name={name}
+                              label={label}
+                              options={options}
+                              error={formik.errors[name]}
+                              touched={formik.touched[name]}
+                              formik={formik}
+                            />
+                          ),
+                        )}
+                      </div>
+                    )}
+
+                    <Button
+                      label="Generate"
+                      type="submit"
+                      className="button-primary h-9 w-[120px] text-xs"
+                      isDisabled={buttonLoader}
+                    />
+                  </MerchantFormLayout>
+                </Form>
+              );
+            }}
+          </Formik>
+
+          {apierror && (
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
+          )}
+
+          <LineChartGraph filteredGraphData={graphData} />
+        </div>
+      )}
     </>
   );
 };
 
 export default MerchantPortalHome;
-
-// {/* <div className="flex flex-col gap-6">
-//   <HeaderWrapper
-//     heading="Welcome to Merchant Portal"
-//     description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-//   />
-//   <div className="flex flex-col gap-9 rounded-lg border-[0.5px] border-border-light bg-screen-grey px-6 pb-[24px] pt-[60px]">
-//     <div className="grid grid-cols-2 gap-5">
-//       <DropdownInput
-//         name="graphType"
-//         label="Graph Type"
-//         options={[{ text: "option1", value: "option1" }]}
-//       />
-//       <DropdownInput
-//         name="graphType2"
-//         label="Graph Duration"
-//         options={[{ text: "option1", value: "option1" }]}
-//       />
-//     </div>
-//     <Button
-//       label="Generate"
-//       className="button-primary h-9 w-[120px] text-xs"
-//     />
-//   </div>
-// </div> */}

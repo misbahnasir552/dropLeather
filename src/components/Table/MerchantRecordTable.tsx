@@ -233,29 +233,7 @@ function MerchantRecordTable({
       {title === 'admin' ? (
         <table className="flex w-full flex-col">
           <thead>
-            <tr className="flex w-full items-center justify-between rounded-lg  bg-screen-grey px-6">
-              {/* <th>
-                <div
-                  onClick={handleSelectAll}
-                  className={`flex h-5 w-5 items-center justify-center rounded-[4px] border-[1.5px] border-border-dark ${
-                    selectAll && 'bg-primary-base'
-                  }`}
-                >
-                  {selectAll && (
-                    <Image src={TickIcon} alt="tick" height={8} width={10} />
-                  )}
-                </div>
-              </th> */}
-              {/* {adminTableHeadings.map((heading, i) => (
-                <th
-                  key={i}
-                  className={`${heading === '#' ? 'w-1/8' : 'w-1/2'
-                    } py-[17px] text-center`}
-                >
-                  <H7>{heading}</H7>
-                </th>
-              ))} */}
-            </tr>
+            <tr className="flex w-full items-center justify-between rounded-lg  bg-screen-grey px-6"></tr>
           </thead>
           <tbody>
             {response?.map((item: any, i: any) => (
@@ -263,18 +241,6 @@ function MerchantRecordTable({
                 key={i}
                 className="flex w-full items-center justify-between border-b border-border-light px-6"
               >
-                {/* <td className="py-[18px] text-center">
-                  <div
-                    onClick={() => handleRowClick(i)}
-                    className={`flex h-5 w-5 items-center justify-center rounded-[4px] border-[1.5px] border-border-dark ${
-                      selectedRows.includes(i) && 'bg-primary-base'
-                    }`}
-                  >
-                    {selectedRows.includes(i) && (
-                      <Image src={TickIcon} alt="tick" height={8} width={10} />
-                    )}
-                  </div>
-                </td> */}
                 <td className="w-1/8 py-[18px] text-center">
                   <B3 textColor="text-secondary-base">{i + 1}</B3>
                 </td>
@@ -391,29 +357,8 @@ function MerchantRecordTable({
                       {item.status}
                     </B3>
                   </td>
-                  {/* <td className="flex w-1/2 items-center justify-center gap-4 py-[18px]">
-                  {(adminRole == 'checker' || adminRole == 'super') &&
-                  item.status === 'Pending' ? (
-                    <div className="" onClick={() => approveUser(item.email)}>
-                    <Image
-                    src={TickIconDark}
-                      height={20}
-                      width={18}
-                      alt="tick"
-                    />
-                    </div>
-                ) : null}
-              </td> */}
-                  {/* <td className="w-1/2 py-[18px] text-center">
-                    <B3 textColor="text-secondary-base">{item.createdAt}</B3>
-                  </td>
-                  <td className="w-1/2 py-[18px] text-center">
-                    <B3 textColor="text-secondary-base">{item.updatedAt}</B3>
-                  </td> */}
+
                   <td className="flex w-1/2 justify-center py-[18px] text-center">
-                    {/* <B3 textColor="text-secondary-base">
-                    {item.pages[0].pageName}
-                  </B3> */}
                     <td
                       className="flex h-[20px] cursor-pointer items-center justify-center gap-1 rounded-lg border-[2px] border-border-dark bg-screen-grey px-1 "
                       onClick={() => togglePagesVisibility(i)}
