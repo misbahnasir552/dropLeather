@@ -4,18 +4,12 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-// import ApplicationFormStatic from '@/components/Forms/ApplicationFormStatic';
-// import apiClient from '@/api/apiClient';
-// import ApplicationForm from '@/components/Forms/ApplicationForm';
-// import LivePicture from '@/components/Forms/LivePicture';
 import Checklist from '@/components/Forms/Checklist';
 // import AttachmentsForm from '@/components/Forms/CorporateAttachments';
 import ReviewForm from '@/components/Forms/ReviewForm';
 import type { FieldsData } from '@/components/Forms/validations/types';
 import PhotoCapture from '@/components/LivePhotoCapture/PhotoCapture';
 import {
-  // ApplicationFormIcon,
-  // AttachmentsIcon,
   CheckListIcon,
   LivePictureIcon,
   ReviewFormIcon,
@@ -45,9 +39,6 @@ interface CorporateData {
 }
 
 const Timeline: React.FC = () => {
-  // const userData = useAppSelector((state: { auth: UserData }) => state.auth);
-  // const [data] = useState<CorporateData | null>(null);
-
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
   console.log('TIMELINE ', fieldData);
 
@@ -64,9 +55,6 @@ const Timeline: React.FC = () => {
   const activeTab = currentTab;
 
   const requestRevisionRequired = userData?.isrequestRevision;
-  // const onBoardRedux = useAppSelector(
-  //   (state: any) => state.onBoardingForms,  );
-
   const getDetails = async () => {
     try {
       const response = await apiClient.get(`corporate/corporateFormReview`, {
@@ -119,25 +107,6 @@ const Timeline: React.FC = () => {
   }, []);
 
   const tabs: Tab[] = [
-    // {
-    //   name: 'application-form',
-    //   label: 'Application Form',
-    //   component: <ApplicationFormStatic />,
-    //   status: applicationFormStatus,
-    //   svg: (
-    //     <ApplicationFormIcon
-    //       color={
-    //         activeTab === 'application-form'
-    //           ? '#21B25F'
-    //           : activeTab !== 'application-form' &&
-    //             applicationFormStatus === 'Completed'
-    //           ? '#322C3C'
-    //           : '#6F6B76'
-    //       }
-    //     />
-    //   ),
-    // },
-
     {
       name: 'live-picture',
       label: 'Live Picture',

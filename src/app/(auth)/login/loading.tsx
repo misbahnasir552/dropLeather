@@ -1,5 +1,4 @@
 import React from 'react';
-// import H1 from '@/components/UI/Headings/H1';
 import { ClockLoader } from 'react-spinners';
 
 function Loading() {

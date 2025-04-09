@@ -56,13 +56,13 @@ const SignUpForm = ({ onSubmit }: any) => {
               error={formik.errors.email}
               touched={formik.touched.email}
             />
-            <Input
+            {/* <Input
               label="Website"
               name="website"
               type="text"
               error={formik.errors.website}
               touched={formik.touched.website}
-            />
+            /> */}
             <Input
               label="Password"
               name="password"

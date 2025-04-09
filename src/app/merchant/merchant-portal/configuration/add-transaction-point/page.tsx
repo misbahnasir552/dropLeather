@@ -23,21 +23,10 @@ import {
   addTransactionPointInitialValues,
   addTransactionPointSchema,
 } from '@/validations/merchant/transactions/addTransactionPoint';
-// import MerchantRecordTable from '@/components/Table/MerchantRecordTable';
-
-// interface Store  {
-//   storeId: string;
-//   storeName: string;
-//   webSiteUrl: string;
-//   paymentEnabled: string;
-//   status: string;
-// }
 
 function AddTransactionPoint() {
   const userData = useAppSelector((state: any) => state.auth);
   const { apiSecret } = userData;
-  // const router = useRouter();
-
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

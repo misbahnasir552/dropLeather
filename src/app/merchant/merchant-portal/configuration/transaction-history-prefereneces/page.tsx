@@ -1,137 +1,207 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
+import apiClient from '@/api/apiClient';
 import DualListTable from '@/components/DualListTable';
-// import H7 from "@/components/UI/Headings/H7";
+import Button from '@/components/UI/Button/PrimaryButton';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { useAppSelector } from '@/hooks/redux';
+import { generateMD5Hash } from '@/utils/helper';
 
 export default function TransactionHistoryPreferences() {
   const [selectedItems, setSelectedItems] = useState<IInitialData[]>([]);
+  const [previousItems, setPreviousItems] = useState<IInitialData[]>([]);
+  const [intialData, setIntialData] = useState<any[]>([]);
+  const [availableItems, setAvailableItems] = useState<IInitialData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [buttonLoader, setButtonLoader] = useState(false);
+  const userData = useAppSelector((state: any) => state.auth);
+  const [showModal, setShowModal] = useState(false);
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   interface IInitialData {
-    // id: number;
     name: string;
     category: string;
   }
   const handleSelectedItemsChange = (items: IInitialData[]) => {
-    console.log('items are', items);
-    setSelectedItems(items); // Update state in the parent
-    // const fieldsForRevision = selectedItems.map(item => item.name);
+    setSelectedItems(items);
   };
-  // const initialItems = [
-  //   { name: 'Item 1', category: 'Category 1' },
-  //   { name: 'Item 2', category: 'Category 2' },
-  //   { name: 'Item 3', category: 'Category 3' },
-  //   { name: 'Item 4', category: 'Category 4' },
-  // ];
-  // const [availableItems, setAvailableItems] = useState(initialItems);
-  // const [selectedItems, setSelectedItems] = useState([]);
-  // const [checkedAvailableItems, setCheckedAvailableItems] = useState([]);
-  // const [checkedSelectedItems, setCheckedSelectedItems] = useState([]);
+
+  function convertToLabelObject(camelCaseString: any) {
+    let label = camelCaseString
+      .replace(/([A-Z])/g, ' $1') // Add space before capital letters
+      .replace(/^./, (str: string) => str.toUpperCase()) // Capitalize first letter
+      .trim()
+      .replace(/\bId\b/gi, 'ID') // Ensure 'Id' is 'ID'
+      .replace(/\bPkr\b/gi, 'PKR') // Ensure 'Pkr' is 'PKR'
+      .replace(/\bMsisdn\b/gi, 'MSISDN'); // Ensure 'Msisdn' is 'MSISDN'
+
+    // Skip modifications for 'TTC' and 'CNIC'
+    if (camelCaseString === 'TTC' || camelCaseString === 'CNIC') {
+      label = camelCaseString;
+    }
+
+    return { key: camelCaseString, label };
+  }
+  // to reduce extra api calls if user has not changed the filters so no save api call
+  function areArraysEqual(columns: any, keys: any) {
+    const columnKeys = columns.map((item: any) => item.key);
+
+    if (columnKeys.length !== keys.length) return false;
+
+    return columnKeys.every((key: any, index: any) => key === keys[index]);
+  }
+
+  const getForms = async () => {
+    try {
+      setIsLoading(true);
+      const response = await apiClient.get(`qrcode/transactionsFields`);
+      const responseData = response?.data;
+
+      const merchantResponse = await apiClient.get(
+        'qrcode/getTransactionPreferences',
+        {
+          params: { merchantEmail: userData?.email },
+        },
+      );
+
+      const previousData = merchantResponse?.data?.selectedFields;
+
+      const filteredArray = responseData?.filter(
+        (key: any) => !previousData?.includes(key),
+      );
+      // format labels to readable form
+      const formattedLabels = filteredArray?.map(convertToLabelObject);
+
+      const previousLabels = previousData?.map(convertToLabelObject);
+
+      setPreviousItems(previousLabels);
+
+      setIntialData(formattedLabels);
+      setAvailableItems(formattedLabels);
+      setSelectedItems(previousLabels);
+      setIsLoading(false);
+    } catch (e) {
+      setIsLoading(false);
+      console.log(e, 'error fetching');
+    }
+  };
+
+  useEffect(() => {
+    getForms();
+  }, []);
+
+  const handleSaveTransactionsPref = async (customSelectedItems?: any[]) => {
+    const itemsToUse = customSelectedItems ?? selectedItems;
+    const selectedFIleds = itemsToUse?.map((item: any) => item?.key);
+
+    // save extra api calls
+    if (areArraysEqual(previousItems, selectedFIleds)) {
+      return;
+    }
+
+    const transactionHistoryValues = {
+      merchantEmail: userData?.email,
+      selectedFields: selectedFIleds,
+      managerMobile: userData?.managerMobile,
+    };
+    const mdRequest = {
+      ...transactionHistoryValues,
+      apisecret: userData?.apiSecret,
+    };
+    const md5Hash = generateMD5Hash(mdRequest);
+    const requestBody = {
+      request: transactionHistoryValues,
+      signature: md5Hash,
+    };
+
+    try {
+      // merchant verify otp
+      setButtonLoader(true);
+      const response = await apiClient.post(
+        'qrcode/saveTransactionPreferences',
+        requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData.jwt}` },
+        },
+      );
+      // setShowModal(true);
+      if (response.data.responseCode === '009') {
+        await getForms();
+        setShowModal(true);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        // setRoute('/login');
+      } else {
+        // // merchant verify otp failure
+        setShowModal(true);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      // merchant verify otp request failure
+      setTitle('Network Failed');
+      setDescription(e?.responseDescription);
+      // console.log(e, 'Merchant verification Failed');
+    } finally {
+      // console.log('finall ma ah gya');
+      setButtonLoader(false);
+      setShowModal(true);
+    }
+  };
+
+  const handleReset = async () => {
+    setSelectedItems([]);
+    await handleSaveTransactionsPref([]);
+  };
 
   return (
-    <div className="flex flex-col gap-6">
-      <HeaderWrapper
-        heading="Transaction History Preferences"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-      />
-      <div className="flex flex-col rounded-lg border-[0.5px] border-border-light bg-screen-grey p-[60px]">
-        <DualListTable
-          // initialData={initialItems}
-          selectedItems={selectedItems}
-          onSelectedItemsChange={handleSelectedItemsChange}
-          headingLeft="Available Filters"
-          headingRight="Selected Filters"
-        />
-      </div>
-    </div>
+    <>
+      {isLoading ? (
+        <BarLoader />
+      ) : (
+        <div className="flex flex-col gap-6">
+          <CustomModal
+            title={title}
+            description={description}
+            show={showModal}
+            setShowModal={setShowModal}
+          />
+
+          <HeaderWrapper heading="Transaction History Preferences" />
+
+          <div className="flex flex-col rounded-lg border-[0.5px] border-border-light bg-screen-grey p-[60px]">
+            <DualListTable
+              initialData={intialData}
+              selectedItems={selectedItems}
+              onSelectedItemsChange={handleSelectedItemsChange}
+              headingLeft="Available Filters"
+              headingRight="Selected Filters"
+              availableItems={availableItems}
+              setAvailableItems={setAvailableItems}
+            />
+          </div>
+
+          <div className="flex w-full justify-end gap-6">
+            <Button
+              label="Reset"
+              className="button-secondary w-[270px] py-[19px] text-xs leading-tight"
+              onClickHandler={handleReset}
+            />
+            <Button
+              label="Save"
+              type="submit"
+              className="button-primary w-[270px] py-[19px] text-sm leading-tight"
+              onClickHandler={handleSaveTransactionsPref}
+              isDisabled={buttonLoader}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 }
-
-// <div className="border-[0.5px] border-border-light rounded-lg bg-screen-grey p-[60px]">
-//   <div className="flex space-x-5">
-//     {/* Available Items */}
-//     <div className="w-1/2 flex flex-col gap-3">
-//       <H7>Available Filters</H7>
-//       <ul className=" bg-screen-white rounded-2xl border border-border-light">
-//         <div className="flex px-6 py-4 items-center border-b border-border-light">
-//           <div className="w-1/6">s</div>
-//           <div className="w-full">
-//             <H7>Field Category</H7>
-//           </div>
-//           <div className="w-full">
-//             <H7>Field Names</H7>
-//           </div>
-//         </div>
-//         {availableItems.map((item) => (
-//           <li
-//             key={item}
-//             className="flex justify-between items-center bg-gray-200 px-4 rounded"
-//           >
-//             <div className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 checked={checkedAvailableItems.includes(item)}
-//                 onChange={() => toggleAvailableItem(item)}
-//                 className="mr-2"
-//               />
-//               {item}
-//             </div>
-//             <button
-//               onClick={() => handleAddItem(item)}
-//               className="bg-primary-base text-white px-2 py-1 rounded"
-//             >
-//               Add
-//             </button>
-//           </li>
-//         ))}
-//       </ul>
-//       {checkedAvailableItems.length > 0 && (
-//         <button
-//           onClick={handleAddSelectedItems}
-//           className="mt-3 bg-blue-500 text-white px-4 py-2 rounded"
-//         >
-//           Add Selected
-//         </button>
-//       )}
-//     </div>
-
-//     {/* Selected Items */}
-//     <div className="w-1/2 bg-white p-5 rounded shadow">
-//       <H7>Selected Filters</H7>
-//       <ul className="space-y-2">
-//         {selectedItems.map((item) => (
-//           <li
-//             key={item}
-//             className="flex justify-between items-center bg-gray-200 p-2 rounded"
-//           >
-//             <div className="flex items-center">
-//               <input
-//                 type="checkbox"
-//                 checked={checkedSelectedItems.includes(item)}
-//                 onChange={() => toggleSelectedItem(item)}
-//                 className="mr-2"
-//               />
-//               {item}
-//             </div>
-//             <button
-//               onClick={() => handleRemoveItem(item)}
-//               className="bg-red-500 text-white px-2 py-1 rounded"
-//             >
-//               Remove
-//             </button>
-//           </li>
-//         ))}
-//       </ul>
-//       {checkedSelectedItems.length > 0 && (
-//         <button
-//           onClick={handleRemoveSelectedItems}
-//           className="mt-3 bg-red-500 text-white px-4 py-2 rounded"
-//         >
-//           Remove Selected
-//         </button>
-//       )}
-//     </div>
-//   </div>
-// </div>

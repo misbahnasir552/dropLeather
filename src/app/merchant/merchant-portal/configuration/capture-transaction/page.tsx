@@ -3,9 +3,7 @@
 import { Form, Formik } from 'formik';
 import React from 'react';
 
-// import MerchantRecordTable from '@/components/Table/MerchantRecordTable';
 import Button from '@/components/UI/Button/PrimaryButton';
-// import H6 from "@/components/UI/Headings/H6";
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
@@ -33,11 +31,6 @@ function page() {
         />
 
         <MerchantFormLayout>
-          {/* <H6>Transaction Point Details</H6> */}
-          {/* <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" /> */}
           <Formik
             initialValues={captureTransactionsInitialValues}
             validationSchema={captureTransactionsSchema}
@@ -46,8 +39,6 @@ function page() {
             {(formik) => (
               <Form className=" bg-screen-grey">
                 <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey ">
-                  {/* <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3"></div> */}
-
                   <Input
                     label="Card Number"
                     name="CardNumber"
@@ -98,7 +89,6 @@ function page() {
               </Form>
             )}
           </Formik>
-          {/* <Input name="asd" label="ASD" formik='xyz'/> */}
         </MerchantFormLayout>
         {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
       </div>

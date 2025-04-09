@@ -1,68 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
 
-// Generate a CSRF token
-// function generateCsrfToken(): string {
-//   return crypto.randomBytes(32).toString('hex');
-// }
-// A function to get the CSRF token (usually from cookies or secure storage)
-// function getCsrfToken(req: NextRequest): string | undefined {
-//   let csrfToken = Cookies.get('csrfToken');
-//   if (!csrfToken) {
-//     csrfToken = generateCsrfToken();
-//     req.cookies.set('csrfToken', csrfToken);
-//   }
-//   console.log('func xsrf token', csrfToken);
-
-//   return csrfToken;
-// }
-
-// export async function POST(req: NextRequest): Promise<NextResponse> {
-//   try {
-//     // Parse the incoming request body
-//     const {
-//       method = 'POST',
-//       // headers = {},
-//       body,
-//     } = await req.json();
-
-//     const externalApiUrl = req.headers.get('externalApiUrl');
-//     const headersStatic = req.headers;
-//     console.log(externalApiUrl, 'MAIN externalApiUrl');
-
-//     if (!externalApiUrl) {
-//       return NextResponse.json(
-//         { error: 'Missing externalApiUrl in the request body' },
-//         { status: 400 },
-//       );
-//     }
-//     // console.log(headers, 'HEaders in route');
-
-//     console.log(`Proxying request to: ${externalApiUrl}, Method: ${method}`);
-//     const preHeaders = {
-//       ...headersStatic,
-//     };
-//     console.log('Headers', preHeaders);
-//     // Perform the external API call
-//     const response = await fetch(externalApiUrl, {
-//       method,
-//       headers: preHeaders,
-//       body: method !== 'GET' && body ? JSON.stringify(body) : undefined,
-//     });
-
-//     // Ensure only the required response payload is returned
-//     const responseData = await response.json();
-
-//     // Do not include any headers in the response payload
-//     return NextResponse.json(responseData, { status: response.status });
-//   } catch (error) {
-//     console.error('Error in generic proxy handler:', error);
-//     return NextResponse.json(
-//       { error: 'Failed to proxy the external API call' },
-//       { status: 500 },
-//     );
-//   }
-// }
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     // Extract the current route path
@@ -187,5 +125,3 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     );
   }
 }
-
-// Repeat the CSRF token inclusion for PUT and DELETE handlers

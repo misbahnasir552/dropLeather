@@ -8,7 +8,6 @@ import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/
 import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-// import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 
 function ManageBeneficiary() {
@@ -28,7 +27,6 @@ function ManageBeneficiary() {
         setLoading(false);
       }, 2000);
       const response = await apiClient.get('/merchant/getAllBeneficiaries');
-      console.log(response.data.beneficiaryList, 'RESPONSE');
       if (response?.data.responseCode === '009') {
         const filteredValues = response?.data?.beneficiaryList.map(
           ({ ...rest }) => rest,
@@ -117,12 +115,6 @@ function ManageBeneficiary() {
               type="button"
               className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
               routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer"
-            />
-            <Button
-              label={`Transfer Funds`}
-              // type="submit"
-              routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/funds-transfer"
-              className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
             />
             <Button
               label={`Add Beneficiary`}

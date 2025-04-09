@@ -3,22 +3,21 @@ import { usePathname } from 'next/navigation';
 import React from 'react';
 
 import B2 from '@/components/UI/Body/B2';
+import { useAppDispatch } from '@/hooks/redux';
 import type { IMerchantNavDropdownProps } from '@/interfaces/interface';
-
-// import { getConfigurationDropDownMenu } from '../../Utils/utils';
+import { setNavbarRoute } from '@/redux/features/merchantSlice/FundsTransfer';
 
 function ConfigurationDropDown({
   className,
   hoveredMenu,
   data,
 }: IMerchantNavDropdownProps) {
-  // const dropDownList = getConfigurationDropDownMenu();
   const pathname = usePathname();
-
-  const handleClickItem = () => {
+  const dispatch = useAppDispatch();
+  const handleClickItem = (title: string) => {
+    dispatch(setNavbarRoute({ navbarRoute: title }));
     if (hoveredMenu) {
       // setIsHovered(false);
-      console.log('hi');
     }
   };
   return (
@@ -32,7 +31,7 @@ function ConfigurationDropDown({
             <Link key={index} href={`/merchant/merchant-portal/${item.link}`}>
               <div
                 key={index}
-                onClick={handleClickItem}
+                onClick={() => handleClickItem(item?.title)}
                 className={`flex flex-row items-start gap-4 hover:text-primary-base ${
                   pathname === `${item.link}` ? 'text-primary-base' : ''
                 }`}

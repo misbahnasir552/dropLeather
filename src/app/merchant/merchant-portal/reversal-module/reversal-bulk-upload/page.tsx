@@ -5,13 +5,10 @@ import React, { useState } from 'react';
 
 import UploadIcon from '@/assets/icons/UploadIcon.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
-// import CrossIcon from '@/assets/icons/Cross.svg';
 import H6 from '@/components/UI/Headings/H6';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
-// import FileInput from '@/components/UI/Inputs/FileInput';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-// import { setAttachmentForm } from "@/redux/features/formSlices/onBoardingForms";
 import {
   AttachmentFormInfoInitialValues,
   AttachmentFormInfoSchema,

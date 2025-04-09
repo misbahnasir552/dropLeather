@@ -128,25 +128,6 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
       // status: data?.businessDetails?.status,
     },
 
-    // {
-    //   name: 'settlement-information',
-    //   label: 'Settlement Details',
-    //   component: <SettlementDetails />,
-    //   svg: (
-    //     <SettlementDetailsIcon
-    //       // color={"#6F6B76"}
-    //       color={
-    //         activeTab === 'settlement-information'
-    //           ? '#21B25F'
-    //           : activeTab !== 'settlement-information' &&
-    //             data?.settlementDetails?.status === 'Completed'
-    //             ? '#000000'
-    //             : '#6F6B76'
-    //       }
-    //     />
-    //   ),
-    //   status: data?.settlementDetails?.status,
-    // },
     {
       name: 'integration-information',
       label: 'Integration',
@@ -206,31 +187,6 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
       status: data?.reviewForm?.status,
     },
   ];
-
-  //   const isAccessible = (tabName: string): boolean => {
-  //   if (tabName === 'activity-info') {
-  //     return true;
-  //   }
-  //   if (data?.activityInformation?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   if (data?.businessDetails?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   if (data?.additionalDetail?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   if (data?.settlementDetails?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   if (data?.integration?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   if (data?.documents?.status === 'Completed') {
-  //     return true;
-  //   }
-  //   return false;
-  // };
 
   return (
     <div className="flex sm:max-md:px-[24px] sm:max-md:py-[48px]">

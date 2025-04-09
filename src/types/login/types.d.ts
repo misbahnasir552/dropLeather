@@ -53,7 +53,10 @@ type TMerchantDetails = {
   success: boolean;
   isAuthenticated: boolean;
 };
-
+type TFundsTransfer = {
+  isAuthenticated: boolean;
+  navbarRoute?: string;
+};
 type TCorporateAccountDetails = {
   accountTitle: null | undefined | string;
   applicantName: null | undefined | string;

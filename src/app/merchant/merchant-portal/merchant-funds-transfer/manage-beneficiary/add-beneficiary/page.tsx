@@ -5,14 +5,13 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
-// import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
-import SuccessModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -24,23 +23,20 @@ import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
 } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/add-beneficiary';
-// import ImageInput from '@/components/UI/Inputs/ImageInput';
 
 function AddBeneficiary() {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const userData = useAppSelector((state: any) => state.auth);
-  // const { apiSecret } = userData;
   const [isChecked, setIsChecked] = useState(false);
-
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
+  const [checkedError, setCheckedError] = useState<string>('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
-
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const handleCheckboxChange = () => {
+    setCheckedError('');
     setIsChecked(!isChecked);
   };
 
@@ -58,24 +54,21 @@ function AddBeneficiary() {
       const md5Hash = generateMD5Hash(mdRequest);
       const requestBody = { request: additionalValues, signature: md5Hash };
       const response = await apiClient.post(
-        'merchant/sendOtpMerchant',
+        `merchant/sendOtpMerchant?actionType=addbeneficiary`,
         requestBody,
         {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log(response, 'FETCH OTP RESPONSE');
       if (response.data.responseCode === '009') {
         return true;
       }
-      setTitle('Error fetching OTP');
-      setShowModal(true);
+      setDescription(response?.data?.responseDescription);
+      setShowErrorModal(true);
       return false;
     } catch (e: any) {
-      console.log(e);
-      setTitle('Network Failed');
       setDescription(e.message);
-      setShowModal(true);
+      setShowErrorModal(true);
       return false;
     } finally {
       setIsLoading(false);
@@ -83,7 +76,6 @@ function AddBeneficiary() {
   };
 
   const handleFetchTitle = async (formik: any) => {
-    console.log('FETCH TITLEeeee');
     setApierror('');
     try {
       setIsLoading(true);
@@ -106,20 +98,14 @@ function AddBeneficiary() {
         requestBody,
         { headers: { Authorization: `Bearer ${userData?.jwt}` } },
       );
-      console.log(response, 'FETCH OTHER BANK TITLE');
-      console.log(response?.data?.accountTitle, 'accountTitle');
       if (response?.data.responseCode === '009') {
         formik?.setFieldValue('accountTitle', response?.data?.accountTitle);
       } else {
-        setTitle('Error fetching Title');
-        setDescription(response.data.responseDescription);
         setApierror(response?.data?.responseDescription);
         // setShowModal(true);
       }
-    } catch (e) {
-      console.log('Fetch details failed', e);
-      setTitle('Network Failed');
-      setApierror('Network Failed');
+    } catch (e: any) {
+      setApierror(e?.message);
       // setShowModal(true);
     } finally {
       setIsLoading(false);
@@ -127,14 +113,53 @@ function AddBeneficiary() {
   };
 
   const onSubmit = async (values: any) => {
-    console.log('Add beneficiary values', values);
-
-    dispatch(addBeneficiaryData(values));
-    const res = await fetchOTP();
-    if (res) {
-      router.push('otp');
+    setApierror('');
+    if (!isChecked) {
+      setCheckedError('Select Terms & Conditions to continue');
+    } else {
+      dispatch(addBeneficiaryData(values));
+      const res = await fetchOTP();
+      if (res) {
+        router.push('otp?expiry=2');
+      }
+      // const additionalValues = {
+      //   ...values,
+      //   managerMobile: userData?.managerMobile,
+      // };
+      // const mdRequest = {
+      //   ...additionalValues,
+      //   apisecret: userData?.apiSecret,
+      // };
+      // const md5Hash = generateMD5Hash(mdRequest);
+      // const requestBody = { request: additionalValues, signature: md5Hash };
+      // try {
+      //   setIsLoading(true);
+      //   const response = await apiClient.post(
+      //     '/merchant/addBeneficiary',
+      //     requestBody,
+      //     {
+      //       headers: { Authorization: `Bearer ${userData?.jwt}` },
+      //       params: { merchantEmail: userData?.email },
+      //     },
+      //   );
+      //   console.log('Added Successfully', response);
+      //   if (response?.data.responseCode === '009') {
+      //     setTitle('Beneficiary Added Successfully');
+      //     setDescription(response?.data?.responseDescription);
+      //     // setRoute(
+      //     //   '/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/',
+      //     // );
+      //     setShowModal(true);
+      //     // router.push("")
+      //   } else {
+      //     setSubmitError(response?.data?.responseMessage);
+      //   }
+      // } catch (e: any) {
+      //   setSubmitError(e?.message);
+      // } finally {
+      //   setIsLoading(false);
+      // }
     }
-
     // const additionalValues = {
     //   ...values,
     //   managerMobile: userData?.managerMobile,
@@ -171,22 +196,22 @@ function AddBeneficiary() {
     //   setShowModal(true);
     // }
   };
-
+  const handleTermsAndConditionsChange = () => {
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=Online%20Payment%20Services%20Agreement.pdf&email=termsandconditions@gmail.com&type=merchant`;
+    window.open(downloadUrl, '_blank');
+  };
   return (
     <div className="flex flex-col gap-6">
       {isLoading && <BarLoader color="#21B25F" />}
-      <SuccessModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        // routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
-      />
-
-      <HeaderWrapper
-        heading="Add Beneficiary"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-      />
+      {showErrorModal && (
+        <ErrorModal
+          title={''}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
+      <HeaderWrapper heading="Add Beneficiary" />
       <Formik
         initialValues={addBeneficiaryInitialValues}
         validationSchema={addBeneficiarySchema}
@@ -208,22 +233,6 @@ function AddBeneficiary() {
                   error={formik.errors.accountType}
                   touched={formik.touched.accountType}
                 />
-
-                <Input
-                  label="Account Number"
-                  name={'mobileNumber'}
-                  type="text"
-                  error={formik.errors.mobileNumber}
-                  touched={false}
-                  asterik={true}
-                />
-                {/* <Input
-                  label="Bank Name"
-                  name={'bankName'}
-                  type="text"
-                  error={'hi'}
-                  touched={false}
-                /> */}
                 <DropdownNew
                   label="Bank Name"
                   name={'bankName'}
@@ -236,10 +245,15 @@ function AddBeneficiary() {
                     value: option.bankPrefix,
                   }))}
                 />
-                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-                  {apierror}
-                </div>
-                <div className="flex w-full justify-end">
+                <Input
+                  label="Account Number"
+                  name={'mobileNumber'}
+                  type="text"
+                  error={formik.errors.mobileNumber}
+                  touched={false}
+                  asterik={true}
+                />
+                {/* <div className="flex w-full justify-end">
                   <Button
                     label="Fetch Title"
                     // isDisabled={!!formik.values.mobileNumber}
@@ -254,10 +268,32 @@ function AddBeneficiary() {
                   type="text"
                   asterik={true}
                   value={formik.values.accountTitle}
-                  // error={formik.errors.accountTitle}
-                  // touched={formik.touched.accountTitle}
                   isDisabled
-                />
+                /> */}
+                <div className="relative w-full">
+                  <Input
+                    label="Account Title"
+                    name="accountTitle"
+                    type="text"
+                    asterik={true}
+                    value={formik.values.accountTitle}
+                    isDisabled
+                    className="pr-20"
+                  />
+                  <button
+                    type="button"
+                    className="bg-blue-500 absolute right-2 top-1/2 -translate-y-1/2 rounded px-3 py-1 text-[#21b25f]"
+                    disabled={!formik.values.mobileNumber}
+                    onClick={() => handleFetchTitle(formik)}
+                  >
+                    Fetch Title
+                  </button>
+                </div>
+                {apierror && (
+                  <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                    {apierror}
+                  </div>
+                )}
                 <Input
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
@@ -274,27 +310,33 @@ function AddBeneficiary() {
                   touched={false}
                 />
               </div>
-              <CheckboxItem
+              {/* <CheckboxItem
                 description="I agree to easypaisa Terms & Conditions"
                 handleCheckboxChange={handleCheckboxChange}
                 isChecked={isChecked}
+              /> */}
+              <CheckboxItem
+                description="I agree to these"
+                span="Terms & Conditions"
+                handleTermsAndConditionsChange={handleTermsAndConditionsChange}
+                isChecked={isChecked}
+                handleCheckboxChange={handleCheckboxChange}
               />
+              {checkedError && (
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {checkedError}
+                </div>
+              )}
             </FormLayout>
-            {/* {isLoading && (
-              <div className="flex w-full justify-center">
-                <BarLoader color="#21B25F" />
-              </div>
-            )} */}
             <div className="flex w-full justify-end gap-6 pb-9">
               <Button
                 label="Cancel"
-                type="submit"
+                routeName="/merchant/merchant-portal/merchant-funds-transfer/manage-beneficiary/"
                 className="button-secondary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
               <Button
                 label="Next"
                 type="submit"
-                // routeName="/login"
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
             </div>

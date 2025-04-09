@@ -123,34 +123,6 @@ function Page() {
           {(formik) => (
             <Form className=" bg-screen-grey">
               <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey">
-                {/* <Input
-                  label="Account Type"
-                  name={'accountType'}
-                  type="text"
-                  error={'hi'}
-                  touched={formik.touched.accountType}
-                />
-                <Input
-                  label="MSISDN"
-                  name={'msisdn'}
-                  type="text"
-                  error={'hi'}
-                  touched={false}
-                />
-                <Input
-                  label="Available Balance"
-                  name={'availableBalance'}
-                  type="text"
-                  error={'hi'}
-                  touched={false}
-                />
-                <Input
-                  label="Current Balance"
-                  name={'currentBalance'}
-                  type="text"
-                  error={'hi'}
-                  touched={false}
-                /> */}
                 <Input
                   label="Beneficiary Name"
                   formik={formik}
@@ -167,13 +139,6 @@ function Page() {
                   error={'hi'}
                   touched={false}
                 />
-
-                {/* <DropdownInput
-                  formik={formik}
-                  label="Payment Status"
-                  name={'paymentStatus'}
-                  options={[{ label: 'hi', value: 'hi' }]}
-                /> */}
               </div>
               <div className="flex w-full justify-start gap-6">
                 <Button

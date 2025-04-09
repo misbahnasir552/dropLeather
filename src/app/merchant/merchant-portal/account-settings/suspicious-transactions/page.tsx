@@ -83,11 +83,6 @@ function page() {
         />
 
         <MerchantFormLayout>
-          {/* <H6>Transaction Point Details</H6> */}
-          {/* <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" />
-        <PrimaryInput name="xyz" label="Momin" /> */}
           <Formik
             initialValues={suspiciousTransactionsInitialValues}
             validationSchema={suspiciousTransactionsSchema}
@@ -171,7 +166,6 @@ function page() {
               </Form>
             )}
           </Formik>
-          {/* <Input name="asd" label="ASD" formik='xyz'/> */}
         </MerchantFormLayout>
         {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
       </div>

@@ -9,6 +9,7 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   customerCellPhone: '',
   otcToken: '',
   orderDate: '',
+  customerName: '',
   merchantName: '',
   authId: '',
   batch: '',
@@ -31,8 +32,11 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   escrow: '',
   transactionPoint: '',
   channel: '',
-  transactionStatus: '',
+  status: '',
   storeID: '',
+  fromDate: '',
+  toDate: '',
+  storeName: '',
 };
 
 export const searchTransactionsSchema = Yup.object().shape({
@@ -42,7 +46,7 @@ export const searchTransactionsSchema = Yup.object().shape({
   customerCellPhone: Yup.string(),
   otcToken: Yup.string(),
   orderDate: Yup.string(),
-  merchantName: Yup.string(),
+  customerName: Yup.string(),
   authId: Yup.string(),
   batch: Yup.string(),
   paymentDate: Yup.string(),
@@ -66,4 +70,15 @@ export const searchTransactionsSchema = Yup.object().shape({
   channel: Yup.string(),
   // status: Yup.string(),
   storeID: Yup.string(),
+  toDate: Yup.string().test(
+    'toDate-required',
+    'To Date is required',
+    // eslint-disable-next-line func-names
+    function (value) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      const { fromDate } = this?.parent;
+      return !fromDate || (fromDate && value); // If fromDate exists, toDate must also exist
+    },
+  ),
+  storeName: Yup.string(),
 });

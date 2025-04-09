@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-// import apiClient from '@/api/apiClient';
-// import { useAppSelector } from '@/hooks/redux';
 import type { StepType } from '../../interfaces/interface';
 import Step from './Step';
 
 const Stepper = ({ ticketStatuses }: any) => {
   const [statusData, setStatusData] = useState<StepType[]>([]);
 
-  // const userData = useAppSelector((state: any) => state.auth);
-
   const fetchApplicationStatus = async () => {
     try {
-      // const response = await apiClient.get(`/corporate/applicationstatus`, {
-      //   params: { email: userData?.email },
-      // });
-      // const fetchedStatusData = response?.data?.listOfTicket;
-
       if (ticketStatuses && ticketStatuses.length > 0) {
         const mappedSteps: StepType[] = ticketStatuses.map(
           (

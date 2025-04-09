@@ -1,6 +1,5 @@
 'use client';
 
-// import type { StaticImageData } from 'next/image';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -40,50 +39,8 @@ const Card = ({ logo, label, description }: ICardProps) => {
                 {description}
               </B1>
             </div>
-            {/* {label === "Online Payments" ? (
-              <div className="flex flex-col gap-4">
-                <H4 className="w-1/2 group-hover:text-neutral-white-base">
-                  {label}
-                </H4>
-                <B1 classes="w-full group-hover:text-neutral-white-base">
-                  {description}
-                </B1>
-              </div>
-            ) : label === "QR Integration" ? (
-              <div className="flex flex-col gap-4">
-                <H4 className="w-1/2 group-hover:text-neutral-white-base">
-                  QR Integration
-                </H4>
-                <B1 classes="w-full group-hover:text-neutral-white-base">
-                  {description}
-                </B1>
-              </div>
-            ) : label === "Mini APPS" ? (
-              <div className="flex flex-col gap-4">
-                <H4 className="w-1/3 group-hover:text-neutral-white-base">
-                  Mini Apps
-                </H4>
-                <B1 classes="w-full group-hover:text-neutral-white-base">
-                  {description}
-                </B1>
-              </div>
-            ) : label === "Payment Link" ? (
-              <div className="flex flex-col gap-4">
-                <H4 className="w-1/2 group-hover:text-neutral-white-base">
-                  Payment Link
-                </H4>
-                <B1 classes="w-full group-hover:text-neutral-white-base">
-                  {description}
-                </B1>
-              </div>
-            ) : (
-              <>{label}</>
-            )} */}
           </>
         </div>
-        {/* <div className="sm:max-md:text-sm w-full text-base font-normal leading-tight text-secondary-600 group-hover:text-neutral-white-base"> */}
-        {/* <B1>{description}</B1> */}
-        {/* </div> */}
       </div>
     </div>
   );

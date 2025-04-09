@@ -20,6 +20,7 @@ const DropdownInput = ({
   label,
   touched,
   formik,
+  resetGraphFilter,
 }: IDropdownInput) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -27,11 +28,20 @@ const DropdownInput = ({
   const [isFocused, setIsFocused] = useState(false);
 
   const handleOptionClick = (label: string) => {
-    formik?.setFieldValue(name, label);
+    // formik?.setFieldValue(name, label);
+    formik?.setFieldValue(
+      name,
+      options.find((opt: any) => opt.label === label)?.value,
+    );
+    if (resetGraphFilter) {
+      formik?.setFieldValue('fromDate', '');
+      formik?.setFieldValue('toDate', '');
+      formik?.setFieldValue('year', '');
+      formik?.setFieldValue('month', '');
+    }
+
     setToggle(false);
   };
-
-  console.log('000000000dropdown error is', error);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -106,7 +116,14 @@ const DropdownInput = ({
                   <B3>{label}</B3>
                   {asterik && <B3 textColor="text-danger-base">*</B3>}
                 </div>
-                <div> {formik?.values[name]}</div>
+                {/* <div> {formik?.values[name]}hi</div> */}
+                <div>
+                  {' '}
+                  {options?.find(
+                    (opt: any) => opt?.value === formik?.values[name],
+                  )?.label || label}
+                </div>
+                {/* <div> {label}</div> */}
               </div>
             ) : (
               <div className="flex w-full items-center gap-2 align-middle text-sm font-medium text-secondary-base">

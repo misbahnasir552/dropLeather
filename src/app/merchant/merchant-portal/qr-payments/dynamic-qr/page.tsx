@@ -1,16 +1,16 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-// import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
-// import H2 from '@/components/UI/Headings/H2';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
+import QRModal from '@/components/UI/Modal/QR/QRModal';
+// import DynamicQRModal from '@/components/UI/Modal/QR/DynamicQRModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
@@ -21,25 +21,23 @@ import {
 } from '@/validations/merchant/merchant-portal/qr-payments/dynamic-qr';
 import type { IDynamicQR } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 
-// import DropdownNew from '@/components/UI/Inputs/DropDownNew';
-// import { categories } from '../utils/utils';
-
 function AddDynamicQR() {
   const [imageUrl, setImageUrl] = useState('');
   const userData = useAppSelector((state: any) => state.auth);
   const [stores, setStores] = useState([]);
   const [amount, setAmount] = useState('');
-  const [expirationTime, setExpirationTime] = useState(0);
+  const [qrExpirationTime, setQrExpirationTime] = useState(0);
+  const [tillNum, setTillNum] = useState<string>('');
   const { apiSecret } = userData;
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [apierror, setApierror] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
-      console.error('Base64 string is undefined or null.');
       return;
     }
 
@@ -93,8 +91,7 @@ function AddDynamicQR() {
       });
       // setTitle('merchantPortalProfile');
 
-      console.log('STORESS', response?.data);
-      if (response.data.responseCode === '009') {
+      if (response?.data?.responseCode === '009') {
         const filterValues = response?.data?.merchantStores.map(
           (item: any) => ({
             label: item.storeName,
@@ -102,20 +99,18 @@ function AddDynamicQR() {
           }),
         );
         setStores(filterValues);
-      } else if (response.data.responseCode === '000') {
-        setTitle('Error');
-        setDescription(response.data.responseDescription);
-        setShowModal(true);
+      } else if (response?.data?.responseCode === '000') {
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        // setShowModal(true);
       } else {
-        setTitle('Error');
-        setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        // setShowModal(true);
       }
     } catch (error: any) {
-      console.error('Error fetching merchant stores:', error);
-      setTitle('Network Error');
-      setDescription(error.message);
-      setShowModal(true);
+      setDescription(error?.message);
+      // setShowModal(true);
     }
   };
 
@@ -125,26 +120,17 @@ function AddDynamicQR() {
     }
   }, [userData?.email]);
 
-  // useEffect(() => {
-  //   base64ToJpg(base64String);
-  //   console.log('Image URL', imageUrl);
-  // }, []);
   const onSubmit = async (values: IDynamicQR) => {
-    console.log('AddDynamicQR', values);
     const {
       storeId,
       // categoryCode,
       ...rest
     } = values;
-
-    const outlet: any = stores.find((store: any) => store.label === storeId);
-    // const categoryNum: any = categories.find(
-    //   (category: any) => category.label === categoryCode,
-    // );
+    const outlet: any = stores?.find((store: any) => store?.value === storeId);
 
     const additionalValues = {
       ...rest,
-      storeId: outlet.value,
+      storeId: outlet?.value,
       // categoryCode: categoryNum.categoryCode,
       managerMobile: userData?.managerMobile,
     };
@@ -163,42 +149,73 @@ function AddDynamicQR() {
           headers: { Authorization: `Bearer ${userData?.jwt}` },
         },
       );
-      console.log(response, 'Dynamic QR Added');
+
       if (response?.data.responseCode === '009') {
         setAmount(values.amount);
-        setExpirationTime(values.expirationTime);
+        setQrExpirationTime(Number(values?.qrExpirationTime));
         base64ToJpg(response?.data.qrCode);
+        setQrString(response?.data?.qrCode);
+        setTillNum(response?.data?.transactionPointNum);
+        setShowModal(true);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
       } else if (response?.data.responseCode === '000') {
-        setTitle('Failure');
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         setImageUrl('');
-        setApierror(response?.data?.responseDescription);
+        setShowErrorModal(true);
         // setShowModal(true);
+      } else {
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
+        setShowErrorModal(true);
       }
-      // else {
-      //   setTitle("Failure");
-      //   setDescription(response.data.errorDescription);
-      // }
     } catch (e: any) {
-      console.log('Network Failure!', e);
-      setTitle(e.code);
-      setDescription(e.message);
-      setApierror(e?.message);
+      setTitle(e?.code);
+      setDescription(e?.message);
       setImageUrl('');
+      setShowErrorModal(true);
       // setShowModal(true);
+    }
+  };
+
+  const handleKeyDown = (event: any) => {
+    // Allow: backspace, delete, tab, escape, enter, and arrow keys
+    if (
+      event.key === 'Backspace' ||
+      event.key === 'Delete' ||
+      event.key === 'Tab' ||
+      event.key === 'Escape' ||
+      event.key === 'Enter' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'ArrowRight'
+    ) {
+      return; // Allow these keys
+    }
+    // Ensure that it is a number and stop the keypress
+    if (!/^\d$/.test(event.key)) {
+      event.preventDefault();
     }
   };
   return (
     <div className="flex flex-col gap-6">
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
-      />
+      {showModal && (
+        <CustomModal
+          title={title}
+          description={description}
+          show={showModal}
+          setShowModal={setShowModal}
+          // routeName="/merchant/merchant-portal/qr-payments/dynamic-qr/"
+        />
+      )}
+      {showErrorModal && (
+        <ErrorModal
+          title={title}
+          description={description}
+          show={showErrorModal}
+          setShow={setShowErrorModal}
+        />
+      )}
       <HeaderWrapper
         heading="Dynamic QR"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -212,14 +229,6 @@ function AddDynamicQR() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
-                {/* <DropdownInput
-                  label="Category"
-                  name="categoryCode"
-                  formik={formik}
-                  error={formik.errors.categoryCode}
-                  touched={formik.touched.categoryCode}
-                  options={categories}
-                /> */}
                 <Input
                   asterik
                   label="Product Name"
@@ -239,10 +248,12 @@ function AddDynamicQR() {
                 <Input
                   asterik
                   label="Expiration Time (in seconds)"
-                  name="expirationTime"
-                  type="number"
-                  error={formik.errors.expirationTime}
-                  touched={formik.touched.expirationTime}
+                  name="qrExpirationTime"
+                  type="text"
+                  placeholder={'0'}
+                  error={formik.errors.qrExpirationTime}
+                  touched={formik.touched.qrExpirationTime}
+                  onKeyDown={handleKeyDown}
                 />
                 <Input
                   asterik
@@ -252,14 +263,14 @@ function AddDynamicQR() {
                   error={formik.errors.productDetails}
                   touched={formik.touched.productDetails}
                 />
-                {/* <Input
-                asterik
+                <Input
+                  asterik
                   label="Product Number"
                   name="productNumber"
                   type="text"
                   error={formik.errors.productNumber}
                   touched={formik.touched.productNumber}
-                /> */}
+                />
                 <DropdownInput
                   asterik
                   label="Store Name"
@@ -280,9 +291,6 @@ function AddDynamicQR() {
                 />
               </div>
             </FormLayout>
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
             <div className="flex w-full justify-end gap-6">
               <Button
                 label="Reset"
@@ -292,22 +300,23 @@ function AddDynamicQR() {
               <Button
                 label="Save"
                 type="submit"
-                // isDisabled={formik.isValid}
                 className="button-primary h-14 w-[270px] px-3 py-[19px] text-sm"
               />
             </div>
           </Form>
         )}
       </Formik>
-      {imageUrl && showModal && (
-        <DynamicQRModal
+      {showModal && (
+        <QRModal
           title="Your Custom QR"
           description="Your custom QR Code has been created. You can now share the below QR code to receive money."
           show={showModal}
           setShowModal={setShowModal}
-          imageUrl={imageUrl} // Pass the QR code image URL here
+          imageUrl={imageUrl}
           amount={amount}
-          expirationTime={expirationTime}
+          expirationTime={qrExpirationTime}
+          tilNum={tillNum}
+          qrString={qrString}
         />
       )}
     </div>
