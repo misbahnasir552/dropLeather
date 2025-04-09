@@ -280,6 +280,8 @@ function IntegrationFormReqRevision() {
         if (response?.data?.responseCode === '009') {
           // ✅ Navigate to the next tab if available
           const nextTab = endpointArray[currentIndex + 1]?.tab;
+          setDescription(response?.data?.responseDescription);
+          setShowModal(true);
           if (nextTab) {
             router.push(`/merchant/home/business-nature/${nextTab}`);
           } else {

@@ -739,6 +739,8 @@ const BusinessInformationReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
