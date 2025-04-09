@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import React from 'react';
 
@@ -14,9 +15,17 @@ const ErrorModal = ({
   description,
   show,
   setShow,
+  routeName,
 }: IErrorModalProps) => {
+  const router = useRouter();
+
   const handleClose = (_e: MouseEvent<HTMLDivElement>) => {
-    setShow(false);
+    if (routeName) {
+      router.push(routeName);
+      setShow(false);
+    } else {
+      setShow(false);
+    }
   };
 
   const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
@@ -63,7 +72,7 @@ const ErrorModal = ({
                   <div className="flex justify-center">
                     <Button
                       label="Close"
-                      onClickHandler={() => setShow(false)}
+                      onClickHandler={handleClose}
                       className="button-primary w-[270px] px-3 py-[19px] text-[14px] leading-tight"
                     />
                   </div>

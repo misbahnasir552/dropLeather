@@ -110,6 +110,9 @@ const OtpInputWithValidation = () => {
           description={description}
           show={showErrorModal}
           setShow={setShowErrorModal}
+          routeName={
+            '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/funds-transfer/'
+          }
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">
