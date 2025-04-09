@@ -35,14 +35,14 @@ const MerchantPortalNavbar = () => {
     {
       title: 'Configuration',
       className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%] left-[24%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%] left-[24%]',
       link: '/merchant/merchant-portal/home',
       dropdown: configurationList,
     },
     {
       title: 'Account Settings',
       className:
-        'left-[32%] sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
@@ -55,20 +55,20 @@ const MerchantPortalNavbar = () => {
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
       className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Settlement Module',
       dropdown: getSettlementModuleDropDownMenu(),
       className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Reversal Module',
       // link: '/merchant/merchant-portal/reversal-module',
       dropdown: getReversalModuleDropDownMenu(),
       className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Merchant Funds Transfer',
@@ -76,7 +76,7 @@ const MerchantPortalNavbar = () => {
         otpSuccess?.isAuthenticated,
       ),
       className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
+        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
   ];
   return (
