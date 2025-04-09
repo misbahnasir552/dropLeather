@@ -8,6 +8,7 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
@@ -18,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
 import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
 import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
-import { generateMD5Hash } from '@/utils/helper';
+import { generateAESEncryption, generateMD5Hash } from '@/utils/helper';
 import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
@@ -197,7 +198,15 @@ function AddBeneficiary() {
     // }
   };
   const handleTermsAndConditionsChange = () => {
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=Online%20Payment%20Services%20Agreement.pdf&email=termsandconditions@gmail.com&type=merchant`;
+    const EncryptedFile = generateAESEncryption(
+      'Online Payment Services Agreement.pdf',
+    );
+    const EncryptedEmmail = generateAESEncryption(
+      'termsandconditions@gmail.com',
+    );
+    // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+
     window.open(downloadUrl, '_blank');
   };
   return (
@@ -271,14 +280,13 @@ function AddBeneficiary() {
                   isDisabled
                 /> */}
                 <div className="relative w-full">
-                  <Input
-                    label="Account Title"
-                    name="accountTitle"
-                    type="text"
-                    asterik={true}
-                    value={formik.values.accountTitle}
-                    isDisabled
-                    className="pr-20"
+                  <DisabledField
+                    data={[
+                      {
+                        label: 'Account Title',
+                        value: formik.values.accountTitle,
+                      },
+                    ]}
                   />
                   <button
                     type="button"

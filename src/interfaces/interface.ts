@@ -151,6 +151,7 @@ export interface IErrorModalProps {
   description?: string;
   show: boolean;
   setShow: (value: boolean) => void;
+  routeName?: string;
 }
 export interface ICustomModalProps {
   title?: string;
