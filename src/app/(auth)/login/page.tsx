@@ -111,6 +111,8 @@ const NewLogin = () => {
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         setApierror(loginResponse?.data?.responseMessage);
+      } else if (loginResponse?.data?.responseCode === '010') {
+        setApierror(loginResponse?.data?.responseMessage);
       } else {
         console.log('LOGIN OTP FAIL ');
         setTitle(loginResponse?.data?.responseMessage);
