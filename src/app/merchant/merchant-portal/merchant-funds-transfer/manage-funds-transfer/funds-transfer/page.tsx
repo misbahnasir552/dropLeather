@@ -137,6 +137,7 @@ function FundsTranfer() {
         }
         return true; // ✅ Returns a value
       }
+      setTitle(response?.data?.responseMessage);
       setDescription(response?.data?.responseDescription);
       setShowErrorModal(true);
       return false; // ✅ Returns a value
