@@ -41,7 +41,6 @@ const LineChartGraph = ({
         <XAxis dataKey="name" interval={0} />
         <YAxis
           dataKey="total"
-          width={100}
           // label={{
           //   value: 'Total Records',
           //   angle: -90,
@@ -53,15 +52,15 @@ const LineChartGraph = ({
 
         <Line
           type="monotone"
-          dataKey="success"
-          stroke="#82ca9d"
-          name={`Successful ${nameKey}`}
-        />
-        <Line
-          type="monotone"
           dataKey="failed"
           stroke="#FF0000"
           name={`Failed ${nameKey}`}
+        />
+        <Line
+          type="monotone"
+          dataKey="success"
+          stroke="#82ca9d"
+          name={`Successful ${nameKey}`}
         />
       </LineChart>
     </ResponsiveContainer>
