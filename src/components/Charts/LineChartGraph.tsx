@@ -41,6 +41,7 @@ const LineChartGraph = ({
         <XAxis dataKey="name" interval={0} />
         <YAxis
           dataKey="total"
+          width={100}
           // label={{
           //   value: 'Total Records',
           //   angle: -90,

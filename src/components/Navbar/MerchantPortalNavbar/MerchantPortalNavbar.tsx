@@ -9,6 +9,7 @@ import {
   getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
   getReversalModuleDropDownMenu,
+  getSettlementModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
 import B2 from '@/components/UI/Body/B2';
 import { useAppSelector } from '@/hooks/redux';
@@ -55,7 +56,8 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Settlement Module',
-      // link: '/merchant/merchant-portal/home',
+      dropdown: getSettlementModuleDropDownMenu(),
+      className: 'sm:top-[17%] top-[15%]',
     },
     {
       title: 'Reversal Module',
