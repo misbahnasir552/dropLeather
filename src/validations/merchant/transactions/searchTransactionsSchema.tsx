@@ -36,6 +36,7 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   storeID: '',
   fromDate: '',
   toDate: '',
+  storeName: '',
 };
 
 export const searchTransactionsSchema = Yup.object().shape({
@@ -79,4 +80,5 @@ export const searchTransactionsSchema = Yup.object().shape({
       return !fromDate || (fromDate && value); // If fromDate exists, toDate must also exist
     },
   ),
+  storeName: Yup.string(),
 });

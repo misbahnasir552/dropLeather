@@ -99,10 +99,10 @@ function ViewProductQR() {
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
-    XLSX?.utils?.book_append_sheet(wb, ws, 'Products QR');
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Dynamic QR Report');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'products_qr.xlsx');
+    XLSX.writeFile(wb, 'Dynamic-QR-Report.xlsx');
   };
   const handleDelete = async (id: any) => {
     try {

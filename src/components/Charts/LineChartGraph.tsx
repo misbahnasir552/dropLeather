@@ -24,6 +24,22 @@ const LineChartGraph = ({
       ? 'Revenue'
       : 'Transactions';
 
+  const formatYAxis = (value: number) => {
+    if (value >= 1_000_000_000_000) {
+      return `${(value / 1_000_000_000_000).toFixed(1)}T`;
+    }
+    if (value >= 1_000_000_000) {
+      return `${(value / 1_000_000_000).toFixed(1)}B`;
+    }
+    if (value >= 1_000_000) {
+      return `${(value / 1_000_000).toFixed(1)}M`;
+    }
+    if (value >= 1_000) {
+      return `${(value / 1_000).toFixed(1)}K`;
+    }
+    return value.toString();
+  };
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
@@ -41,26 +57,33 @@ const LineChartGraph = ({
         <XAxis dataKey="name" interval={0} />
         <YAxis
           dataKey="total"
+          width={50}
+          tickFormatter={formatYAxis}
           // label={{
           //   value: 'Total Records',
           //   angle: -90,
           //   position: 'insideLeft',
           // }}
         />
-        <Tooltip />
+        <Tooltip
+          formatter={(value: number, name: string) => [
+            formatYAxis(value),
+            name,
+          ]}
+        />
         <Legend />
 
-        <Line
-          type="monotone"
-          dataKey="success"
-          stroke="#82ca9d"
-          name={`Successful ${nameKey}`}
-        />
         <Line
           type="monotone"
           dataKey="failed"
           stroke="#FF0000"
           name={`Failed ${nameKey}`}
+        />
+        <Line
+          type="monotone"
+          dataKey="success"
+          stroke="#82ca9d"
+          name={`Successful ${nameKey}`}
         />
       </LineChart>
     </ResponsiveContainer>

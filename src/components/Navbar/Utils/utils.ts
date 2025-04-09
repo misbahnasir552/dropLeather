@@ -38,25 +38,25 @@ export const getConfigurationDropDownMenu = () => [
     title: 'Transaction History Preferences',
     link: 'configuration/transaction-history-prefereneces',
   },
-  { title: 'Upload Documents', link: 'configuration/upload-documents' },
-  { title: 'Add Outlet', link: 'configuration/add-outlet' },
+  { title: 'Documents', link: 'configuration/uploaded-documents' },
+  // { title: 'Add Outlet', link: 'configuration/add-outlet' },
   // { title: "Add Transaction Point", link: "payment-link", icon: Money },
-  {
-    title: 'Add Transaction Point',
-    link: 'configuration/add-transaction-point',
-  },
-  {
-    title: 'Capture Transaction',
-    link: 'configuration/capture-transaction',
-  },
-  {
-    title: 'De-Link MA Relationship',
-    link: 'configuration/de-Link-ma-relationship',
-  },
-  {
-    title: 'De-Link Account Report',
-    link: 'configuration/deLink-report',
-  },
+  // {
+  //   title: 'Add Transaction Point',
+  //   link: 'configuration/add-transaction-point',
+  // },
+  // {
+  //   title: 'Capture Transaction',
+  //   link: 'configuration/capture-transaction',
+  // },
+  // {
+  //   title: 'De-Link MA Relationship',
+  //   link: 'configuration/de-Link-ma-relationship',
+  // },
+  // {
+  //   title: 'De-Link Account Report',
+  //   link: 'configuration/deLink-report',
+  // },
 ];
 
 export const getAccountSettingsDropDownMenu = () => [
@@ -64,28 +64,28 @@ export const getAccountSettingsDropDownMenu = () => [
     title: 'Change Password',
     link: 'account-settings/change-password',
   },
-  {
-    title: 'IPN Attribute Configurations',
-    link: 'account-settings/ipn-configurations',
-  },
-  { title: 'Generate Hash Key', link: 'account-settings/hash-generator' },
-  // { title: "Add Transaction Point", link: "payment-link", icon: Money },
-  {
-    title: 'Public Key Configuration',
-    link: 'add-transaction-point',
-  },
-  {
-    title: 'Suspicious Transaction Report',
-    link: 'capture-transaction',
-  },
-  {
-    title: 'Failed Transaction Report',
-    link: 'de-Link-ma-relationship',
-  },
-  {
-    title: 'Transaction Feedback Report',
-    link: 'deLink-report',
-  },
+  // {
+  //   title: 'IPN Attribute Configurations',
+  //   link: 'account-settings/ipn-configurations',
+  // },
+  // { title: 'Generate Hash Key', link: 'account-settings/hash-generator' },
+  // // { title: "Add Transaction Point", link: "payment-link", icon: Money },
+  // {
+  //   title: 'Public Key Configuration',
+  //   link: 'add-transaction-point',
+  // },
+  // {
+  //   title: 'Suspicious Transaction Report',
+  //   link: 'capture-transaction',
+  // },
+  // {
+  //   title: 'Failed Transaction Report',
+  //   link: 'de-Link-ma-relationship',
+  // },
+  // {
+  //   title: 'Transaction Feedback Report',
+  //   link: 'deLink-report',
+  // },
 ];
 
 export const getQRPaymentsDropDownMenu = () => [
@@ -108,6 +108,12 @@ export const getReversalModuleDropDownMenu = () => [
   {
     title: 'Bulk Reversal Report',
     link: 'reversal-module/bulk-reversal-report',
+  },
+];
+export const getSettlementModuleDropDownMenu = () => [
+  {
+    title: 'Settlement Report',
+    link: 'settlement-module/settlement-report',
   },
 ];
 export const getMerchantFundsTransferDropDownMenu = (

@@ -380,6 +380,7 @@ export interface IDropdownInput {
   formik?: FormikProps<any>;
   onClick?: any;
   setSelectedDropDownValue?: any;
+  resetGraphFilter?: boolean;
 }
 
 export interface BusinessNatureForm {
@@ -438,6 +439,7 @@ export interface SearchTransactionsForm {
   storeID: string;
   fromDate: string;
   toDate: string;
+  storeName: string;
 }
 
 export interface AddOutletForm {

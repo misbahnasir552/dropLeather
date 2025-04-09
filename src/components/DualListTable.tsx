@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import apiClient from '@/api/apiClient';
 import ArrowLeftSingle from '@/assets/icons/arrow-back-single.svg';
 import ArrowLeftAll from '@/assets/icons/arrow-left-all.svg';
 import ArrowRightAll from '@/assets/icons/arrow-right-all.svg';
@@ -20,107 +19,28 @@ interface IInitialData {
 }
 
 interface IDualListTable {
-  // initialData: IInitialData[];
+  initialData: any[];
   headingLeft: string;
   headingRight: string;
   title?: string;
-  selectedItems: IInitialData[]; // Received from parent
+  selectedItems: any[]; // Received from parent
   onSelectedItemsChange: (items: IInitialData[]) => void;
+  setAvailableItems: any;
+  availableItems: any;
   // onSelectedItemsChange: (items: IInitialData[]) => void;
 }
 
 const DualListTable = ({
-  // initialData,
-  title,
+  initialData,
+  // title,
   headingLeft,
   headingRight, //  title
   selectedItems,
+  setAvailableItems,
+  availableItems,
   onSelectedItemsChange, // onSelectedItemsChange,
 }: IDualListTable) => {
-  const [initialData, setInitialData] = useState<IInitialData[]>([]);
-  // const [selectedItems, setSelectedItems] = useState<IInitialData[]>([]);
-
-  useEffect(() => {}, [selectedItems]);
-
-  useEffect(() => {
-    const getForms = async () => {
-      try {
-        if (title === 'corporateAdmin') {
-          const response = await apiClient.get(
-            `corporate/getPageInfo/soleProprietor`,
-          );
-          const responseData = response?.data?.page;
-          // const initialItems = responseData?.flatMap((item: any) =>
-          //   item.categories.flatMap((category: any) =>
-          //     category.fields.map((field: any) => ({
-          //       name: category.categoryName,
-          //       category: field.label,
-          //     })),
-          //   ),
-          // );
-
-          const initialItems = responseData
-            ?.filter(
-              (item: any) => item.name !== 'Corporate Sole Sample Attachments',
-            )
-            .flatMap((item: any) =>
-              item.categories.flatMap((category: any) =>
-                category.fields.map((field: any) => ({
-                  name: category.categoryName,
-                  category: field.label,
-                })),
-              ),
-            );
-
-          if (initialItems) {
-            setInitialData(initialItems);
-          }
-        } else {
-          const response = await apiClient.get(
-            `merchant/getPageInfo/soleProprietor`,
-          );
-          const responseData = response?.data?.page;
-          const initialItems = responseData?.flatMap((item: any) =>
-            item.categories.flatMap((category: any) =>
-              category.fields.map((field: any) => ({
-                name: category.categoryName,
-                category: field.label,
-              })),
-            ),
-          );
-
-          if (initialItems) {
-            setInitialData(initialItems);
-          }
-        }
-        // const response = await apiClient.get(
-        //   `merchant/getPageInfo/soleProprietor`,
-        // );
-        // console.log('Get Forms', response);
-        // const responseData = response?.data?.page;
-        // const initialItems = responseData?.flatMap((item: any) =>
-        //   item.categories.flatMap((category: any) =>
-        //     category.fields.map((field: any) => ({
-        //       name: category.categoryName,
-        //       category: field.label,
-        //     })),
-        //   ),
-        // );
-
-        // if (initialItems) {
-        //   setInitialData(initialItems);
-        // }
-        // console.log('Initial items:', initialItems);
-        // console.log('initial data', initialData);
-      } catch (e) {
-        console.log(e, 'error fetching');
-      }
-    };
-    getForms();
-  }, []);
-
-  const [availableItems, setAvailableItems] =
-    useState<IInitialData[]>(initialData);
+  const [checkedSelectedItems, setCheckedSelectedItems] = useState<any[]>([]);
 
   useEffect(() => {
     setAvailableItems(initialData);
@@ -131,9 +51,6 @@ const DualListTable = ({
   >([]);
 
   //  const [selectedRole, setSelectedRole] = useState();
-  const [checkedSelectedItems, setCheckedSelectedItems] = useState<
-    IInitialData[]
-  >([]);
 
   const handleSelectAllAvailable = () => {
     if (checkedAvailableItems.length === availableItems.length) {
@@ -155,7 +72,7 @@ const DualListTable = ({
     const updatedSelectedItems = [...selectedItems, ...checkedAvailableItems];
     onSelectedItemsChange(updatedSelectedItems); // Update in parent
     setAvailableItems(
-      availableItems.filter((i) => !checkedAvailableItems.includes(i)),
+      availableItems.filter((i: any) => !checkedAvailableItems.includes(i)),
     );
     setCheckedAvailableItems([]);
   };
@@ -188,16 +105,6 @@ const DualListTable = ({
       setCheckedAvailableItems([...checkedAvailableItems, item]);
     }
   };
-
-  //   const toggleAvailableItem2 = (item: any) => {
-  //   if (checkedAvailableItems.includes(item)) {
-  //     setCheckedAvailableItems(checkedAvailableItems.filter((i) => i !== item));
-  //   } else {
-  //     setCheckedAvailableItems([...checkedAvailableItems, item]);
-  //   }
-  //   setSelectedRole(item)
-  //   console
-  // };
 
   const toggleSelectedItem = (item: IInitialData) => {
     if (checkedSelectedItems.includes(item)) {
@@ -238,15 +145,15 @@ const DualListTable = ({
                     )}
                 </div>
               </div>
-              <div className="w-5/6">
+              {/* <div className="w-5/6">
                 <H7>Field Category</H7>
-              </div>
+              </div> */}
               <div className="w-5/6">
                 <H7>Field Names</H7>
               </div>
             </div>
             <div className="flex max-h-[250px] min-h-[250px] flex-col gap-2 overflow-y-auto px-6">
-              {availableItems.map((item, index) => (
+              {availableItems.map((item: any, index: number) => (
                 <div key={index} className="flex items-center">
                   <div className="w-1/6">
                     <div
@@ -269,11 +176,11 @@ const DualListTable = ({
                     </div>
                   </div>
                   <div className="border-gray-300 w-5/6">
-                    <B2 textColor="text-secondary-base">{item.name}</B2>
+                    <B2 textColor="text-secondary-base">{item?.label}</B2>
                   </div>
-                  <div className="border-gray-300 w-5/6">
+                  {/* <div className="border-gray-300 w-5/6">
                     <B2 textColor="text-secondary-base">{item.category}</B2>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>
@@ -336,9 +243,9 @@ const DualListTable = ({
                     )}
                 </div>
               </div>
-              <div className="w-5/6">
+              {/* <div className="w-5/6">
                 <H7>Field Category</H7>
-              </div>
+              </div> */}
               <div className="w-5/6">
                 <H7>Field Names</H7>
               </div>
@@ -366,11 +273,11 @@ const DualListTable = ({
                     </div>
                   </div>
                   <div className="border-gray-300 w-5/6">
-                    <B2 textColor="text-secondary-base">{item.name}</B2>
+                    <B2 textColor="text-secondary-base">{item?.label}</B2>
                   </div>
-                  <div className="border-gray-300 w-5/6">
+                  {/* <div className="border-gray-300 w-5/6">
                     <B2 textColor="text-secondary-base">{item.category}</B2>
-                  </div>
+                  </div> */}
                 </div>
               ))}
             </div>

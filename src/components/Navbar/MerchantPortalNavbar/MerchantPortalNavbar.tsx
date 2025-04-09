@@ -9,6 +9,7 @@ import {
   getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
   getReversalModuleDropDownMenu,
+  getSettlementModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
 import B2 from '@/components/UI/Body/B2';
 import { useAppSelector } from '@/hooks/redux';
@@ -33,13 +34,15 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Configuration',
-      className: 'top-[17%] left-[24%]',
+      className:
+        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%] left-[24%]',
       link: '/merchant/merchant-portal/home',
       dropdown: configurationList,
     },
     {
       title: 'Account Settings',
-      className: 'left-[32%] top-[17%]',
+      className:
+        'left-[32%] sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
@@ -51,24 +54,29 @@ const MerchantPortalNavbar = () => {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
-      className: 'top-[17%]',
+      className:
+        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Settlement Module',
-      // link: '/merchant/merchant-portal/home',
+      dropdown: getSettlementModuleDropDownMenu(),
+      className:
+        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Reversal Module',
       // link: '/merchant/merchant-portal/reversal-module',
       dropdown: getReversalModuleDropDownMenu(),
-      className: 'top-[17%]',
+      className:
+        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
     {
       title: 'Merchant Funds Transfer',
       dropdown: getMerchantFundsTransferDropDownMenu(
         otpSuccess?.isAuthenticated,
       ),
-      className: 'top-[17%]',
+      className:
+        'sm:top-[20%] xll:top-[14%] xl:top-[15%] lg:top-[20%] md:top-[20%] top-[15%]',
     },
   ];
   return (

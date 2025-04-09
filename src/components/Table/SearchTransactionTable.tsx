@@ -125,13 +125,28 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                           : 'w-32 text-center'
                       } py-[18px]`}
                     >
-                      {value === 'Success' ? (
+                      {/* {value === 'Success' ? (
                         <B3 textColor="text-primary-base">{'Approved'}</B3>
                       ) : value === 'Failed' ? (
                         <B3 textColor="text-danger-base">{value || 'N/A'}</B3>
                       ) : (
                         <B3 textColor="text-secondary-base">
-                          {value || 'N/A'}
+                          {value === null || value === undefined || value === ''
+                            ? 'N/A'
+                            : value}
+                        </B3>
+                      )} */}
+                      {value === 'Success' ? (
+                        <B3 textColor="text-primary-base">{'Approved'}</B3>
+                      ) : value === 'Failed' ? (
+                        <B3 textColor="text-danger-base">{value || 'N/A'}</B3>
+                      ) : value === 'PAID' ? (
+                        <B3 textColor="text-primary-base">{value}</B3>
+                      ) : (
+                        <B3 textColor="text-secondary-base">
+                          {value === null || value === undefined || value === ''
+                            ? 'N/A'
+                            : value}
                         </B3>
                       )}
                     </td>

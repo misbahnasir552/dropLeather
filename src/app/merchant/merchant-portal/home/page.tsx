@@ -251,6 +251,7 @@ const MerchantPortalHome = () => {
                         error={formik.errors.graphDuration}
                         touched={formik.touched.graphDuration}
                         formik={formik}
+                        resetGraphFilter={true}
                       />
                     </div>
 
