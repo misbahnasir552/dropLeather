@@ -68,6 +68,7 @@ const OtpInputWithValidation = () => {
             setDescription(response?.data.responseDescription);
             dispatch(resetTransferFundsFormData());
           } else {
+            setTitle(response?.data?.responseMessage);
             setDescription(response?.data.responseDescription);
             setShowErrorModal(true);
           }
@@ -78,6 +79,7 @@ const OtpInputWithValidation = () => {
           setIsLoading(false);
         }
       } else {
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         setShowErrorModal(true);
       }
