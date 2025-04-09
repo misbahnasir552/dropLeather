@@ -65,7 +65,7 @@ export const graphDurationOptions = [
 ];
 
 const currentYear = new Date().getFullYear();
-const startYear = 2024;
+const startYear = 2000;
 
 export const yearOptions = Array.from(
   { length: currentYear - startYear + 1 },
