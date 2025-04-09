@@ -77,7 +77,7 @@ function ManageBeneficiary() {
   }, []);
 
   const tableHeadings = [
-    'Mobile Number',
+    'Account Number',
     'Bank name',
     'Account Title',
     'Beneficiary Name',

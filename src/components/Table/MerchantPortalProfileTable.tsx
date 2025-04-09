@@ -29,8 +29,9 @@ function MerchantPortalProfileTable({
                 <th
                   key={i}
                   className={`${
-                    heading === '#' ? 'w-1/8' : 'w-1/2'
-                  } py-[17px] text-center`}
+                    // heading === '#' ? 'w-1/8' : 'w-1/2'
+                    heading === '#' ? 'w-1/8' : ''
+                  } py-[17px] `}
                 >
                   <H7>{heading}</H7>
                 </th>
@@ -46,28 +47,33 @@ function MerchantPortalProfileTable({
                 key={i}
                 className="flex w-full items-center justify-between border-b border-border-light px-6"
               >
-                <td className="w-1/2 py-[18px] text-center">
+                {/* <td className="w-1/2 py-[18px] text-center"> */}
+                <td className=" py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
                     {item?.storeId ? item?.storeId : ''}
                   </B3>
                   {/* <B3 textColor="text-secondary-base">{i + 1}</B3> */}
                 </td>
-                <td className="w-1/2 py-[18px] text-center">
+                {/* <td className="w-1/2 py-[18px] text-center"> */}
+                <td className="py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
                     {item?.storeName ? item?.storeName : ''}
                   </B3>
                 </td>
-                <td className="w-1/2 py-[18px] text-center">
+                {/* <td className="w-1/2 py-[18px] text-center"> */}
+                <td className="py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
                     {item?.webSiteUrl ? item?.webSiteUrl : ''}
                   </B3>
                 </td>
-                <td className="w-1/2 py-[18px] text-center">
+                {/* <td className="w-1/2 py-[18px] text-center"> */}
+                <td className="py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
                     {item?.paymentEnabled ? item?.paymentEnabled : ''}
                   </B3>
                 </td>
-                <td className="w-1/2 py-[18px] text-center">
+                <td className="py-[18px] text-center">
+                  {/* <td className="w-1/2 py-[18px] text-center"> */}
                   <B3
                     textColor={`${
                       item.status === 'Non-Active'
@@ -154,6 +160,7 @@ function MerchantPortalProfileTable({
       ) : (
         <table className="flex w-full flex-col">
           <thead>
+            {/* <tr className="flex w-full items-center justify-between rounded-lg  bg-screen-grey px-6"> */}
             <tr className="flex w-full items-center justify-between rounded-lg  bg-screen-grey px-6">
               {merchantPortalTableHeadings.map((heading, i) => (
                 <th

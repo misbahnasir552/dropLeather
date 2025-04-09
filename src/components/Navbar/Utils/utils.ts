@@ -110,6 +110,12 @@ export const getReversalModuleDropDownMenu = () => [
     link: 'reversal-module/bulk-reversal-report',
   },
 ];
+export const getSettlementModuleDropDownMenu = () => [
+  {
+    title: 'Settlement Report',
+    link: 'settlement-module/settlement-report',
+  },
+];
 export const getMerchantFundsTransferDropDownMenu = (
   isAuthenticated: boolean,
 ) => [

@@ -75,15 +75,15 @@ const LineChartGraph = ({
 
         <Line
           type="monotone"
-          dataKey="success"
-          stroke="#82ca9d"
-          name={`Successful ${nameKey}`}
-        />
-        <Line
-          type="monotone"
           dataKey="failed"
           stroke="#FF0000"
           name={`Failed ${nameKey}`}
+        />
+        <Line
+          type="monotone"
+          dataKey="success"
+          stroke="#82ca9d"
+          name={`Successful ${nameKey}`}
         />
       </LineChart>
     </ResponsiveContainer>
