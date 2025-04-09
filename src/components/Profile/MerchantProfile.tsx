@@ -145,7 +145,7 @@ const MerchantProfile = () => {
           <div className="flex h-[20px] text-sm leading-[20px] text-secondary-600">
             Payment Method QR/Till:
           </div>
-          <H6>No</H6>
+          <H6>Yes</H6>
         </div>
 
         {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
