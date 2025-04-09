@@ -4,3 +4,6 @@ export interface ISettlementTransactionHistory {
   settlementDateBetween: string;
   status: string;
 }
+export interface ISettlementReport {
+  date: string;
+}
