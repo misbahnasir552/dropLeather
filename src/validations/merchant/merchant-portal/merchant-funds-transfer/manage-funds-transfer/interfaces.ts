@@ -4,8 +4,8 @@ export interface IManageFundsTransfer {
   availableBalance: string;
   currentBalance: string;
   beneficiaryName: string;
-  toDate: string;
-  fromDate: string;
+  transferDateTo: string;
+  transferDateFrom: string;
   status: string;
   transferAmount: string;
 }

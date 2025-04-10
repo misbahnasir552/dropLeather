@@ -243,19 +243,19 @@ function ManageFundsTransfer() {
                 />
                 <DateInputNew
                   label="From Date"
-                  name="fromDate"
+                  name="transferDateFrom"
                   formik={formik}
-                  error={formik.errors.fromDate}
-                  touched={formik.touched.fromDate}
+                  error={formik.errors.transferDateFrom}
+                  touched={formik.touched.transferDateFrom}
                 />
                 <DateInputNew
                   label="To Date"
-                  name="toDate"
+                  name="transferDateTo"
                   formik={formik}
-                  error={formik.errors.toDate}
-                  touched={formik.touched.toDate}
-                  isDisabled={!formik.values.fromDate}
-                  minDate={formik.values.fromDate}
+                  error={formik.errors.transferDateTo}
+                  touched={formik.touched.transferDateTo}
+                  isDisabled={!formik.values.transferDateFrom}
+                  minDate={formik.values.transferDateTo}
                 />
                 <DropdownInput
                   formik={formik}
