@@ -23,5 +23,14 @@ export const manageFundsTransferSchema = Yup.object().shape({
   transferDate: Yup.string(),
   status: Yup.string(),
   transferDateFrom: Yup.string(),
-  transferDateTo: Yup.string(),
+  transferDateTo: Yup.string().test(
+    'transferDateTo-required',
+    'To Date is required',
+    // eslint-disable-next-line func-names
+    function (value) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      const { transferDateFrom } = this?.parent;
+      return !transferDateFrom || (transferDateFrom && value); // If transferDateFrom exists, transferDateTo must also exist
+    },
+  ),
 });
