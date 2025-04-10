@@ -8,7 +8,8 @@ export const manageFundsTransferInitialValues: IManageFundsTransfer = {
   availableBalance: '',
   currentBalance: '',
   beneficiaryName: '',
-  transferDate: '',
+  toDate: '',
+  fromDate: '',
   status: '',
   transferAmount: '',
 };
@@ -21,5 +22,6 @@ export const manageFundsTransferSchema = Yup.object().shape({
   beneficiaryName: Yup.string(),
   transferDate: Yup.string(),
   status: Yup.string(),
-  transferAmount: Yup.string(),
+  fromDate: Yup.string(),
+  toDate: Yup.string(),
 });

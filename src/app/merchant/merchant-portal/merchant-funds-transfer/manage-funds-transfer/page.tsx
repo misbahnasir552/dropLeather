@@ -239,13 +239,23 @@ function ManageFundsTransfer() {
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
                   type="text"
-                  error={'hi'}
                   touched={false}
                 />
                 <DateInputNew
+                  label="From Date"
+                  name="fromDate"
                   formik={formik}
-                  label="Date Between"
-                  name={'transferDate'}
+                  error={formik.errors.fromDate}
+                  touched={formik.touched.fromDate}
+                />
+                <DateInputNew
+                  label="To Date"
+                  name="toDate"
+                  formik={formik}
+                  error={formik.errors.toDate}
+                  touched={formik.touched.toDate}
+                  isDisabled={!formik.values.fromDate}
+                  minDate={formik.values.fromDate}
                 />
                 <DropdownInput
                   formik={formik}
@@ -261,7 +271,6 @@ function ManageFundsTransfer() {
                 <Button
                   label="Search"
                   type="submit"
-                  // routeName="/login"
                   className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
                 <Button
