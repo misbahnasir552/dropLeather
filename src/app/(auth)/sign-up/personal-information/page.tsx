@@ -14,6 +14,7 @@ import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch } from '@/hooks/redux';
 import { addFormData } from '@/redux/features/signUpSlice';
+import { generateAESEncryption } from '@/utils/helper';
 import {
   signUpInitialValues,
   signUpSchema,
@@ -111,9 +112,15 @@ const PersonalInfo = () => {
   const handleCheckboxChange = () => {
     setChecked((prev) => !prev);
   };
-
   const handleTermsAndConditionsChange = () => {
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=Online%20Payment%20Services%20Agreement.pdf&email=termsandconditions@gmail.com&type=merchant`;
+    const EncryptedFile = generateAESEncryption(
+      'Online Payment Services Agreement.pdf',
+    );
+    const EncryptedEmmail = generateAESEncryption(
+      'termsandconditions@gmail.com',
+    );
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+
     window.open(downloadUrl, '_blank');
   };
 
