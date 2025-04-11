@@ -255,7 +255,7 @@ function ManageFundsTransfer() {
                   error={formik.errors.transferDateTo}
                   touched={formik.touched.transferDateTo}
                   isDisabled={!formik.values.transferDateFrom}
-                  minDate={formik.values.transferDateTo}
+                  minDate={formik.values.transferDateFrom}
                 />
                 <DropdownInput
                   formik={formik}
