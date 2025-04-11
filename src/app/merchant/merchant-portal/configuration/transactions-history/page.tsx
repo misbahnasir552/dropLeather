@@ -61,8 +61,8 @@ const SearchTransaction = () => {
     // const selectedFIleds = selectedItems?.map((item: any) => item?.key);
 
     const transactionHistoryValues = {
-      // merchantEmail: 'misbah55@yopmail.com',
-      merchantEmail: userData.email,
+      merchantEmail: 'misbah55@yopmail.com',
+      // merchantEmail: userData.email,
       ...(filteredData || {}),
       managerMobile: userData?.managerMobile,
       page: pageNumber,
@@ -234,7 +234,12 @@ const SearchTransaction = () => {
       <Formik
         initialValues={searchTransactionsInitialValues}
         validationSchema={searchTransactionsSchema}
-        onSubmit={onSubmit}
+        // onSubmit={()=>{onSubmit}}
+        onSubmit={(values) => {
+          setPageNumber(0); // reset page to 0
+          onSubmit(values); // your custom reset logic
+          // ... any other logic like triggering search
+        }}
       >
         {(formik) => (
           <Form className=" bg-screen-grey px-6 pb-6 pt-[30px]">
