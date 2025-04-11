@@ -230,14 +230,16 @@ const SearchTransaction = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <HeaderWrapper heading="Search Transactions" />
+      <HeaderWrapper heading="Transactions History" />
       <Formik
         initialValues={searchTransactionsInitialValues}
         validationSchema={searchTransactionsSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
-          <Form className=" bg-screen-grey px-6 pb-6 pt-[60px]">
+          <Form className=" bg-screen-grey px-6 pb-6 pt-[30px]">
+            <div className="mb-4 text-base font-bold">Search Transactions</div>
+
             <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3">
               {/* <DropdownInput
                 label="Payment Method"
