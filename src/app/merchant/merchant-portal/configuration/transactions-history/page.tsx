@@ -61,8 +61,8 @@ const SearchTransaction = () => {
     // const selectedFIleds = selectedItems?.map((item: any) => item?.key);
 
     const transactionHistoryValues = {
-      merchantEmail: 'misbah55@yopmail.com',
-      // merchantEmail: userData.email,
+      // merchantEmail: 'misbah55@yopmail.com',
+      merchantEmail: userData.email,
       ...(filteredData || {}),
       managerMobile: userData?.managerMobile,
       page: pageNumber,
