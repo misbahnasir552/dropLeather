@@ -223,7 +223,7 @@ function ManageFundsTransfer() {
                   error={formik.errors.accountType}
                   touched={formik.touched.accountType}
                 />
-                <Input
+                {/* <Input
                   label="MSISDN"
                   name={'msisdn'}
                   type="text"
@@ -234,7 +234,7 @@ function ManageFundsTransfer() {
                   name={'currentBalance'}
                   type="number"
                   touched={false}
-                />
+                /> */}
                 <Input
                   label="Beneficiary Name"
                   name={'beneficiaryName'}

@@ -7,6 +7,7 @@ import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
@@ -214,13 +215,21 @@ function FundsTranfer() {
             <Form className="flex flex-col gap-6">
               <FormLayout formHeading="Account Details">
                 <div className="flex flex-col gap-4">
-                  <Input
+                  {/* <Input
                     isDisabled
                     value={userData?.managerMobile}
                     label="Transfer From"
                     name={'transferFrom'}
                     type="text"
                     placeholder={'92XXXXXXXXXX'}
+                  /> */}
+                  <DisabledField
+                    data={[
+                      {
+                        label: 'Transfer From',
+                        value: userData?.managerMobile,
+                      },
+                    ]}
                   />
                   <DropdownInput
                     label="Beneficiary Account Details"

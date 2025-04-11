@@ -297,6 +297,11 @@ function AddBeneficiary() {
                     Fetch Title
                   </button>
                 </div>
+                {formik.values.accountTitle === '' && (
+                  <div className="flex w-full justify-start px-3 text-xs text-danger-base">
+                    {formik.errors.accountTitle}
+                  </div>
+                )}
                 {apierror && (
                   <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                     {apierror}
