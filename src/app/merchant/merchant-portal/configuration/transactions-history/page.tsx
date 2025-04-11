@@ -198,7 +198,7 @@ const SearchTransaction = () => {
       setApierror('Please enter at least one filter to search.');
       return;
     }
-
+    setPageNumber(0);
     setApierror('');
     setFilteredData(filteredValues);
     // fetchRecords();
@@ -235,11 +235,7 @@ const SearchTransaction = () => {
         initialValues={searchTransactionsInitialValues}
         validationSchema={searchTransactionsSchema}
         // onSubmit={()=>{onSubmit}}
-        onSubmit={(values) => {
-          setPageNumber(0); // reset page to 0
-          onSubmit(values); // your custom reset logic
-          // ... any other logic like triggering search
-        }}
+        onSubmit={onSubmit}
       >
         {(formik) => (
           <Form className=" bg-screen-grey px-6 pb-6 pt-[30px]">
