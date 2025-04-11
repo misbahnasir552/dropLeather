@@ -29,11 +29,54 @@ import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import type { FieldsData } from './validations/types';
+// import type { FieldsData } from './validations/types';
+
+interface Field {
+  required: boolean;
+  options: any;
+  name: string;
+  label: string;
+  type: string;
+  validation: {
+    errorMessage: string;
+    options?: string[];
+  };
+  image?: string;
+  priority: number;
+}
+
+interface Category {
+  categoryName: string;
+  fields: Field[];
+}
+
+interface PageItem {
+  pageName: string;
+  categories: Category[];
+}
+
+interface FieldsData {
+  pages: {
+    page: PageItem[];
+  };
+}
+
+// interface UserData {
+//   managerMobile: string;
+//   email: string;
+//   apiSecret: string;
+//   jwt: string;
+// }
+
+// interface InitialValues {
+//   [key: string]: any;
+// }
 
 const ActivityInformationReqRevision = () => {
   const userData = useAppSelector((state: any) => state.auth);
-  const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
+  const fieldData = useAppSelector(
+    (state: { fields: FieldsData }) => state.fields,
+  );
 
   const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
   console.log('islast tab from redux ', isLastTab);
@@ -241,22 +284,31 @@ const ActivityInformationReqRevision = () => {
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Current Tab');
 
-      // Ensure valid fData based on page name
-      const fData = fieldData?.pages?.page?.filter((item) => {
-        console.log(item.pageName, 'ITEM PAGE NAME');
-        return convertSlugToTitle(item.pageName) === title;
+      // Map fieldData to change `page` to `pageName`
+      const fData = fieldData?.pages?.page?.map((item) => {
+        return {
+          ...item, // Spread the rest of the properties
+          name: (item as any).pageName, // Cast item to 'any' to access 'pageName'
+        };
       });
 
-      if (!fData || fData.length === 0) {
+      // Filter the data based on the title (converted slug)
+      const filteredData = fData?.filter((item) => {
+        console.log(item, 'ITEM PAGE NAME');
+        return convertSlugToTitle(item.name) === title;
+      });
+
+      // Exit if no valid data is found
+      if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
-        return; // Exit if no valid data
+        return; // Exit early if no valid data
       }
 
-      // setFilteredData(fData);
-      console.log('FDATAAAA:', fData);
+      console.log('Filtered Data:', filteredData);
+      setFilteredData(filteredData);
 
       // Map and Compare fData with ActivityInformationFormData
-      const mappedData = fData.map((item) => {
+      const mappedData = filteredData.map((item) => {
         const mappedCategories = item.categories.map((filteredCategory) => {
           // Find matching category in ActivityInformationFormData
           const matchingCategory = ActivityInformationFormData.categories.find(
@@ -299,13 +351,12 @@ const ActivityInformationReqRevision = () => {
         });
 
         return {
-          pageName: item.pageName,
+          pageName: item.name, // Ensure we're using `pageName` here
           categories: mappedCategories.filter(Boolean), // Remove null categories
         };
       });
 
       console.log('Mapped Data:', mappedData);
-      console.log(mappedData);
       setFilteredData(mappedData || []);
 
       setInitialValuesState(initialValues);
@@ -391,6 +442,7 @@ const ActivityInformationReqRevision = () => {
 
       // ✅ Extract valid page names from fieldData
       const validPages = fieldData.pages.page.map((p) => p.pageName);
+      console.log('valid pages', validPages);
 
       const transformedData = {
         managerMobile: userData.managerMobile,
@@ -443,8 +495,10 @@ const ActivityInformationReqRevision = () => {
             },
           });
 
+          console.log('api response', response.data);
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
+            console.log('nextIndex', nextIndex);
 
             //  Ensure nextIndex is within bounds and valid
             while (
@@ -461,8 +515,9 @@ const ActivityInformationReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              console.log('next tab', nextTab);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
@@ -531,7 +586,7 @@ const ActivityInformationReqRevision = () => {
               {/* Loop through filtered data to render form pages */}
               {filteredData.length > 0 ? (
                 filteredData?.map((pageItem: any) => {
-                  console.log('Page Item: ', pageItem); // Debug Page Item
+                  // console.log('Page Item: ', pageItem); // Debug Page Item
 
                   return (
                     <React.Fragment key={pageItem.pageName}>
@@ -546,7 +601,7 @@ const ActivityInformationReqRevision = () => {
                             item: { categoryName: any; fields: any[] },
                             itemIndex: any,
                           ) => {
-                            console.log('Category Item: ', item); // Debug Category Item
+                            // console.log('Category Item: ', item); // Debug Category Item
 
                             return (
                               <FormLayoutDynamic
@@ -602,7 +657,7 @@ const ActivityInformationReqRevision = () => {
                                           | null
                                           | undefined,
                                       ) => {
-                                        console.log('Field Item: ', field); // Debug Field Item
+                                        // console.log('Field Item: ', field); // Debug Field Item
 
                                         switch (field?.type) {
                                           case 'text':

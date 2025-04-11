@@ -30,7 +30,48 @@ import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
 // import DisabledInput from './DisabledStoreComponent';
-import type { FieldsData } from './validations/types';
+// import type { FieldsData } from './validations/types';
+
+interface Field {
+  required: boolean;
+  options: any;
+  name: string;
+  label: string;
+  type: string;
+  validation: {
+    errorMessage: string;
+    options?: string[];
+  };
+  image?: string;
+  priority: number;
+}
+
+interface Category {
+  categoryName: string;
+  fields: Field[];
+}
+
+interface PageItem {
+  pageName: string;
+  categories: Category[];
+}
+
+interface FieldsData {
+  pages: {
+    page: PageItem[];
+  };
+}
+
+// interface UserData {
+//   managerMobile: string;
+//   email: string;
+//   apiSecret: string;
+//   jwt: string;
+// }
+
+// interface InitialValues {
+//   [key: string]: any;
+// }
 
 const AddStoreReqRevision = () => {
   const { currentTab } = useCurrentTab();
@@ -253,21 +294,30 @@ const AddStoreReqRevision = () => {
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Current Tab');
 
-      // Ensure valid fData based on page name
-      const fData = fieldData?.pages?.page?.filter((item) => {
-        console.log(item.pageName, 'ITEM PAGE NAME');
-        return convertSlugToTitle(item.pageName) === title;
+      // Map fieldData to change `page` to `pageName`
+      const fData = fieldData?.pages?.page?.map((item) => {
+        return {
+          ...item, // Spread the rest of the properties
+          name: (item as any).pageName, // Cast item to 'any' to access 'pageName'
+        };
       });
 
-      if (!fData || fData.length === 0) {
+      // Ensure valid fData based on page name
+      const filteredData = fData?.filter((item) => {
+        console.log(item.name, 'ITEM PAGE NAME');
+        return convertSlugToTitle(item.name) === title; // Compare pageName instead of page
+      });
+
+      if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
         return; // Exit if no valid data
       }
 
-      // setFilteredData(fData);
-      console.log('FDATAAAA:', fData);
+      console.log('Filtered Data:', filteredData);
+      setFilteredData(filteredData);
 
-      const mappedData = fData.map((item) => {
+      // Map and Compare filteredData with storeDetailsFormData
+      const mappedData = filteredData.map((item) => {
         const mappedCategories = item.categories.map((filteredCategory) => {
           const matchingCategory = storeDetailsFormData.categories.find(
             (category: { categoryName: string }) =>
@@ -284,7 +334,7 @@ const AddStoreReqRevision = () => {
 
               if (matchedField) {
                 if (matchedField?.type !== 'checkItem') {
-                  initialValues[matchedField.name] = '';
+                  initialValues[matchedField.name] = ''; // Initialize field with empty value
                 }
 
                 return {
@@ -301,7 +351,7 @@ const AddStoreReqRevision = () => {
 
             return {
               categoryName: filteredCategory.categoryName,
-              fields: matchedFields.filter(Boolean), // Remove null values
+              fields: matchedFields.filter(Boolean), // Remove null values from fields
             };
           }
 
@@ -309,16 +359,15 @@ const AddStoreReqRevision = () => {
         });
 
         return {
-          pageName: item.pageName,
+          pageName: item.name, // Use pageName after mapping
           categories: mappedCategories.filter(Boolean), // Remove null categories
         };
       });
 
       console.log('Mapped Data:', mappedData);
-      console.log(mappedData);
-      setFilteredData(mappedData || []);
+      setFilteredData(mappedData || []); // Update state with mapped data
 
-      setInitialValuesState(initialValues);
+      setInitialValuesState(initialValues); // Set initial values for form
 
       // Build validation schema if matched data exists
       // if (mappedData.length > 0) {

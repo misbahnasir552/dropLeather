@@ -86,7 +86,7 @@ const BusinessInformation = () => {
     setPageTitle(title);
 
     let updatedFData = fieldsData?.pages?.page?.filter(
-      (item) => convertSlugToTitle(item.pageName) === title,
+      (item) => convertSlugToTitle(item.name) === title,
     );
 
     // Find the category containing "associationToHighRiskBusiness"
@@ -284,7 +284,7 @@ const BusinessInformation = () => {
                   {filteredData?.map(
                     (pageItem) => (
                       // pageItem.name === "Business Details" && (
-                      <React.Fragment key={pageItem.pageName}>
+                      <React.Fragment key={pageItem.name}>
                         {pageItem.categories
                           .sort(
                             (a: any, b: any) =>
@@ -293,7 +293,7 @@ const BusinessInformation = () => {
                           .map((item, itemIndex) => (
                             <FormLayoutDynamic
                               // key={itemIndex}
-                              key={`${itemIndex}-${pageItem.pageName}-${item.categoryName}`}
+                              key={`${itemIndex}-${pageItem.name}-${item.categoryName}`}
                               heading={item.categoryName}
                             >
                               {[...item.fields]

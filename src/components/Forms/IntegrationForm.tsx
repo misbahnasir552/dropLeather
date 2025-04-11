@@ -50,7 +50,7 @@ function IntegrationForm() {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
       const fData = fieldData.pages?.page.filter((item) => {
-        return convertSlugToTitle(item.pageName) === title;
+        return convertSlugToTitle(item.name) === title;
       });
       setFilteredData(fData);
       console.log('FDATAAA:', fData);
@@ -185,7 +185,7 @@ function IntegrationForm() {
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
                   {filteredData?.map((pageItem, index) => (
-                    <React.Fragment key={`${pageItem.pageName}-${index}`}>
+                    <React.Fragment key={`${pageItem.name}-${index}`}>
                       {pageItem?.categories
                         ?.slice()
                         .sort(
@@ -194,7 +194,7 @@ function IntegrationForm() {
                         )
                         .map((item, itemIndex) => (
                           <FormLayoutDynamic
-                            key={`${pageItem.pageName}-${itemIndex}`}
+                            key={`${pageItem.name}-${itemIndex}`}
                             heading={item.categoryName}
                           >
                             {[...item.fields]

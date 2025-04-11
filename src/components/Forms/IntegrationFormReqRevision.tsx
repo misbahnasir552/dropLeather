@@ -23,7 +23,48 @@ import CustomModal from '../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import { buildValidationSchema } from './validations/integrationSchema';
-import type { FieldsData } from './validations/types';
+// import type { FieldsData } from './validations/types';
+
+interface Field {
+  required: boolean;
+  options: any;
+  name: string;
+  label: string;
+  type: string;
+  validation: {
+    errorMessage: string;
+    options?: string[];
+  };
+  image?: string;
+  priority: number;
+}
+
+interface Category {
+  categoryName: string;
+  fields: Field[];
+}
+
+interface PageItem {
+  pageName: string;
+  categories: Category[];
+}
+
+interface FieldsData {
+  pages: {
+    page: PageItem[];
+  };
+}
+
+// interface UserData {
+//   managerMobile: string;
+//   email: string;
+//   apiSecret: string;
+//   jwt: string;
+// }
+
+// interface InitialValues {
+//   [key: string]: any;
+// }
 
 function IntegrationFormReqRevision() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -107,23 +148,31 @@ function IntegrationFormReqRevision() {
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Current Tab');
 
-      // Ensure valid fData based on page name
-      const fData = fieldData?.pages?.page?.filter((item) => {
-        console.log(item.pageName, 'ITEM PAGE NAME');
-        return convertSlugToTitle(item.pageName) === title;
+      // Map fieldData to change `page` to `pageName`
+      const fData = fieldData?.pages?.page?.map((item) => {
+        return {
+          ...item, // Spread the rest of the properties
+          name: (item as any).pageName, // Cast item to 'any' to access 'pageName'
+        };
       });
 
-      if (!fData || fData.length === 0) {
+      // Ensure valid fData based on page name
+      const filteredData = fData?.filter((item) => {
+        console.log(item.name, 'ITEM PAGE NAME');
+        return convertSlugToTitle(item.name) === title;
+      });
+
+      if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
         return; // Exit if no valid data
       }
 
-      // setFilteredData(fData);
-      console.log('FDATAAAA:', fData);
+      console.log('Filtered Data:', filteredData);
+      setFilteredData(filteredData);
 
-      // Map and Compare fData with ActivityInformationFormData
-      const mappedData = fData.map(
-        (item: { categories: any[]; pageName: any }) => {
+      // Map and Compare filteredData with ActivityInformationFormData
+      const mappedData = filteredData.map(
+        (item: { categories: any[]; name: any }) => {
           const mappedCategories = item.categories.map((filteredCategory) => {
             // Find matching category in ActivityInformationFormData
             const matchingCategory = IntegrationFormData.categories.find(
@@ -169,7 +218,7 @@ function IntegrationFormReqRevision() {
           });
 
           return {
-            pageName: item.pageName,
+            pageName: item.name, // Ensure we're using `pageName` here
             categories: mappedCategories.filter(Boolean), // Remove null categories
           };
         },

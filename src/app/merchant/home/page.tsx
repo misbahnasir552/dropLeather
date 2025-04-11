@@ -128,7 +128,7 @@ const LoginSucessHome = () => {
           console.log(businessType);
 
           const fieldsResponse = await apiClient.get(
-            `/merchant/fieldsForRevision?email=${userData.email}`,
+            `/merchant/getPageInfo/${businessType}`,
           );
           console.log('FIELDS DATA fieldsResponse Corporate: ', fieldsResponse);
         } catch (error) {
@@ -148,6 +148,35 @@ const LoginSucessHome = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleRequestRevisionClick = async () => {
+    try {
+      const response = await apiClient.get(
+        `/merchant/fieldsForRevision?email=${userData.email}`,
+      );
+
+      console.log('Request revision response:', response.data);
+
+      const firstPage = response?.data?.page?.[0]?.pageName;
+
+      if (firstPage) {
+        const formattedRoute = `/merchant/home/request-revision/${firstPage
+          .toLowerCase()
+          .replace(/\s+/g, '-')}`; // Convert to kebab-case if needed
+        console.log(formattedRoute);
+
+        router.push(formattedRoute);
+      } else {
+        // fallback if no page is found
+        router.push('/merchant/home');
+      }
+    } catch (error) {
+      console.error('Error requesting revision:', error);
+      setTitle('Error');
+      setDescription('Failed to request revision. Please try again.');
+      setShowModal(true);
+    }
+  };
 
   const PendingMerchantCardData = [
     {
@@ -174,10 +203,10 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Request Revision',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: '/merchant/home/request-revision',
+      description: 'All you need is to select...',
+      // routeName: '/merchant/home/request-revision',
       hide: !userData.isrequestRevision,
+      onClick: handleRequestRevisionClick,
     },
     {
       title: 'Continue to My Dashboard',
@@ -236,6 +265,7 @@ const LoginSucessHome = () => {
                   title={item.title}
                   description={item.description}
                   routeName={item.routeName}
+                  onClick={item.onClick}
                 /> // type={item.type} // onClickHandler={handleNavigate} /> ))
               ))}
         </div>

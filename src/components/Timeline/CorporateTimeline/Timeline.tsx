@@ -73,10 +73,7 @@ const Timeline: React.FC = () => {
   //   ? data?.mulipleApplicantsData?.status
   //   : appStatus;
 
-  const getFilteredTabs = (
-    fetchedPages: { pageName: string }[],
-    tabs: Tab[],
-  ) => {
+  const getFilteredTabs = (fetchedPages: { name: string }[], tabs: Tab[]) => {
     // const getFilteredTabs = (backendPages: { name: string }[], tabs: Tab[]) => {
 
     const nameToLabelMapping: Record<string, string> = {
@@ -87,9 +84,9 @@ const Timeline: React.FC = () => {
 
     return fetchedPages
       .map((page) => {
-        console.log('IN MAP ', page.pageName);
+        console.log('IN MAP ', page.name);
 
-        const labelToMatch = nameToLabelMapping[page.pageName];
+        const labelToMatch = nameToLabelMapping[page.name];
         console.log('TTTTTT ', tabs);
 
         return tabs.find((tab) => tab.label === labelToMatch);

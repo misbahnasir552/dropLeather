@@ -29,7 +29,48 @@ import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import AddStore from './AddStore';
 // import { buildValidationSchema } from './validations/helper';
-import type { FieldsData } from './validations/types';
+// import type { FieldsData } from './validations/types';
+
+interface Field {
+  required: boolean;
+  options: any;
+  name: string;
+  label: string;
+  type: string;
+  validation: {
+    errorMessage: string;
+    options?: string[];
+  };
+  image?: string;
+  priority: number;
+}
+
+interface Category {
+  categoryName: string;
+  fields: Field[];
+}
+
+interface PageItem {
+  pageName: string;
+  categories: Category[];
+}
+
+interface FieldsData {
+  pages: {
+    page: PageItem[];
+  };
+}
+
+// interface UserData {
+//   managerMobile: string;
+//   email: string;
+//   apiSecret: string;
+//   jwt: string;
+// }
+
+// interface InitialValues {
+//   [key: string]: any;
+// }
 
 const BusinessInformationReqRevision = () => {
   const userData = useAppSelector((state: any) => state.auth);

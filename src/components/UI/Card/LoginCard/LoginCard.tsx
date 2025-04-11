@@ -17,7 +17,8 @@ export default function LoginCard({
   description,
   routeName, // onClickHandler
   type, // isDisabled,
-}: ILoginCard) {
+  onClick,
+}: ILoginCard & { onClick?: () => void }) {
   // const userData = useAppSelector((state) => state.auth);
 
   const router = useRouter();
@@ -26,9 +27,12 @@ export default function LoginCard({
   const handleClick = async (type: any) => {
     console.log(type, 'type');
 
-    console.log('route name is', routeName);
-
-    router.push(routeName);
+    if (routeName) {
+      console.log('route name is', routeName);
+      router.push(routeName);
+    } else {
+      console.warn('No routeName provided');
+    }
 
     // }
     // router.push(routeName);
@@ -40,7 +44,7 @@ export default function LoginCard({
         className={`group flex w-[270px] rounded-lg border-[0.5px] border-border-light bg-screen-grey px-5 py-6 duration-300 ease-out hover:cursor-pointer hover:bg-primary-base sm:max-md:w-full`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        onClick={() => handleClick(type)}
+        onClick={() => (onClick ? onClick() : handleClick(type))}
       >
         <div className="flex flex-col gap-4">
           <p className="text-2xl font-semibold leading-[30px] text-secondary-base group-hover:text-neutral-white-base sm:max-md:text-xl sm:max-md:leading-6">

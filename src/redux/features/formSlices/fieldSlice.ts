@@ -26,7 +26,7 @@ interface Category {
 }
 
 interface Page {
-  pageName: string;
+  name: string;
   categories: Category[];
 }
 
@@ -39,7 +39,7 @@ interface InitialState {
 const initialState: InitialState = {
   pages: [
     {
-      pageName: 'Activity Information',
+      name: 'Activity Information',
       categories: [
         {
           categoryName: 'Contact Details',
@@ -52,7 +52,7 @@ const initialState: InitialState = {
       ],
     },
     {
-      pageName: 'Settlement Details',
+      name: 'Settlement Details',
       categories: [
         {
           categoryName:

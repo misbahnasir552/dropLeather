@@ -24,7 +24,7 @@ export type Category = {
 };
 
 export type Page = {
-  pageName: string;
+  name: string;
   categories: Category[];
 };
 

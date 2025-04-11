@@ -136,8 +136,8 @@ function ReviewFormData({ isEditable, corporate }: IRevieFormData) {
     };
 
     const fData = fieldsData.pages?.page?.filter((item) => {
-      if (item.pageName === 'Documents') {
-        return convertSlugToTitle(item.pageName);
+      if (item.name === 'Documents') {
+        return convertSlugToTitle(item.name);
       }
       return true;
     });
