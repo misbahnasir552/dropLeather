@@ -55,7 +55,7 @@ const DateInputNew = ({
     h-[60px] w-full rounded-lg p-5 font-medium focus:outline-none
     ${
       isDisabled
-        ? 'text-neutral-500 cursor-not-allowed bg-screen-white text-secondary-200'
+        ? 'cursor-not-allowed bg-screen-white text-secondary-200'
         : 'bg-white text-neutral-black-base'
     }
   `}
