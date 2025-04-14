@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-import ApiClientProvider from '@/services/providers/ApiClientProvider';
+// import ApiClientProvider from '@/services/providers/ApiClientProvider';
 // import store from '../store';
 // import SessionMonitor from '@/components/Session/SessionMonitor';
 import ReduxProvider from '@/services/providers/ReduxProvider';
@@ -44,11 +44,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${SFProDisplay.variable} font-SFPro`}>
         <ReduxProvider>
-          <ApiClientProvider>
-            {children}
+          {/* <ApiClientProvider> */}
+          {children}
 
-            {/* <SessionMonitor /> */}
-          </ApiClientProvider>
+          {/* <SessionMonitor /> */}
+          {/* </ApiClientProvider> */}
         </ReduxProvider>
       </body>
     </html>

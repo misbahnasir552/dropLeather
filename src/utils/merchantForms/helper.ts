@@ -1,24 +1,49 @@
 export const endpointArray = [
   {
     tab: 'activity-information',
-    endpoint: `/merchant/activity`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   {
     tab: 'business-details',
-    endpoint: `/merchant/businessDetails`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   {
     tab: 'store-details',
-    endpoint: `/merchant/saveMerchantStore`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   {
     tab: 'settlement-details',
-    endpoint: `/merchant/settlementdetails`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   {
     tab: 'integration',
-    endpoint: `/merchant/integration`,
+    endpoint: `/merchant/saveOnboardingForms`,
   },
   { tab: 'attachments', endpoint: `/merchant/upload` },
   { tab: 'review-form', endpoint: null },
 ];
+
+// export const endpointArray = [
+//   {
+//     tab: 'activity-information',
+//     endpoint: `/merchant/activity`,
+//   },
+//   {
+//     tab: 'business-details',
+//     endpoint: `/merchant/businessDetails`,
+//   },
+//   {
+//     tab: 'store-details',
+//     endpoint: `/merchant/saveMerchantStore`,
+//   },
+//   {
+//     tab: 'settlement-details',
+//     endpoint: `/merchant/settlementdetails`,
+//   },
+//   {
+//     tab: 'integration',
+//     endpoint: `/merchant/integration`,
+//   },
+//   { tab: 'attachments', endpoint: `/merchant/upload` },
+//   { tab: 'review-form', endpoint: null },
+// ];

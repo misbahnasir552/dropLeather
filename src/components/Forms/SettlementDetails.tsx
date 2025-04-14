@@ -4,7 +4,6 @@ import type { FormikHelpers } from 'formik';
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -15,40 +14,45 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
-import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
+// import { BarLoader } from 'react-spinners';
+import { SettlementDetailsFormData } from '@/utils/onboardingForms/settlementDetails';
 
 import DropdownInput from '../UI/Inputs/DropdownInput';
 import ImageInput from '../UI/Inputs/ImageInput';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+// import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
+import settlementDetailsSchema, {
+  settlementDetailsInitialValues,
+} from './validations/settlementForm';
 
-interface Field {
-  name: string;
-  label: string;
-  type: string;
-  validation: {
-    errorMessage: string;
-    options?: string[];
-  };
-  image?: string;
-  priority: number;
-}
+// interface Field {
+//   name: string;
+//   label: string;
+//   type: string;
+//   validation: {
+//     errorMessage: string;
+//     options?: string[];
+//   };
+//   image?: string;
+//   priority: number;
+// }
 
-interface Category {
-  categoryName: string;
-  fields: Field[];
-}
+// interface Category {
+//   categoryName: string;
+//   fields: Field[];
+// }
 
-interface PageItem {
-  name: string;
-  categories: Category[];
-}
+// interface PageItem {
+//   name: string;
+//   categories: Category[];
+// }
 
-interface FieldsData {
-  pages: {
-    page: PageItem[];
-  };
-}
+// interface FieldsData {
+//   pages: {
+//     page: PageItem[];
+//   };
+// }
 
 interface UserData {
   managerMobile: string;
@@ -69,96 +73,125 @@ interface InitialValues {
 // }
 
 const SettlementDetails = () => {
-  const fieldsData = useAppSelector(
-    (state: { fields: FieldsData }) => state.fields,
-  );
+  // const fieldsData = useAppSelector(
+  //   (state: { fields: FieldsData }) => state.fields,
+  // );
   const userData = useAppSelector((state: { auth: UserData }) => state.auth);
   const dispatch = useAppDispatch();
   const { currentTab } = useCurrentTab();
   const router = useRouter();
   const [pageTitle, setPageTitle] = useState<string | undefined>();
-  const [filteredData, setFilteredData] = useState<PageItem[] | undefined>();
+  const [filteredData, setFilteredData] = useState<any[]>();
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
-
+  const [formData, setFormData] = useState(
+    SettlementDetailsFormData.categories,
+  );
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
   useEffect(() => {
-    const initialValues: InitialValues = {};
+    console.log(
+      initialValuesState,
+      setFormData,
+      formData,
+      setInitialValuesState,
+    );
+    // const initialValues: InitialValues = {};
     if (currentTab) {
       const title = convertSlugToTitle(currentTab);
       setPageTitle(title);
 
-      let updatedFData = fieldsData.pages.page.filter(
-        (item) => convertSlugToTitle(item.name) === title,
+      // let updatedFData = fieldsData?.pages?.page?.filter(
+      //   (item) => convertSlugToTitle(item.name) === title,
+      // );
+
+      const updatedFormData = SettlementDetailsFormData.categories?.map(
+        (category) => {
+          let updatedFields = category.fields;
+          const hasAssociationField = category.fields.some(
+            (field: any) =>
+              field.name === 'bank' && field.type === 'checkBoxInput',
+          );
+
+          if (!hasAssociationField) return category;
+          if (
+            selectedCheckValue === 'easypaisaBankLimited' ||
+            selectedCheckValue === '' ||
+            selectedCheckValue === undefined
+          ) {
+            console.log('here i am ');
+            // console.log("updated fields",updatedFields)
+            updatedFields = category.fields.filter(
+              (field: any) => field.name !== 'bankName',
+            );
+            console.log('updated fields ', updatedFields);
+          }
+
+          return {
+            ...category,
+            fields: updatedFields,
+          };
+        },
       );
 
-      updatedFData = updatedFData?.map((item) => {
-        return {
-          ...item,
-          categories: item.categories.map((category) => {
-            let updatedFields = category.fields;
-
-            if (
-              selectedCheckValue === 'easypaisabanklimited' ||
-              selectedCheckValue === '' ||
-              selectedCheckValue === undefined
-            ) {
-              updatedFields = category.fields.filter(
-                (field) => field.name !== 'bankName',
-              );
-            }
-
-            return {
-              ...category,
-              fields: updatedFields,
-            };
-          }),
-        };
-      });
-
-      setFilteredData(updatedFData);
-
-      updatedFData?.forEach((item) => {
-        item.categories.forEach((category) => {
-          category.fields.forEach((field) => {
-            initialValues[field.name] = '';
-          });
-        });
-        setInitialValuesState(initialValues);
-      });
+      setFilteredData(updatedFormData);
     }
-  }, [currentTab, fieldsData.pages.page, selectedCheckValue]);
+  }, [currentTab, selectedCheckValue]);
 
-  if (!initialValuesState || !filteredData) {
-    setTimeout(() => {}, 12000);
-    return (
-      <div className="flex w-full flex-col justify-center">
-        <BarLoader color="#21B25F" />
-      </div>
-    );
-  }
+  // if (!initialValuesState || !filteredData) {
+  //   setTimeout(() => {}, 12000);
+  //   return (
+  //     <div className="flex w-full flex-col justify-center">
+  //       <BarLoader color="#21B25F" />
+  //     </div>
+  //   );
+  // }
 
   const onSubmit = async (
     values: any,
     { setSubmitting }: FormikHelpers<any>,
   ) => {
-    const req = {
+    // const req = {
+    //   managerMobile: userData.managerMobile,
+    //   account: values.accounts,
+    //   bankName:
+    //     values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
+    //   accountNumber: values.accountNumber,
+    //   accountTitle: values.accountTitle,
+    //   status: 'Completed',
+    // };
+
+    const transformedRequest = {
+      // request: {
       managerMobile: userData.managerMobile,
-      account: values.accounts,
-      bankName:
-        values?.bankName !== '' ? values?.bankName : 'Easypaisa Bank Limited',
-      accountNumber: values.accountNumber,
-      accountTitle: values.accountTitle,
-      status: 'Completed',
+      page: {
+        pageName: SettlementDetailsFormData?.pageName,
+        categories: SettlementDetailsFormData?.categories.map(
+          (category: any) => ({
+            categoryName: `Settlement Details`,
+            data: category.fields.map((field: any) => ({
+              label: field.label,
+              // value: values[field.name] || '', // Fetching value from formik.values
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}), // Add options only if it's a checkbox
+            })),
+          }),
+        ),
+        status: 'Completed',
+      },
+      // },
     };
 
     const mdRequest = {
-      ...req,
+      ...transformedRequest,
       apisecret: userData.apiSecret,
     };
 
@@ -167,14 +200,17 @@ const SettlementDetails = () => {
       const response: any = await apiClient.post(
         `merchant/settlementdetails`,
         {
-          request: req,
+          request: transformedRequest,
           signature: md5Hash,
         },
         {
           params: {
             username: userData?.email,
           },
-          headers: { Authorization: `Bearer ${userData?.jwt}` },
+          headers: {
+            Authorization: `Bearer ${userData?.jwt}`,
+            username: userData.email,
+          },
         },
       );
       if (response.data.responseCode === '009') {
@@ -194,7 +230,7 @@ const SettlementDetails = () => {
     }
     setSubmitting(false);
   };
-  console.log('asdads', filteredData, selectedCheckValue);
+  console.log('asdads', selectedCheckValue);
 
   return (
     <div>
@@ -207,8 +243,8 @@ const SettlementDetails = () => {
         // routeName="/merchant/home"
       />
       <Formik
-        initialValues={initialValuesState}
-        validationSchema={SettlementFormInfoSchema}
+        initialValues={settlementDetailsInitialValues}
+        validationSchema={settlementDetailsSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -219,107 +255,65 @@ const SettlementDetails = () => {
               </div>
               <div className="flex flex-col gap-9">
                 <div className="flex flex-col gap-6">
-                  {filteredData?.map((pageItem) => (
-                    <React.Fragment key={pageItem.name}>
-                      {pageItem.categories.map((item, itemIndex) => (
-                        <FormLayoutDynamic
-                          key={itemIndex}
-                          heading={item.categoryName}
-                        >
-                          {[...item.fields]
-                            .sort((a, b) => a.priority - b.priority)
-                            .map((field, fieldIndex) => {
-                              if (field?.type === 'text') {
-                                return (
-                                  <Input
-                                    key={fieldIndex}
-                                    label={field.label}
-                                    name={field.name}
-                                    type={field.type}
-                                    error={field.validation.errorMessage}
-                                  />
-                                );
-                              }
-                              if (field?.type === 'checkBoxInput') {
-                                return (
-                                  <CheckboxInput
-                                    // isMulti
-                                    key={fieldIndex}
-                                    name={field.name}
-                                    options={field.validation.options?.map(
-                                      (option) => ({
-                                        label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
-                                      }),
-                                    )}
-                                    form={formik}
-                                    setSelectedCheckValue={
-                                      setSelectedCheckValue
-                                    }
-                                  />
-                                );
-                              }
-                              if (
-                                field?.type === 'dropDown'
-                                //  &&
-                                // selectedCheckValue?.includes('bankaccount')
-                              ) {
-                                return (
-                                  <DropdownInput
-                                    key={fieldIndex}
-                                    label={field.label}
-                                    name={field.name}
-                                    options={field.validation?.options?.map(
-                                      (option: string) => ({
-                                        label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
-                                      }),
-                                    )}
-                                    formik={formik}
-                                    error={field.validation.errorMessage}
-                                  />
-                                );
-                              }
-                              if (field?.type === 'imageInput') {
-                                return (
-                                  <ImageInput
-                                    key={fieldIndex}
-                                    name={field.name}
-                                    label={field.label}
-                                    type={field.type}
-                                    hasImage
-                                    image={field.image}
-                                    data={{
-                                      accNumber: formik?.values?.accountNumber,
-                                      // easypaisabankLimited otherwise if otherbanks then selected
-                                      bankName:
-                                        selectedCheckValue ===
-                                        'easypaisabanklimited'
-                                          ? 'easypaisabanklimited'
-                                          : formik?.values?.bankName,
-                                    }}
-                                    formik={formik}
-                                    selectedCheckValue={selectedCheckValue}
-                                  />
-                                  // <Input
-                                  //   label={field.label}
-                                  //   name={field.name}
-                                  //   type={field.type}
-                                  //   value={formik.values.accountTitle}
-                                  //   // error={formik.errors.accountTitle}
-                                  //   // touched={formik.touched.accountTitle}
-                                  //   isDisabled
-                                  // />
-                                );
-                              }
-                              return null;
-                            })}
-                        </FormLayoutDynamic>
-                      ))}
+                  {filteredData?.map((item: any, index: any) => (
+                    <React.Fragment key={index}>
+                      {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
+                      <FormLayoutDynamic key={item} heading={item.categoryName}>
+                        {item.fields.map((field: any, fieldIndex: any) => {
+                          return field.type === 'text' ? (
+                            <Input
+                              key={fieldIndex}
+                              label={field.label}
+                              name={field.name}
+                              type={field.type}
+                              formik={formik}
+                              asterik={field.required}
+                              error={field.validation?.errorMessage}
+                            />
+                          ) : field?.type === 'checkBoxInput' ? (
+                            <CheckboxInput
+                              key={fieldIndex}
+                              isMulti={false}
+                              name={field.name}
+                              options={field.options}
+                              form={formik}
+                              error={field.validation?.errorMessage}
+                              setSelectedCheckValue={setSelectedCheckValue}
+                            />
+                          ) : field.type === 'dropdown' ? (
+                            <DropdownInput
+                              key={fieldIndex}
+                              label={field.label}
+                              name={field.name}
+                              options={field.options}
+                              formik={formik}
+                              // error={field.validation.errorMessage}
+                            />
+                          ) : field?.type === 'imageInput' ? (
+                            <ImageInput
+                              key={fieldIndex}
+                              name={field.name}
+                              label={field.label}
+                              type={field.type}
+                              hasImage
+                              image={field.image}
+                              data={{
+                                accNumber: formik?.values?.accountNumber,
+                                // easypaisabankLimited otherwise if otherbanks then selected
+                                bankName:
+                                  selectedCheckValue === 'easypaisabanklimited'
+                                    ? 'easypaisabanklimited'
+                                    : formik?.values?.bankName,
+                              }}
+                              formik={formik}
+                              selectedCheckValue={selectedCheckValue}
+                            />
+                          ) : (
+                            <p key={fieldIndex}>nothing to show</p>
+                          );
+                        })}
+                      </FormLayoutDynamic>
+                      {/* // ))} */}
                     </React.Fragment>
                   ))}
                 </div>

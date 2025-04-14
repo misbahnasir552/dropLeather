@@ -1,31 +1,33 @@
+// Do NOt Remove Commented Fields
+
 export const storeFields = [
   {
     label: 'Store Type *',
     name: 'storeType',
     type: 'checkbox',
     options: [
-      { value: 'Online', label: 'Online' },
+      // { value: 'Online', label: 'Online' },
       { value: 'Retail', label: 'Retail' },
     ],
   },
-  {
-    label: 'Web Store Name *',
-    name: 'webstoreName',
-    type: 'text',
-    show: ['Online'],
-  },
+  // {
+  //   label: 'Web Store Name *',
+  //   name: 'webstoreName',
+  //   type: 'text',
+  //   show: ['Online'],
+  // },
   {
     label: 'Store Name *',
     name: 'storeName',
     type: 'text',
     show: ['Online', 'Retail'],
   },
-  {
-    label: 'Website URL *',
-    name: 'webstoreURL',
-    type: 'text',
-    show: ['Online'],
-  },
+  // {
+  //   label: 'Website URL *',
+  //   name: 'webstoreURL',
+  //   type: 'text',
+  //   show: ['Online'],
+  // },
 
   {
     label: 'Street Address *',

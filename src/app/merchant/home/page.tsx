@@ -82,6 +82,11 @@ const LoginSucessHome = () => {
     try {
       const response = await apiClient.get(
         `merchant/getdetails/${userData?.email}`,
+        // {
+        //   params: {
+        //     username:
+        //   }
+        // }
       );
 
       setData(response.data);
@@ -127,7 +132,13 @@ const LoginSucessHome = () => {
             response?.data?.activityInformation?.businessNature;
 
           const fieldsResponse = await apiClient.get(
-            `/merchant/getPageInfo/${businessType}`,
+            `/merchant/getPageInfo`,
+
+            {
+              params: {
+                natureOfBusiness: businessType,
+              },
+            },
           );
           console.log('FIELDS DATA fieldsResponse Corporate: ', fieldsResponse);
         } catch (error) {

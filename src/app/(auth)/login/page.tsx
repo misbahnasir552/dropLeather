@@ -38,6 +38,12 @@ const NewLogin = () => {
       if (userData?.email && jwt) {
         const getDetailResponse = await apiClient.get(
           `merchant/getdetails/${email}`,
+
+          //   {
+          //   params: {
+          //     username: email
+          //   }
+          // }
         );
         console.log('getDetailResponse', getDetailResponse);
         if (getDetailResponse?.data?.responseCode === '009') {

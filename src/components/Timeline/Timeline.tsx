@@ -9,12 +9,12 @@ import React, {
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-import ActivityInformation from '@/components/Forms/ActivityInformation';
-import AttachmentsForm from '@/components/Forms/Attachments';
-import BusinessInformation from '@/components/Forms/BusinessDetails';
-import IntegrationForm from '@/components/Forms/IntegrationForm';
+import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
+import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
+import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
 import ReviewForm from '@/components/Forms/ReviewForm';
-import SettlementDetailsStatic from '@/components/Forms/SettlementDetails';
+import SettlementDetailsStatic from '@/components/Forms/SettlementDetailsOLD';
 import StoreDetails from '@/components/Forms/StoreDetails';
 import {
   ActivityInformationIcon,
