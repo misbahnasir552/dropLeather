@@ -222,10 +222,10 @@ const SearchTransaction = () => {
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
-    XLSX?.utils?.book_append_sheet(wb, ws, 'QR Reporting');
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Transaction History');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'qr_reporting.xlsx');
+    XLSX.writeFile(wb, 'transaction_history.xlsx');
   };
 
   return (
