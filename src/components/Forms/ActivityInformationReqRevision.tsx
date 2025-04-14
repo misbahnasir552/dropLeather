@@ -77,7 +77,6 @@ const ActivityInformationReqRevision = () => {
   const fieldData = useAppSelector(
     (state: { fields: FieldsData }) => state.fields,
   );
-
   const isLastTab = useAppSelector((state: any) => state.lastTab.isLastTab);
   console.log('islast tab from redux ', isLastTab);
 

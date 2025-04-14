@@ -75,6 +75,8 @@ const SettlementDetailsReqRevision = () => {
   const fieldsData = useAppSelector(
     (state: { fields: FieldsData }) => state.fields,
   );
+
+  console.log('fieldsData', fieldsData);
   const userData = useAppSelector((state: { auth: UserData }) => state.auth);
   const dispatch = useAppDispatch();
 
@@ -156,6 +158,8 @@ const SettlementDetailsReqRevision = () => {
         (item) => convertSlugToTitle(item.pageName) === title,
       );
 
+      console.log('updatedFData', updatedFData);
+
       updatedFData = updatedFData?.map((item) => ({
         ...item,
         categories: item.categories.map((category) => {
@@ -183,7 +187,7 @@ const SettlementDetailsReqRevision = () => {
       console.log('SettlementDetailsFormData:', SettlementDetailsFormData);
 
       // ✅ Map and merge fields from SettlementDetailsFormData (Exact Matching)
-      const mappedData = updatedFData.map((item) => {
+      const mappedData = updatedFData?.map((item) => {
         const mappedCategories = item.categories.map((filteredCategory) => {
           // ✅ Find matching category by exact categoryName
           const matchingCategory = SettlementDetailsFormData.categories.find(

@@ -6,7 +6,17 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { setPageData } from '@/redux/features/formSlices/fieldSlice';
+
+interface MerchantData {
+  activityInformation?: { status: string };
+  businessDetails?: { status: string };
+  settlementDetails?: { status: string };
+  integration?: { status: string };
+  documents?: { status: string };
+  reviewForm?: { status: string };
+}
 
 const LoginSucessHome = () => {
   const userData = useAppSelector((state: any) => state.auth);
@@ -15,6 +25,11 @@ const LoginSucessHome = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [reqRevisiondata, setReqRevisionData] = useState<MerchantData | null>(
+    null,
+  );
+
+  const dispatch = useAppDispatch();
 
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
@@ -155,20 +170,26 @@ const LoginSucessHome = () => {
         `/merchant/fieldsForRevision?email=${userData.email}`,
       );
 
-      console.log('Request revision response:', response.data);
+      if (response?.data) {
+        setReqRevisionData(response.data);
+        console.log(reqRevisiondata);
+        dispatch(setPageData(response.data));
 
-      const firstPage = response?.data?.page?.[0]?.pageName;
+        console.log('Request revision response:', response.data);
 
-      if (firstPage) {
-        const formattedRoute = `/merchant/home/request-revision/${firstPage
-          .toLowerCase()
-          .replace(/\s+/g, '-')}`; // Convert to kebab-case if needed
-        console.log(formattedRoute);
+        const firstPage = response?.data?.page?.[0]?.pageName;
 
-        router.push(formattedRoute);
-      } else {
-        // fallback if no page is found
-        router.push('/merchant/home');
+        if (firstPage) {
+          const formattedRoute = `/merchant/home/request-revision/${firstPage
+            .toLowerCase()
+            .replace(/\s+/g, '-')}`; // Convert to kebab-case if needed
+          console.log(formattedRoute);
+
+          router.push(formattedRoute);
+        } else {
+          // fallback if no page is found
+          router.push('/merchant/home');
+        }
       }
     } catch (error) {
       console.error('Error requesting revision:', error);
@@ -204,7 +225,7 @@ const LoginSucessHome = () => {
     {
       title: 'Request Revision',
       description: 'All you need is to select...',
-      // routeName: '/merchant/home/request-revision',
+      routeName: '/merchant/home/request-revision',
       hide: !userData.isrequestRevision,
       onClick: handleRequestRevisionClick,
     },
