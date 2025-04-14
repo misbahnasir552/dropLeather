@@ -533,18 +533,6 @@ export const ApplicationFormSchema = Yup.object().shape({
   requiredBusiness: Yup.string().required('Please fill the field'),
   // homeAddressOther: Yup.string().required('Please fill the field'),
 
-  homeAddressOther: Yup.string().when(
-    'secondaryNationality',
-    (secondaryNationality, schema) => {
-      console.log('secondaryNationality1 ', secondaryNationality);
-
-      if (secondaryNationality[0] !== 'None') {
-        return schema.required('Please fill the field');
-      }
-      return schema;
-    },
-  ),
-
   taxJurisdictionForResidency: Yup.string().when(
     'taxResidencyCountry',
     (taxResidencyCountry, schema) => {

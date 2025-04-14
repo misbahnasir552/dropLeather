@@ -3,35 +3,42 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-import { BarLoader } from 'react-spinners';
 
+// import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
-import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
+// import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import type { ActivityFormInfo } from '@/interfaces/interface';
+// import type { ActivityFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
+import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import CheckboxItem from '../UI/Inputs/CheckboxItem';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import { buildValidationSchema } from './validations/helper';
-import type { FieldsData } from './validations/types';
+import activityInformationFormSchema, {
+  activityInformationFormInitialValues,
+} from './validations/activityInformationForm';
+import { buildValidationSchema } from './validationsOLD/helper';
+import type { FieldsData } from './validationsOLD/types';
 
 const ActivityInformation = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
-
-  const formData = useAppSelector((state: any) => state.onBoardingForms);
+  const [formData, setFormData] = useState(
+    ActivityInformationFormData.categories,
+  );
+  // const formData = useAppSelector((state: any) => state.onBoardingForms);
   console.log('FORM DATA ', formData);
 
-  const [isChecked, setChecked] = useState(false);
+  // const [isChecked, setChecked] = useState(false);
   const [filteredData, setFilteredData] = useState<any[]>();
   const [pageTitle, setPageTitle] = useState('');
   const [initialValuesState, setInitialValuesState] = useState<any>();
@@ -40,11 +47,17 @@ const ActivityInformation = () => {
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
-
+  const [isChecked, setChecked] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  console.log('userdatais', userData);
+  console.log(
+    'userdatais',
+    userData,
+    filteredData,
+    validationSchemaState,
+    setFormData,
+  );
   const { apiSecret } = userData;
   const router = useRouter();
   console.log('selected value checkbox input: ', selectedCheckValue);
@@ -82,63 +95,76 @@ const ActivityInformation = () => {
     }
   }, [currentTab]);
 
-  console.log('INITAIL VALUES STATE', initialValuesState);
-  if (!initialValuesState || !validationSchemaState || !filteredData) {
-    return (
-      <div className="flex w-full flex-col justify-center">
-        <BarLoader color="#21B25F" />
-      </div>
-    );
-  }
-  const saveAndContinue = async (
-    values: ActivityFormInfo,
-    { setSubmitting }: any,
-  ) => {
-    try {
-      const response: any = await apiClient.post(
-        `merchant/activity/${userData.email}`,
-        {
-          businessNature: formData?.businessNature?.businessTypeNature,
-          managerMobile: userData.managerMobile,
-          fatherName: values.fatherName,
-          businessName: values.businessName,
-          nameOfBusinessOwner: values.businessOwner,
-          legalNameOfBusiness: values.legalName,
-          dateOfIncorporation: values.incorporationDate,
-          ntnNumber: values.ntnNumber,
-          purposeOfAccount: values.purposeOfAccount,
-          emailAddress: values.emailAddress,
-          city: values.city,
-          businessAddress: values.businessAddress,
-          correspondenceAddress: values.correspondenceAddress,
-          primaryPhoneNumber: values.primaryPhoneNumber,
-          otherPhoneNumber: values.otherPhoneNumber,
-          status: 'partial',
-          terrorFinancing: values.terrorFinancing,
-          politicallyExposed: values.politicallyExposed,
-          accountHolder: values.accountHolder,
-          gender: values.gender,
-          citizenship: values.citizenship,
-          countryOfResidency: values.residency,
-        },
-        {
-          headers: { Authorization: `Bearer ${userData.jwt}` },
-        },
-      );
-
-      if (response.data.responseCode === '000') {
-        console.log(response, 'Activity Information');
-        router.push('/business-details');
-      } else {
-        router.push('/login');
-        console.log('Data submission failure');
-      }
-    } catch (e) {
-      console.log(e, 'Error');
+  const handleCheckboxChange = (name: string, formik: any) => {
+    const newChecked = !isChecked;
+    console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
+    if (formik.values.businessAddress) {
+      setChecked(newChecked);
     }
-
-    setSubmitting(false);
+    if (newChecked && formik.values.businessAddress) {
+      formik.setFieldValue(name, formik.values.businessAddress);
+    } else {
+      formik.setFieldValue(name, '');
+    }
   };
+
+  console.log('INITAIL VALUES STATE', initialValuesState);
+  // if (!initialValuesState || !validationSchemaState || !filteredData) {
+  //   return (
+  //     <div className="flex w-full flex-col justify-center">
+  //       <BarLoader color="#21B25F" />
+  //     </div>
+  //   );
+  // }
+  // const saveAndContinue = async (
+  //   values: ActivityFormInfo,
+  //   { setSubmitting }: any,
+  // ) => {
+  //   try {
+  //     const response: any = await apiClient.post(
+  //       `merchant/activity/${userData.email}`,
+  //       {
+  //         // businessNature: formData?.businessNature?.businessTypeNature,
+  //         managerMobile: userData.managerMobile,
+  //         fatherName: values.fatherName,
+  //         businessName: values.businessName,
+  //         nameOfBusinessOwner: values.businessOwner,
+  //         legalNameOfBusiness: values.legalName,
+  //         dateOfIncorporation: values.incorporationDate,
+  //         ntnNumber: values.ntnNumber,
+  //         purposeOfAccount: values.purposeOfAccount,
+  //         emailAddress: values.emailAddress,
+  //         city: values.city,
+  //         businessAddress: values.businessAddress,
+  //         correspondenceAddress: values.correspondenceAddress,
+  //         primaryPhoneNumber: values.primaryPhoneNumber,
+  //         otherPhoneNumber: values.otherPhoneNumber,
+  //         status: 'partial',
+  //         terrorFinancing: values.terrorFinancing,
+  //         politicallyExposed: values.politicallyExposed,
+  //         accountHolder: values.accountHolder,
+  //         gender: values.gender,
+  //         citizenship: values.citizenship,
+  //         countryOfResidency: values.residency,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${userData.jwt}` },
+  //       },
+  //     );
+
+  //     if (response.data.responseCode === '000') {
+  //       console.log(response, 'Activity Information');
+  //       router.push('/business-details');
+  //     } else {
+  //       router.push('/login');
+  //       console.log('Data submission failure');
+  //     }
+  //   } catch (e) {
+  //     console.log(e, 'Error');
+  //   }
+
+  //   setSubmitting(false);
+  // };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('activity valuesssssssssssss', values);
@@ -152,28 +178,49 @@ const ActivityInformation = () => {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
 
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-      const additionalValues = {
-        ...values,
-        managerMobile: userData?.managerMobile,
-        businessNature: formData?.businessNature?.businessTypeNature,
-        status: 'Completed',
+
+      const transformedData = {
+        managerMobile: userData.managerMobile,
+        page: {
+          pageName: 'Activity Information',
+          categories: ActivityInformationFormData.categories.map(
+            (category) => ({
+              categoryName: category.categoryName,
+              data: category.fields.map((field) => ({
+                label: field.label,
+                value: values[field.name] || '', // Fetching value from formik.values
+              })),
+            }),
+          ),
+        },
       };
+
+      // const additionalValues = {
+      //   ...values,
+      //   managerMobile: userData?.managerMobile,
+      //   // businessNature: formData?.businessNature?.businessTypeNature,
+      //   status: 'Completed',
+      // };
       const mdRequest = {
-        ...additionalValues,
+        ...transformedData,
         apisecret: apiSecret,
       };
       const md5Hash = generateMD5Hash(mdRequest);
       const requestBody = {
-        request: additionalValues,
+        // managerMobile: userData.managerMobile,
+        request: transformedData,
         signature: md5Hash,
       };
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(currentEndpoint, requestBody, {
-            params: {
-              username: userData?.email,
+            // params: {
+            //   username: userData?.email,
+            // },
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              Username: userData?.email,
             },
-            headers: { Authorization: `Bearer ${userData.jwt}` },
           });
           // console.log(response);
           if (response?.data?.responseCode === '009') {
@@ -215,18 +262,18 @@ const ActivityInformation = () => {
     }
   };
 
-  const handleCheckboxChange = (name: string, formik: any) => {
-    const newChecked = !isChecked;
-    console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
-    if (formik.values.businessAddress) {
-      setChecked(newChecked);
-    }
-    if (newChecked && formik.values.businessAddress) {
-      formik.setFieldValue(name, formik.values.businessAddress);
-    } else {
-      formik.setFieldValue(name, '');
-    }
-  };
+  // const handleCheckboxChange = (name: string, formik: any) => {
+  //   const newChecked = !isChecked;
+  //   console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
+  //   if (formik.values.businessAddress) {
+  //     setChecked(newChecked);
+  //   }
+  //   if (newChecked && formik.values.businessAddress) {
+  //     formik.setFieldValue(name, formik.values.businessAddress);
+  //   } else {
+  //     formik.setFieldValue(name, '');
+  //   }
+  // };
 
   return (
     <>
@@ -239,8 +286,8 @@ const ActivityInformation = () => {
         // routeName="/merchant/home"
       />
       <Formik
-        initialValues={initialValuesState}
-        validationSchema={validationSchemaState}
+        initialValues={activityInformationFormInitialValues}
+        validationSchema={activityInformationFormSchema}
         onSubmit={onSubmit}
       >
         {(formik) => (
@@ -250,109 +297,82 @@ const ActivityInformation = () => {
             </div>
 
             <div className="flex flex-col justify-end gap-9">
-              {filteredData?.map(
-                (pageItem) => (
-                  // pageItem.name === "Business Details" && (
-                  <React.Fragment key={pageItem.name}>
-                    {pageItem?.categories
-                      ?.slice()
-                      .sort(
-                        (a: any, b: any) =>
-                          Number(a.priority) - Number(b.priority),
-                      )
-                      .map(
-                        (
-                          item: { categoryName: any; fields: any[] },
-                          itemIndex: number,
-                        ) => (
-                          <FormLayoutDynamic
-                            key={itemIndex}
-                            heading={item.categoryName}
-                          >
-                            {[...item.fields]
-                              .sort((a, b) => a.priority - b.priority)
-                              .map((field, fieldIndex) => {
-                                return field?.type === 'text' ? (
-                                  <Input
-                                    key={fieldIndex}
-                                    label={field.label}
-                                    name={field.name}
-                                    placeholder={field.placeholder}
-                                    type={field.type}
-                                    error={field.validation.errorMessage}
-                                    asterik={field.validation.required}
-                                  />
-                                ) : field?.type === 'dropDown' ? (
-                                  <DropdownNew
-                                    asterik={field.validation.required}
-                                    key={fieldIndex} // Add a key prop to DropdownInput as well
-                                    label={field.label}
-                                    name={field.name}
-                                    options={field.validation?.options?.map(
-                                      (option: string) => ({
-                                        label: option,
-                                        value: option
-                                          .toLowerCase()
-                                          .replace(/\s+/g, ''),
-                                      }),
-                                    )}
-                                    formik={formik}
-                                    error={field.validation.errorMessage}
-                                  />
-                                ) : field?.type === 'date' ? (
-                                  <DateInputNew
-                                    asterik={field.validation.required}
-                                    key={fieldIndex}
-                                    formik={formik}
-                                    label={field.label}
-                                    name={field.name}
-                                    error={field.validation.errorMessage}
-                                  />
-                                ) : field?.type === 'checkItem' ? (
-                                  <CheckboxItem
-                                    key={fieldIndex}
-                                    description={field.label}
-                                    isChecked={isChecked}
-                                    handleCheckboxChange={() =>
-                                      handleCheckboxChange(
-                                        'correspondenceAddress',
-                                        formik,
-                                      )
-                                    }
-                                  />
-                                ) : field?.type === 'checkBoxInput' ? (
-                                  <CheckboxInput
-                                    key={fieldIndex}
-                                    name={field.name}
-                                    error={field.validation.errorMessage}
-                                    options={field.validation.options}
-                                    form={formik}
-                                    setSelectedCheckValue={
-                                      setSelectedCheckValue
-                                    }
-                                  />
-                                ) : (
-                                  <p key={fieldIndex}>nothing to show field</p>
-                                );
-                              })}
-                          </FormLayoutDynamic>
-                        ),
-                      )}
-                  </React.Fragment>
-                ),
-                // )
-              )}
+              {formData?.map((item: any, index: any) => (
+                <React.Fragment key={index}>
+                  {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
+                  <FormLayoutDynamic key={item} heading={item.categoryName}>
+                    {item.fields.map((field: any, fieldIndex: any) => {
+                      return field.type === 'text' ? (
+                        <Input
+                          key={fieldIndex}
+                          label={field.label}
+                          name={field.name}
+                          type={field.type}
+                          formik={formik}
+                          asterik={field.required}
+                          error={field.validation?.errorMessage}
+                        />
+                      ) : field?.type === 'checkItem' ? (
+                        <CheckboxItem
+                          key={fieldIndex}
+                          description={field.label}
+                          isChecked={isChecked}
+                          handleCheckboxChange={() =>
+                            handleCheckboxChange(
+                              'correspondenceAddress',
+                              formik,
+                            )
+                          }
+                        />
+                      ) : field?.type === 'checkBoxInputMulti' ? (
+                        <CheckboxInput
+                          key={fieldIndex}
+                          isMulti
+                          name={field.name}
+                          options={field.options}
+                          form={formik}
+                          error={field.validation?.errorMessage}
+                          setSelectedCheckValue={setSelectedCheckValue}
+                        />
+                      ) : field?.type === 'dropdown' ? (
+                        <DropdownNew
+                          asterik={field.required}
+                          key={fieldIndex} // Add a key prop to DropdownInput as well
+                          label={field.label}
+                          name={field?.name}
+                          options={field.options}
+                          formik={formik}
+                          // error={field.validation.errorMessage}
+                        />
+                      ) : field?.type === 'date' ? (
+                        <DateInputNew
+                          asterik={field.required}
+                          key={fieldIndex}
+                          formik={formik}
+                          label={field.label}
+                          name={field.name}
+                          // error={field.validation.errorMessage}
+                        />
+                      ) : (
+                        <p key={fieldIndex}>nothing to show</p>
+                      );
+                    })}
+                  </FormLayoutDynamic>
+                  {/* // ))} */}
+                </React.Fragment>
+              ))}
+
               {/* <FormControlButtons saveAndContinue={saveAndContinue} /> */}
               <div className=" sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                 <Button
                   label={`Save & Continue Later`}
-                  onClickHandler={() =>
-                    saveAndContinue(
-                      formik.values,
-                      formik.setSubmitting,
-                      // formik.validateForm,
-                    )
-                  }
+                  // onClickHandler={() =>
+                  //   saveAndContinue(
+                  //     formik.values,
+                  //     formik.setSubmitting,
+                  //     // formik.validateForm,
+                  //   )
+                  // }
                   type="button"
                   className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
                 />

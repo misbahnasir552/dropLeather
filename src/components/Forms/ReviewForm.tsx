@@ -15,9 +15,11 @@ function ReviewForm() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await apiClient.get(
-          `merchant/getdetails/${userData?.email}`,
-        );
+        const response = await apiClient.get(`merchant/getDynamicReviewForm`, {
+          headers: {
+            username: userData?.email,
+          },
+        });
         console.log(response, 'view/get details RESPONSE');
 
         if (response?.data.responseCode === '009') {
@@ -46,6 +48,42 @@ function ReviewForm() {
     };
     fetchData();
   }, []);
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await apiClient.get(
+  //         `merchant/getdetails/${userData?.email}`,
+  //       );
+  //       console.log(response, 'view/get details RESPONSE');
+
+  //       if (response?.data.responseCode === '009') {
+  //         // setOnboardingData(response?.data);
+  //         console.log('response data is', response?.data);
+  //         if (
+  //           response?.data?.activityInformation?.businessNature ===
+  //           'soleProprietor'
+  //         ) {
+
+  //           setOnboardingData(response?.data);
+  //           setBusinessNatureActivity('soleProprietor');
+  //         } else {
+  //           setOnboardingData(response?.data);
+  //           setBusinessNatureActivity('other');
+  //         }
+  //       } else if (response?.data?.responseMessage === '000') {
+  //         setApierror(response?.data?.responseMessage);
+  //       } else {
+  //         setApierror('an unexpected error occcured');
+  //       }
+  //       // console.log(data, "view/get details Data");
+  //     } catch (e: any) {
+  //       setApierror(e);
+  //       console.log(e, 'error fetching');
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
 
   return (
     <div className="flex flex-col gap-5">

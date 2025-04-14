@@ -7,7 +7,7 @@ import apiClient from '@/api/apiClient';
 import Checklist from '@/components/Forms/Checklist';
 // import AttachmentsForm from '@/components/Forms/CorporateAttachments';
 import ReviewForm from '@/components/Forms/ReviewForm';
-import type { FieldsData } from '@/components/Forms/validations/types';
+import type { FieldsData } from '@/components/Forms/validationsOLD/types';
 import PhotoCapture from '@/components/LivePhotoCapture/PhotoCapture';
 import {
   CheckListIcon,
