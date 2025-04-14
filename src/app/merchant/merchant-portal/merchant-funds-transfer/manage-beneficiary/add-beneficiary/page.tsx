@@ -259,7 +259,7 @@ function AddBeneficiary() {
                   name={'mobileNumber'}
                   type="text"
                   error={formik.errors.mobileNumber}
-                  touched={false}
+                  touched={formik.touched.mobileNumber}
                   asterik={true}
                 />
                 {/* <div className="flex w-full justify-end">
@@ -287,6 +287,8 @@ function AddBeneficiary() {
                         value: formik.values.accountTitle,
                       },
                     ]}
+                    touched={formik.touched.accountTitle}
+                    error={formik.errors.accountTitle}
                   />
                   <button
                     type="button"
@@ -311,9 +313,9 @@ function AddBeneficiary() {
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.beneficiaryName}
                   asterik={true}
-                  touched={false}
+                  touched={formik.touched.beneficiaryName}
                 />
                 <Input
                   label="Beneficiary Email"
