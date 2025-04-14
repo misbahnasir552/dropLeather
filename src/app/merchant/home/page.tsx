@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -18,11 +18,11 @@ const LoginSucessHome = () => {
 
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
-  const router = useRouter();
+  // const router = useRouter();
 
-  if (userData?.temp) {
-    router.push('/merchant/home/reset-password');
-  }
+  // if (userData?.temp) {
+  //   router.push('/merchant/home/reset-password');
+  // }
 
   // const determineNextRoute = (
   //   pages: { routeName: string; status: string }[],
