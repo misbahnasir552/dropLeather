@@ -72,11 +72,13 @@ const OtpLogin = () => {
         });
         dispatch(clearApplicants());
         router.push('/merchant/home');
-      } else if (response?.data?.responseCode == '010') {
-        console.log('here');
+      }
+      // else if (response?.data?.responseCode == '010') {
+      //   console.log('here');
 
-        router.push(`/reset-password?email=${credentials.username}`);
-      } else {
+      //   router.push(`/reset-password?email=${credentials.username}`);
+      // }
+      else {
         console.log('Login failure');
         console.log('Login failure');
         setApierror(response?.data?.responseMessage);
