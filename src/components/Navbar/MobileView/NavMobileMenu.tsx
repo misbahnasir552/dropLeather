@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
+import apiClient from '@/api/apiClient';
 import bellIcon from '@/assets/icons/bell-icon.svg';
 import ChevronRight from '@/assets/icons/chevron-right.svg';
 import downSmall from '@/assets/icons/downSmall.svg';
@@ -41,10 +42,31 @@ const NavMobileMenu = ({
     setIstoggle((prev) => !prev);
   };
 
-  const logOut = () => {
-    dispatch(setLogout());
-    dispatch(resetForms());
-    router.push('/login');
+  const logOut = async () => {
+    console.log("here i'm to log out >");
+
+    try {
+      const response = await apiClient.get(
+        `/auth/expireJwt?email=${userData?.email}`,
+        { headers: { Authorization: `Bearer ${userData?.jwt}` } },
+      );
+
+      if (response.data.responseCode === '000') {
+        dispatch(setLogout());
+        dispatch(resetForms());
+        router.push('/login');
+
+        // setTimeout(() => {
+        //   dispatch(clearCredentials());
+        //   dispatch(setLogoutOnboarding());
+        //   dispatch(resetFields());
+        // }, 5000);
+      } else {
+        console.error('logout Error:', response);
+      }
+    } catch (error) {
+      console.error('logout Error:', error);
+    }
   };
   return (
     <NavMobileViewLayout>
