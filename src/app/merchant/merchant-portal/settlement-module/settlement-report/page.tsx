@@ -20,6 +20,8 @@ function SettlementReport() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  console.log('totalPages');
+
   const settlementTransactionHistoryTableHeadings: string[] = [
     'Financial Transaction ID',
     'Settlement Date/Time',
