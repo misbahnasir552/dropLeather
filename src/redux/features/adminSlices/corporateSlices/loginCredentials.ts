@@ -12,8 +12,6 @@ const credentialSlice = createSlice({
   initialState,
   reducers: {
     setLoginCredentials: (state, action: PayloadAction<any>) => {
-      console.log('setLoginCredentials success', state, action.payload);
-
       state.username = action.payload.username;
       state.password = action.payload.password;
       state.email = action.payload.email;

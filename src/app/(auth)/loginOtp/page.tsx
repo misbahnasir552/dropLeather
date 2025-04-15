@@ -58,8 +58,6 @@ const OtpLogin = () => {
 
       if (response?.data?.responseCode === '000') {
         dispatch(loginSuccess(response?.data));
-        console.log('Login success. Redirecting...');
-
         Cookies.set('jwt', response?.data?.jwt, {
           expires: 1,
           path: '/',
@@ -74,7 +72,13 @@ const OtpLogin = () => {
         });
         dispatch(clearApplicants());
         router.push('/merchant/home');
-      } else {
+      }
+      // else if (response?.data?.responseCode == '010') {
+      //   console.log('here');
+
+      //   router.push(`/reset-password?email=${credentials.username}`);
+      // }
+      else {
         console.log('Login failure');
         console.log('Login failure');
         setApierror(response?.data?.responseMessage);
