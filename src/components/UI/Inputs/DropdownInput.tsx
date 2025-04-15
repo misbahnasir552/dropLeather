@@ -19,8 +19,7 @@ const DropdownInput = ({
   error,
   label,
   touched,
-  formik,
-  resetGraphFilter,
+  formik, // resetGraphFilter,
 }: IDropdownInput) => {
   const selectRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,12 +32,6 @@ const DropdownInput = ({
       name,
       options.find((opt: any) => opt.label === label)?.value,
     );
-    if (resetGraphFilter) {
-      formik?.setFieldValue('fromDate', '');
-      formik?.setFieldValue('toDate', '');
-      formik?.setFieldValue('year', '');
-      formik?.setFieldValue('month', '');
-    }
 
     setToggle(false);
   };
@@ -119,8 +112,8 @@ const DropdownInput = ({
                 {/* <div> {formik?.values[name]}hi</div> */}
                 <div>
                   {' '}
-                  {options?.find(
-                    (opt: any) => opt?.value === formik?.values[name],
+                  {options.find(
+                    (opt: any) => opt.value === formik?.values[name],
                   )?.label || label}
                 </div>
                 {/* <div> {label}</div> */}

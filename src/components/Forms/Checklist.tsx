@@ -18,8 +18,8 @@ import CheckBoxImageInput from '../UI/Inputs/CheckBoxImageInput';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 // import Input from '../UI/Inputs/Input';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import { buildValidationSchema } from './validations/helper';
-import type { FieldsData } from './validations/types';
+import { buildValidationSchema } from './validationsOLD/helper';
+import type { FieldsData } from './validationsOLD/types';
 
 const Checklist = () => {
   const dispatch = useAppDispatch();

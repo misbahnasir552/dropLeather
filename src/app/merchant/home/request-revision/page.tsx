@@ -7,8 +7,8 @@ import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-import { buildValidationSchema } from '@/components/Forms/validations/helper';
-import type { FieldsData } from '@/components/Forms/validations/types';
+import { buildValidationSchema } from '@/components/Forms/validationsOLD/helper';
+import type { FieldsData } from '@/components/Forms/validationsOLD/types';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';

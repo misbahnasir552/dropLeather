@@ -169,9 +169,10 @@ function ManageFundsTransfer() {
         return null;
       })
       ?.filter(Boolean); // Remove null entries from the array
-
+    setPageNumber(0);
     setBeneficiaryFilteredData(filteredData);
   };
+
   const exportToExcel = () => {
     // if (!response) return;
 
