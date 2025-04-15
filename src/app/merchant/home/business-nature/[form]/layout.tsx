@@ -9,7 +9,6 @@ const Layout = ({ children }: any) => {
     <>
       <div className="flex flex-col gap-6 pb-[120px]">
         <Timeline />
-
         {children}
       </div>
     </>

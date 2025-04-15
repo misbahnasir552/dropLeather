@@ -57,14 +57,34 @@ const Timeline: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     const getDetails = async () => {
+      // try {
+      //   console.log('Fetching details...');
+      //   const response = await apiClient.get(
+      //     `merchant/getdetails/${userData?.email}`,
+      //   );
+      //   console.log('Response received:', response?.data);
+
+      //   if (response?.data) {
+      //     setData(response?.data);
+      //     console.log('Data set successfully.');
+      //   } else {
+      //     console.error('Empty response data.');
+      //   }
+      // }
+
       try {
         console.log('Fetching details...');
         const response = await apiClient.get(
-          `merchant/getdetails/${userData?.email}`,
+          `merchant/getOnboardingPageStatus`,
+          {
+            headers: {
+              username: userData.email,
+            },
+          },
         );
         console.log('Response received:', response?.data);
 
-        if (response?.data) {
+        if (response?.data?.responseCode === '009') {
           setData(response?.data);
           console.log('Data set successfully.');
         } else {

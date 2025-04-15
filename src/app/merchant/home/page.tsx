@@ -180,23 +180,23 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
-      // hide: userData.onboardingCompleted,
+      hide: userData.onboardingCompleted,
     },
     {
       title: 'Continue to My Dashboard',
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: '/merchant/merchant-portal/home/',
-      // hide: !userData.onboardingCompleted,
+      hide: !userData.onboardingCompleted,
     },
-    {
-      title: 'Sandbox Integrations',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: 'business-nature',
-    },
-  ];
-  // .filter((card) => !card.hide);
+    // PLease DO NOT REMOVE THE CODE BELOw
+    // {
+    //   title: 'Sandbox Integrations',
+    //   description:
+    //     'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+    //   routeName: 'business-nature',
+    // },
+  ].filter((card) => !card.hide);
   // ].filter((card) => !card.hide);
 
   return (
