@@ -15,6 +15,7 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import NavMobileViewLayout from '@/components/UI/Wrappers/NavMobileViewLayout';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
+import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
 
 interface INavMobileMenu {
   setIsMobileSubMenu: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,6 +53,7 @@ const NavMobileMenu = ({
 
       if (response.data.responseCode === '000') {
         dispatch(setLogout());
+        dispatch(resetForms());
         router.push('/login');
 
         // setTimeout(() => {
