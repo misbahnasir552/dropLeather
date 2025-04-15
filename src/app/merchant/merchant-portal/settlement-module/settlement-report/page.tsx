@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 
 import Pagination from '@/components/Pagination/Pagination';
-import SearchTransactionTable from '@/components/Table/SearchTransactionTable';
+import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -89,11 +89,20 @@ function SettlementReport() {
                 <Form className=" bg-screen-grey">
                   <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey ">
                     <DateInputNew
+                      label="From Date"
+                      name="settlementDateFrom"
                       formik={formik}
-                      label="Date"
-                      name="date"
-                      error={formik.errors.date}
-                      touched={formik.touched.date}
+                      error={formik.errors.settlementDateFrom}
+                      touched={formik.touched.settlementDateFrom}
+                    />
+                    <DateInputNew
+                      label="To Date"
+                      name="settlementDateTo"
+                      formik={formik}
+                      error={formik.errors.settlementDateTo}
+                      touched={formik.touched.settlementDateTo}
+                      isDisabled={!formik.values.settlementDateFrom}
+                      minDate={formik.values.settlementDateFrom}
                     />
                   </div>
                   <div className="flex w-full justify-start gap-6">
@@ -117,12 +126,10 @@ function SettlementReport() {
                 </Form>
               )}
             </Formik>
-            {/* <Input name="asd" label="ASD" formik='xyz'/> */}
           </MerchantFormLayout>
-          {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
         </div>
         <div className="flex flex-col gap-3 pt-[40px]">
-          <SearchTransactionTable
+          <FundsTransferTable
             tableHeadings={settlementTransactionHistoryTableHeadings}
             tableData={settlementTransactionHistoryTableData}
           />
