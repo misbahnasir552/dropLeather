@@ -50,9 +50,15 @@ const DateInputNew = ({
           disabled={isDisabled}
           min={minDate}
           // onBlur={handleBlur}
-          className={`h-[60px] w-full rounded-lg p-5 font-medium text-neutral-black-base focus:outline-none ${
-            isDisabled && 'bg-screen-white'
-          }`}
+          // className="h-[60px] w-full rounded-lg p-5 font-medium text-neutral-black-base focus:outline-none"
+          className={`
+    h-[60px] w-full rounded-lg p-5 font-medium focus:outline-none
+    ${
+      isDisabled
+        ? 'cursor-not-allowed bg-screen-white text-secondary-200'
+        : 'bg-white text-neutral-black-base'
+    }
+  `}
         />
         <label
           htmlFor={name}
