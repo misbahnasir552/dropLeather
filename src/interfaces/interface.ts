@@ -221,9 +221,10 @@ export interface LoginForm {
 export interface ILoginCard {
   title: string;
   description: string;
-  routeName: string;
+  routeName?: string;
   isDisabled?: boolean;
   type?: string;
+  onClick?: () => void;
 }
 
 export interface IHeaderProps {
