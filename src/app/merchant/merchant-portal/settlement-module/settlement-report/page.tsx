@@ -31,7 +31,7 @@ function SettlementReport() {
     'Status',
     'Remarks',
   ];
-  console.log('setTotalPages', setTotalPages);
+  console.log(setTotalPages);
   const settlementTransactionHistoryTableData: any = [
     {
       financialTransactionId: '001123',
