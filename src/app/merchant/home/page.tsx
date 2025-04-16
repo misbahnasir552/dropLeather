@@ -1,7 +1,7 @@
 'use client';
 
 // import { useRouter } from 'next/navigation';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -31,7 +31,7 @@ const LoginSucessHome = () => {
   );
 
   const dispatch = useAppDispatch();
-
+  const router = useRouter();
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
   // const router = useRouter();

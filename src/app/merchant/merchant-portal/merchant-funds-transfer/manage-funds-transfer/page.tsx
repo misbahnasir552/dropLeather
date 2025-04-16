@@ -42,9 +42,6 @@ function ManageFundsTransfer() {
   const fetchRecords = async () => {
     try {
       setLoading(true);
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
       const response = await apiClient.get(
         '/merchant/getAllFundsTransferRecords',
         {
