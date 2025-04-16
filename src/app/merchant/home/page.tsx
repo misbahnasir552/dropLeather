@@ -203,10 +203,12 @@ const LoginSucessHome = () => {
           router.push('/merchant/home');
         }
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error requesting revision:', error);
-      setTitle('Error');
-      setDescription('Failed to request revision. Please try again.');
+      // setTitle('Error');
+      // setDescription('Failed to request revision. Please try again.');
+      // setShowModal(true);
+      setDescription(error);
       setShowModal(true);
     }
   };

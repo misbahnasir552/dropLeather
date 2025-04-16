@@ -15,10 +15,10 @@ import type { ILoginCard } from '@/interfaces/interface';
 export default function LoginCard({
   title,
   description,
-  routeName, // onClickHandler
-  type, // isDisabled,
+  routeName,
+  type,
   onClick,
-}: ILoginCard & { onClick?: () => void }) {
+}: ILoginCard) {
   // const userData = useAppSelector((state) => state.auth);
 
   const router = useRouter();
