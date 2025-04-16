@@ -152,7 +152,7 @@ function BulkFundsTransferReport() {
         return null;
       })
       ?.filter(Boolean); // Remove null entries from the array
-
+    setPageNumber(0);
     setResponse(filteredData);
   };
   const showNextPage = () => {

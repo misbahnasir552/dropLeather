@@ -8,6 +8,7 @@ import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
@@ -18,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
 import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
 import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
-import { generateMD5Hash } from '@/utils/helper';
+import { generateAESEncryption, generateMD5Hash } from '@/utils/helper';
 import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
@@ -197,7 +198,15 @@ function AddBeneficiary() {
     // }
   };
   const handleTermsAndConditionsChange = () => {
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=Online%20Payment%20Services%20Agreement.pdf&email=termsandconditions@gmail.com&type=merchant`;
+    const EncryptedFile = generateAESEncryption(
+      'Online Payment Services Agreement.pdf',
+    );
+    const EncryptedEmmail = generateAESEncryption(
+      'termsandconditions@gmail.com',
+    );
+    // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+
     window.open(downloadUrl, '_blank');
   };
   return (
@@ -250,7 +259,7 @@ function AddBeneficiary() {
                   name={'mobileNumber'}
                   type="text"
                   error={formik.errors.mobileNumber}
-                  touched={false}
+                  touched={formik.touched.mobileNumber}
                   asterik={true}
                 />
                 {/* <div className="flex w-full justify-end">
@@ -271,14 +280,15 @@ function AddBeneficiary() {
                   isDisabled
                 /> */}
                 <div className="relative w-full">
-                  <Input
-                    label="Account Title"
-                    name="accountTitle"
-                    type="text"
-                    asterik={true}
-                    value={formik.values.accountTitle}
-                    isDisabled
-                    className="pr-20"
+                  <DisabledField
+                    data={[
+                      {
+                        label: 'Account Title',
+                        value: formik.values.accountTitle,
+                      },
+                    ]}
+                    touched={formik.touched.accountTitle}
+                    error={formik.errors.accountTitle}
                   />
                   <button
                     type="button"
@@ -289,6 +299,11 @@ function AddBeneficiary() {
                     Fetch Title
                   </button>
                 </div>
+                {formik.touched.accountTitle && (
+                  <div className="flex w-full justify-start px-3 text-xs text-danger-base">
+                    {formik.errors.accountTitle}
+                  </div>
+                )}
                 {apierror && (
                   <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                     {apierror}
@@ -298,9 +313,9 @@ function AddBeneficiary() {
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
                   type="text"
-                  error={'hi'}
+                  error={formik.errors.beneficiaryName}
                   asterik={true}
-                  touched={false}
+                  touched={formik.touched.beneficiaryName}
                 />
                 <Input
                   label="Beneficiary Email"

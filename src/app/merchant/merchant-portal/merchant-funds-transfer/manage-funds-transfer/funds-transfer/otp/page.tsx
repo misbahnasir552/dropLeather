@@ -68,6 +68,7 @@ const OtpInputWithValidation = () => {
             setDescription(response?.data.responseDescription);
             dispatch(resetTransferFundsFormData());
           } else {
+            setTitle(response?.data?.responseMessage);
             setDescription(response?.data.responseDescription);
             setShowErrorModal(true);
           }
@@ -78,6 +79,7 @@ const OtpInputWithValidation = () => {
           setIsLoading(false);
         }
       } else {
+        setTitle(response?.data?.responseMessage);
         setDescription(response?.data.responseDescription);
         setShowErrorModal(true);
       }
@@ -110,6 +112,9 @@ const OtpInputWithValidation = () => {
           description={description}
           show={showErrorModal}
           setShow={setShowErrorModal}
+          routeName={
+            '/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/funds-transfer/'
+          }
         />
       )}
       <div className="flex flex-col gap-6 pb-[52px]">

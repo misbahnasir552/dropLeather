@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-import locationIcon from '@/assets/icons/location-icon.svg';
+// import locationIcon from '@/assets/icons/location-icon.svg';
 import mailIcon from '@/assets/icons/mail-inbox-app-icon.svg';
 import telephoneIcon from '@/assets/icons/number-icon.svg';
 import H1 from '@/components/UI/Headings/H1';
@@ -124,12 +124,12 @@ const MerchantProfile = () => {
 
         <div className="flex w-[170px]">{userData?.email}</div>
 
-        <div className="flex h-[16px] w-[2px] bg-border-dark" />
+        {/* <div className="flex h-[16px] w-[2px] bg-border-dark" /> */}
 
-        <Image src={locationIcon} alt="phone" className="h-[24px] w-[24px]" />
+        {/* <Image src={locationIcon} alt="phone" className="h-[24px] w-[24px]" /> */}
 
         {/* <div className="flex w-[170px]">{userData?.email}</div> */}
-        <div className="flex w-[170px]"> Islamabad, Pakistan</div>
+        {/* <div className="flex w-[170px]"> Islamabad, Pakistan</div> */}
       </div>
       <div className="flex w-full border-[1px] border-border-light "></div>
       <div className="flex flex-row py-6">
@@ -145,7 +145,7 @@ const MerchantProfile = () => {
           <div className="flex h-[20px] text-sm leading-[20px] text-secondary-600">
             Payment Method QR/Till:
           </div>
-          <H6>No</H6>
+          <H6>Yes</H6>
         </div>
 
         {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />

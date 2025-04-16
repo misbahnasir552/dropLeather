@@ -1,6 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
+import router from 'next/router';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -33,11 +34,11 @@ const LoginSucessHome = () => {
 
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
-  const router = useRouter();
+  // const router = useRouter();
 
-  if (userData?.temp) {
-    router.push('/merchant/home/reset-password');
-  }
+  // if (userData?.temp) {
+  //   router.push('/merchant/home/reset-password');
+  // }
 
   // const determineNextRoute = (
   //   pages: { routeName: string; status: string }[],
@@ -97,6 +98,11 @@ const LoginSucessHome = () => {
     try {
       const response = await apiClient.get(
         `merchant/getdetails/${userData?.email}`,
+        // {
+        //   params: {
+        //     username:
+        //   }
+        // }
       );
 
       setData(response.data);
@@ -143,7 +149,13 @@ const LoginSucessHome = () => {
           console.log(businessType);
 
           const fieldsResponse = await apiClient.get(
-            `/merchant/getPageInfo/${businessType}`,
+            `/merchant/getPageInfo`,
+
+            {
+              params: {
+                natureOfBusiness: businessType,
+              },
+            },
           );
           console.log('FIELDS DATA fieldsResponse Corporate: ', fieldsResponse);
         } catch (error) {

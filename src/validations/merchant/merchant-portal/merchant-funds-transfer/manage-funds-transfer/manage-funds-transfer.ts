@@ -8,7 +8,8 @@ export const manageFundsTransferInitialValues: IManageFundsTransfer = {
   availableBalance: '',
   currentBalance: '',
   beneficiaryName: '',
-  transferDate: '',
+  transferDateTo: '',
+  transferDateFrom: '',
   status: '',
   transferAmount: '',
 };
@@ -21,5 +22,15 @@ export const manageFundsTransferSchema = Yup.object().shape({
   beneficiaryName: Yup.string(),
   transferDate: Yup.string(),
   status: Yup.string(),
-  transferAmount: Yup.string(),
+  transferDateFrom: Yup.string(),
+  transferDateTo: Yup.string().test(
+    'transferDateTo-required',
+    'To Date is required',
+    // eslint-disable-next-line func-names
+    function (value) {
+      // eslint-disable-next-line no-unsafe-optional-chaining
+      const { transferDateFrom } = this?.parent;
+      return !transferDateFrom || (transferDateFrom && value); // If transferDateFrom exists, transferDateTo must also exist
+    },
+  ),
 });

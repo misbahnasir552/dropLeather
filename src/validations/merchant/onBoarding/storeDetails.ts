@@ -116,8 +116,8 @@ export const addMerchantAccountSchema = Yup.object().shape({
 // export const addStoreInitialValues: AddStoreInfo = {
 export const storeDetailsInitialValues: any = {
   storeType: '',
-  webstoreName: '',
-  webstoreURL: '',
+  // webstoreName: '',
+  // webstoreURL: '',
   storeName: '',
   streetAddress: '',
   city: '',
@@ -131,9 +131,9 @@ export const storeDetailsSchema = Yup.object().shape({
   storeType: Yup.array()
     .required('Store type is required')
     .min(1, 'Store type is required'),
-  webstoreName: Yup.string().required('Website Name is required'),
+  // webstoreName: Yup.string().required('Website Name is required'),
 
-  webstoreURL: Yup.string().required('Website URL is required'),
+  // webstoreURL: Yup.string().required('Website URL is required'),
   storeName: Yup.string().required('Store Name is required'),
   streetAddress: Yup.string().required('Street Address is required'),
   city: Yup.string().required('Cityis required'),

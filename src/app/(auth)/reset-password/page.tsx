@@ -94,25 +94,32 @@ export default function ResetPassword() {
             <Form className="flex flex-col ">
               <div className="flex flex-col gap-4 bg-screen-grey px-[190px] py-[60px]">
                 <Input
+                  label="Old Password"
+                  name="oldPassword"
+                  type="password"
+                  error={formik.errors.oldPassword}
+                  touched={formik.touched.oldPassword}
+                />
+                <Input
                   label="New Password"
                   name="newPassword"
                   type="password"
-                  // error={formik.errors.newPassword}
-                  // touched={formik.touched.newPassword}
+                  error={formik.errors.newPassword}
+                  touched={formik.touched.newPassword}
                 />
                 <Input
                   label="Confirm Password"
                   name="confirmPassword"
                   type="password"
-                  // error={formik.errors.confirmPassword}
-                  // touched={formik.touched.confirmPassword}
+                  error={formik.errors.confirmPassword}
+                  touched={formik.touched.confirmPassword}
                 />
               </div>
               <div className="flex flex-row justify-end">
                 <Button
                   label="Submit"
                   type="submit"
-                  isDisabled={!formik.isValid}
+                  // isDisabled={!formik.isValid}
                   className={`button-primary mt-[24px] w-[270px] px-3 py-[19px] text-sm leading-tight transition duration-300`}
                 />
               </div>

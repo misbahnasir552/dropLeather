@@ -23,7 +23,7 @@ const NewLogin = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const [loginResponse, setLoginResponse] = useState<Partial<TLogin>>();
+  const [loginResponse] = useState<Partial<TLogin>>();
   const [apierror, setApierror] = useState('');
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -33,13 +33,17 @@ const NewLogin = () => {
   const jwt = Cookies.get('jwt');
 
   const fetchUserDetails = async (email: string) => {
-    console.log(setLoginResponse);
     try {
       if (userData?.email && jwt) {
         const getDetailResponse = await apiClient.get(
           `merchant/getdetails/${email}`,
+
+          //   {
+          //   params: {
+          //     username: email
+          //   }
+          // }
         );
-        console.log('getDetailResponse', getDetailResponse);
         if (getDetailResponse?.data?.responseCode === '009') {
           router.push('/merchant/home');
         } else if (getDetailResponse?.data?.responseCode === '000') {
@@ -70,13 +74,11 @@ const NewLogin = () => {
       if (Object.keys(errors).length !== 0) {
         setApierror('');
       }
-      console.log('USER DATA CHECK1: ', userData);
 
       if (loginResponse) {
         dispatch(loginSuccess(loginResponse));
       }
       if (userData.email && userData.userType !== 'Corporate') {
-        console.log('GET DETAILS TEST 1');
         fetchUserDetails(userData.email);
       }
     }, [values, errors, loginResponse, dispatch, userData.email]);
@@ -111,8 +113,9 @@ const NewLogin = () => {
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         setApierror(loginResponse?.data?.responseMessage);
+      } else if (loginResponse?.data?.responseCode === '010') {
+        setApierror(loginResponse?.data?.responseMessage);
       } else {
-        console.log('LOGIN OTP FAIL ');
         setTitle(loginResponse?.data?.responseMessage);
         setDescription(loginResponse?.data?.responseMessage);
         setShowModal(true);

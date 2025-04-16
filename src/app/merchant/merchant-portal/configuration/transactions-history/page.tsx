@@ -198,7 +198,7 @@ const SearchTransaction = () => {
       setApierror('Please enter at least one filter to search.');
       return;
     }
-
+    setPageNumber(0);
     setApierror('');
     setFilteredData(filteredValues);
     // fetchRecords();
@@ -222,22 +222,25 @@ const SearchTransaction = () => {
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
-    XLSX?.utils?.book_append_sheet(wb, ws, 'QR Reporting');
+    XLSX?.utils?.book_append_sheet(wb, ws, 'Transaction History');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'qr_reporting.xlsx');
+    XLSX.writeFile(wb, 'transaction_history.xlsx');
   };
 
   return (
     <div className="flex flex-col gap-6">
-      <HeaderWrapper heading="Search Transactions" />
+      <HeaderWrapper heading="Transactions History" />
       <Formik
         initialValues={searchTransactionsInitialValues}
         validationSchema={searchTransactionsSchema}
+        // onSubmit={()=>{onSubmit}}
         onSubmit={onSubmit}
       >
         {(formik) => (
-          <Form className=" bg-screen-grey px-6 pb-6 pt-[60px]">
+          <Form className=" bg-screen-grey px-6 pb-6 pt-[30px]">
+            <div className="mb-4 text-base font-bold">Search Transactions</div>
+
             <div className="mb-9 grid grid-cols-1 gap-5  bg-screen-grey md:grid-cols-3">
               {/* <DropdownInput
                 label="Payment Method"

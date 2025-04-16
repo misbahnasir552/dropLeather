@@ -5,8 +5,7 @@ export const endpointArray = [
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
-    name: 'Settlement Details',
-    tab: 'settlement-details',
+    tab: 'business-details',
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
@@ -15,8 +14,7 @@ export const endpointArray = [
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
-    name: 'Business Details',
-    tab: 'business-details',
+    tab: 'settlement-details',
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
@@ -24,8 +22,8 @@ export const endpointArray = [
     tab: 'integration',
     endpoint: `/merchant/saveOnboardingForms`,
   },
-  { name: 'Attachments', tab: 'attachments', endpoint: `/merchant/upload` },
-  { name: 'Review Form', tab: 'review-form', endpoint: null },
+  { tab: 'attachments', endpoint: `/merchant/upload` },
+  { tab: 'review-form', endpoint: null },
 ];
 
 // export const endpointArray = [

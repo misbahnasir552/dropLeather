@@ -169,9 +169,10 @@ function ManageFundsTransfer() {
         return null;
       })
       ?.filter(Boolean); // Remove null entries from the array
-
+    setPageNumber(0);
     setBeneficiaryFilteredData(filteredData);
   };
+
   const exportToExcel = () => {
     // if (!response) return;
 
@@ -223,7 +224,7 @@ function ManageFundsTransfer() {
                   error={formik.errors.accountType}
                   touched={formik.touched.accountType}
                 />
-                <Input
+                {/* <Input
                   label="MSISDN"
                   name={'msisdn'}
                   type="text"
@@ -234,18 +235,28 @@ function ManageFundsTransfer() {
                   name={'currentBalance'}
                   type="number"
                   touched={false}
-                />
+                /> */}
                 <Input
                   label="Beneficiary Name"
                   name={'beneficiaryName'}
                   type="text"
-                  error={'hi'}
                   touched={false}
                 />
                 <DateInputNew
+                  label="From Date"
+                  name="transferDateFrom"
                   formik={formik}
-                  label="Date Between"
-                  name={'transferDate'}
+                  error={formik.errors.transferDateFrom}
+                  touched={formik.touched.transferDateFrom}
+                />
+                <DateInputNew
+                  label="To Date"
+                  name="transferDateTo"
+                  formik={formik}
+                  error={formik.errors.transferDateTo}
+                  touched={formik.touched.transferDateTo}
+                  isDisabled={!formik.values.transferDateFrom}
+                  minDate={formik.values.transferDateFrom}
                 />
                 <DropdownInput
                   formik={formik}
@@ -261,7 +272,6 @@ function ManageFundsTransfer() {
                 <Button
                   label="Search"
                   type="submit"
-                  // routeName="/login"
                   className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
                 <Button
