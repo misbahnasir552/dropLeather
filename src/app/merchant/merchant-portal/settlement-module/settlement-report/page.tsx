@@ -1,22 +1,32 @@
 'use client';
 
 import { Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
+import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
+import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
-import type { ISettlementReport } from '@/validations/merchant/merchant-portal/settlement-module/interfaces';
+import { useAppSelector } from '@/hooks/redux';
 import {
   settlementReportInitialValues,
   settlementReportSchema,
 } from '@/validations/merchant/merchant-portal/settlement-module/settlement-report';
 
 function SettlementReport() {
+  const userData = useAppSelector((state: any) => state.auth);
+  const [settlementFilteredData, setSettlementFilteredData] = useState<any[]>(
+    [],
+  );
+  const [filteredData, setFilteredData] = useState();
+  const [loading, setLoading] = useState(false);
+  const [apierror, setApierror] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
@@ -31,34 +41,77 @@ function SettlementReport() {
     'Status',
     'Remarks',
   ];
-  console.log(setTotalPages);
-  const settlementTransactionHistoryTableData: any = [
-    {
-      financialTransactionId: '001123',
-      settlementDate: '24/04/2025',
-      fromAccount: 'momin',
-      toAccount: 'Jawad',
-      toAccountTitle: 'Jawad',
-      toBank: 'HBL',
-      status: 'success',
-      remarks: 'none',
-    },
-  ];
-  const onSubmit = (values: ISettlementReport) => {
-    console.log('i am outlet page', values);
+
+  const onSubmit = async (values: any) => {
+    const filteredValues: any = {};
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (value !== '' && value !== null) {
+        filteredValues[key] = value;
+      }
+    });
+
+    if (Object.keys(filteredValues).length === 0) {
+      return;
+    }
+    setPageNumber(0);
+    setApierror('');
+    setFilteredData(filteredValues);
   };
+  const fetchRecords = async () => {
+    try {
+      setLoading(true);
+      const response = await apiClient.get(
+        '/merchant/getSettlementTransferReport',
+        {
+          params: {
+            ...(filteredData && typeof filteredData === 'object'
+              ? filteredData
+              : {}), // Spread existing filtered data
+            page: pageNumber, // Add page parameter
+            size: +envPageSize, // Add size parameter
+          },
+          headers: {
+            merchantEmail: userData?.email,
+          },
+        },
+      );
+      if (response?.data?.responseCode === '009') {
+        setLoading(false);
+        // setAllRecords(response?.data?.settlementReportResponse);
+        setTotalPages(response?.data?.totalPages);
+        const filteredValues = response?.data?.settlementReportResponse.map(
+          ({ msisdn, accountType, batchId, ...rest }: any) => rest,
+        );
+        setSettlementFilteredData(filteredValues);
+      } else if (response?.data?.responseCode === '000') {
+        setLoading(false);
+        setApierror(response?.data?.responseDescription);
+      } else {
+        setApierror(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setLoading(false);
+      setApierror(e?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchRecords();
+  }, [filteredData, pageNumber]);
+
   const exportToExcel = () => {
     // if (!response) return;
 
     // if (!response || response.length === 0) {
-    if (!settlementTransactionHistoryTableData) {
+    if (!settlementFilteredData) {
       return;
     }
 
     // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(
-      settlementTransactionHistoryTableData,
-    );
+    const ws = XLSX?.utils?.json_to_sheet(settlementFilteredData);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
@@ -74,6 +127,10 @@ function SettlementReport() {
 
   const showPrevPage = () => {
     setPageNumber((prev) => Math.max(prev - 1, 0));
+  };
+  const handleReset = (Formik: any) => {
+    Formik.resetForm();
+    fetchRecords();
   };
   return (
     <div>
@@ -91,19 +148,19 @@ function SettlementReport() {
                   <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey ">
                     <DateInputNew
                       label="From Date"
-                      name="settlementDateFrom"
+                      name="transferDateFrom"
                       formik={formik}
-                      error={formik.errors.settlementDateFrom}
-                      touched={formik.touched.settlementDateFrom}
+                      error={formik.errors.transferDateFrom}
+                      touched={formik.touched.transferDateFrom}
                     />
                     <DateInputNew
                       label="To Date"
-                      name="settlementDateTo"
+                      name="transferDateTo"
                       formik={formik}
-                      error={formik.errors.settlementDateTo}
-                      touched={formik.touched.settlementDateTo}
-                      isDisabled={!formik.values.settlementDateFrom}
-                      minDate={formik.values.settlementDateFrom}
+                      error={formik.errors.transferDateTo}
+                      touched={formik.touched.transferDateTo}
+                      isDisabled={!formik.values.transferDateFrom}
+                      minDate={formik.values.transferDateFrom}
                     />
                   </div>
                   <div className="flex w-full justify-start gap-6">
@@ -120,6 +177,10 @@ function SettlementReport() {
                     <Button
                       label="Reset"
                       type="button"
+                      onClickHandler={() => {
+                        handleReset(formik);
+                        setFilteredData(undefined);
+                      }}
                       // routeName="/login"
                       className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
                     />
@@ -129,18 +190,31 @@ function SettlementReport() {
             </Formik>
           </MerchantFormLayout>
         </div>
-        <div className="flex flex-col gap-3 pt-[40px]">
-          <FundsTransferTable
-            tableHeadings={settlementTransactionHistoryTableHeadings}
-            tableData={settlementTransactionHistoryTableData}
-          />
-          <Pagination
-            pageNumber={pageNumber}
-            totalPages={totalPages}
-            onNext={showNextPage}
-            onPrev={showPrevPage}
-          />
-        </div>
+        {loading ? (
+          <BarLoader color="#21B25F" className="mx-auto mt-6 block" />
+        ) : (
+          <>
+            {settlementFilteredData?.length > 0 ? (
+              <div className="flex flex-col gap-3 pt-[40px]">
+                <FundsTransferTable
+                  tableHeadings={settlementTransactionHistoryTableHeadings}
+                  tableData={settlementFilteredData}
+                />
+                <Pagination
+                  pageNumber={pageNumber}
+                  totalPages={totalPages}
+                  onNext={showNextPage}
+                  onPrev={showPrevPage}
+                />
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
+              </div>
+            ) : (
+              <H7 className="mt-4 text-center">No Records Found</H7>
+            )}
+          </>
+        )}
       </>
     </div>
   );

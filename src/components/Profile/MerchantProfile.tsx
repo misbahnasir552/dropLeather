@@ -108,10 +108,8 @@ const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
       </div>
       <div className="flex w-full flex-row border-[1px] border-border-light "></div>
       <div className="flex flex-row gap-4 py-6">
-        <div className="flex items-center gap-3">
-          <div className="flex flex-row gap-6">
-            <div className="flex h-[16px] w-[2px] bg-border-dark" />
-          </div>
+        <div className="flex flex-row gap-6">
+          <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
           <Image
             src={telephoneIcon}
