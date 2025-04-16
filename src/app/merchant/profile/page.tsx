@@ -1,4 +1,4 @@
-import Navbar from '@/components/Navbar/OnBoardingNavbar/page';
+import Navbar from '@/components/Navbar/Navbar';
 import MerchantProfile from '@/components/Profile/MerchantProfile';
 
 const page = () => {

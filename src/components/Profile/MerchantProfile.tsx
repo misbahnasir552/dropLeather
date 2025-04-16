@@ -95,7 +95,7 @@ const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
   };
 
   return (
-    <div className="text-gray-700 flex flex-col px-[50px] md:px-[50px] ">
+    <div className="text-gray-700 flex flex-col md:px-[150px] ">
       <CustomModal
         title={title}
         description={description}
@@ -108,24 +108,26 @@ const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
       </div>
       <div className="flex w-full flex-row border-[1px] border-border-light "></div>
       <div className="flex flex-row gap-4 py-6">
-        <div className="flex flex-row gap-6">
-          <div className="flex h-[16px] w-[2px] bg-border-dark" />
+        <div className="flex items-center gap-3">
+          <div className="flex flex-row gap-6">
+            <div className="flex h-[16px] w-[2px] bg-border-dark" />
+          </div>
+
+          <Image
+            src={telephoneIcon}
+            alt="phone"
+            className="left-[170px] top-[306px]  h-[20px] w-[20px] gap-[12px]"
+          />
+
+          <div className="flex w-[170px]">{userData?.managerMobile}</div>
         </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
-        <Image
-          src={telephoneIcon}
-          alt="phone"
-          className="left-[170px] top-[306px]  h-[20px] w-[20px] gap-[12px]"
-        />
+          <Image src={mailIcon} alt="phone" className="h-[23px] w-[23px]" />
 
-        <div className="flex w-[170px]">{userData?.managerMobile}</div>
-
-        <div className="flex h-[16px] w-[2px] bg-border-dark" />
-
-        <Image src={mailIcon} alt="phone" className="h-[23px] w-[23px]" />
-
-        <div className="flex w-[170px]">{userData?.email}</div>
-
+          <div className="flex w-[170px]">{userData?.email}</div>
+        </div>
         {/* <div className="flex h-[16px] w-[2px] bg-border-dark" /> */}
 
         {/* <Image src={locationIcon} alt="phone" className="h-[24px] w-[24px]" /> */}
