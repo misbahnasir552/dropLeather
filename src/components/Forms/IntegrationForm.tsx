@@ -23,15 +23,19 @@ import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import integrationFormSchema, {
   integrationFormInitialValues,
 } from './validations/integartionForm';
+// import type { FieldsData, Page } from './validations/types';
 // import settlementDetailsSchema,{settlementDetailsInitialValues} from './validations/settlementForm';
 
 function IntegrationForm() {
+  const userData = useAppSelector((state: any) => state.auth);
+  const { apiSecret } = userData;
+  // const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
+  // const [filteredData, setFilteredData] = useState<Page[]>([]);
+  // const [pageTitle, setPageTitle] = useState('');
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
   const [formData, setFormData] = useState(IntegrationFormData.categories);
-  const userData = useAppSelector((state: any) => state.auth);
-  const { apiSecret } = userData;
 
   console.log(
     'IntegartionFormData',
