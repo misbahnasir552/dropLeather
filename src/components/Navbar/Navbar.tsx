@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
-import bellIcon from '@/assets/icons/bell-icon.svg';
+// import bellIcon from '@/assets/icons/bell-icon.svg';
 import ChevronLeft from '@/assets/icons/chevron-left.svg';
 import CloseIcon from '@/assets/icons/close-icon-nav.svg';
-import downSmall from '@/assets/icons/downSmall.svg';
+// import downSmall from '@/assets/icons/downSmall.svg';
 import Logo from '@/assets/icons/logo.svg';
 import Menu from '@/assets/icons/menu-button.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -34,8 +34,8 @@ const Navbar = () => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isMobileSubMenu, setIsMobileSubMenu] = useState<boolean>(false);
-  const [istoggle, setIstoggle] = useState<boolean>(false);
-  console.log(istoggle);
+  // const [istoggle, setIstoggle] = useState<boolean>(false);
+  // console.log(istoggle);
 
   const isCurrentTabNotInNavMenu = !navMenu.some(
     (item) => item.name === currentTab,
@@ -50,9 +50,9 @@ const Navbar = () => {
     setIsMobileSubMenu(false);
   };
 
-  const showLogout = () => {
-    setIstoggle((prev) => !prev);
-  };
+  // const showLogout = () => {
+  //   setIstoggle((prev) => !prev);
+  // };
 
   const logOut = () => {
     dispatch(setLogout());
@@ -166,7 +166,10 @@ const Navbar = () => {
           <div className="flex flex-row gap-6">
             {userData.jwt ? (
               <div className="flex gap-4">
-                <div className="flex gap-4 rounded-2xl border-[1px] border-border-light px-4 py-2">
+                <div
+                  className="flex cursor-pointer gap-4 rounded-2xl border-[1px] border-border-light px-4 py-2"
+                  onClick={() => router.push('/merchant/profile')}
+                >
                   <div>
                     <div className="text-base font-semibold text-secondary-base">
                       {userData.name}
@@ -175,7 +178,7 @@ const Navbar = () => {
                       {userData.email}
                     </div>
                   </div>
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <Image
                       src={downSmall}
                       alt={'arrow down'}
@@ -183,12 +186,10 @@ const Navbar = () => {
                       // width={24}
                       // onClick={() => handleToggle(index)}
                     />
-                  </div>
-                </div>
-                <div className="relative flex items-center rounded-2xl border-[1px] border-border-light px-2 py-3">
-                  {/* <div className="absolute right-2 top-2 flex h-4 w-4 items-center justify-center rounded-full bg-danger-base text-[10px] leading-tight text-neutral-white-base">
-                    5
                   </div> */}
+                </div>
+                {/* Don't remove the commented out code */}
+                {/* <div className="relative flex items-center rounded-2xl border-[1px] border-border-light px-2 py-3">
                   <Image
                     src={bellIcon}
                     alt={'bell icon'}
@@ -197,7 +198,7 @@ const Navbar = () => {
                     // onClick={() => handleToggle(index)}
                     onClick={showLogout}
                   />
-                </div>
+                </div> */}
                 {/* {istoggle ? <div onClick={logOut}>Logout</div> : null} */}
                 <Button
                   label="Logout"
