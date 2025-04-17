@@ -14,13 +14,14 @@ import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
+import type { ISettlementReport } from '@/validations/merchant/merchant-portal/settlement-module/interfaces';
 import {
   settlementReportInitialValues,
   settlementReportSchema,
 } from '@/validations/merchant/merchant-portal/settlement-module/settlement-report';
 
 function SettlementReport() {
-  const userData = useAppSelector((state: any) => state.auth);
+  const userData = useAppSelector((state) => state.auth);
   const [settlementFilteredData, setSettlementFilteredData] = useState<any[]>(
     [],
   );
@@ -42,7 +43,7 @@ function SettlementReport() {
     'Remarks',
   ];
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: ISettlementReport) => {
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -78,7 +79,6 @@ function SettlementReport() {
       );
       if (response?.data?.responseCode === '009') {
         setLoading(false);
-        // setAllRecords(response?.data?.settlementReportResponse);
         setTotalPages(response?.data?.totalPages);
         const filteredValues = response?.data?.settlementReportResponse.map(
           ({ msisdn, accountType, batchId, ...rest }: any) => rest,
