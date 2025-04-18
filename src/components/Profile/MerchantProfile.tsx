@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -14,9 +15,10 @@ import MerchantPortalProfileTable from '../Table/MerchantPortalProfileTable';
 import H6 from '../UI/Headings/H6';
 import CustomModal from '../UI/Modal/CustomModal';
 
-const MerchantProfile = () => {
+const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
   const userData = useAppSelector((state: any) => state.auth);
   const [response, setResponse] = useState(null);
+  const router = useRouter();
   const [merchantTitle, setMerchantTitle] = useState<
     'merchantPortalProfile' | 'merchantPortalTransactionProfile'
   >('merchantPortalProfile');
@@ -93,7 +95,7 @@ const MerchantProfile = () => {
   };
 
   return (
-    <div className="text-gray-700 flex flex-col px-[150px] ">
+    <div className="text-gray-700 flex flex-col md:px-[150px] ">
       <CustomModal
         title={title}
         description={description}
@@ -108,22 +110,22 @@ const MerchantProfile = () => {
       <div className="flex flex-row gap-4 py-6">
         <div className="flex flex-row gap-6">
           <div className="flex h-[16px] w-[2px] bg-border-dark" />
+
+          <Image
+            src={telephoneIcon}
+            alt="phone"
+            className="left-[170px] top-[306px]  h-[20px] w-[20px] gap-[12px]"
+          />
+
+          <div className="flex w-[170px]">{userData?.managerMobile}</div>
         </div>
+        <div className="flex items-center gap-3">
+          <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
-        <Image
-          src={telephoneIcon}
-          alt="phone"
-          className="left-[170px] top-[306px]  h-[20px] w-[20px] gap-[12px]"
-        />
+          <Image src={mailIcon} alt="phone" className="h-[23px] w-[23px]" />
 
-        <div className="flex w-[170px]">{userData?.managerMobile}</div>
-
-        <div className="flex h-[16px] w-[2px] bg-border-dark" />
-
-        <Image src={mailIcon} alt="phone" className="h-[23px] w-[23px]" />
-
-        <div className="flex w-[170px]">{userData?.email}</div>
-
+          <div className="flex w-[170px]">{userData?.email}</div>
+        </div>
         {/* <div className="flex h-[16px] w-[2px] bg-border-dark" /> */}
 
         {/* <Image src={locationIcon} alt="phone" className="h-[24px] w-[24px]" /> */}
@@ -132,7 +134,7 @@ const MerchantProfile = () => {
         {/* <div className="flex w-[170px]"> Islamabad, Pakistan</div> */}
       </div>
       <div className="flex w-full border-[1px] border-border-light "></div>
-      <div className="flex flex-row py-6">
+      <div className="flex flex-row items-center gap-8 py-6">
         <div className="flex flex-row gap-4">
           <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
@@ -147,7 +149,21 @@ const MerchantProfile = () => {
           </div>
           <H6>Yes</H6>
         </div>
-
+        {isApproved && (
+          <div className="flex gap-3">
+            <div className="flex border-[1px] border-border-light "></div>{' '}
+            <div
+              onClick={() =>
+                router.push(
+                  '/merchant/merchant-portal/account-settings/change-password/',
+                )
+              }
+              className="cursor-pointer  text-primary-base "
+            >
+              Change Password
+            </div>
+          </div>
+        )}
         {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
           <div className="flex h-[20px] w-[270px] text-sm leading-[20px] text-secondary-600">
             Payment Via RAAST: <H6>Yes</H6>
@@ -161,22 +177,23 @@ const MerchantProfile = () => {
       </div>
 
       <div className="flex w-full border-b border-border-light"></div>
-
-      {/* Dynamic Tab section */}
-      <div className="flex w-full pt-6">
-        <div className="relative flex flex-row items-center  gap-6">
-          {/* Merchant Stores Tab */}
-          <div
-            onClick={() => handleTabClick('stores')}
-            className={`cursor-pointer py-2 transition-all ${
-              activeTab === 'stores'
-                ? 'border-b-2 border-primary-base text-primary-base'
-                : 'text-gray-500'
-            }`}
-          >
-            Merchant Stores
-          </div>
-          {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
+      {!isApproved && (
+        <>
+          {/* Dynamic Tab section */}
+          <div className="flex w-full pt-6">
+            <div className="relative flex flex-row items-center  gap-6">
+              {/* Merchant Stores Tab */}
+              <div
+                onClick={() => handleTabClick('stores')}
+                className={`cursor-pointer py-2 transition-all ${
+                  activeTab === 'stores'
+                    ? 'border-b-2 border-primary-base text-primary-base'
+                    : 'text-gray-500'
+                }`}
+              >
+                Merchant Stores
+              </div>
+              {/* <div className="flex h-[16px] w-[2px] bg-border-dark" />
 
         <div
           onClick={() => handleTabClick('transactionPoints')}
@@ -188,22 +205,24 @@ const MerchantProfile = () => {
         >
           Merchant Transaction Points
         </div> */}
-        </div>
-      </div>
-      <div className="relative  bottom-0 left-0 h-[1px] w-full border-[1px] border-border-light" />
-
-      <div className="table">
-        <div className="overflow-x-auto">
-          <div className="flex pt-6">
-            <MerchantPortalProfileTable
-              response={response}
-              title={merchantTitle}
-            />
+            </div>
           </div>
-        </div>
-      </div>
+          <div className="relative  bottom-0 left-0 h-[1px] w-full border-[1px] border-border-light" />
 
-      <div className="flex w-full border-[1px] border-border-light "></div>
+          <div className="table">
+            <div className="overflow-x-auto">
+              <div className="flex pt-6">
+                <MerchantPortalProfileTable
+                  response={response}
+                  title={merchantTitle}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex w-full border-[1px] border-border-light "></div>
+        </>
+      )}
     </div>
   );
 };

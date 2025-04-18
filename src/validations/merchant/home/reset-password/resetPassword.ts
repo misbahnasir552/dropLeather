@@ -5,9 +5,11 @@ import * as Yup from 'yup';
 export const resetPasswordInitialValues = {
   newPassword: '',
   confirmPassword: '',
+  oldPassword: '',
 };
 
 const resetPasswordSchema = Yup.object().shape({
+  oldPassword: Yup.string().required('Old Password is required'),
   newPassword: Yup.string()
     .min(8, 'Password must be at least 8 characters long')
     .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')

@@ -9,7 +9,6 @@ import {
   getMerchantFundsTransferDropDownMenu,
   getQRPaymentsDropDownMenu,
   getReversalModuleDropDownMenu,
-  getSettlementModuleDropDownMenu,
 } from '@/components/Navbar/Utils/utils';
 import B2 from '@/components/UI/Body/B2';
 import { useAppSelector } from '@/hooks/redux';
@@ -34,15 +33,13 @@ const MerchantPortalNavbar = () => {
     },
     {
       title: 'Configuration',
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%] left-[24%]',
+      className: 'top-[150px]',
       link: '/merchant/merchant-portal/home',
       dropdown: configurationList,
     },
     {
       title: 'Account Settings',
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
+      className: 'top-[150px]',
       link: '/merchant/merchant-portal/home',
       dropdown: accountSettingsList,
     },
@@ -54,29 +51,24 @@ const MerchantPortalNavbar = () => {
       title: 'QR Payments',
       // link: '/merchant/merchant-portal/qr-payments',
       dropdown: qrList,
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
+      className: 'top-[150px]',
     },
     {
       title: 'Settlement Module',
-      dropdown: getSettlementModuleDropDownMenu(),
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
+      link: '/merchant/merchant-portal/settlement-module/settlement-report/',
+      className: 'top-[150px]',
     },
     {
       title: 'Reversal Module',
-      // link: '/merchant/merchant-portal/reversal-module',
       dropdown: getReversalModuleDropDownMenu(),
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
+      className: 'top-[150px]',
     },
     {
       title: 'Merchant Funds Transfer',
       dropdown: getMerchantFundsTransferDropDownMenu(
         otpSuccess?.isAuthenticated,
       ),
-      className:
-        'sm:top-[20%] xll:top-[14%] xl:top-[17%] lg:top-[20%] md:top-[20%] top-[15%]',
+      className: 'top-[150px]',
     },
   ];
   return (

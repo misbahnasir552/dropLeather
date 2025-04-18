@@ -23,6 +23,7 @@ import signupReducer from '@/redux/features/signUpSlice';
 
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
 import fieldReducer from '../features/formSlices/fieldSlice';
+import lastTabReducer from '../features/formSlices/lastTabSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
 import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
 import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
@@ -71,6 +72,7 @@ const rootReducer = combineReducers({
   corporateJourneyType: corporateJourneyTypeReducer,
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
+  lastTab: lastTabReducer,
   transferFunds: transferFundsReducer,
 });
 

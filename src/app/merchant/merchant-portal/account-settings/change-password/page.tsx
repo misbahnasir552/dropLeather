@@ -121,11 +121,6 @@ export default function ChangePasswordPage() {
                     touched.newPassword = true;
                   }}
                 />
-                <span className="px-4 text-xs font-normal">
-                  Password should include pattern of - lower case, upper case,
-                  digits (0-9), Special Characters (@,#,$,!).It should contain
-                  between 8 to 15 characters
-                </span>
                 <Input
                   label="Confirm Password"
                   name="confirmPassword"
@@ -135,6 +130,11 @@ export default function ChangePasswordPage() {
                     touched.confirmPassword = true;
                   }}
                 />
+                <span className="px-4 text-xs font-normal">
+                  Password should include pattern of - lower case, upper case,
+                  digits (0-9), Special Characters (@,#,$,!).It should contain
+                  between 8 to 15 characters
+                </span>
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}
                 </div>

@@ -8,6 +8,8 @@ export type ValidationRules = {
 };
 
 export type Field = {
+  options: any;
+  required: boolean;
   type: string;
   label: string;
   name: string;

@@ -1,12 +1,23 @@
 'use client';
 
 // import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { setPageData } from '@/redux/features/formSlices/fieldSlice';
+
+interface MerchantData {
+  activityInformation?: { status: string };
+  businessDetails?: { status: string };
+  settlementDetails?: { status: string };
+  integration?: { status: string };
+  documents?: { status: string };
+  reviewForm?: { status: string };
+}
 
 const LoginSucessHome = () => {
   const userData = useAppSelector((state: any) => state.auth);
@@ -15,7 +26,12 @@ const LoginSucessHome = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [reqRevisiondata, setReqRevisionData] = useState<MerchantData | null>(
+    null,
+  );
 
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
   // const router = useRouter();
@@ -130,6 +146,7 @@ const LoginSucessHome = () => {
         try {
           const businessType =
             response?.data?.activityInformation?.businessNature;
+          console.log(businessType);
 
           const fieldsResponse = await apiClient.get(
             `/merchant/getPageInfo`,
@@ -159,6 +176,58 @@ const LoginSucessHome = () => {
     fetchData();
   }, []);
 
+  const handleRequestRevisionClick = async () => {
+    try {
+      const response = await apiClient.get(
+        `/merchant/fieldsForRevision?email=${userData.email}`,
+      );
+
+      if (response?.data) {
+        setReqRevisionData(response.data);
+        console.log(reqRevisiondata);
+        dispatch(setPageData(response.data));
+
+        console.log('Request revision response:', response.data);
+
+        const firstPage = response?.data?.page?.[0]?.pageName;
+
+        if (firstPage) {
+          const formattedRoute = `/merchant/home/request-revision/${firstPage
+            .toLowerCase()
+            .replace(/\s+/g, '-')}`; // Convert to kebab-case if needed
+          console.log(formattedRoute);
+
+          router.push(formattedRoute);
+        } else {
+          // fallback if no page is found
+          router.push('/merchant/home');
+        }
+      }
+    } catch (error: any) {
+      console.error('Error requesting revision:', error);
+      // setTitle('Error');
+      // setDescription('Failed to request revision. Please try again.');
+      // setShowModal(true);
+      setDescription(error);
+      setShowModal(true);
+    }
+  };
+
+  // const PendingMerchantCardData = [
+  //   {
+  //     title: 'Sandbox Integrations',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+  //   {
+  //     title: 'Merchant Onboarding',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+  // ];
+
   const LoginCardData = [
     {
       title: 'Merchant Onboarding',
@@ -166,6 +235,13 @@ const LoginSucessHome = () => {
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
       hide: userData.onboardingCompleted,
+    },
+    {
+      title: 'Request Revision',
+      description: 'All you need is to select...',
+      routeName: '/merchant/home/request-revision',
+      hide: !userData.isrequestRevision,
+      onClick: handleRequestRevisionClick,
     },
     {
       title: 'Continue to My Dashboard',
