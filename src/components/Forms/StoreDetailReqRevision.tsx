@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 // import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 
 import apiClient from '@/api/apiClient';
 // import AddIcon from '@/assets/icons/Add.svg';
@@ -16,13 +17,17 @@ import Input from '@/components/UI/Inputs/Input';
 // import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setLogout } from '@/redux/features/authSlice';
 // import type { AddStoreInfo } from '@/interfaces/interface';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-import { storeDetailsInitialValues } from '@/validations/merchant/onBoarding/storeDetails';
+import {
+  storeDetailsInitialValues,
+  storeDetailsSchema,
+} from '@/validations/merchant/onBoarding/storeDetails';
 
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
@@ -99,7 +104,7 @@ const AddStoreReqRevision = () => {
   const [regions, setRegions] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [apierror, setApierror] = useState('');
-  const { apiSecret } = userData;
+  const { apiSecret, managerMobile } = userData;
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [pageTitle, setPageTitle] = useState('');
   const [initialValuesState, setInitialValuesState] = useState<any>();
@@ -107,7 +112,7 @@ const AddStoreReqRevision = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
-  const [validationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
 
   const storeDetailsFormData = {
     pageName: 'Store Details',
@@ -285,6 +290,32 @@ const AddStoreReqRevision = () => {
 
   console.log('updated store fields,', updatedStoreFields);
 
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
+
+    // Access internal schema fields safely
+    const schemaFields = (storeDetailsSchema as Yup.ObjectSchema<any>).fields;
+
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
+
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
+
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
+  };
+
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
     console.log('Field DATA:::', fieldData);
@@ -371,12 +402,11 @@ const AddStoreReqRevision = () => {
 
       setInitialValuesState(initialValues); // Set initial values for form
 
-      // Build validation schema if matched data exists
-      // if (mappedData.length > 0) {
-      //   const validationSchema = buildValidationSchema(mappedData);
-      //   console.log('Validation schema result:', validationSchema);
-      //   setValidationSchemaState(validationSchema);
-      // }
+      if (mappedData.length > 0) {
+        const validationSchema =
+          buildValidationSchemaFromMappedFields(mappedData);
+        setValidationSchemaState(validationSchema);
+      }
     }
   }, [currentTab, fieldData]);
 
@@ -404,27 +434,28 @@ const AddStoreReqRevision = () => {
       const validPages = fieldData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
-        managerMobile: userData.managerMobile,
+        // request: {
+        managerMobile,
         page: {
-          pageName: 'Store Details',
-          categories: storeDetailsFormData.categories
-            .map((category) => {
-              const filteredFields = category.fields.filter((field) =>
-                Object.keys(values).includes(field.name),
-              );
-
-              if (filteredFields.length === 0) return null; // Exclude empty categories
-
-              return {
-                categoryName: category.categoryName,
-                data: filteredFields.map((field) => ({
-                  label: field.label,
-                  value: values[field.name], // Formik value
-                })),
-              };
-            })
-            .filter(Boolean), // Remove null categories
+          pageName: storeDetailsFormData.pageName,
+          categories: storeDetailsFormData.categories.map(
+            (category: any, index: any) => ({
+              categoryName: `${category.categoryName} + ${index + 1}`,
+              data: category.fields.map((field: any) => ({
+                label: field.label,
+                // value: values[field.name] || '', // Fetching value from formik.values
+                value:
+                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+                ...(field.type === 'checkboxInput' ||
+                field.type === 'checkBoxInputMulti'
+                  ? { options: values[field.name] || '' }
+                  : {}), // Add options only if it's a checkbox
+              })),
+            }),
+          ),
+          status: 'Completed',
         },
+        // },
       };
 
       const mdRequest = {
@@ -472,15 +503,17 @@ const AddStoreReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle('Form submission completed.');
-              setDescription('Form submission completed.');
-              setShowModal(true);
-              router.push(`/merchant/home`);
+              // setTitle('Form submission completed.');
+              // setDescription('Form submission completed.');
+              // setShowModal(true);
+              // router.push(`/merchant/home`);
+              dispatch(setLogout());
+              router.push('/login');
             }
           } else {
             setTitle('Error Occurred');

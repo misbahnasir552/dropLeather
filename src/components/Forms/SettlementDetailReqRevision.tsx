@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as Yup from 'yup';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -11,6 +12,7 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setLogout } from '@/redux/features/authSlice';
 // import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 // import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
@@ -22,6 +24,7 @@ import DropdownInput from '../UI/Inputs/DropdownInput';
 import ImageInput from '../UI/Inputs/ImageInput';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import settlementDetailsSchema from './validations/settlementForm';
 
 interface Field {
   required: boolean;
@@ -88,7 +91,7 @@ const SettlementDetailsReqRevision = () => {
   const [pageTitle, setPageTitle] = useState<string | undefined>();
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
-  const [validationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -144,6 +147,33 @@ const SettlementDetailsReqRevision = () => {
         ],
       },
     ],
+  };
+
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
+
+    // Access internal schema fields safely
+    const schemaFields = (settlementDetailsSchema as Yup.ObjectSchema<any>)
+      .fields;
+
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
+
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
+
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
   };
 
   useEffect(() => {
@@ -261,6 +291,11 @@ const SettlementDetailsReqRevision = () => {
       });
 
       setInitialValuesState(initialValues);
+      if (mappedData.length > 0) {
+        const validationSchema =
+          buildValidationSchemaFromMappedFields(mappedData);
+        setValidationSchemaState(validationSchema);
+      }
     }
   }, [currentTab, fieldsData?.pages?.page, selectedCheckValue]);
 
@@ -289,27 +324,28 @@ const SettlementDetailsReqRevision = () => {
       const validPages = fieldsData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
+        // request: {
         managerMobile: userData.managerMobile,
         page: {
-          pageName: 'Settlement Details',
-          categories: SettlementDetailsFormData.categories
-            .map((category) => {
-              const filteredFields = category.fields.filter((field) =>
-                Object.keys(values).includes(field.name),
-              );
-
-              if (filteredFields.length === 0) return null; // Exclude empty categories
-
-              return {
-                categoryName: category.categoryName,
-                data: filteredFields.map((field) => ({
-                  label: field.label,
-                  value: values[field.name], // Formik value
-                })),
-              };
-            })
-            .filter(Boolean), // Remove null categories
+          pageName: SettlementDetailsFormData?.pageName,
+          categories: SettlementDetailsFormData?.categories.map(
+            (category: any) => ({
+              categoryName: `Settlement Details`,
+              data: category.fields.map((field: any) => ({
+                label: field.label,
+                // value: values[field.name] || '', // Fetching value from formik.values
+                value:
+                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+                ...(field.type === 'checkboxInput' ||
+                field.type === 'checkBoxInputMulti'
+                  ? { options: values[field.name] || '' }
+                  : {}), // Add options only if it's a checkbox
+              })),
+            }),
+          ),
+          status: 'Completed',
         },
+        // },
       };
 
       const mdRequest = {
@@ -357,15 +393,17 @@ const SettlementDetailsReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle('Form submission completed.');
-              setDescription('Form submission completed.');
-              setShowModal(true);
-              router.push(`/merchant/home`);
+              // setTitle('Form submission completed.');
+              // setDescription('Form submission completed.');
+              // setShowModal(true);
+              // router.push(`/merchant/home`);
+              dispatch(setLogout());
+              router.push('/login');
             }
           } else {
             setTitle('Error Occurred');
@@ -493,7 +531,8 @@ const SettlementDetailsReqRevision = () => {
                                       label={field.label}
                                       type={field.type}
                                       hasImage
-                                      image={field.image}
+                                      image="Fetch Title"
+                                      // image={field.image}
                                       data={{
                                         accNumber:
                                           formik?.values?.accountNumber,
