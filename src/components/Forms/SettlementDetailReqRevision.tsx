@@ -102,7 +102,7 @@ const SettlementDetailsReqRevision = () => {
     categories: [
       {
         categoryName:
-          'Settlement Details (Select the account you would like to have)',
+          'Settlement Details(Select the account you would like to have)',
         fields: [
           {
             name: 'bank',
@@ -195,6 +195,7 @@ const SettlementDetailsReqRevision = () => {
               category.categoryName === filteredCategory.categoryName,
           );
 
+          console.log('matching category,', matchingCategory);
           if (matchingCategory) {
             // ✅ Map and merge fields
             const matchedFields = filteredCategory.fields
@@ -480,7 +481,7 @@ const SettlementDetailsReqRevision = () => {
                                       }
                                       asterik={field?.required || false}
                                       formik={formik}
-                                      error={field.validation.errorMessage}
+                                      // error={field.validation.errorMessage}
                                     />
                                   );
                                 }
@@ -503,7 +504,6 @@ const SettlementDetailsReqRevision = () => {
                                             ? 'easypaisabanklimited'
                                             : formik?.values?.bankName,
                                       }}
-                                      // asterik={field?.required || false}
                                       formik={formik}
                                       selectedCheckValue={selectedCheckValue}
                                     />

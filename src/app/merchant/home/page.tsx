@@ -239,7 +239,7 @@ const LoginSucessHome = () => {
     {
       title: 'Request Revision',
       description: 'All you need is to select...',
-      routeName: '/merchant/home/request-revision',
+      // routeName: '/merchant/home/request-revision',
       hide: !userData.isrequestRevision,
       onClick: handleRequestRevisionClick,
     },
@@ -296,6 +296,7 @@ const LoginSucessHome = () => {
               title={item.title}
               description={item.description}
               routeName={item.routeName}
+              onClick={item.onClick}
             /> // type={item.type} // onClickHandler={handleNavigate} /> ))
           ))}
         </div>

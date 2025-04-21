@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 
 // import { BarLoader } from 'react-spinners';
 // import * as Yup from 'yup';
@@ -686,14 +687,14 @@ const BusinessInformationReqRevision = () => {
 
   console.log('selectedDropDownValue', selectedDropDownValue);
 
-  // if (!initialValuesState || !filteredData) {
-  //   // if (!initialValuesState || !validationSchemaState || !filteredData) {
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
+  if (!initialValuesState || !filteredData) {
+    // if (!initialValuesState || !validationSchemaState || !filteredData) {
+    return (
+      <div className="flex w-full flex-col justify-center">
+        <BarLoader color="#21B25F" />
+      </div>
+    );
+  }
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('Submitted form values:', values);

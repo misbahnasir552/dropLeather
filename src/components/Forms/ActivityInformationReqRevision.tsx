@@ -291,12 +291,14 @@ const ActivityInformationReqRevision = () => {
         };
       });
 
+      console.log('fData', fData);
       // Filter the data based on the title (converted slug)
       const filteredData = fData?.filter((item) => {
         console.log(item, 'ITEM PAGE NAME');
         return convertSlugToTitle(item.name) === title;
       });
 
+      console.log('filteredData', filteredData);
       // Exit if no valid data is found
       if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');

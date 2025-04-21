@@ -113,7 +113,7 @@ const AddStoreReqRevision = () => {
     pageName: 'Store Details',
     categories: [
       {
-        categoryName: 'Store',
+        categoryName: 'Store ',
         fields: [
           {
             label: 'Store Type *',
@@ -307,6 +307,8 @@ const AddStoreReqRevision = () => {
         console.log(item.name, 'ITEM PAGE NAME');
         return convertSlugToTitle(item.name) === title; // Compare pageName instead of page
       });
+
+      console.log('filteredData', filteredData);
 
       if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
@@ -677,6 +679,29 @@ const AddStoreReqRevision = () => {
                                                 name={field.name}
                                                 options={
                                                   field?.validation?.options
+                                                }
+                                                form={formik}
+                                                setSelectedCheckValue={
+                                                  setSelectedCheckValue
+                                                }
+                                              />
+                                            );
+                                          case 'checkBoxInputMulti':
+                                            return (
+                                              <CheckboxInput
+                                                layout="grid grid-cols-2 gap-4"
+                                                isMulti={true}
+                                                name={field.name}
+                                                options={
+                                                  field?.options?.map(
+                                                    (option: {
+                                                      label: any;
+                                                      value: any;
+                                                    }) => ({
+                                                      label: option.label,
+                                                      value: option.value,
+                                                    }),
+                                                  ) || []
                                                 }
                                                 form={formik}
                                                 setSelectedCheckValue={
