@@ -17,6 +17,7 @@ import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
+import { formatDateTime } from '@/utils/helper';
 import type { IManageFundsTransfer } from '@/validations/merchant/merchant-portal/merchant-funds-transfer/manage-funds-transfer/interfaces';
 import {
   manageFundsTransferInitialValues,
@@ -60,10 +61,15 @@ function ManageFundsTransfer() {
       if (response?.data?.responseCode === '009') {
         setAllRecords(response?.data?.fundsTransferReportRecords);
         setTotalPages(response?.data?.totalPages);
-        const filteredValues = response?.data?.fundsTransferReportRecords.map(
+        const filteredValues = response?.data?.fundsTransferReportRecords?.map(
           ({ msisdn, accountType, batchId, ...rest }: any) => rest,
         );
-        setBeneficiaryFilteredData(filteredValues);
+        setBeneficiaryFilteredData(
+          filteredValues?.map((item: any) => ({
+            ...item,
+            transferDate: formatDateTime(item?.transferDate),
+          })),
+        );
       } else if (response?.data?.responseCode === '000') {
         setTitle(response?.data?.responseMessage || '');
         setDescription(response?.data?.responseDescription);
@@ -128,6 +134,9 @@ function ManageFundsTransfer() {
         filteredValues[key] = value;
       }
     });
+    if (Object.keys(filteredValues)?.length === 0) {
+      return;
+    }
     setFilteredData(filteredValues);
     const filteredData = allRecords
       .map((record: any) => {

@@ -12,6 +12,7 @@ import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import QRModal from '@/components/UI/Modal/QR/QRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
+import { formatDateTime } from '@/utils/helper';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -31,7 +32,6 @@ function StaticQr() {
   const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
-    console.log('base 64 is', base64String);
     if (!base64String) {
       console.error('Base64 string is undefined or null.');
       return;
@@ -101,14 +101,16 @@ function StaticQr() {
       // setTitle('merchantPortalProfile');
 
       if (response.data.responseCode === '009') {
-        const filterValues = response?.data?.merchantStores.map(
+        const filterValues = response?.data?.merchantStores?.map(
           (item: any) => item,
         );
+
         setStores(
           filterValues?.map((item: any) => {
             return {
               ...item,
               tillNumber: item?.transactionPointNumber,
+              qrGenerationTime: formatDateTime(item?.qrGenerationTime),
             };
           }),
         );
@@ -202,6 +204,7 @@ function StaticQr() {
             imageUrl={imageUrl} // Pass the QR code image URL here
             tilNum={tillNum}
             qrString={qrString}
+            isStatic={true}
             // amount={amount}
             // expirationTime={expirationTime}
           />

@@ -27,6 +27,7 @@ interface QRModalProps {
   expirationTime?: number;
   tilNum?: string;
   qrString?: string;
+  isStatic?: boolean;
 }
 
 const QRModal: React.FC<QRModalProps> = ({
@@ -40,6 +41,7 @@ const QRModal: React.FC<QRModalProps> = ({
   expirationTime,
   tilNum,
   qrString,
+  isStatic,
 }) => {
   const router = useRouter();
   const userData = useAppSelector((state: any) => state.auth);
@@ -76,7 +78,10 @@ const QRModal: React.FC<QRModalProps> = ({
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.setAttribute('download', 'QR.png'); // Set the desired file name
+      link.setAttribute(
+        'download',
+        `${isStatic ? 'Static Qr.png' : 'Dynamic QR.png'}`,
+      ); // Set the desired file name
       document.body.appendChild(link);
       link.click();
       link.remove();

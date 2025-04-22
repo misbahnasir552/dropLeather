@@ -158,7 +158,7 @@ const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
                   '/merchant/merchant-portal/account-settings/change-password/',
                 )
               }
-              className="cursor-pointer  text-primary-base "
+              className="cursor-pointer  text-primary-base underline"
             >
               Change Password
             </div>

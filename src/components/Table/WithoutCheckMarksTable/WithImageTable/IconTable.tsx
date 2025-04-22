@@ -107,9 +107,7 @@ const IconTable: React.FC<IconTableProps> = ({
                             handleView &&
                             handleView(
                               isDynamicQr ? qrCode : staticQRCode,
-                              isDynamicQr
-                                ? tableItem?.productName
-                                : tableItem?.storeName,
+                              tableItem?.storeName,
                               tillNumber,
                             )
                           }

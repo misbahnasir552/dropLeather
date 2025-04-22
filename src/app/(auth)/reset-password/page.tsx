@@ -1,71 +1,61 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
+import eye from '@/assets/icons/eye.svg';
 import B1 from '@/components/UI/Body/B1';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H1 from '@/components/UI/Headings/H1';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
-import { useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
-import { generateMD5Hash } from '@/utils/helper';
 import resetPasswordSchema, {
   resetPasswordInitialValues,
 } from '@/validations/merchant/home/reset-password/resetPassword';
 
 export default function ResetPassword() {
-  const userData = useAppSelector((state: any) => state.auth);
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [route, setRoute] = useState('');
+  const [apierror, setApierror] = useState('');
   const dispatch = useDispatch();
+  const email = useSearchParams().get('email');
+  const token = useSearchParams().get('token');
 
   const onSubmit = async (values: any) => {
+    setIsLoading(true);
     try {
       const additionalValues = {
-        newPassword: values.newPassword,
-        username: userData?.email,
-        // managerMobile: userData?.managerMobile,
+        newPassword: values?.newPassword,
+        email: email || null,
+        oldPassword: values?.oldPassword,
+        confirmNewPassword: values?.confirmNewPassword,
       };
-      const mdRequest = {
-        ...additionalValues,
-        apisecret: userData?.apiSecret,
-      };
-      const md5Hash = generateMD5Hash(mdRequest);
-      const requestBody = {
-        request: additionalValues,
-        signature: md5Hash,
-      };
-      // Replace with actual API call for resetting the password
       const response = await apiClient.post(
-        `/auth/changePasswordMerchant`,
-        requestBody,
+        `merchant/resetPassword${token ? `?token=${token}` : ''}`,
         {
-          headers: { Authorization: `Bearer ${userData.jwt}` },
+          request: additionalValues,
         },
       );
 
       if (response.data.responseCode === '009') {
-        // router.push(`/login`);
         setShowModal(true);
-        setTitle('Password Updated!');
-        setDescription(response.data.responseMessage);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
         dispatch(setLogout());
-        setRoute('/login');
+        setIsLoading(false);
       } else {
-        setShowModal(true);
-        setTitle('Retry');
-        setDescription(response.data.responseMessage);
+        setIsLoading(false);
+        setApierror(response.data.responseDescription);
       }
     } catch (e: any) {
-      setShowModal(true);
-      setTitle(e.code);
-      setDescription(e.message);
+      setIsLoading(false);
+      setApierror(e.message);
     }
   };
 
@@ -76,7 +66,8 @@ export default function ResetPassword() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName={route}
+        routeName={'/login'}
+        isVisible={true}
       />
       <div className="flex flex-col gap-2">
         <H1>Reset Password</H1>
@@ -92,13 +83,15 @@ export default function ResetPassword() {
         >
           {(formik) => (
             <Form className="flex flex-col ">
-              <div className="flex flex-col gap-4 bg-screen-grey px-[190px] py-[60px]">
+              <div className="flex flex-col gap-4 bg-screen-grey px-[20px] py-[60px] md:px-[190px]">
                 <Input
                   label="Old Password"
                   name="oldPassword"
                   type="password"
                   error={formik.errors.oldPassword}
                   touched={formik.touched.oldPassword}
+                  hasImage={true}
+                  image={eye}
                 />
                 <Input
                   label="New Password"
@@ -106,20 +99,32 @@ export default function ResetPassword() {
                   type="password"
                   error={formik.errors.newPassword}
                   touched={formik.touched.newPassword}
+                  hasImage={true}
+                  image={eye}
                 />
                 <Input
                   label="Confirm Password"
-                  name="confirmPassword"
+                  name="confirmNewPassword"
                   type="password"
-                  error={formik.errors.confirmPassword}
-                  touched={formik.touched.confirmPassword}
+                  error={formik.errors.confirmNewPassword}
+                  touched={formik.touched.confirmNewPassword}
+                  hasImage={true}
+                  image={eye}
                 />
+                <span className="px-4 text-xs font-normal">
+                  Password should include pattern of - lower case, upper case,
+                  digits (0-9), Special Characters (@,#,$,!).It should contain
+                  between 8 to 15 characters
+                </span>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
+                </div>
               </div>
               <div className="flex flex-row justify-end">
                 <Button
                   label="Submit"
                   type="submit"
-                  // isDisabled={!formik.isValid}
+                  isDisabled={isLoading}
                   className={`button-primary mt-[24px] w-[270px] px-3 py-[19px] text-sm leading-tight transition duration-300`}
                 />
               </div>

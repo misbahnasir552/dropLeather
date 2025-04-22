@@ -13,6 +13,7 @@ import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
+import { formatDateTime } from '@/utils/helper';
 import {
   searchBulkInitialValues,
   searchBulkSchema,
@@ -53,7 +54,12 @@ function BulkFundsTransferReport() {
           }),
         );
         setFileNames(formattedRoles);
-        setResponse(response?.data?.fundsTransferRecords);
+        setResponse(
+          response?.data?.fundsTransferRecords?.map((item: any) => ({
+            ...item,
+            createdAt: formatDateTime(item?.createdAt),
+          })),
+        );
         setTotalPages(response?.data?.totalPages);
       }
     } catch (e) {
@@ -222,12 +228,13 @@ function BulkFundsTransferReport() {
                       error={formik.errors.toDate}
                       touched={formik.touched.toDate}
                       minDate={formik.values.fromDate}
+                      isDisabled={!formik.values.fromDate}
                     />
                   </div>
                   <div className="flex w-full items-end gap-5 px-6">
                     <Button
                       label="Search"
-                      onClickHandler={() => onSubmit(formik.values)}
+                      // onClickHandler={() => onSubmit(formik.values)}
                       type="submit"
                       className="button-primary w-[120px] px-2 py-[13px] text-xs leading-tight transition duration-300"
                     />

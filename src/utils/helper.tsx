@@ -1,4 +1,5 @@
 import CryptoJS from 'crypto-js';
+import { format, parseISO } from 'date-fns';
 import Image from 'next/image';
 import React from 'react';
 
@@ -140,4 +141,14 @@ export const generateAESEncryption = (inputString: string) => {
   const encoded = encodeURIComponent(encrypted);
 
   return encoded;
+};
+export const formatDateTime = (isoDateString: string) => {
+  if (!isoDateString) return 'N/A';
+  try {
+    const parsedDate = parseISO(isoDateString);
+    return format(parsedDate, 'dd-MM-yyyy, hh:mma');
+  } catch (error) {
+    console.error('Invalid date:', error);
+    return '';
+  }
 };

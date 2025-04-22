@@ -13,7 +13,7 @@ const FundsTransferTable = ({ tableHeadings, tableData }: any) => {
         <table className="w-full border-collapse">
           <thead className="sticky top-0 z-10 bg-screen-grey">
             <tr className="flex w-full items-center justify-between rounded-lg px-6">
-              {tableHeadings.map((heading: any, i: number, arr: any) => (
+              {tableHeadings?.map((heading: any, i: number, arr: any) => (
                 <th
                   key={i}
                   className={`py-[17px] ${
@@ -30,7 +30,7 @@ const FundsTransferTable = ({ tableHeadings, tableData }: any) => {
             </tr>
           </thead>
           <tbody className="block max-h-[450px]">
-            {tableData.map((item: any, i: number) => (
+            {tableData?.map((item: any, i: number) => (
               <tr
                 key={i}
                 className="flex w-full items-center justify-between border-b border-border-light px-6"
@@ -50,6 +50,7 @@ const FundsTransferTable = ({ tableHeadings, tableData }: any) => {
                         <B3 textColor="text-primary-base">{'Success'}</B3>
                       ) : value === 'FAILURE' ||
                         value === 'FAILED' ||
+                        value === 'Failure' ||
                         value === 'Failed' ? (
                         <B3 textColor="text-danger-base">{'Failed'}</B3>
                       ) : (

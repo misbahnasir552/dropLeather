@@ -6,12 +6,13 @@ import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
-import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
+import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { formatDateTime } from '@/utils/helper';
 import {
   searchBulkInitialValues,
   searchBulkSchema,
@@ -45,17 +46,22 @@ function BulkReversalReport() {
           }),
         );
         setFileNames(formattedRoles);
-        setResponse(response?.data?.reversalRecords);
+        setResponse(
+          response?.data?.reversalRecords?.map((item: any) => ({
+            ...item,
+            createdAt: formatDateTime(item?.createdAt),
+          })),
+        );
         setTotalPages(response?.data?.totalPages);
       }
-    } catch (e) {
-      console.log(e, 'error fetching');
+    } catch (e: any) {
+      setApierror(e?.message);
     }
   };
   useEffect(() => {
     fetchRecords();
   }, [filteredData, pageNumber]);
-  useEffect(() => {}, [fileNames]);
+  // useEffect(() => {}, [fileNames]);
 
   const bulkTableHeadings: string[] = [
     '#',
@@ -217,9 +223,15 @@ function BulkReversalReport() {
                       error={formik.errors.toDate}
                       touched={formik.touched.toDate}
                       minDate={formik.values.fromDate}
+                      isDisabled={!formik.values.fromDate}
                     />
                   </div>
-                  <div className="flex w-full items-end justify-end gap-5 px-6">
+                  <div className="flex w-full items-end justify-start gap-5 px-6">
+                    <Button
+                      label="Search"
+                      type="submit"
+                      className="button-primary w-[120px] px-2 py-[13px] text-xs leading-tight transition duration-300"
+                    />
                     <Button
                       label="Reset"
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
@@ -234,15 +246,8 @@ function BulkReversalReport() {
                       onClickHandler={exportToExcel} // Export button click handler
                     />
                     <Button
-                      label="Search"
-                      onClickHandler={() => onSubmit(formik.values)}
-                      // type="submit"
-                      className="button-primary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                    />
-                    <Button
                       label="Bulk Transfer"
                       routeName="/merchant/merchant-portal/merchant-funds-transfer/bulk-funds-transfer-report/bulk-upload/"
-                      type="submit"
                       className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                   </div>
@@ -258,10 +263,9 @@ function BulkReversalReport() {
             {/* <Table /> */}
             {response && response?.length > 0 ? (
               <>
-                <DynamicRecordsTable
-                  heading={bulkTableHeadings}
-                  response={bulktableData}
-                  title={'admin'}
+                <FundsTransferTable
+                  tableHeadings={bulkTableHeadings}
+                  tableData={bulktableData}
                 />
                 <Pagination
                   pageNumber={pageNumber}
