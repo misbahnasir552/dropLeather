@@ -12,6 +12,7 @@ import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { formatDateTime } from '@/utils/helper';
 import {
   searchBulkInitialValues,
   searchBulkSchema,
@@ -45,7 +46,12 @@ function BulkReversalReport() {
           }),
         );
         setFileNames(formattedRoles);
-        setResponse(response?.data?.reversalRecords);
+        setResponse(
+          response?.data?.reversalRecords?.map((item: any) => ({
+            ...item,
+            createdAt: formatDateTime(item?.createdAt),
+          })),
+        );
         setTotalPages(response?.data?.totalPages);
       }
     } catch (e: any) {

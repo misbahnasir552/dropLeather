@@ -12,6 +12,7 @@ import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import QRModal from '@/components/UI/Modal/QR/QRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
+import { formatDateTime } from '@/utils/helper';
 
 function StaticQr() {
   const userData = useAppSelector((state: any) => state.auth);
@@ -109,6 +110,7 @@ function StaticQr() {
             return {
               ...item,
               tillNumber: item?.transactionPointNumber,
+              qrGenerationTime: formatDateTime(item?.qrGenerationTime),
             };
           }),
         );

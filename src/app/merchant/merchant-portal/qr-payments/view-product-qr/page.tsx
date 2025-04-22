@@ -17,6 +17,7 @@ import QRModal from '@/components/UI/Modal/QR/QRModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
+import { formatDateTime } from '@/utils/helper';
 import type { IViewProductQr } from '@/validations/merchant/merchant-portal/qr-payments/interfaces';
 import {
   viewProductQrInitialValues,
@@ -35,6 +36,7 @@ function ViewProductQR() {
   const [imageUrl, setImageUrl] = useState('');
   const [storeName, setStoreName] = useState('');
   const [tillNum, setTillNum] = useState<string>('');
+  const [apierror, setApierror] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
@@ -81,12 +83,17 @@ function ViewProductQR() {
         }: any) => rest,
       );
 
-      setQrFilteredData(filteredValues);
+      setQrFilteredData(
+        filteredValues?.map((item: any) => ({
+          ...item,
+          expirationTime: formatDateTime(item?.expirationTime),
+          createdAt: formatDateTime(item?.createdAt),
+        })),
+      );
       setTotalPages(response?.data?.totalPages);
       setLoading(false);
     } catch (e: any) {
-      setTitle('Network Failure!');
-      setDescription(e?.message);
+      setApierror(e?.message);
       setLoading(false);
       console.log('Error in fetching dynamic QR list', e);
     }
@@ -308,6 +315,11 @@ function ViewProductQR() {
             </Formik>
           </MerchantFormLayout>
         </div>
+        {apierror && (
+          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+            {apierror}
+          </div>
+        )}
         <div className="flex flex-col justify-center gap-3 pt-[30px]">
           {loading ? (
             <BarLoader color="#21B25F" />
