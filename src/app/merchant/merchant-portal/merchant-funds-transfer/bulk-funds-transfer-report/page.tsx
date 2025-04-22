@@ -222,12 +222,13 @@ function BulkFundsTransferReport() {
                       error={formik.errors.toDate}
                       touched={formik.touched.toDate}
                       minDate={formik.values.fromDate}
+                      isDisabled={!formik.values.fromDate}
                     />
                   </div>
                   <div className="flex w-full items-end gap-5 px-6">
                     <Button
                       label="Search"
-                      onClickHandler={() => onSubmit(formik.values)}
+                      // onClickHandler={() => onSubmit(formik.values)}
                       type="submit"
                       className="button-primary w-[120px] px-2 py-[13px] text-xs leading-tight transition duration-300"
                     />

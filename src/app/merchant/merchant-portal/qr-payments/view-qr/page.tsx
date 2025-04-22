@@ -202,6 +202,7 @@ function StaticQr() {
             imageUrl={imageUrl} // Pass the QR code image URL here
             tilNum={tillNum}
             qrString={qrString}
+            isStatic={true}
             // amount={amount}
             // expirationTime={expirationTime}
           />

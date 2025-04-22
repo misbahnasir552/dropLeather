@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 // Initial values for the form
 export const resetPasswordInitialValues = {
   newPassword: '',
-  confirmPassword: '',
+  confirmNewPassword: '',
   oldPassword: '',
 };
 
@@ -20,7 +20,7 @@ const resetPasswordSchema = Yup.object().shape({
       'Password must contain at least one special character',
     )
     .required('Password is required'),
-  confirmPassword: Yup.string()
+  confirmNewPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), ''], 'Passwords must match')
     .required('Confirm Password is required'),
 });
