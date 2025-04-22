@@ -300,26 +300,54 @@ const BusinessInformation = () => {
       console.log('currentEndpoint', currentEndpoint);
       console.log('businessNatureData', businessNatureData);
 
+      // const transformedData = {
+      //   managerMobile: userData.managerMobile,
+      //   businessNature: businessNatureData?.businessTypeNature,
+      //   status: 'Completed',
+      //   page: {
+      //     pageName: 'Business Details',
+      //     categories: soleBusinessDetailsFormData.categories.map(
+      //       (category) => ({
+      //         categoryName: category.categoryName,
+      //         data: category.fields.map((field) => ({
+      //           label: field.label,
+      //           value:
+      //             field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+      //           ...(field.type === 'checkboxInput' ||
+      //           field.type === 'checkBoxInputMulti'
+      //             ? { options: values[field.name] || '' }
+      //             : {}), // Add options only if it's a checkbox
+      //         })),
+      //       }),
+      //     ),
+      //   },
+      // };
+
       const transformedData = {
         managerMobile: userData.managerMobile,
         businessNature: businessNatureData?.businessTypeNature,
         status: 'Completed',
         page: {
           pageName: 'Business Details',
-          categories: soleBusinessDetailsFormData.categories.map(
-            (category) => ({
-              categoryName: category.categoryName,
-              data: category.fields.map((field) => ({
-                label: field.label,
-                value:
-                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-                ...(field.type === 'checkboxInput' ||
-                field.type === 'checkBoxInputMulti'
-                  ? { options: values[field.name] || '' }
-                  : {}), // Add options only if it's a checkbox
-              })),
-            }),
-          ),
+          categories: (businessNature?.businessNature === 'soleProprietor'
+            ? soleBusinessDetailsFormData?.categories ?? []
+            : businessNature?.businessNature === 'partnership'
+            ? partnershipBusinessDetailsFormData?.categories ?? []
+            : businessNature?.businessNature === 'publicAndPrivateLtd'
+            ? pnpLtdBusinessDetailsFormData?.categories ?? []
+            : []
+          ).map((category) => ({
+            categoryName: category.categoryName,
+            data: category.fields.map((field) => ({
+              label: field.label,
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name],
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}),
+            })),
+          })),
         },
       };
 

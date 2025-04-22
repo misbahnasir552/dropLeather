@@ -35,7 +35,7 @@ const LoginSucessHome = () => {
   // const [route, setRoute] = useState<any>();
   const [data, setData] = useState<any>();
   // const router = useRouter();
-
+  console.log(data);
   // if (userData?.temp) {
   //   router.push('/merchant/home/reset-password');
   // }
@@ -213,20 +213,20 @@ const LoginSucessHome = () => {
     }
   };
 
-  const PendingMerchantCardData = [
-    {
-      title: 'Sandbox Integrations',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: 'business-nature',
-    },
-    {
-      title: 'Merchant Onboarding',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: 'business-nature',
-    },
-  ];
+  // const PendingMerchantCardData = [
+  //   {
+  //     title: 'Sandbox Integrations',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+  //   {
+  //     title: 'Merchant Onboarding',
+  //     description:
+  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+  //     routeName: 'business-nature',
+  //   },
+  // ];
 
   const LoginCardData = [
     {
@@ -234,7 +234,7 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
-      // hide: userData.onboardingCompleted,
+      hide: userData.onboardingCompleted,
     },
     {
       title: 'Request Revision',
@@ -248,15 +248,17 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: '/merchant/merchant-portal/home/',
-      // hide: !userData.onboardingCompleted,
+      hide: !userData.onboardingCompleted,
     },
-    {
-      title: 'Sandbox Integrations',
-      description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-      routeName: 'business-nature',
-    },
+    // PLease DO NOT REMOVE THE CODE BELOw
+    // {
+    //   title: 'Sandbox Integrations',
+    //   description:
+    //     'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+    //   routeName: 'business-nature',
+    // },
   ].filter((card) => !card.hide);
+  // ].filter((card) => !card.hide);
 
   return (
     <>
@@ -270,14 +272,7 @@ const LoginSucessHome = () => {
         <div className="flex flex-col gap-2">
           <p className="text-5xl font-semibold leading-[60px] text-secondary-base sm:max-md:text-[32px] sm:max-md:leading-[40px]">
             Welcome to easypaisa{' '}
-            {userData?.userType === 'Corporate' ? (
-              <span className="text-primary-base">
-                {' '}
-                Corporate Onboarding Portal{' '}
-              </span>
-            ) : (
-              <span className="text-primary-base"> Merchant Portal </span>
-            )}
+            <span className="text-primary-base"> Merchant Portal </span>
           </p>
           <p className="text-base font-normal leading-5 text-secondary-600 sm:max-md:text-sm sm:max-md:leading-[18px] ">
             Create and modify your easypaisa account effortlessly through our
@@ -285,24 +280,24 @@ const LoginSucessHome = () => {
           </p>
         </div>
         <div className="flex gap-5 sm:max-md:flex-col sm:max-md:gap-6">
-          {data?.applicationFormStatus === 'PENDING'
-            ? PendingMerchantCardData.map((item, index) => (
-                <LoginCard
-                  key={index}
-                  title={item.title}
-                  description={item.description}
-                  routeName={item.routeName}
-                />
-              ))
-            : LoginCardData?.map((item, index) => (
-                <LoginCard
-                  key={index}
-                  title={item.title}
-                  description={item.description}
-                  routeName={item.routeName}
-                  onClick={item.onClick}
-                /> // type={item.type} // onClickHandler={handleNavigate} /> ))
-              ))}
+          {// data?.applicationFormStatus === 'PENDING'
+          //   ? PendingMerchantCardData.map((item, index) => (
+          //       <LoginCard
+          //         key={index}
+          //         title={item.title}
+          //         description={item.description}
+          //         routeName={item.routeName}
+          //       />
+          //     ))
+          //   :
+          LoginCardData?.map((item, index) => (
+            <LoginCard
+              key={index}
+              title={item.title}
+              description={item.description}
+              routeName={item.routeName}
+            /> // type={item.type} // onClickHandler={handleNavigate} /> ))
+          ))}
         </div>
       </div>
     </>

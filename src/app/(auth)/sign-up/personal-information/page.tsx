@@ -47,16 +47,16 @@ const PersonalInfo = () => {
     setIsSubmitted(true);
     setIsLoading(true);
 
-    if (!isChecked) {
-      console.log('here in checked ');
-      setApierror(
-        'You must agree to the terms and conditions to proceed. Please check the box to continue.',
-      );
-      setIsSubmitted(false);
-      setIsLoading(false);
-      setSubmitting(false);
-      return;
-    }
+    // if (!isChecked) {
+    //   console.log('here in checked ');
+    //   setApierror(
+    //     'You must agree to the terms and conditions to proceed. Please check the box to continue.',
+    //   );
+    //   setIsSubmitted(false);
+    //   setIsLoading(false);
+    //   setSubmitting(false);
+    //   return;
+    // }
 
     try {
       const response = await apiClient.post('merchant/register/inquire', {
@@ -102,7 +102,7 @@ const PersonalInfo = () => {
         setApierror(response?.data?.responseMessage);
       }
     } catch (e: any) {
-      setApierror(e);
+      setApierror(e?.message);
     } finally {
       setSubmitting(false);
       setIsLoading(false);
