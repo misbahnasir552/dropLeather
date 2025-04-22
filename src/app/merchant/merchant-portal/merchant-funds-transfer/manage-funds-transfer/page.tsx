@@ -128,6 +128,9 @@ function ManageFundsTransfer() {
         filteredValues[key] = value;
       }
     });
+    if (Object.keys(filteredValues)?.length === 0) {
+      return;
+    }
     setFilteredData(filteredValues);
     const filteredData = allRecords
       .map((record: any) => {

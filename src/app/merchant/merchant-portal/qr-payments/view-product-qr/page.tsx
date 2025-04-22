@@ -43,6 +43,7 @@ function ViewProductQR() {
     'Product Name',
     'Amount (Rs.)',
     'Product Number',
+    'Store Name',
     'Store ID',
     'QR Generation Date/Time',
     'QR Expiry Date/Time',
@@ -74,6 +75,7 @@ function ViewProductQR() {
           // qrCode,
           // tillNumber,
           // createdAt,
+          // storeName,
           updatedAt,
           ...rest
         }: any) => rest,
@@ -140,6 +142,9 @@ function ViewProductQR() {
         filteredValues[key] = value;
       }
     });
+    if (Object.keys(filteredValues)?.length === 0) {
+      return;
+    }
     setFilteredParams(filteredValues);
   };
   const base64ToJpg = (base64String: any) => {
@@ -198,11 +203,11 @@ function ViewProductQR() {
   };
   const handleReset = (formik: any) => {
     formik.resetForm();
+    setPageNumber(0);
     fetchRecords();
   };
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
-    // fetchRecords()
   };
 
   const showPrevPage = () => {

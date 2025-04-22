@@ -31,7 +31,6 @@ function StaticQr() {
   const [qrString, setQrString] = useState('');
 
   const base64ToJpg = (base64String: any) => {
-    console.log('base 64 is', base64String);
     if (!base64String) {
       console.error('Base64 string is undefined or null.');
       return;
@@ -101,9 +100,10 @@ function StaticQr() {
       // setTitle('merchantPortalProfile');
 
       if (response.data.responseCode === '009') {
-        const filterValues = response?.data?.merchantStores.map(
+        const filterValues = response?.data?.merchantStores?.map(
           (item: any) => item,
         );
+
         setStores(
           filterValues?.map((item: any) => {
             return {
