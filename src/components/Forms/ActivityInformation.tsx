@@ -35,6 +35,9 @@ const ActivityInformation = () => {
   const [formData, setFormData] = useState(
     ActivityInformationFormData.categories,
   );
+  const businessNature = useAppSelector(
+    (state: any) => state.onBoardingForms.businessNature,
+  );
   // const formData = useAppSelector((state: any) => state.onBoardingForms);
   console.log('FORM DATA ', formData);
 
@@ -181,8 +184,10 @@ const ActivityInformation = () => {
 
       const transformedData = {
         managerMobile: userData.managerMobile,
+
         page: {
           pageName: 'Activity Information',
+
           categories: ActivityInformationFormData.categories.map(
             (category) => ({
               categoryName: category.categoryName,
@@ -214,9 +219,9 @@ const ActivityInformation = () => {
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(currentEndpoint, requestBody, {
-            // params: {
-            //   username: userData?.email,
-            // },
+            params: {
+              natureOfBusiness: businessNature,
+            },
             headers: {
               Authorization: `Bearer ${userData.jwt}`,
               Username: userData?.email,
