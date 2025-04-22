@@ -5,6 +5,7 @@ export const endpointArray = [
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
+    name: 'Business Details',
     tab: 'business-details',
     endpoint: `/merchant/saveOnboardingForms`,
   },
@@ -14,6 +15,7 @@ export const endpointArray = [
     endpoint: `/merchant/saveOnboardingForms`,
   },
   {
+    name: 'Settlement Details',
     tab: 'settlement-details',
     endpoint: `/merchant/saveOnboardingForms`,
   },
