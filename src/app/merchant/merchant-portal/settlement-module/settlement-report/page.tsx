@@ -145,7 +145,7 @@ function SettlementReport() {
             >
               {(formik) => (
                 <Form className=" bg-screen-grey">
-                  <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey ">
+                  <div className="mb-9 flex flex-col gap-5 bg-screen-grey md:w-[75%] md:flex-row ">
                     <DateInputNew
                       label="From Date"
                       name="transferDateFrom"
@@ -170,11 +170,6 @@ function SettlementReport() {
                       className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                     <Button
-                      label="Export"
-                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                      onClickHandler={exportToExcel} // Export button click handler
-                    />
-                    <Button
                       label="Reset"
                       type="button"
                       onClickHandler={() => {
@@ -182,7 +177,12 @@ function SettlementReport() {
                         setFilteredData(undefined);
                       }}
                       // routeName="/login"
-                      className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
+                      className="button-secondary h-9 w-[120px] px-2 py-[19px] text-xs leading-tight"
+                    />
+                    <Button
+                      label="Export"
+                      className="button-secondary w-[120px] px-2 py-[10px] text-xs leading-tight transition duration-300"
+                      onClickHandler={exportToExcel} // Export button click handler
                     />
                   </div>
                 </Form>

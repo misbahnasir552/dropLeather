@@ -22,6 +22,7 @@ function Page() {
   const userData = useAppSelector((state: any) => state.auth);
 
   const [allRecords, setAllRecords] = useState<any[]>([]);
+  const [apierror, setApierror] = useState('');
   const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
     [],
   );
@@ -50,8 +51,8 @@ function Page() {
         }),
       );
       setBeneficiaryFilteredData(filteredValues);
-    } catch (error) {
-      console.error('Error fetching merchant stores:', error);
+    } catch (error: any) {
+      setApierror(error?.message);
     }
   };
 
@@ -85,6 +86,9 @@ function Page() {
       return matchesAccount && matchesDate;
     });
 
+    if (Object.keys(filtered)?.length === 0) {
+      return;
+    }
     const filteredSearchData = filtered?.map((item: any) => ({
       accountNumber: item?.accountNumber,
       // transferDate: new Date(item?.transferDate).toLocaleString(),
@@ -100,8 +104,6 @@ function Page() {
   };
 
   const handleReset = (Formik: any) => {
-    console.log('RESET');
-
     Formik.resetForm();
     fetchBulkFundsTransferRecords(userData);
   };
@@ -163,8 +165,13 @@ function Page() {
           )}
         </Formik>
       </MerchantFormLayout>
+      {apierror && (
+        <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+          {apierror}
+        </div>
+      )}
       <div>
-        {beneficiaryFilteredData.length > 0 ? (
+        {beneficiaryFilteredData?.length > 0 ? (
           <div>
             <SearchTransactionTable
               tableHeadings={bulkTransferTableHeadings}
