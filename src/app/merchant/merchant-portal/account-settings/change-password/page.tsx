@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
+import eye from '@/assets/icons/eye.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import Input from '@/components/UI/Inputs/Input';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
@@ -56,7 +57,7 @@ export default function ChangePasswordPage() {
         },
       );
 
-      if (response?.data.responseCode === '000') {
+      if (response?.data.responseCode === '009') {
         setShowModal(true);
         dispatch(setLogout());
         dispatch(resetForms());
@@ -66,14 +67,10 @@ export default function ChangePasswordPage() {
         setDescription(response?.data?.responseDescription);
       } else {
         setIsLoading(false);
-        // setTitle('Failure');
-        // setDescription(response?.data.responseMessage);
-        setApierror(response?.data?.responseMessage);
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
       setApierror(e?.message);
-      // setTitle('Network Failed');
-      // setDescription(e.message);
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -110,6 +107,8 @@ export default function ChangePasswordPage() {
                   onKeyDown={() => {
                     touched.currentPassword = true;
                   }}
+                  hasImage={true}
+                  image={eye}
                   // isDisabled={true} // Disable as it's autofilled
                 />
                 <Input
@@ -120,6 +119,8 @@ export default function ChangePasswordPage() {
                   onKeyDown={() => {
                     touched.newPassword = true;
                   }}
+                  hasImage={true}
+                  image={eye}
                 />
                 <Input
                   label="Confirm Password"
@@ -129,6 +130,8 @@ export default function ChangePasswordPage() {
                   onKeyDown={() => {
                     touched.confirmPassword = true;
                   }}
+                  hasImage={true}
+                  image={eye}
                 />
                 <span className="px-4 text-xs font-normal">
                   Password should include pattern of - lower case, upper case,
@@ -147,7 +150,7 @@ export default function ChangePasswordPage() {
 
             <div className="flex w-full justify-end gap-6">
               <Button
-                label="Cancel"
+                label="Reset"
                 onClickHandler={() => resetForm()}
                 className="button-secondary w-[270px] py-[19px] text-xs leading-tight"
               />
