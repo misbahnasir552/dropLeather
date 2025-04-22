@@ -462,6 +462,8 @@ const ActivityInformationReqRevision = () => {
   //   setSubmitting(false);
   // };
 
+  console.log('endpointArray[nextIndex]?.name', endpointArray);
+
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('Submitted form values:', values);
 
@@ -534,6 +536,10 @@ const ActivityInformationReqRevision = () => {
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
             console.log('nextIndex', nextIndex);
+            console.log(
+              'endpointArray[nextIndex]?.name',
+              endpointArray[1]?.name,
+            );
 
             //  Ensure nextIndex is within bounds and valid
             while (
@@ -555,6 +561,9 @@ const ActivityInformationReqRevision = () => {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
               dispatch(setLogout());
               router.push('/login');
               console.log('Form submission completed.');

@@ -279,100 +279,118 @@ function IntegrationFormReqRevision() {
 
   console.log(selectedCheckValue);
 
-  const onSubmit = async (
-    values: { [key: string]: any },
-    { setSubmitting }: any,
-  ) => {
-    console.log('Form values:', values);
+  const onSubmit = async (values: any, { setSubmitting }: any) => {
+    console.log('Submitted form values:', values);
 
     const currentIndex = endpointArray.findIndex(
       (item) => item.tab === currentTab,
     );
 
-    if (currentIndex === -1) return; // Exit if no matching tab is found
+    if (currentIndex !== -1) {
+      console.log(currentIndex, 'Current Index');
 
-    const currentEndpoint = endpointArray[currentIndex]?.endpoint;
+      const currentEndpoint = endpointArray[currentIndex]?.endpoint;
 
-    //  Dynamically generate categories and data based on form values
-    const transformedData = {
-      // request: {
-      managerMobile: userData.managerMobile,
-      page: {
-        pageName: IntegrationFormData?.pageName,
-        categories: IntegrationFormData?.categories.map((category: any) => ({
-          categoryName: `Integration`,
-          data: category.fields.map((field: any) => ({
-            label: field.label,
-            // value: values[field.name] || '', // Fetching value from formik.values
-            value:
-              field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-            ...(field.type === 'checkboxInput' ||
-            field.type === 'checkBoxInputMulti'
-              ? { options: values[field.name] || '' }
-              : {}), // Add options only if it's a checkbox
+      // ✅ Extract valid page names from fieldData
+      const validPages = fieldData.pages.page.map((p) => p.pageName);
+      console.log('valid pages', validPages);
+
+      const transformedData = {
+        // request: {
+        managerMobile: userData.managerMobile,
+        page: {
+          pageName: IntegrationFormData?.pageName,
+          categories: IntegrationFormData?.categories.map((category: any) => ({
+            categoryName: `Integration`,
+            data: category.fields.map((field: any) => ({
+              label: field.label,
+              // value: values[field.name] || '', // Fetching value from formik.values
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}), // Add options only if it's a checkbox
+            })),
           })),
-        })),
-        status: 'Completed',
-      },
-      // },
-    };
+          status: 'Completed',
+        },
+        // },
+      };
 
-    const mdRequest = {
-      ...transformedData,
-      apisecret: apiSecret,
-    };
+      const mdRequest = {
+        ...transformedData,
+        apisecret: apiSecret,
+      };
 
-    const md5Hash = generateMD5Hash(mdRequest);
+      const md5Hash = generateMD5Hash(mdRequest);
 
-    try {
-      if (currentEndpoint) {
-        let finalEndpoint = currentEndpoint;
+      const requestBody = {
+        request: transformedData,
+        signature: md5Hash,
+      };
 
-        if (isLastTab) {
-          finalEndpoint += '?requestRevision=Completed';
-          dispatch(setIsLastTab(false));
-        }
-        const response = await apiClient.post(
-          finalEndpoint,
-          {
-            request: transformedData,
-            signature: md5Hash,
-          },
-          {
-            params: { username: userData?.email },
-            headers: { Authorization: `Bearer ${userData.jwt}` },
-          },
-        );
+      try {
+        if (currentEndpoint) {
+          let finalEndpoint = currentEndpoint;
 
-        console.log('API Response:', response);
-
-        if (response?.data?.responseCode === '009') {
-          // ✅ Navigate to the next tab if available
-          const nextTab = endpointArray[currentIndex + 1]?.tab;
-          // setDescription(response?.data?.responseDescription);
-          // setShowModal(true);
-          if (nextTab) {
-            router.push(`/merchant/home/business-nature/${nextTab}`);
-          } else {
-            console.log('Form submission completed.');
-            setTitle('Form submission completed.');
-            setDescription('Form submission completed.');
-            // setShowModal(true);
-            // router.push(`/merchant/home`);
-            dispatch(setLogout());
-            router.push('/login');
+          if (isLastTab) {
+            finalEndpoint += '?requestRevision=Completed';
+            dispatch(setIsLastTab(false));
           }
-        } else {
-          setApierror(
-            response?.data?.responseMessage || 'Unknown error occurred',
-          );
+          const response = await apiClient.post(finalEndpoint, requestBody, {
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              Username: userData?.email,
+            },
+          });
+
+          console.log('api response', response.data);
+          if (response?.data?.responseCode === '009') {
+            let nextIndex = currentIndex + 1;
+            console.log('nextIndex', nextIndex);
+
+            //  Ensure nextIndex is within bounds and valid
+            while (
+              nextIndex < endpointArray.length &&
+              (!endpointArray[nextIndex]?.name ||
+                !validPages.includes(endpointArray[nextIndex]?.name ?? ''))
+            ) {
+              nextIndex += 1;
+            }
+
+            //  Ensure nextIndex is valid before accessing tab
+            if (
+              nextIndex < endpointArray.length &&
+              endpointArray[nextIndex]?.tab
+            ) {
+              const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
+              console.log('next tab', nextTab);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
+              router.push(`/merchant/home/request-revision/${nextTab}`);
+            } else {
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
+              dispatch(setLogout());
+              router.push('/login');
+              console.log('Form submission completed.');
+            }
+          } else {
+            setTitle('Error Occurred');
+            setApierror(response?.data?.responseDescription);
+            setDescription(response?.data?.responseDescription);
+            setShowModal(true);
+          }
         }
+      } catch (e) {
+        console.error('Error in submitting form:', e);
+        setDescription('Network failed! Please try again later.');
+        setShowModal(true);
+      } finally {
+        setSubmitting(false);
       }
-    } catch (error: any) {
-      console.error('Error submitting form:', error);
-      setApierror(error.message || 'Network failed! Please try again later.');
-    } finally {
-      setSubmitting(false);
     }
   };
 

@@ -91,7 +91,17 @@ const getFilteredTabs = (
   tabs: Tab[],
   statusMap: any,
 ) => {
-  return fetchedPages
+  // Fixed tab order
+  const fixedTabOrder = [
+    'activity-information',
+    'business-details',
+    'store-details',
+    'settlement-details',
+    'integration',
+  ];
+
+  // Map over the fetchedPages to match tabs and their statuses
+  const filteredTabs = fetchedPages
     .map((page) => {
       const matchedTab = tabs.find(
         (tab) => tab.label === nameToLabelMapping[page.pageName],
@@ -105,14 +115,14 @@ const getFilteredTabs = (
       }
       return undefined;
     })
-    .filter((tab): tab is Tab => tab !== undefined)
-    .sort((a, b) =>
-      a.label === 'Activity Information'
-        ? -1
-        : b.label === 'Activity Information'
-        ? 1
-        : 0,
-    );
+    .filter((tab): tab is Tab => tab !== undefined);
+
+  // Now, sort the filteredTabs based on the fixedTabOrder
+  const sortedTabs = filteredTabs.sort((a, b) => {
+    return fixedTabOrder.indexOf(a.name) - fixedTabOrder.indexOf(b.name);
+  });
+
+  return sortedTabs;
 };
 
 const RequestRevisionTimeline: React.FC = () => {

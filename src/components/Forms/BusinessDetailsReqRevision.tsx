@@ -835,6 +835,9 @@ const BusinessInformationReqRevision = () => {
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
               dispatch(setLogout());
               router.push('/login');
               // setTitle('Form submission completed.');

@@ -358,42 +358,48 @@ const AddStoreReqRevision = () => {
           );
 
           if (matchingCategory) {
-            // Collect matched fields with full field info
             const matchedFields = filteredCategory.fields.map((fieldLabel) => {
-              // Find full field info based on label
               const matchedField = matchingCategory.fields.find(
                 (field: { label: any }) => field.label === fieldLabel,
               );
 
               if (matchedField) {
+                // Check if this is the 'category' field
+                const isCategoryField = matchedField.name === 'category';
+
+                // Initialize fields with empty string for non-checkbox types
                 if (matchedField?.type !== 'checkItem') {
-                  initialValues[matchedField.name] = ''; // Initialize field with empty value
+                  initialValues[matchedField.name] = '';
+                }
+
+                let fieldOptions;
+                if (storeCategories.length > 0) {
+                  fieldOptions = isCategoryField
+                    ? storeCategories
+                    : matchedField.options || [];
                 }
 
                 return {
                   name: matchedField.name,
                   label: matchedField.label,
                   type: matchedField.type,
-                  // required: matchedField.required || false,
-                  options: matchedField.options || [],
+                  options: fieldOptions,
                 };
               }
-
-              return null; // Ignore unmatched fields
+              return null;
             });
 
             return {
               categoryName: filteredCategory.categoryName,
-              fields: matchedFields.filter(Boolean), // Remove null values from fields
+              fields: matchedFields.filter(Boolean),
             };
           }
-
-          return null; // Ignore unmatched categories
+          return null;
         });
 
         return {
-          pageName: item.name, // Use pageName after mapping
-          categories: mappedCategories.filter(Boolean), // Remove null categories
+          pageName: item.name,
+          categories: mappedCategories.filter(Boolean),
         };
       });
 
@@ -408,7 +414,7 @@ const AddStoreReqRevision = () => {
         setValidationSchemaState(validationSchema);
       }
     }
-  }, [currentTab, fieldData]);
+  }, [currentTab, fieldData, storeCategories]);
 
   console.log('filtered data', filteredData);
 
@@ -508,9 +514,9 @@ const AddStoreReqRevision = () => {
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              // setTitle('Form submission completed.');
-              // setDescription('Form submission completed.');
-              // setShowModal(true);
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
               // router.push(`/merchant/home`);
               dispatch(setLogout());
               router.push('/login');
@@ -561,8 +567,6 @@ const AddStoreReqRevision = () => {
               {/* Loop through filtered data to render form pages */}
               {filteredData.length > 0 ? (
                 filteredData.map((pageItem: any) => {
-                  console.log('Page Item: ', pageItem); // Debug Page Item
-
                   return (
                     <React.Fragment key={pageItem.pageName}>
                       {pageItem?.categories
@@ -576,8 +580,6 @@ const AddStoreReqRevision = () => {
                             item: { categoryName: any; fields: any[] },
                             itemIndex: any,
                           ) => {
-                            console.log('Category Item: ', item); // Debug Category Item
-
                             return (
                               <FormLayoutDynamic
                                 key={itemIndex}
@@ -632,8 +634,6 @@ const AddStoreReqRevision = () => {
                                           | null
                                           | undefined,
                                       ) => {
-                                        console.log('Field Item: ', field); // Debug Field Item
-
                                         switch (field?.type) {
                                           case 'text':
                                             return (
