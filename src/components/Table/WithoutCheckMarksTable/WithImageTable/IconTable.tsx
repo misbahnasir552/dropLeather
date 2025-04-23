@@ -19,7 +19,13 @@ interface IconTableProps {
   hasEdit?: boolean;
   hasIcons?: boolean;
   handleDelete?: (id: any) => void;
-  handleView?: (staticQRCode: string, name: string, tillNum?: string) => void;
+  handleView?: (
+    staticQRCode: string,
+    name: string,
+    tillNum?: string,
+    amount?: string,
+    expirationTime?: string,
+  ) => void;
   isDynamicQr?: boolean;
 }
 
@@ -109,9 +115,12 @@ const IconTable: React.FC<IconTableProps> = ({
                               isDynamicQr ? qrCode : staticQRCode,
                               tableItem?.storeName,
                               tillNumber,
+                              isDynamicQr ? tableItem?.amount : null,
+                              isDynamicQr ? tableItem?.expirationTime : null,
                             )
                           }
                         >
+                          {/* {console.log('table', tableItem)} */}
                           <Image
                             className="cursor-pointer"
                             src={ShareIcon}

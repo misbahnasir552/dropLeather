@@ -40,6 +40,8 @@ function ViewProductQR() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [expirationTime, setExpirationTime] = useState('');
+  const [qrAmount, setQrAmount] = useState('');
   const [qrString, setQrString] = useState('');
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
@@ -202,11 +204,19 @@ function ViewProductQR() {
     setImageUrl(imageUrl); // Update the state to display the image
     setShowModal(true);
   };
-  const handleView = (qrCode: string, name: string, tillId?: string) => {
+  const handleView = (
+    qrCode: string,
+    name: string,
+    tillId?: string,
+    amount?: string,
+    expTime?: string,
+  ) => {
     setTillNum(tillId || '');
     base64ToJpg(qrCode);
     setQrString(qrCode);
     setStoreName(name);
+    setQrAmount(amount || '');
+    setExpirationTime(expTime || '');
   };
   const handleReset = (formik: any) => {
     formik.resetForm();
@@ -254,8 +264,10 @@ function ViewProductQR() {
               imageUrl={imageUrl} // Pass the QR code image URL here
               tilNum={tillNum}
               qrString={qrString}
+              amount={qrAmount}
               // amount={amount}
-              // expirationTime={expirationTime}
+              expirationTime={expirationTime}
+              isDynamic={true}
             />
           )}
           <HeaderWrapper

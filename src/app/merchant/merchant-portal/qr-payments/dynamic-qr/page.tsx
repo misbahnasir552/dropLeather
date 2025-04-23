@@ -317,6 +317,7 @@ function AddDynamicQR() {
           expirationTime={qrExpirationTime}
           tilNum={tillNum}
           qrString={qrString}
+          generateDynamicQr={true}
         />
       )}
     </div>
