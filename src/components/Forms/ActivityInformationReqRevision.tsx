@@ -61,6 +61,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -100,6 +101,7 @@ const ActivityInformationReqRevision = () => {
     string | undefined | string[]
   >(undefined);
 
+  const businessNature = fieldData?.pages?.natureOfBusiness;
   const [showModal, setShowModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState('');
@@ -484,6 +486,7 @@ const ActivityInformationReqRevision = () => {
 
       const transformedData = {
         status: 'Completed',
+        businessNature,
         managerMobile: userData.managerMobile,
         page: {
           pageName: 'Activity Information',

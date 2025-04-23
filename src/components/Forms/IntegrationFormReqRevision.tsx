@@ -54,6 +54,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -91,6 +92,7 @@ function IntegrationFormReqRevision() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const { currentTab } = useCurrentTab();
+  const businessNature = fieldData?.pages?.natureOfBusiness;
 
   const IntegrationFormData = {
     pageName: 'Integration',
@@ -298,6 +300,7 @@ function IntegrationFormReqRevision() {
       const transformedData = {
         // request: {
         managerMobile: userData.managerMobile,
+        businessNature,
         page: {
           pageName: IntegrationFormData?.pageName,
           categories: IntegrationFormData?.categories.map((category: any) => ({
