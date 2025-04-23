@@ -220,6 +220,10 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
     }
   };
 
+  // console.log('Checking option:', option.value);
+  console.log('form?.values:', form?.values);
+  console.log(`form?.values[${name}]`, form?.values?.[name]);
+
   return (
     <>
       <div className={`flex w-full ${layout || 'flex-col'} gap-4`}>

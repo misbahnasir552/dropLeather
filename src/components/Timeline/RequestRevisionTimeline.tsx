@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-// import RequestRevision from '@/app/merchant/home/request-revision/[form]/page';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
@@ -27,7 +26,7 @@ interface Tab {
   name: string;
   label: string;
   component: JSX.Element;
-  status: string;
+  status: string | null;
   svg: JSX.Element;
 }
 
@@ -55,54 +54,75 @@ const allTabs: Tab[] = [
     label: 'Activity Information',
     component: <ActivityInformationReqRevision />,
     svg: <ActivityInformationIcon color="#6F6B76" />,
-    status: '',
+    status: null,
   },
   {
     name: 'business-details',
     label: 'Business Details',
     component: <BusinessInformationReqRevision />,
     svg: <BusinessDetailsIcon color="#6F6B76" />,
-    status: '',
+    status: null,
   },
   {
     name: 'store-details',
     label: 'Store Details',
     component: <StoreDetailReqRevision />,
     svg: <BusinessDetailsIcon color="#6F6B76" />,
-    status: '',
+    status: null,
   },
   {
     name: 'settlement-details',
     label: 'Settlement Details',
     component: <SettlementDetailsReqRevision />,
     svg: <SettlementDetailsIcon color="#6F6B76" />,
-    status: '',
+    status: null,
   },
   {
     name: 'integration',
     label: 'Integration',
     component: <IntegrationFormReqRevision />,
     svg: <IntegrationsIcon color="#6F6B76" />,
-    status: '',
+    status: null,
   },
 ];
 
-const getFilteredTabs = (fetchedPages: { pageName: string }[], tabs: Tab[]) => {
-  return fetchedPages
+const getFilteredTabs = (
+  fetchedPages: { pageName: string }[],
+  tabs: Tab[],
+  statusMap: any,
+) => {
+  // Fixed tab order
+  const fixedTabOrder = [
+    'activity-information',
+    'business-details',
+    'store-details',
+    'settlement-details',
+    'integration',
+  ];
+
+  // Map over the fetchedPages to match tabs and their statuses
+  const filteredTabs = fetchedPages
     .map((page) => {
       const matchedTab = tabs.find(
         (tab) => tab.label === nameToLabelMapping[page.pageName],
       );
-      return matchedTab ? { ...matchedTab, status: 'Completed' } : undefined;
+      if (matchedTab) {
+        const status = statusMap[matchedTab.name];
+        return {
+          ...matchedTab,
+          status: status !== null ? status : 'Not Completed',
+        };
+      }
+      return undefined;
     })
-    .filter((tab): tab is Tab => tab !== undefined)
-    .sort((a, b) =>
-      a.label === 'Activity Information'
-        ? -1
-        : b.label === 'Activity Information'
-        ? 1
-        : 0,
-    );
+    .filter((tab): tab is Tab => tab !== undefined);
+
+  // Now, sort the filteredTabs based on the fixedTabOrder
+  const sortedTabs = filteredTabs.sort((a, b) => {
+    return fixedTabOrder.indexOf(a.name) - fixedTabOrder.indexOf(b.name);
+  });
+
+  return sortedTabs;
 };
 
 const RequestRevisionTimeline: React.FC = () => {
@@ -111,6 +131,7 @@ const RequestRevisionTimeline: React.FC = () => {
   const activeTab = currentTab;
   const [data, setData] = useState<MerchantData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [statusMap, setStatusMap] = useState<any>({});
 
   const dispatch = useDispatch();
 
@@ -120,6 +141,11 @@ const RequestRevisionTimeline: React.FC = () => {
         console.log('Fetching details...');
         const response = await apiClient.get(
           `merchant/fieldsForRevision?email=${userData?.email}`,
+          {
+            headers: {
+              Authorization: `Bearer ${userData.email}`,
+            },
+          },
         );
         console.log('Response received:', response?.data);
 
@@ -136,8 +162,37 @@ const RequestRevisionTimeline: React.FC = () => {
       }
     };
 
+    const getPageStatus = async () => {
+      try {
+        const response: any = await apiClient.get(
+          `/merchant/getOnboardingPageStatus`,
+          {
+            headers: {
+              username: userData.email, // You can send email in the Authorization header, or another header as needed
+            },
+          },
+        );
+
+        const statusResponse = response?.data || {};
+        const statusMapResponse = {
+          'activity-information': statusResponse.activityInformationStatus,
+          'business-details': statusResponse.businessDetailsStatus,
+          'store-details': statusResponse.storeDetailsStatus,
+          'settlement-details': statusResponse.settlementDetailsStatus,
+          integration: statusResponse.integrationStatus,
+        };
+        setStatusMap(statusMapResponse);
+
+        return null;
+      } catch (error) {
+        console.log(error, 'error from onboarding forms');
+        return null;
+      }
+    };
+
     getDetails();
-  }, []);
+    getPageStatus();
+  }, [userData?.email]);
 
   if (isLoading) {
     return (
@@ -151,29 +206,27 @@ const RequestRevisionTimeline: React.FC = () => {
     return <div>No data available.</div>;
   }
 
-  const filteredTabs = getFilteredTabs(data.page, allTabs);
+  const filteredTabs = getFilteredTabs(data.page, allTabs, statusMap);
 
   const currentTabIndex = filteredTabs.findIndex(
     (tab) => tab.name === activeTab,
   );
   const isLastTab = currentTabIndex === filteredTabs.length - 1;
-  console.log(' isLastTab', isLastTab);
+  console.log('isLastTab', isLastTab);
 
   if (isLastTab) {
     dispatch(setIsLastTab(true)); // Dispatch the action to set isLastTab to true
   }
 
   if (!isLastTab) {
-    dispatch(setIsLastTab(false)); // Dispatch the action to set isLastTab to true
+    dispatch(setIsLastTab(false)); // Dispatch the action to set isLastTab to false
   }
 
-  // Update the component prop with the correct isLastTab value
   const finalTabs = filteredTabs.map((tab) => ({
     ...tab,
     component: React.cloneElement(tab.component, { isLastTab }),
   }));
 
-  console.log('islast tab in timeline', isLastTab);
   console.log('filtered tabs', filteredTabs);
   console.log('updated tabs', finalTabs);
 
@@ -216,7 +269,6 @@ const RequestRevisionTimeline: React.FC = () => {
           </React.Fragment>
         ))}
       </div>
-      {/* <RequestRevision isLastTab={isLastTab} /> */}
     </div>
   );
 };

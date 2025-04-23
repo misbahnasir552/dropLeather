@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
@@ -19,6 +20,8 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 //   GetActivityInfoDetails,
 // } from "@/validations/merchant/onBoarding/activityInfo";
 import useCurrentTab from '@/hooks/useCurrentTab';
+// import { buildValidationSchema } from './validationsOLD/helper';
+import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
@@ -29,6 +32,7 @@ import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import activityInformationFormSchema from './validations/activityInformationForm';
 // import type { FieldsData } from './validations/types';
 
 interface Field {
@@ -89,7 +93,7 @@ const ActivityInformationReqRevision = () => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [pageTitle, setPageTitle] = useState('');
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
   //  const [selectedCheckValue, setSelectedCheckValue] = useState();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
@@ -273,6 +277,34 @@ const ActivityInformationReqRevision = () => {
 
   console.log('filtered data', filteredData);
 
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
+
+    // Access internal schema fields safely
+    const schemaFields = (
+      activityInformationFormSchema as Yup.ObjectSchema<any>
+    ).fields;
+
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
+
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
+
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
+  };
+
   // const ActivityFormInfoInitialValues = GetActivityInfoDetails();
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
@@ -291,12 +323,14 @@ const ActivityInformationReqRevision = () => {
         };
       });
 
+      console.log('fData', fData);
       // Filter the data based on the title (converted slug)
       const filteredData = fData?.filter((item) => {
         console.log(item, 'ITEM PAGE NAME');
         return convertSlugToTitle(item.name) === title;
       });
 
+      console.log('filteredData', filteredData);
       // Exit if no valid data is found
       if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
@@ -360,14 +394,15 @@ const ActivityInformationReqRevision = () => {
 
       setInitialValuesState(initialValues);
 
-      // Build validation schema if matched data exists
-      // if (mappedData.length > 0) {
-      //   const validationSchema = buildValidationSchema(mappedData);
-      //   console.log('Validation schema result:', validationSchema);
-      //   setValidationSchemaState(validationSchema);
-      // }
+      if (mappedData.length > 0) {
+        const validationSchema =
+          buildValidationSchemaFromMappedFields(mappedData);
+        setValidationSchemaState(validationSchema);
+      }
     }
   }, [currentTab, fieldData]);
+
+  console.log('validation schema', validationSchemaState);
 
   console.log('INITAIL VALUES STATE', initialValuesState);
   // if (!initialValuesState || !validationSchemaState || !filteredData) {
@@ -427,6 +462,8 @@ const ActivityInformationReqRevision = () => {
   //   setSubmitting(false);
   // };
 
+  console.log('endpointArray[nextIndex]?.name', endpointArray);
+
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('Submitted form values:', values);
 
@@ -444,6 +481,7 @@ const ActivityInformationReqRevision = () => {
       console.log('valid pages', validPages);
 
       const transformedData = {
+        status: 'Completed',
         managerMobile: userData.managerMobile,
         page: {
           pageName: 'Activity Information',
@@ -498,6 +536,10 @@ const ActivityInformationReqRevision = () => {
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
             console.log('nextIndex', nextIndex);
+            console.log(
+              'endpointArray[nextIndex]?.name',
+              endpointArray[1]?.name,
+            );
 
             //  Ensure nextIndex is within bounds and valid
             while (
@@ -519,6 +561,11 @@ const ActivityInformationReqRevision = () => {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
+              setShowModal(true);
+              dispatch(setLogout());
+              router.push('/login');
               console.log('Form submission completed.');
             }
           } else {

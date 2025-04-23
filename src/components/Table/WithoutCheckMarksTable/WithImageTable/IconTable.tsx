@@ -120,7 +120,6 @@ const IconTable: React.FC<IconTableProps> = ({
                             )
                           }
                         >
-                          {/* {console.log('table', tableItem)} */}
                           <Image
                             className="cursor-pointer"
                             src={ShareIcon}
