@@ -80,34 +80,57 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   paymentModes: Yup.array()
     .min(1, 'Please select at least one Payment Mode')
     .required('Payment Mode is required'),
-  signatoryName: Yup.string().required('Signatory Name is required'),
+  signatoryName: Yup.string()
+    .required('Signatory Name is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
   signatoryDateOfBirth: Yup.date().required(
     'Signatory Date Of Birth is required',
   ),
-  signatoryIdCardNo: Yup.date().required('Signatory Id Card No is required'),
-  signatoryCityAndCountry: Yup.string().required(
-    'Signatory City & Country is required',
-  ),
-  beneficialOwnerName: Yup.string().required(
-    'Beneficial Owner Name is required',
-  ),
-  beneficialOwnerIDCardNo: Yup.string().required(
-    'Beneficial Owner ID Card No is required',
-  ),
+  signatoryIdCardNo: Yup.string()
+    .required('Signatory Id Card No is required')
+    .matches(/^\d+$/, 'Invalid CNIC')
+    .length(13, 'CNIC must be exactly 13 digits'),
+  signatoryCityAndCountry: Yup.string()
+    .required('Signatory City & Country is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  beneficialOwnerName: Yup.string()
+    .required('Beneficial Owner Name is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  beneficialOwnerIDCardNo: Yup.string()
+    .required('Beneficial Owner ID Card No is required')
+    .matches(/^\d+$/, 'Invalid CNIC')
+    .length(13, 'CNIC must be exactly 13 digits'),
   beneficialOwnerDateOfBirth: Yup.date().required(
     'Beneficial Owner Date Of Birth is required',
   ),
-  beneficialOwnerCityAndCountry: Yup.string().required(
-    'Beneficial Owner City & Country is required',
-  ),
-  partnersName: Yup.string().required('Partners Name is required'),
-  partnersIdCardNo: Yup.string().required('Partners ID Card No is required'),
+  beneficialOwnerCityAndCountry: Yup.string()
+    .required('Beneficial Owner City & Country is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  partnersName: Yup.string()
+    .required('Partners Name is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  partnersIdCardNo: Yup.string()
+    .required('Partners ID Card No is required')
+    .matches(/^\d+$/, 'Invalid CNIC')
+    .length(13, 'CNIC must be exactly 13 digits'),
   partnersDateOfBirth: Yup.date().required(
     'Partners Date Of Birth is required',
   ),
-  partnersCityAndCountry: Yup.string().required(
-    'Partners City & Country is required',
-  ),
+  partnersCityAndCountry: Yup.string()
+    .required('Partners City & Country is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
   permanentAddress: Yup.string().required('Permanent Address is required'),
   // fatcaStatus: Yup.string(),
   // crsStatus: Yup.string(),
@@ -200,28 +223,36 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   // lowRiskType: Yup.string().required('Low Risk Type is required'),
   // mediumRiskType: Yup.string().required(' Risk Type is required'),
   // riskType: Yup.string().required('Risk Type is required'),
-  sourceOfFunds: Yup.string().required('Source of Funds is required'),
-  currentMonthlyTransactionPKR: Yup.string().required(
-    'Current Monthly Transaction (PKR) is required',
-  ),
-  expectedMonthlyDebitTransactions: Yup.string().required(
-    'Expected monthly Debit turnover (No. of transactions) is required',
-  ),
-  expectedMonthlyDebitAmount: Yup.string().required(
-    'Expected monthly Debit turnover (amount) is required',
-  ),
-  expectedMonthlyCreditTransactions: Yup.string().required(
-    'Expected monthly credit turnover (No. of transactions) is required',
-  ),
-  expectedMonthlyCreditAmount: Yup.string().required(
-    'Expected monthly credit turnover (amount) is required',
-  ),
-  annualTurnoverCredit: Yup.string().required(
-    'Annual Turnover (Credit) is required',
-  ),
-  annualTurnoverDebit: Yup.string().required(
-    'Annual Turnover (Debit) is required',
-  ),
+  sourceOfFunds: Yup.string()
+    .required('Source of Funds is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  currentMonthlyTransactionPKR: Yup.string()
+    .required('Current Monthly Transaction (PKR) is required')
+    .matches(/^\d+$/, 'Must be a number'),
+  expectedMonthlyDebitTransactions: Yup.string()
+    .required(
+      'Expected monthly Debit turnover (No. of transactions) is required',
+    )
+    .matches(/^\d+$/, 'Must be a number'),
+  expectedMonthlyDebitAmount: Yup.string()
+    .required('Expected monthly Debit turnover (amount) is required')
+    .matches(/^\d+$/, 'Must be a number'),
+  expectedMonthlyCreditTransactions: Yup.string()
+    .required(
+      'Expected monthly credit turnover (No. of transactions) is required',
+    )
+    .matches(/^\d+$/, 'Must be a number'),
+  expectedMonthlyCreditAmount: Yup.string()
+    .required('Expected monthly credit turnover (amount) is required')
+    .matches(/^\d+$/, 'Must be a number'),
+  annualTurnoverCredit: Yup.string()
+    .required('Annual Turnover (Credit) is required')
+    .matches(/^\d+$/, 'Must be a number'),
+  annualTurnoverDebit: Yup.string()
+    .required('Annual Turnover (Debit) is required')
+    .matches(/^\d+$/, 'Must be a number'),
 });
 
 //
