@@ -14,7 +14,10 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import type { BusinessNatureForm, ICheckboxData } from '@/interfaces/interface';
-import { businessNatureInitialValues } from '@/validations/merchant/onBoarding/businessNatureSchema';
+import {
+  businessNatureInitialValues,
+  businessNatureSchema,
+} from '@/validations/merchant/onBoarding/businessNatureSchema';
 
 const checkboxData: ICheckboxData[] = [
   // {/* Do not remove this code */ }
@@ -59,6 +62,7 @@ const AccountOptions = () => {
       />
       <Formik
         initialValues={businessNatureInitialValues}
+        validationSchema={businessNatureSchema}
         onSubmit={handleSubmit}
       >
         {(formik) => (
@@ -74,6 +78,7 @@ const AccountOptions = () => {
                     name="businessNature"
                     options={checkboxData}
                     form={formik}
+                    error={formik.errors.businessNature}
                   />
                 </div>
                 <Button
