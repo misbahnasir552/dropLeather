@@ -52,6 +52,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -99,6 +100,7 @@ const SettlementDetailsReqRevision = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const businessNature = fieldsData?.pages?.natureOfBusiness;
 
   const SettlementDetailsFormData = {
     pageName: 'Settlement Details',
@@ -326,6 +328,7 @@ const SettlementDetailsReqRevision = () => {
       const transformedData = {
         // request: {
         managerMobile: userData.managerMobile,
+        businessNature,
         page: {
           pageName: SettlementDetailsFormData?.pageName,
           categories: SettlementDetailsFormData?.categories.map(
