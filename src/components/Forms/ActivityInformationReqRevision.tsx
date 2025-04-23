@@ -120,13 +120,13 @@ const ActivityInformationReqRevision = () => {
         fields: [
           {
             name: 'businessOwnerName',
-            label: 'Business Owner Name (EXACTLY as per CNIC)',
+            label: 'Business Owner Name (Signatory name as per CNIC)',
             type: 'text',
             required: true,
           },
           {
             name: 'ownerOfCNIC',
-            label: 'Owner of CNIC',
+            label: 'Owner of CNIC/Signatory CNIC',
             type: 'text',
             required: true,
           },

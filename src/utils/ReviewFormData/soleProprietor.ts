@@ -6,10 +6,10 @@ const soleProprietorData = [
         sectionName: "Merchant's Detail",
         fields: [
           {
-            label: 'Business Owner Name (EXACTLY as per CNIC)',
+            label: 'Business Owner Name (Signatory name as per CNIC)',
             value: 'abc',
           },
-          { label: 'Owner of CNIC', value: 'abc' },
+          { label: 'Owner of CNIC/Signatory CNIC', value: 'abc' },
           { label: 'Father/Spouse Name', value: 'abc' },
           { label: 'Gender', value: 'abc' },
           { label: 'Purpose of Account', value: 'abc' },
