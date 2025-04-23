@@ -510,6 +510,13 @@ const BusinessInformationReqRevision = () => {
             label: 'Current Monthly Transaction (PKR)',
             type: 'dropdown',
             required: true,
+            options: [
+              { label: '1000 - 24999', value: '1000 - 24999' },
+              { label: '25000 - 49999', value: '25000 - 49999' },
+              { label: '50000 - 74999', value: '50000 - 74999' },
+              { label: '75000 - 99999', value: '75000 - 99999' },
+              { label: '100000 and Above', value: '100000 and Above' },
+            ],
           },
 
           // Sole Above
@@ -770,7 +777,7 @@ const BusinessInformationReqRevision = () => {
 
       const transformedData = {
         managerMobile: userData.managerMobile,
-        businessNature,
+        // businessNature,
         status: 'Completed',
         page: {
           pageName: 'Business Details',
@@ -803,10 +810,11 @@ const BusinessInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '?requestRevision=Completed';
+            finalEndpoint += '&requestRevision=Completed';
             dispatch(setIsLastTab(false));
           }
           console.log('finalEndpoint', finalEndpoint);

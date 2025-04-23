@@ -61,6 +61,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -100,6 +101,7 @@ const ActivityInformationReqRevision = () => {
     string | undefined | string[]
   >(undefined);
 
+  const businessNature = fieldData?.pages?.natureOfBusiness;
   const [showModal, setShowModal] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState('');
@@ -152,9 +154,11 @@ const ActivityInformationReqRevision = () => {
             type: 'dropdown',
             required: true,
             options: [
-              { label: 'Online Payment', value: 'Online Payment' },
               { label: 'Retail Payments', value: 'Retail Payments' },
-              { label: 'Mini App', value: 'Mini App' },
+              // DO NOT REMOVE COMMENTED CODE
+              // { label: 'Online Payment', value: 'Online Payment' },
+              // { label: 'Retail Payments', value: 'Retail Payments' },
+              // { label: 'Mini App', value: 'Mini App' },
             ],
           },
 
@@ -482,6 +486,7 @@ const ActivityInformationReqRevision = () => {
 
       const transformedData = {
         status: 'Completed',
+        // businessNature,
         managerMobile: userData.managerMobile,
         page: {
           pageName: 'Activity Information',
@@ -519,7 +524,8 @@ const ActivityInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
             finalEndpoint += '?requestRevision=Completed';

@@ -12,7 +12,8 @@ import apiClient from '@/api/apiClient';
 import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
 import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
 import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
-import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
+// DO NOT REMOVE COMMENTED CODE
+// import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
 import ReviewForm from '@/components/Forms/ReviewForm';
 import SettlementDetailsStatic from '@/components/Forms/SettlementDetailsOLD';
 import StoreDetails from '@/components/Forms/StoreDetails';
@@ -20,7 +21,7 @@ import {
   ActivityInformationIcon,
   AttachmentsIcon,
   BusinessDetailsIcon,
-  IntegrationsIcon,
+  // IntegrationsIcon,
   ReviewFormIcon,
   SettlementDetailsIcon,
 } from '@/components/Timeline/TimelineIcons/Timelineicons';
@@ -201,24 +202,25 @@ const Timeline: React.FC = () => {
         />
       ),
     },
-    {
-      name: 'integration',
-      label: 'Integration',
-      component: <IntegrationForm />,
-      status: data?.integration?.status,
-      svg: (
-        <IntegrationsIcon
-          color={
-            activeTab === 'integration'
-              ? '#21B25F'
-              : activeTab !== 'integration' &&
-                data?.integration?.status === 'Completed'
-              ? '#000000'
-              : '#6F6B76'
-          }
-        />
-      ),
-    },
+    // DO NOT REMOVE COMMENTED CODE
+    // {
+    //   name: 'integration',
+    //   label: 'Integration',
+    //   component: <IntegrationForm />,
+    //   status: data?.integration?.status,
+    //   svg: (
+    //     <IntegrationsIcon
+    //       color={
+    //         activeTab === 'integration'
+    //           ? '#21B25F'
+    //           : activeTab !== 'integration' &&
+    //             data?.integration?.status === 'Completed'
+    //           ? '#000000'
+    //           : '#6F6B76'
+    //       }
+    //     />
+    //   ),
+    // },
     {
       name: 'attachments',
       label: 'Attachments',

@@ -207,8 +207,12 @@ export const pnpLtdBusinessDetailsFormData = {
         {
           name: 'specialCustomer',
           label: 'Special Customer',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'registrationIncorporationNo',
@@ -311,8 +315,12 @@ export const pnpLtdBusinessDetailsFormData = {
         {
           name: 'incomeStatusSalaried',
           label: 'Income Status (Salaried)',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'currentDailyTransactionPKR',
@@ -380,15 +388,23 @@ export const pnpLtdBusinessDetailsFormData = {
           type: 'dropdown',
           required: true,
           options: [
-            {
-              label: 'C5 (limit of max 500k)',
-              value: 'C5 (limit of max 500k)',
-            },
-            {
-              label: 'C10 (limit above than 500k)',
-              value: 'C10 (limit above than 500k)',
-            },
+            { label: '1000 - 24999', value: '1000 - 24999' },
+            { label: '25000 - 49999', value: '25000 - 49999' },
+            { label: '50000 - 74999', value: '50000 - 74999' },
+            { label: '75000 - 99999', value: '75000 - 99999' },
+            { label: '100000 and Above', value: '100000 and Above' },
           ],
+          // DO NOT REMOVE CODE BELOW
+          // options: [
+          //   {
+          //     label: 'C5 (limit of max 500k)',
+          //     value: 'C5 (limit of max 500k)',
+          //   },
+          //   {
+          //     label: 'C10 (limit above than 500k)',
+          //     value: 'C10 (limit above than 500k)',
+          //   },
+          // ],
         },
 
         // Sole Above
