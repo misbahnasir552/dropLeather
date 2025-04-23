@@ -176,6 +176,14 @@ const LoginSucessHome = () => {
     fetchData();
   }, []);
 
+  const fixedTabOrder = [
+    'activity-information',
+    'business-details',
+    'store-details',
+    'settlement-details',
+    'integration',
+  ];
+
   const handleRequestRevisionClick = async () => {
     try {
       const response = await apiClient.get(
@@ -184,30 +192,82 @@ const LoginSucessHome = () => {
 
       if (response?.data) {
         setReqRevisionData(response.data);
-        console.log(reqRevisiondata);
+        console.log('Request revision data:', reqRevisiondata);
         dispatch(setPageData(response.data));
 
         console.log('Request revision response:', response.data);
 
-        const firstPage = response?.data?.page?.[0]?.pageName;
+        // Step 1: Check the structure of response.data.page
+        const pages = response.data.page;
+        console.log('Pages:', pages);
+
+        if (!Array.isArray(pages)) {
+          console.error('Expected pages to be an array, but got:', pages);
+          return;
+        }
+
+        // Normalize fixedTabOrder for case-insensitive matching and removing spaces
+        const normalizedFixedTabOrder = fixedTabOrder.map((page) =>
+          page.toLowerCase().replace(/\s+/g, '-'),
+        );
+
+        // Step 2: Create a shallow copy of the page array and reorder it based on the fixedTabOrder
+        const reorderedPages = [...pages].sort((a: any, b: any) => {
+          const normalizedPageNameA = a.pageName
+            .toLowerCase()
+            .replace(/\s+/g, '-');
+          const normalizedPageNameB = b.pageName
+            .toLowerCase()
+            .replace(/\s+/g, '-');
+
+          // Get the index of the normalized page names in the fixedTabOrder
+          const indexA = normalizedFixedTabOrder.indexOf(normalizedPageNameA);
+          const indexB = normalizedFixedTabOrder.indexOf(normalizedPageNameB);
+
+          // If not found in fixedTabOrder, push to the end of the list
+          const safeIndexA = indexA === -1 ? fixedTabOrder.length : indexA;
+          const safeIndexB = indexB === -1 ? fixedTabOrder.length : indexB;
+
+          // Log index and pageName for debugging
+          console.log(
+            'Normalized Index of A:',
+            safeIndexA,
+            'PageName:',
+            normalizedPageNameA,
+          );
+          console.log(
+            'Normalized Index of B:',
+            safeIndexB,
+            'PageName:',
+            normalizedPageNameB,
+          );
+
+          return safeIndexA - safeIndexB; // Ensures that pages are sorted according to fixedTabOrder
+        });
+
+        console.log('Reordered Pages:', reorderedPages);
+
+        // Step 3: Get the first page after sorting
+        const firstPage = reorderedPages[0]?.pageName;
+        console.log('First page after reordering:', firstPage);
 
         if (firstPage) {
+          // Step 4: Format the route
           const formattedRoute = `/merchant/home/request-revision/${firstPage
             .toLowerCase()
             .replace(/\s+/g, '-')}`; // Convert to kebab-case if needed
-          console.log(formattedRoute);
+          console.log('Formatted route:', formattedRoute);
 
-          router.push(formattedRoute);
+          // Step 5: Use router.push() to navigate
+          router.push(formattedRoute); // Navigate to the first page in the ordered list
         } else {
-          // fallback if no page is found
+          console.error('No valid pageName found in reorderedPages');
+          // Fallback in case no pages are found
           router.push('/merchant/home');
         }
       }
     } catch (error: any) {
       console.error('Error requesting revision:', error);
-      // setTitle('Error');
-      // setDescription('Failed to request revision. Please try again.');
-      // setShowModal(true);
       setDescription(error);
       setShowModal(true);
     }

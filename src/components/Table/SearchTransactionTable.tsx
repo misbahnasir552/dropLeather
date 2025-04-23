@@ -95,8 +95,8 @@ const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
                     i === 0
                       ? 'w-16 text-left'
                       : i === arr.length - 1
-                      ? 'w-32 text-center'
-                      : 'w-32 text-center'
+                      ? 'w-40 text-center'
+                      : 'w-40 text-center'
                   }`}
                 >
                   <H7>{heading}</H7>

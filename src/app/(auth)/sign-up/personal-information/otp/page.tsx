@@ -12,7 +12,6 @@ import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { resetFormData } from '@/redux/features/signUpSlice';
-import { replaceCountryCodeWithZero } from '@/utils/helper';
 
 const OtpInputWithValidation = () => {
   const [apierror, setApierror] = useState('');
@@ -104,6 +103,7 @@ const OtpInputWithValidation = () => {
       setIsLoading(false);
     }
   };
+  console.log('signUpForm', signUpForm);
 
   return (
     <>
@@ -128,9 +128,7 @@ const OtpInputWithValidation = () => {
             signUpForm.email
           })${
             option !== 'corporatePortal'
-              ? ` and your mobile number (${replaceCountryCodeWithZero(
-                  signUpForm?.managerMobile,
-                )})`
+              ? ` and your mobile number (${signUpForm?.managerMobile})`
               : ''
           }`}
           show={true}

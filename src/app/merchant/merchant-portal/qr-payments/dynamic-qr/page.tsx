@@ -35,6 +35,7 @@ function AddDynamicQR() {
   const [description, setDescription] = useState('');
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [qrString, setQrString] = useState('');
+  const [storeName, setStoreName] = useState('');
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -156,6 +157,7 @@ function AddDynamicQR() {
         base64ToJpg(response?.data.qrCode);
         setQrString(response?.data?.qrCode);
         setTillNum(response?.data?.transactionPointNum);
+        setStoreName(response?.data?.storeName);
         setShowModal(true);
         // setTitle("Success");
         // setDescription(response?.data.responseDescription);
@@ -308,7 +310,7 @@ function AddDynamicQR() {
       </Formik>
       {showModal && (
         <QRModal
-          title="Your Custom QR"
+          title={storeName}
           description="Your custom QR Code has been created. You can now share the below QR code to receive money."
           show={showModal}
           setShowModal={setShowModal}
@@ -317,6 +319,7 @@ function AddDynamicQR() {
           expirationTime={qrExpirationTime}
           tilNum={tillNum}
           qrString={qrString}
+          generateDynamicQr={true}
         />
       )}
     </div>

@@ -11,7 +11,7 @@ export const signUpInitialValues: SignupForm = {
   password: '',
   confirmPassword: '',
   merchantType: '',
-  // termsAndConditions: false
+  termsAndConditions: false,
 };
 
 // const phoneRegExp = /^(?:\92)?[3456789]\d{9}$/;
@@ -23,18 +23,18 @@ export const signUpSchema = Yup.object().shape({
     // .transform((value) => value.trim())
     .required('First name is required')
     .min(2, 'Must be more than 2 letters')
-    .matches(/^\S+$/, 'Spaces are not allowed')
+    // .matches(/^\S+$/, 'Spaces are not allowed')
     // .matches(/^\S.*$/, 'First name cannot consist of only spaces')
     // .matches(/^(?![-'’.\s]+$)[a-zA-ZÀ-ÿ'’\-.\s]+$/, 'Only alphabets are allowed')
-    .matches(/^[a-zA-ZÀ-ÿ]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
 
     .max(20, 'Max limit exceed'),
   lastName: Yup.string()
     .required('Last name is required')
     .min(2, 'Must be more than 2 letters')
-    .matches(/^\S+$/, 'Spaces are not allowed')
+    // .matches(/^\S+$/, 'Spaces are not allowed')
     // .matches(/^[a-zA-ZÀ-ÿ]+$/, 'Last name cannot consist of only spaces')
-    .matches(/^[a-zA-ZÀ-ÿ]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     .max(20, 'Max limit exceed'),
   merchantName: Yup.string()
     .required('Merchant name is required')

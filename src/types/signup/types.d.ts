@@ -8,7 +8,7 @@ interface SignupForm {
   password: string;
   confirmPassword?: string;
   merchantType: string | null;
-  // termsAndConditions: boolean | undefined
+  termsAndConditions: boolean;
 }
 
 // interface BusinessNatureForm {

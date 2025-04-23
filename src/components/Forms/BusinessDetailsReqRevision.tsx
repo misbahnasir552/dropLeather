@@ -62,6 +62,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -118,6 +119,8 @@ const BusinessInformationReqRevision = () => {
   const handleCheckboxChange = () => {
     setChecked(!isChecked);
   };
+
+  const businessNature = fieldsData?.pages?.natureOfBusiness;
   // console.log(
   //   'selected value checkbox input',
   //   selectedCheckValue,
@@ -581,7 +584,7 @@ const BusinessInformationReqRevision = () => {
         | Yup.ISchema<any, Yup.AnyObject, any, any>;
     };
 
-    if (businessNatureData?.businessNature === 'soleProprietor') {
+    if (businessNature === 'soleProprietor') {
       // Access internal schema fields safely
       schemaFields = (soleBusinessDetailsFormSchema as Yup.ObjectSchema<any>)
         .fields;
@@ -622,6 +625,8 @@ const BusinessInformationReqRevision = () => {
     setPageTitle(title);
 
     const initialValues: { [key: string]: any } = {};
+
+    console.log('fieldsData', fieldsData);
 
     // Step 1: Filter based on page title
     let updatedFData = fieldsData?.pages?.page?.filter(
@@ -772,7 +777,7 @@ const BusinessInformationReqRevision = () => {
 
       const transformedData = {
         managerMobile: userData.managerMobile,
-        // businessNature: businessNatureData?.businessTypeNature,
+        businessNature,
         status: 'Completed',
         page: {
           pageName: 'Business Details',
