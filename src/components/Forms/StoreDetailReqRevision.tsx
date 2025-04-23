@@ -444,7 +444,7 @@ const AddStoreReqRevision = () => {
       const transformedData = {
         // request: {
         managerMobile,
-        businessNature,
+        // businessNature,
         page: {
           pageName: storeDetailsFormData.pageName,
           categories: storeDetailsFormData.categories.map(
@@ -481,7 +481,8 @@ const AddStoreReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
             finalEndpoint += '?requestRevision=Completed';

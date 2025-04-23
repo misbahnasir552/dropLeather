@@ -300,7 +300,7 @@ function IntegrationFormReqRevision() {
       const transformedData = {
         // request: {
         managerMobile: userData.managerMobile,
-        businessNature,
+        // businessNature,
         page: {
           pageName: IntegrationFormData?.pageName,
           categories: IntegrationFormData?.categories.map((category: any) => ({
@@ -335,7 +335,8 @@ function IntegrationFormReqRevision() {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
             finalEndpoint += '?requestRevision=Completed';

@@ -328,7 +328,7 @@ const SettlementDetailsReqRevision = () => {
       const transformedData = {
         // request: {
         managerMobile: userData.managerMobile,
-        businessNature,
+        // businessNature,
         page: {
           pageName: SettlementDetailsFormData?.pageName,
           categories: SettlementDetailsFormData?.categories.map(
@@ -365,7 +365,8 @@ const SettlementDetailsReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
             finalEndpoint += '?requestRevision=Completed';

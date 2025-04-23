@@ -484,7 +484,7 @@ const ActivityInformationReqRevision = () => {
 
       const transformedData = {
         status: 'Completed',
-        businessNature,
+        // businessNature,
         managerMobile: userData.managerMobile,
         page: {
           pageName: 'Activity Information',
@@ -522,7 +522,8 @@ const ActivityInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
             finalEndpoint += '?requestRevision=Completed';
