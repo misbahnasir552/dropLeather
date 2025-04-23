@@ -231,8 +231,11 @@ const RequestRevisionTimeline: React.FC = () => {
   console.log('updated tabs', finalTabs);
 
   return (
-    <div className="flex flex-col justify-between py-2">
-      <div className="flex w-full justify-between overflow-auto">
+    <div className="mx-4 flex flex-col justify-between py-2">
+      {/* Margin on left and right for the outer div */}
+      <div className="flex w-full justify-between overflow-auto px-4">
+        {' '}
+        {/* Added px-4 for space at both ends */}
         {finalTabs.map((tab, index) => (
           <React.Fragment key={index}>
             <div className="flex flex-col">

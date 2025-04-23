@@ -777,7 +777,7 @@ const BusinessInformationReqRevision = () => {
 
       const transformedData = {
         managerMobile: userData.managerMobile,
-        businessNature,
+        // businessNature,
         status: 'Completed',
         page: {
           pageName: 'Business Details',
@@ -810,10 +810,11 @@ const BusinessInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '?requestRevision=Completed';
+            finalEndpoint += '&requestRevision=Completed';
             dispatch(setIsLastTab(false));
           }
           console.log('finalEndpoint', finalEndpoint);
