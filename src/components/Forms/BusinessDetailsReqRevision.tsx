@@ -3,9 +3,10 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
-
+import { BarLoader } from 'react-spinners';
 // import { BarLoader } from 'react-spinners';
-// import * as Yup from 'yup';
+import * as Yup from 'yup';
+
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
@@ -13,6 +14,7 @@ import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo } from '@/interfaces/interface';
+import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
@@ -27,6 +29,9 @@ import DropdownInput from '../UI/Inputs/DropdownInput';
 // import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import { soleBusinessDetailsFormSchema } from './validations/businessDetailsForm/soleBusinessForm';
+// import { partnershipBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/partnershipBusinessDetails';
+// import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/pnpLtdBusinessDetails';
 // import AddStore from './AddStore';
 // import { buildValidationSchema } from './validations/helper';
 // import type { FieldsData } from './validations/types';
@@ -102,7 +107,7 @@ const BusinessInformationReqRevision = () => {
     Array(5).fill(null),
   );
   const [initialValuesState, setInitialValuesState] = useState<any>();
-  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -561,6 +566,48 @@ const BusinessInformationReqRevision = () => {
     );
   }, [selectedDropDownValue]);
 
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
+    let schemaFields: {
+      [x: string]:
+        | Yup.Reference<unknown>
+        | Yup.ISchema<any, Yup.AnyObject, any, any>;
+    };
+
+    if (businessNatureData?.businessNature === 'soleProprietor') {
+      // Access internal schema fields safely
+      schemaFields = (soleBusinessDetailsFormSchema as Yup.ObjectSchema<any>)
+        .fields;
+    }
+    // } else if (businessNatureData?.businessNature === 'partnership') {
+    //   // Access internal schema fields safely
+    //   schemaFields = (partnershipBusinessDetailsFormData as Yup.ObjectSchema<any>).fields;
+    // }
+    // else if (businessNatureData?.businessNature === 'publicAndPrivateLtd') {
+    //   // Access internal schema fields safely
+    //   schemaFields = (pnpLtdBusinessDetailsFormData as Yup.ObjectSchema<any>).fields;
+    // }
+
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
+
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
+
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
+  };
+
   useEffect(() => {
     if (!currentTab) return;
 
@@ -680,6 +727,12 @@ const BusinessInformationReqRevision = () => {
     // Step 4: Set transformed data and initial values
     setFilteredData(mappedData || []);
     setInitialValuesState(initialValues);
+
+    if (mappedData.length > 0) {
+      const validationSchema =
+        buildValidationSchemaFromMappedFields(mappedData);
+      setValidationSchemaState(validationSchema);
+    }
   }, [currentTab, selectedDropDownValue]);
 
   console.log('initialValuesState', initialValuesState);
@@ -687,13 +740,13 @@ const BusinessInformationReqRevision = () => {
   console.log('selectedDropDownValue', selectedDropDownValue);
 
   // if (!initialValuesState || !filteredData) {
-  //   // if (!initialValuesState || !validationSchemaState || !filteredData) {
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
+  if (!initialValuesState || !filteredData) {
+    return (
+      <div className="flex w-full flex-col justify-center">
+        <BarLoader color="#21B25F" />
+      </div>
+    );
+  }
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('Submitted form values:', values);
@@ -712,25 +765,22 @@ const BusinessInformationReqRevision = () => {
 
       const transformedData = {
         managerMobile: userData.managerMobile,
+        // businessNature: businessNatureData?.businessTypeNature,
+        status: 'Completed',
         page: {
           pageName: 'Business Details',
-          categories: BusinessDetailsFormData.categories
-            .map((category) => {
-              const filteredFields = category.fields.filter((field) =>
-                Object.keys(values).includes(field.name),
-              );
-
-              if (filteredFields.length === 0) return null; // Exclude empty categories
-
-              return {
-                categoryName: category.categoryName,
-                data: filteredFields.map((field) => ({
-                  label: field.label,
-                  value: values[field.name], // Formik value
-                })),
-              };
-            })
-            .filter(Boolean), // Remove null categories
+          categories: BusinessDetailsFormData.categories.map((category) => ({
+            categoryName: category.categoryName,
+            data: category.fields.map((field) => ({
+              label: field.label,
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}), // Add options only if it's a checkbox
+            })),
+          })),
         },
       };
 
@@ -780,15 +830,20 @@ const BusinessInformationReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle('Form submission completed.');
-              setDescription('Form submission completed.');
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
               setShowModal(true);
-              router.push(`/merchant/home`);
+              dispatch(setLogout());
+              router.push('/login');
+              // setTitle('Form submission completed.');
+              // setDescription('Form submission completed.');
+              // setShowModal(true);
+              // router.push(`/merchant/home`);
             }
           } else {
             setTitle('Error Occurred');
@@ -826,7 +881,7 @@ const BusinessInformationReqRevision = () => {
       <Formik
         enableReinitialize
         initialValues={initialValuesState}
-        // validationSchema={validationSchemaState}
+        validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >
         {(formik) => (

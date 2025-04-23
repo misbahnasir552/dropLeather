@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 // import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import * as Yup from 'yup';
 
 import apiClient from '@/api/apiClient';
 // import AddIcon from '@/assets/icons/Add.svg';
@@ -16,13 +17,17 @@ import Input from '@/components/UI/Inputs/Input';
 // import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+import { setLogout } from '@/redux/features/authSlice';
 // import type { AddStoreInfo } from '@/interfaces/interface';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-import { storeDetailsInitialValues } from '@/validations/merchant/onBoarding/storeDetails';
+import {
+  storeDetailsInitialValues,
+  storeDetailsSchema,
+} from '@/validations/merchant/onBoarding/storeDetails';
 
 import DateInputNew from '../UI/Inputs/DateInputNew';
 import DropdownNew from '../UI/Inputs/DropDownNew';
@@ -99,7 +104,7 @@ const AddStoreReqRevision = () => {
   const [regions, setRegions] = useState([]);
   const [storeCategories, setStoreCategories] = useState([]);
   const [apierror, setApierror] = useState('');
-  const { apiSecret } = userData;
+  const { apiSecret, managerMobile } = userData;
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [pageTitle, setPageTitle] = useState('');
   const [initialValuesState, setInitialValuesState] = useState<any>();
@@ -107,13 +112,13 @@ const AddStoreReqRevision = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
-  const [validationSchemaState] = useState<any>();
+  const [validationSchemaState, setValidationSchemaState] = useState<any>();
 
   const storeDetailsFormData = {
     pageName: 'Store Details',
     categories: [
       {
-        categoryName: 'Store',
+        categoryName: 'Store ',
         fields: [
           {
             label: 'Store Type *',
@@ -285,6 +290,32 @@ const AddStoreReqRevision = () => {
 
   console.log('updated store fields,', updatedStoreFields);
 
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
+
+    // Access internal schema fields safely
+    const schemaFields = (storeDetailsSchema as Yup.ObjectSchema<any>).fields;
+
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
+
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
+
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
+  };
+
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
     console.log('Field DATA:::', fieldData);
@@ -308,6 +339,8 @@ const AddStoreReqRevision = () => {
         return convertSlugToTitle(item.name) === title; // Compare pageName instead of page
       });
 
+      console.log('filteredData', filteredData);
+
       if (!filteredData || filteredData.length === 0) {
         console.error('No matching data found for the current tab.');
         return; // Exit if no valid data
@@ -325,42 +358,48 @@ const AddStoreReqRevision = () => {
           );
 
           if (matchingCategory) {
-            // Collect matched fields with full field info
             const matchedFields = filteredCategory.fields.map((fieldLabel) => {
-              // Find full field info based on label
               const matchedField = matchingCategory.fields.find(
                 (field: { label: any }) => field.label === fieldLabel,
               );
 
               if (matchedField) {
+                // Check if this is the 'category' field
+                const isCategoryField = matchedField.name === 'category';
+
+                // Initialize fields with empty string for non-checkbox types
                 if (matchedField?.type !== 'checkItem') {
-                  initialValues[matchedField.name] = ''; // Initialize field with empty value
+                  initialValues[matchedField.name] = '';
+                }
+
+                let fieldOptions;
+                if (storeCategories.length > 0) {
+                  fieldOptions = isCategoryField
+                    ? storeCategories
+                    : matchedField.options || [];
                 }
 
                 return {
                   name: matchedField.name,
                   label: matchedField.label,
                   type: matchedField.type,
-                  // required: matchedField.required || false,
-                  options: matchedField.options || [],
+                  options: fieldOptions,
                 };
               }
-
-              return null; // Ignore unmatched fields
+              return null;
             });
 
             return {
               categoryName: filteredCategory.categoryName,
-              fields: matchedFields.filter(Boolean), // Remove null values from fields
+              fields: matchedFields.filter(Boolean),
             };
           }
-
-          return null; // Ignore unmatched categories
+          return null;
         });
 
         return {
-          pageName: item.name, // Use pageName after mapping
-          categories: mappedCategories.filter(Boolean), // Remove null categories
+          pageName: item.name,
+          categories: mappedCategories.filter(Boolean),
         };
       });
 
@@ -369,14 +408,13 @@ const AddStoreReqRevision = () => {
 
       setInitialValuesState(initialValues); // Set initial values for form
 
-      // Build validation schema if matched data exists
-      // if (mappedData.length > 0) {
-      //   const validationSchema = buildValidationSchema(mappedData);
-      //   console.log('Validation schema result:', validationSchema);
-      //   setValidationSchemaState(validationSchema);
-      // }
+      if (mappedData.length > 0) {
+        const validationSchema =
+          buildValidationSchemaFromMappedFields(mappedData);
+        setValidationSchemaState(validationSchema);
+      }
     }
-  }, [currentTab, fieldData]);
+  }, [currentTab, fieldData, storeCategories]);
 
   console.log('filtered data', filteredData);
 
@@ -402,27 +440,28 @@ const AddStoreReqRevision = () => {
       const validPages = fieldData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
-        managerMobile: userData.managerMobile,
+        // request: {
+        managerMobile,
         page: {
-          pageName: 'Store Details',
-          categories: storeDetailsFormData.categories
-            .map((category) => {
-              const filteredFields = category.fields.filter((field) =>
-                Object.keys(values).includes(field.name),
-              );
-
-              if (filteredFields.length === 0) return null; // Exclude empty categories
-
-              return {
-                categoryName: category.categoryName,
-                data: filteredFields.map((field) => ({
-                  label: field.label,
-                  value: values[field.name], // Formik value
-                })),
-              };
-            })
-            .filter(Boolean), // Remove null categories
+          pageName: storeDetailsFormData.pageName,
+          categories: storeDetailsFormData.categories.map(
+            (category: any, index: any) => ({
+              categoryName: `${category.categoryName} + ${index + 1}`,
+              data: category.fields.map((field: any) => ({
+                label: field.label,
+                // value: values[field.name] || '', // Fetching value from formik.values
+                value:
+                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+                ...(field.type === 'checkboxInput' ||
+                field.type === 'checkBoxInputMulti'
+                  ? { options: values[field.name] || '' }
+                  : {}), // Add options only if it's a checkbox
+              })),
+            }),
+          ),
+          status: 'Completed',
         },
+        // },
       };
 
       const mdRequest = {
@@ -470,15 +509,17 @@ const AddStoreReqRevision = () => {
               endpointArray[nextIndex]?.tab
             ) {
               const nextTab = endpointArray[nextIndex]?.tab as string; // Type assertion ensures it's a string
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle('Form submission completed.');
-              setDescription('Form submission completed.');
+              setTitle(response?.data?.responseMessage);
+              setDescription(response?.data?.responseDescription);
               setShowModal(true);
-              router.push(`/merchant/home`);
+              // router.push(`/merchant/home`);
+              dispatch(setLogout());
+              router.push('/login');
             }
           } else {
             setTitle('Error Occurred');
@@ -526,8 +567,6 @@ const AddStoreReqRevision = () => {
               {/* Loop through filtered data to render form pages */}
               {filteredData.length > 0 ? (
                 filteredData.map((pageItem: any) => {
-                  console.log('Page Item: ', pageItem); // Debug Page Item
-
                   return (
                     <React.Fragment key={pageItem.pageName}>
                       {pageItem?.categories
@@ -541,8 +580,6 @@ const AddStoreReqRevision = () => {
                             item: { categoryName: any; fields: any[] },
                             itemIndex: any,
                           ) => {
-                            console.log('Category Item: ', item); // Debug Category Item
-
                             return (
                               <FormLayoutDynamic
                                 key={itemIndex}
@@ -597,8 +634,6 @@ const AddStoreReqRevision = () => {
                                           | null
                                           | undefined,
                                       ) => {
-                                        console.log('Field Item: ', field); // Debug Field Item
-
                                         switch (field?.type) {
                                           case 'text':
                                             return (
@@ -677,6 +712,29 @@ const AddStoreReqRevision = () => {
                                                 name={field.name}
                                                 options={
                                                   field?.validation?.options
+                                                }
+                                                form={formik}
+                                                setSelectedCheckValue={
+                                                  setSelectedCheckValue
+                                                }
+                                              />
+                                            );
+                                          case 'checkBoxInputMulti':
+                                            return (
+                                              <CheckboxInput
+                                                layout="grid grid-cols-2 gap-4"
+                                                isMulti={true}
+                                                name={field.name}
+                                                options={
+                                                  field?.options?.map(
+                                                    (option: {
+                                                      label: any;
+                                                      value: any;
+                                                    }) => ({
+                                                      label: option.label,
+                                                      value: option.value,
+                                                    }),
+                                                  ) || []
                                                 }
                                                 form={formik}
                                                 setSelectedCheckValue={
