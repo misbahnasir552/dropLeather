@@ -510,6 +510,13 @@ const BusinessInformationReqRevision = () => {
             label: 'Current Monthly Transaction (PKR)',
             type: 'dropdown',
             required: true,
+            options: [
+              { label: '1000 - 24999', value: '1000 - 24999' },
+              { label: '25000 - 49999', value: '25000 - 49999' },
+              { label: '50000 - 74999', value: '50000 - 74999' },
+              { label: '75000 - 99999', value: '75000 - 99999' },
+              { label: '100000 and Above', value: '100000 and Above' },
+            ],
           },
 
           // Sole Above
