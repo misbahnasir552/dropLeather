@@ -24,10 +24,12 @@ interface QRModalProps {
   routeName?: string;
   imageUrl: string; // The QR code URL passed as a prop
   amount?: string;
-  expirationTime?: number;
+  expirationTime?: any;
   tilNum?: string;
   qrString?: string;
   isStatic?: boolean;
+  isDynamic?: boolean;
+  generateDynamicQr?: boolean;
 }
 
 const QRModal: React.FC<QRModalProps> = ({
@@ -42,6 +44,8 @@ const QRModal: React.FC<QRModalProps> = ({
   tilNum,
   qrString,
   isStatic,
+  isDynamic,
+  generateDynamicQr,
 }) => {
   const router = useRouter();
   const userData = useAppSelector((state: any) => state.auth);
@@ -54,6 +58,10 @@ const QRModal: React.FC<QRModalProps> = ({
         qr: qrString,
         storeName: title,
         tillNo: tilNum || '',
+        ...((isDynamic || generateDynamicQr) && {
+          amount,
+          expireTime: expirationTime,
+        }),
         managerMobile: userData?.managerMobile,
       };
       const mdRequest = {
@@ -66,13 +74,17 @@ const QRModal: React.FC<QRModalProps> = ({
         signature: md5Hash,
       };
 
-      const response = await apiClient.post('/merchant/printQR', requestBody, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${userData?.jwt}`,
+      const response = await apiClient.post(
+        `/merchant/${isStatic ? 'printQR' : 'printDynamicQR'}`,
+        requestBody,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userData?.jwt}`,
+          },
+          responseType: 'blob', // Important
         },
-        responseType: 'blob', // Important
-      });
+      );
 
       // Create a URL for the blob and initiate the download
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -173,7 +185,7 @@ const QRModal: React.FC<QRModalProps> = ({
                         <div className="flex w-full flex-row items-center justify-center gap-2">
                           <B1>Expiry time would be : </B1>
                           <H6 textColor="text-primary-base">
-                            {expirationTime} seconds
+                            {expirationTime} {!isDynamic && 'seconds'}
                           </H6>
                         </div>
                       )}
