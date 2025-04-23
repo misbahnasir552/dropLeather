@@ -230,29 +230,29 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
     .max(25, 'Cannot be more than 25 letters'),
   currentMonthlyTransactionPKR: Yup.string()
     .required('Current Monthly Transaction (PKR) is required')
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   expectedMonthlyDebitTransactions: Yup.string()
     .required(
       'Expected monthly Debit turnover (No. of transactions) is required',
     )
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   expectedMonthlyDebitAmount: Yup.string()
     .required('Expected monthly Debit turnover (amount) is required')
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   expectedMonthlyCreditTransactions: Yup.string()
     .required(
       'Expected monthly credit turnover (No. of transactions) is required',
     )
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   expectedMonthlyCreditAmount: Yup.string()
     .required('Expected monthly credit turnover (amount) is required')
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   annualTurnoverCredit: Yup.string()
     .required('Annual Turnover (Credit) is required')
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   annualTurnoverDebit: Yup.string()
     .required('Annual Turnover (Debit) is required')
-    .matches(/^\d+$/, 'Must be a number'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
 });
 
 //
