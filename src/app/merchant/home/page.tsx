@@ -250,6 +250,7 @@ const LoginSucessHome = () => {
         // Step 3: Get the first page after sorting
         const firstPage = reorderedPages[0]?.pageName;
         console.log('First page after reordering:', firstPage);
+        console.log('check');
 
         if (firstPage) {
           // Step 4: Format the route

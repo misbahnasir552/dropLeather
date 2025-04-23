@@ -63,6 +63,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    natureOfBusiness: any;
     page: PageItem[];
   };
 }
@@ -113,6 +114,7 @@ const AddStoreReqRevision = () => {
   const [description, setDescription] = useState('');
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const businessNature = fieldData?.pages?.natureOfBusiness;
 
   const storeDetailsFormData = {
     pageName: 'Store Details',
@@ -442,6 +444,7 @@ const AddStoreReqRevision = () => {
       const transformedData = {
         // request: {
         managerMobile,
+        businessNature,
         page: {
           pageName: storeDetailsFormData.pageName,
           categories: storeDetailsFormData.categories.map(
