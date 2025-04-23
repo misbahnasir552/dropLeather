@@ -180,8 +180,9 @@ const ActivityInformation = () => {
     if (currentIndex !== -1) {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
 
+      // const currentEndpoint = endpointArray[currentIndex]?.endpoint;
       const currentEndpoint = endpointArray[currentIndex]?.endpoint;
-
+      console.log(currentEndpoint, 'currentpoint');
       const transformedData = {
         managerMobile: userData.managerMobile,
 
@@ -220,7 +221,7 @@ const ActivityInformation = () => {
         if (currentEndpoint) {
           const response = await apiClient.post(currentEndpoint, requestBody, {
             params: {
-              natureOfBusiness: businessNature,
+              natureOfBusiness: businessNature?.businessNature,
             },
             headers: {
               Authorization: `Bearer ${userData.jwt}`,
