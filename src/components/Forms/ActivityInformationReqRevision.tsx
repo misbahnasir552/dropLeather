@@ -569,7 +569,7 @@ const ActivityInformationReqRevision = () => {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              router.push('/login');
+              // router.push('/login');
               console.log('Form submission completed.');
             }
           } else {
@@ -614,7 +614,7 @@ const ActivityInformationReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={'/login'}
         // routeName="/merchant/home"
       />
 

@@ -378,7 +378,7 @@ function IntegrationFormReqRevision() {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              router.push('/login');
+              // router.push('/login');
               console.log('Form submission completed.');
             }
           } else {
@@ -407,7 +407,7 @@ function IntegrationFormReqRevision() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={'/login'}
         // routeName="/merchant/home"
       />
       <Formik

@@ -852,7 +852,7 @@ const BusinessInformationReqRevision = () => {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              router.push('/login');
+              // router.push('/login');
               // setTitle('Form submission completed.');
               // setDescription('Form submission completed.');
               // setShowModal(true);
@@ -884,7 +884,7 @@ const BusinessInformationReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={'/login'}
         // routeName="/merchant/home"
       />
       {/* <AddStore

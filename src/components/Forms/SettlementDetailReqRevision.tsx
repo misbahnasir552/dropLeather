@@ -407,7 +407,7 @@ const SettlementDetailsReqRevision = () => {
               setShowModal(true);
               // router.push(`/merchant/home`);
               dispatch(setLogout());
-              router.push('/login');
+              // router.push('/login');
             }
           } else {
             setTitle('Error Occurred');
@@ -432,7 +432,7 @@ const SettlementDetailsReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={'/login'}
         // routeName="/merchant/home"
       />
       <Formik
