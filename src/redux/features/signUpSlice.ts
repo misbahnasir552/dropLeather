@@ -10,6 +10,7 @@ const initialState: SignupForm = {
   // website: '',
   password: '',
   merchantType: '',
+  termsAndConditions: false,
 };
 
 const signupSlice = createSlice({
