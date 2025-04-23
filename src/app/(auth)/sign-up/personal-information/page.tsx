@@ -39,7 +39,7 @@ const PersonalInfo = () => {
   };
 
   useEffect(() => {
-    console.log('ischecked is', isChecked);
+    console.log('ischecked is', isChecked, setChecked);
   }, [isChecked]);
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
@@ -109,9 +109,6 @@ const PersonalInfo = () => {
     }
   };
 
-  const handleCheckboxChange = () => {
-    setChecked((prev) => !prev);
-  };
   const handleTermsAndConditionsChange = () => {
     const EncryptedFile = generateAESEncryption(
       'Online Payment Services Agreement.pdf',
@@ -243,15 +240,35 @@ const PersonalInfo = () => {
                       use of this site
                     </div>
                   </div>
-                  <CheckboxItem
+                  {/* <CheckboxItem
                     description="I agree to easypaisa"
-                    span="terms & conditions"
+                    span="Terms & Conditions"
                     handleTermsAndConditionsChange={
                       handleTermsAndConditionsChange
                     }
                     isChecked={isChecked}
                     handleCheckboxChange={handleCheckboxChange}
+                  /> */}
+                  <CheckboxItem
+                    description="I agree to easypaisa"
+                    span="Terms & Conditions"
+                    handleTermsAndConditionsChange={
+                      handleTermsAndConditionsChange
+                    }
+                    isChecked={formik.values.termsAndConditions}
+                    handleCheckboxChange={() =>
+                      formik.setFieldValue(
+                        'termsAndConditions',
+                        !formik.values.termsAndConditions,
+                      )
+                    }
                   />
+                  {formik.touched.termsAndConditions &&
+                    formik.errors.termsAndConditions && (
+                      <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                        {formik.errors.termsAndConditions}
+                      </div>
+                    )}
                 </div>
                 <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                   {apierror}

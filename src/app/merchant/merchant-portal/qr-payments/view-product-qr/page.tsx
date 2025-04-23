@@ -95,7 +95,6 @@ function ViewProductQR() {
       setTotalPages(response?.data?.totalPages);
       setLoading(false);
     } catch (e: any) {
-      setApierror(e?.message);
       setLoading(false);
       console.log('Error in fetching dynamic QR list', e);
     }
@@ -116,6 +115,7 @@ function ViewProductQR() {
     XLSX.writeFile(wb, 'Dynamic-QR-Report.xlsx');
   };
   const handleDelete = async (id: any) => {
+    setApierror('');
     try {
       const response = await apiClient.get('/merchantportal/removeDynamicQr', {
         params: { id },
