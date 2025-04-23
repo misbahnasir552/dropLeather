@@ -113,7 +113,9 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   directorCityAndCountry: Yup.string().required(
     'Director City & Country is required',
   ),
-  signatoryIdCardNo: Yup.string().required('Signatory Id Card No is required'),
+  signatoryIdCardNo: Yup.string()
+    .required('Signatory Id Card No is required')
+    .matches(/^\d+$/, 'Only numeric values are allowed'),
   // permanentAddress: Yup.string(),
   // fatcaStatus: Yup.string(),
   // crsStatus: Yup.string(),
@@ -220,12 +222,12 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   expectedMonthlyCreditAmount: Yup.string().required(
     'Expected monthly credit turnover (amount) is required',
   ),
-  annualTurnoverCredit: Yup.string().required(
-    'Annual Turnover (Credit) is required',
-  ),
-  annualTurnoverDebit: Yup.string().required(
-    'Annual Turnover (Debit) is required',
-  ),
+  annualTurnoverCredit: Yup.string()
+    .required('Annual Turnover (Credit) is required')
+    .matches(/^\d+$/, 'Only numeric values are allowed'),
+  annualTurnoverDebit: Yup.string()
+    .required('Annual Turnover (Debit) is required')
+    .matches(/^\d+$/, 'Only numeric values are allowed'),
 });
 
 //

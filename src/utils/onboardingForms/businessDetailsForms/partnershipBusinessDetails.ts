@@ -191,7 +191,7 @@ export const partnershipBusinessDetailsFormData = {
         {
           name: 'dateOfIssuanceOfApplicableIdentityDocument',
           label: 'Date of issuance of applicable identity document',
-          type: 'text',
+          type: 'dateInput',
           required: false,
         },
 
@@ -214,8 +214,12 @@ export const partnershipBusinessDetailsFormData = {
         {
           name: 'specialCustomer',
           label: 'Special Customer',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'registrationIncorporationNo',
@@ -318,8 +322,12 @@ export const partnershipBusinessDetailsFormData = {
         {
           name: 'incomeStatusSalaried',
           label: 'Income Status (Salaried)',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'currentDailyTransactionPKR',

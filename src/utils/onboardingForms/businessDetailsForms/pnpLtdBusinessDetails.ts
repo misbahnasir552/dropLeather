@@ -207,8 +207,12 @@ export const pnpLtdBusinessDetailsFormData = {
         {
           name: 'specialCustomer',
           label: 'Special Customer',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'registrationIncorporationNo',
@@ -311,8 +315,12 @@ export const pnpLtdBusinessDetailsFormData = {
         {
           name: 'incomeStatusSalaried',
           label: 'Income Status (Salaried)',
-          type: 'text',
+          type: 'dropdown',
           required: true,
+          options: [
+            { label: 'Yes', value: 'Yes' },
+            { label: 'No', value: 'No' },
+          ],
         },
         {
           name: 'currentDailyTransactionPKR',

@@ -152,9 +152,11 @@ const ActivityInformationReqRevision = () => {
             type: 'dropdown',
             required: true,
             options: [
-              { label: 'Online Payment', value: 'Online Payment' },
               { label: 'Retail Payments', value: 'Retail Payments' },
-              { label: 'Mini App', value: 'Mini App' },
+              // DO NOT REMOVE COMMENTED CODE
+              // { label: 'Online Payment', value: 'Online Payment' },
+              // { label: 'Retail Payments', value: 'Retail Payments' },
+              // { label: 'Mini App', value: 'Mini App' },
             ],
           },
 

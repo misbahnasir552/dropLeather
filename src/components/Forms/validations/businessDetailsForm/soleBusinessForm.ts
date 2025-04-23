@@ -160,12 +160,12 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   expectedMonthlyCreditAmount: Yup.string().required(
     'Expected monthly credit turnover (amount) is required',
   ),
-  annualTurnoverCredit: Yup.string().required(
-    'Annual Turnover (Credit) is required',
-  ),
-  annualTurnoverDebit: Yup.string().required(
-    'Annual Turnover (Debit) is required',
-  ),
+  annualTurnoverCredit: Yup.string()
+    .required('Annual Turnover (Credit) is required')
+    .matches(/^\d+$/, 'Only numeric values are allowed'),
+  annualTurnoverDebit: Yup.string()
+    .required('Annual Turnover (Debit) is required')
+    .matches(/^\d+$/, 'Only numeric values are allowed'),
 });
 
 //
