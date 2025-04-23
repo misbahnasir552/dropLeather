@@ -125,20 +125,83 @@ function ReviewFormData({
                 key={category.categoryName}
                 heading={category.categoryName}
               >
-                {category.data.map((item: any, index: any) =>
+                {category?.data?.map((item: any, index: any) =>
+                  item.label ===
+                  'Click here if correspondence address is same as business address' ? null : Array.isArray(
+                      item.value,
+                    ) ? (
+                    item?.value?.map((subValue: any, subIndex: any) => (
+                      <ReviewInput
+                        key={`${index}-${subIndex}`}
+                        label={item.label}
+                        value={
+                          subValue !== null && subValue !== ''
+                            ? subValue
+                            : Array.isArray(item.options) &&
+                              item.options.length > 0
+                            ? item.options.join(', ')
+                            : ''
+                        }
+                      />
+                    ))
+                  ) : (item.value !== null && item.value !== '') ||
+                    (Array.isArray(item.options) && item.options.length > 0) ? (
+                    <ReviewInput
+                      key={index}
+                      label={item.label}
+                      value={
+                        item.value !== null && item.value !== ''
+                          ? item.value
+                          : item.options.join(', ')
+                      }
+                    />
+                  ) : null,
+                )}
+              </ReviewFormDataGrid>
+              {categoryIndex !== page.categories.length - 1 && (
+                <div className="border-t-px border border-border-light" />
+              )}
+            </>
+          ))}
+
+          {/* DO NOT REMOVE COMMENTED CODE BELOW */}
+          {/* {page.categories.map((category: any, categoryIndex: number) => (
+            <>
+              <ReviewFormDataGrid
+                key={category.categoryName}
+                heading={category.categoryName}
+              >
+                {category?.data?.map((item: any, index: any) =>
+
+                
                   Array.isArray(item.value) ? (
-                    item.value.map((subValue: any, subIndex: any) => (
+                    item?.value?.map((subValue: any, subIndex: any) => (
                       <ReviewInput
                         key={`${index}-${subIndex}`}
                         label={item.label}
                         value={subValue}
+
+                        // value={
+                        //   subValue !== null && subValue !== ""
+                        //     ? subValue
+                        //     : Array.isArray(item.options) && item.options.length > 0
+                        //       ? item.options
+                        //       : ""
+                        // }
                       />
                     ))
                   ) : (
                     <ReviewInput
                       key={index}
                       label={item.label}
-                      value={item.value}
+                      // value={item.value}
+                        value={
+                          item.value !== null && item.value !== ""
+                            ? item.value
+                            : Array.isArray(item.options) && item.options.length > 0
+                              ? item.options.join(", ")
+                              : ""
+                        }
                     />
                   ),
                 )}
@@ -147,7 +210,7 @@ function ReviewFormData({
                 <div className="border-t-px border border-border-light" />
               )}
             </>
-          ))}
+          ))} */}
         </ReviewFormLayout>
       ))}
 
