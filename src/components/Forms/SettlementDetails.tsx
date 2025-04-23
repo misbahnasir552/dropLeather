@@ -89,7 +89,7 @@ const SettlementDetails = () => {
   const [formData, setFormData] = useState(
     SettlementDetailsFormData.categories,
   );
-  // const [apierror, setApierror] = useState('');
+  const [apierror, setApierror] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -98,23 +98,22 @@ const SettlementDetails = () => {
   const getBankNames = async () => {
     try {
       const response: any = await apiClient.get(`merchant/getBankNames`);
-      // if (response.data.responseCode === '009') {
-      setBankName(
-        response?.data?.map((item: any) => ({
-          label: item.label,
-          value: item.value,
-        })),
-      );
-      // } else if (response?.data?.responseCode === '000') {
-      //   setApierror(response?.data?.responseDescription);
-      // }
-      // else {
-      //   setTitle('Error Occured');
-      //   setDescription(response?.data?.responseDescription);
-      //   setShowModal(true);
-      // }
+      if (response.data.responseCode === '009') {
+        setBankName(
+          response?.data?.bankNames?.map((item: any) => ({
+            label: item.label,
+            value: item.value,
+          })),
+        );
+      } else if (response?.data?.responseCode === '000') {
+        setApierror(response?.data?.responseDescription);
+      } else {
+        setTitle('Error Occured');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
+      }
     } catch (e) {
-      console.log(e, 'Error');
+      console.log(e, 'Error', apierror);
     }
   };
 
