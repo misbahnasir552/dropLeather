@@ -92,7 +92,7 @@ const QRModal: React.FC<QRModalProps> = ({
       link.href = url;
       link.setAttribute(
         'download',
-        `${isStatic ? 'Static Qr.png' : 'Dynamic QR.png'}`,
+        `${isStatic ? 'Static QR.png' : 'Dynamic QR.png'}`,
       ); // Set the desired file name
       document.body.appendChild(link);
       link.click();

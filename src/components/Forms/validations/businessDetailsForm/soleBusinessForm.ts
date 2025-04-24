@@ -77,21 +77,51 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   mandateDateOfBirth: Yup.string(),
   mandatePlaceOfBirth: Yup.string(),
   cityAndCountry: Yup.string(),
-  nextOfKinCnic: Yup.string().required('Next of Kin CNIC is required'),
-  nextOfKinRelationship: Yup.string().required(
-    'Next of Kin Relationship is required',
-  ),
-  nextOfKinName: Yup.string().required('Next of Kin Name is required'),
+  nextOfKinCnic: Yup.string()
+    .required('Next of Kin CNIC is required')
+    .matches(/^\d+$/, 'Invalid CNIC')
+    .length(13, 'CNIC must be exactly 13 digits'),
+  nextOfKinRelationship: Yup.string()
+    .required('Next of Kin Relationship is required')
+    .min(4, 'Cannot be less than 4 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(13, 'Cannot be more than 13 letters'),
+  nextOfKinName: Yup.string()
+    .required('Next of Kin Name is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
   dateOfBirth: Yup.string(),
   registerUnRegister: Yup.string().required('Register/Unregister is required'),
   specialCustomer: Yup.string().required('Special Customer is required'),
-  registrationIncorporationNo: Yup.string(),
-  placeOfIncorporationOrRegistration: Yup.string(),
-  geographiesInvolved: Yup.string(),
-  expectedTypeOfCounterParties: Yup.string(),
-  intendedNatureOfBusinessRelations: Yup.string(),
-  expectedModesOfTransactionsDeliveryChannels: Yup.string(),
-  industrySegment: Yup.string(),
+  registrationIncorporationNo: Yup.string()
+    .min(5, 'Cannot be less than 5 digits')
+    .matches(/^\d+$/, 'Only numbers are allowed')
+    .max(13, 'Cannot be more than 13 digits'),
+  placeOfIncorporationOrRegistration: Yup.string()
+    .min(4, 'Cannot be less than 4 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  geographiesInvolved: Yup.string()
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  expectedTypeOfCounterParties: Yup.string()
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  intendedNatureOfBusinessRelations: Yup.string()
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  expectedModesOfTransactionsDeliveryChannels: Yup.string()
+    .min(3, 'Cannot be less than 3 digits')
+    .matches(/^\d+$/, 'Only numbers are allowed')
+    .max(25, 'Cannot be more than 25 digits'),
+  industrySegment: Yup.string()
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
   natureOfActivity: Yup.array()
@@ -144,28 +174,36 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   // lowRiskType: Yup.string().required('Low Risk Type is required'),
   // mediumRiskType: Yup.string().required(' Risk Type is required'),
   // riskType: Yup.string().required('Risk Type is required'),
-  sourceOfFunds: Yup.string().required('Source of Funds is required'),
-  currentMonthlyTransactionPKR: Yup.string().required(
-    'Current Monthly Transaction (PKR) is required',
-  ),
-  expectedMonthlyDebitTransactions: Yup.string().required(
-    'Expected monthly Debit turnover (No. of transactions) is required',
-  ),
-  expectedMonthlyDebitAmount: Yup.string().required(
-    'Expected monthly Debit turnover (amount) is required',
-  ),
-  expectedMonthlyCreditTransactions: Yup.string().required(
-    'Expected monthly credit turnover (No. of transactions) is required',
-  ),
-  expectedMonthlyCreditAmount: Yup.string().required(
-    'Expected monthly credit turnover (amount) is required',
-  ),
+  sourceOfFunds: Yup.string()
+    .required('Source of Funds is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  currentMonthlyTransactionPKR: Yup.string()
+    .required('Current Monthly Transaction (PKR) is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  expectedMonthlyDebitTransactions: Yup.string()
+    .required(
+      'Expected monthly Debit turnover (No. of transactions) is required',
+    )
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  expectedMonthlyDebitAmount: Yup.string()
+    .required('Expected monthly Debit turnover (amount) is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  expectedMonthlyCreditTransactions: Yup.string()
+    .required(
+      'Expected monthly credit turnover (No. of transactions) is required',
+    )
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  expectedMonthlyCreditAmount: Yup.string()
+    .required('Expected monthly credit turnover (amount) is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   annualTurnoverCredit: Yup.string()
     .required('Annual Turnover (Credit) is required')
-    .matches(/^\d+$/, 'Only numeric values are allowed'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   annualTurnoverDebit: Yup.string()
     .required('Annual Turnover (Debit) is required')
-    .matches(/^\d+$/, 'Only numeric values are allowed'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
 });
 
 //
