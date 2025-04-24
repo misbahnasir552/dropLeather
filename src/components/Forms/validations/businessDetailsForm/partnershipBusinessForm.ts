@@ -168,9 +168,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   intendedNatureOfBusinessRelations: Yup.string().required(
     'Intended nature of business relations is required',
   ),
-  expectedModesOfTransactionsDeliveryChannels: Yup.string().required(
-    'Expected modes of transactions/ delivery channels is required',
-  ),
+  expectedModesOfTransactionsDeliveryChannels: Yup.string()
+    .required('Expected modes of transactions/ delivery channels is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   industrySegment: Yup.string().required('Industry/Segment is required'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
@@ -191,9 +191,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
       return schema;
     },
   ),
-  currentDailyTransactionPKR: Yup.string().required(
-    'Current Daily Transaction (PKR) is required',
-  ),
+  currentDailyTransactionPKR: Yup.string()
+    .required('Current Daily Transaction (PKR) is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   anyOtherDetails: Yup.string().required('Other details are required'),
   associationToHighRiskBusiness: Yup.string().required(
     'Association to High Risk Business is required',

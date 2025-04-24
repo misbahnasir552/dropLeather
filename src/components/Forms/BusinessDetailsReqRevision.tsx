@@ -279,7 +279,7 @@ const BusinessInformationReqRevision = () => {
           {
             name: 'dateOfIssuanceOfApplicableIdentityDocument',
             label: 'Date of issuance of applicable identity document',
-            type: 'text',
+            type: 'date',
             required: false,
           },
           {

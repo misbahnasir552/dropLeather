@@ -57,9 +57,9 @@ export const GetBusinessDetails = () => {
 export const businessInfoSchema = Yup.object().shape({
   establishedSince: Yup.string().required('Established Since is required'),
   natureOfActivity: Yup.string().required('Nature Of Activity is required'),
-  currentDailyTransactionsInPkr: Yup.string().required(
-    'Current Daily Transactions In Pkr is required',
-  ),
+  currentDailyTransactionsInPkr: Yup.string()
+    .required('Current Daily Transactions In Pkr is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   currentMonthlyTransactionsInPkr: Yup.string().required(
     'Current Monthly Transactions In Pkr is required',
   ),

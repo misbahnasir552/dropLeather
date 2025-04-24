@@ -191,7 +191,7 @@ export const partnershipBusinessDetailsFormData = {
         {
           name: 'dateOfIssuanceOfApplicableIdentityDocument',
           label: 'Date of issuance of applicable identity document',
-          type: 'dateInput',
+          type: 'date',
           required: false,
         },
 
@@ -223,6 +223,7 @@ export const partnershipBusinessDetailsFormData = {
         },
         {
           name: 'registrationIncorporationNo',
+
           label: 'Registration/Incorporation No',
           type: 'text',
           required: true,
