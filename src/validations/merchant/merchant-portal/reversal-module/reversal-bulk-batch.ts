@@ -13,8 +13,9 @@ export const searchBulkInitialValues: any = {
 export const searchBulkSchema = Yup.object().shape({
   batchId: Yup.string(),
   file: Yup.string(),
-  fromDate: Yup.string(),
+  fromDate: Yup.string().required('From Date is required'),
   toDate: Yup.string()
+    .required('To Date is required')
     .test(
       'toDate-required',
       'To Date is required',
@@ -26,8 +27,8 @@ export const searchBulkSchema = Yup.object().shape({
       },
     )
     .test(
-      'toDate-max-15-days',
-      'To Date should not be more than 15 days from From Date',
+      'toDate-max-30-days',
+      'To Date should not be more than 30 days from From Date',
       // eslint-disable-next-line func-names
       function (value) {
         // eslint-disable-next-line no-unsafe-optional-chaining
@@ -40,7 +41,7 @@ export const searchBulkSchema = Yup.object().shape({
 
         if (!isValid(fromDates) || !isValid(toDate)) return true;
 
-        return differenceInDays(toDate, fromDates) <= 15;
+        return differenceInDays(toDate, fromDates) <= 30;
       },
     ),
   status: Yup.string(),

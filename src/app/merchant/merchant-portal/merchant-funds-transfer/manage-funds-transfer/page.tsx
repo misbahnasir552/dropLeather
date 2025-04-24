@@ -13,7 +13,6 @@ import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
-import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import MerchantFormLayout from '@/components/UI/Wrappers/MerchantFormLayout';
 import { useAppSelector } from '@/hooks/redux';
@@ -32,9 +31,6 @@ function ManageFundsTransfer() {
   );
   const [filteredData, setFilteredData] = useState();
   const [loading, setLoading] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [apierror, setApierror] = useState('');
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
@@ -71,20 +67,11 @@ function ManageFundsTransfer() {
           })),
         );
       } else if (response?.data?.responseCode === '000') {
-        setTitle(response?.data?.responseMessage || '');
-        setDescription(response?.data?.responseDescription);
         setApierror(response?.data?.responseDescription);
-        // setShowModal(true);
       } else {
-        setTitle(response?.data?.responseMessage || '');
-        setDescription(response?.data?.responseDescription);
         setApierror(response?.data?.responseDescription);
-        // setShowModal(true);
       }
-      // setLoading(false);
     } catch (e: any) {
-      // setTitle('Network Failed');
-      setDescription(e?.message);
       setApierror(e?.message);
       // setShowModal(true);
     } finally {
@@ -108,6 +95,8 @@ function ManageFundsTransfer() {
     Formik.resetForm();
     fetchRecords();
   };
+  console.log('api error', apierror);
+
   const tableHeadings: string[] = [
     'Beneficiary Name',
     'Transfer Date',
@@ -191,13 +180,6 @@ function ManageFundsTransfer() {
   };
   return (
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-        // routeName="/login"
-      />
       <HeaderWrapper
         heading="Manage Funds Transfer"
         // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
@@ -276,6 +258,13 @@ function ManageFundsTransfer() {
                   label="Reset"
                   type="button"
                   onClickHandler={() => {
+                    if (
+                      !Object.values(formik.values)?.some(
+                        (value) => value !== '',
+                      )
+                    ) {
+                      return;
+                    }
                     handleReset(formik);
                     setFilteredData(undefined);
                   }}
@@ -312,7 +301,11 @@ function ManageFundsTransfer() {
         </>
       ) : (
         <>
-          {beneficiaryFilteredData?.length > 0 ? (
+          {apierror ? (
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
+          ) : beneficiaryFilteredData?.length > 0 ? (
             <div className="flex flex-col gap-3">
               <FundsTransferTable
                 tableHeadings={tableHeadings}
@@ -324,9 +317,6 @@ function ManageFundsTransfer() {
                 onNext={showNextPage}
                 onPrev={showPrevPage}
               />
-              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-                {apierror}
-              </div>
             </div>
           ) : (
             <H7 className="text-center">No Records Found</H7>
