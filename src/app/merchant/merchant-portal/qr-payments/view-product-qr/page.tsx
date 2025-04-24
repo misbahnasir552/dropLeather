@@ -50,7 +50,7 @@ function ViewProductQR() {
     'Store Name',
     'Store ID',
     'QR Generation Date/Time',
-    'QR Expiry Date/Time',
+    'QR Expiry Time(seconds)',
     'Actions',
   ];
 
@@ -88,7 +88,6 @@ function ViewProductQR() {
       setQrFilteredData(
         filteredValues?.map((item: any) => ({
           ...item,
-          expirationTime: formatDateTime(item?.expirationTime),
           createdAt: formatDateTime(item?.createdAt),
         })),
       );
