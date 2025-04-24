@@ -75,7 +75,7 @@ const QRModal: React.FC<QRModalProps> = ({
       };
 
       const response = await apiClient.post(
-        `/merchant/${isStatic ? 'printQR' : 'printDynamicQR'}`,
+        `/qrcode/${isStatic ? 'printQR' : 'downloadDynamicQR'}`,
         requestBody,
         {
           headers: {
