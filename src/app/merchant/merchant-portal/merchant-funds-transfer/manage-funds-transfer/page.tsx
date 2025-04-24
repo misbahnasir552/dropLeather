@@ -143,9 +143,6 @@ function ManageFundsTransfer() {
         const matchesAccountType = values.accountType
           ? record.accountType === values.accountType
           : true;
-        const matchesMsisdn = values.msisdn
-          ? record.msisdn === values.msisdn
-          : true;
         const matchesBeneficiaryName = values.beneficiaryName
           ? record.beneficiaryName
               .toLowerCase()
@@ -154,17 +151,12 @@ function ManageFundsTransfer() {
         const matchesPaymentStatus = values.status
           ? record.paymentStatus === values.status
           : true;
-        const matchesTransferAmount = values.transferAmount
-          ? record.transferAmount === values.transferAmount
-          : true; // Filter for transferAmount
 
         // Only keep records that match all filters
         if (
           matchesAccountType &&
-          matchesMsisdn &&
           matchesBeneficiaryName &&
-          matchesPaymentStatus &&
-          matchesTransferAmount
+          matchesPaymentStatus
         ) {
           const { msisdn, accountType, ...rest } = record; // Exclude msisdn, accountType, and failureReason
           return {
