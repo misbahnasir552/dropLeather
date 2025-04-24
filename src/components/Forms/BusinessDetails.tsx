@@ -161,9 +161,12 @@ const BusinessInformation = () => {
   }, [businessNature]);
 
   useEffect(() => {
+    console.log('selected drop', selectedDropDownValue, selectedCheckValue);
+  }, [selectedDropDownValue]);
+  useEffect(() => {
     getNatureOfBusiness();
     getRiskTypes();
-    console.log('hereeeeeeeeeeeeeeeee');
+    console.log('hereeeeeeeeeeeeeeeee', selectedDropDownValue);
     console.log('business details data', businessDetailsData);
     const updatedFormData = businessDetailsData?.map((category) => {
       // const hasAssociationField = category.fields.some(
@@ -188,11 +191,23 @@ const BusinessInformation = () => {
         } else if (field.name === 'highRiskType') {
           field.options = highRiskType;
         }
+        // else if (field.name === "incomeStatusSalaried" && selectedDropDownValue==='No') {
+        //   updatedFields = category.fields.filter(
+        //     (field: any) =>
+        //       field.name === 'currentSalaryIncome',
+        //   );
+        // }
       });
       if (selectedDropDownValue === 'High Risk Business / Person') {
         updatedFields = category.fields.filter(
           (field: any) =>
             field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+        );
+      }
+
+      if (selectedDropDownValue === 'No') {
+        updatedFields = category.fields.filter(
+          (field: any) => field.name !== 'currentSalaryIncome',
         );
       } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
         updatedFields = category.fields.filter(
@@ -209,11 +224,16 @@ const BusinessInformation = () => {
         selectedDropDownValue === '' ||
         selectedDropDownValue === undefined
       ) {
+        console.log('in no');
         updatedFields = category.fields.filter(
           (field: any) =>
+            // field.name !== 'mediumRiskType' &&
+            // field.name !== 'highRiskType' &&
+            // field.name !== 'lowRiskType',
             field.name !== 'mediumRiskType' &&
             field.name !== 'highRiskType' &&
-            field.name !== 'lowRiskType',
+            field.name !== 'lowRiskType' &&
+            field.name !== 'currentSalaryIncome',
         );
       }
 

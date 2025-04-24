@@ -329,6 +329,13 @@ export const partnershipBusinessDetailsFormData = {
             { label: 'No', value: 'No' },
           ],
         },
+
+        {
+          name: 'currentSalaryIncome',
+          label: 'Current Salary / Income',
+          type: 'text',
+          required: true,
+        },
         {
           name: 'currentDailyTransactionPKR',
           label: 'Current Daily Transaction (PKR)',

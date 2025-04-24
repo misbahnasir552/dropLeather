@@ -328,6 +328,12 @@ export const soleBusinessDetailsFormData = {
           ],
         },
         {
+          name: 'currentSalaryIncome',
+          label: 'Current Salary / Income',
+          type: 'text',
+          required: true,
+        },
+        {
           name: 'currentDailyTransactionPKR',
           label: 'Current Daily Transaction (PKR)',
           type: 'text',

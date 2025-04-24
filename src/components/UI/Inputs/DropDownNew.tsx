@@ -48,7 +48,7 @@ const DropdownNew = ({
     if (name === 'associationToHighRiskBusiness') {
       setSelectedDropDownValue(item?.label);
     }
-    if (name === 'incomeStatus') {
+    if (name === 'incomeStatusSalaried') {
       setSelectedDropDownValue(item?.value);
     }
 

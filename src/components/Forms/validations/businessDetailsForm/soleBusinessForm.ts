@@ -36,6 +36,7 @@ export const soleBusinessDetailsFormInitialValues = {
   nationality: '',
   natureOfActivity: [],
   incomeStatusSalaried: '',
+  currentSalaryIncome: '',
   currentDailyTransactionPKR: '',
   anyOtherDetails: '',
   associationToHighRiskBusiness: '',
@@ -100,6 +101,22 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   incomeStatusSalaried: Yup.string().required(
     'Income Status (Salaried) is required',
   ),
+  // DO NOT Remove Commented Code
+  // currentSalaryIncome: Yup.string().required(
+  //   'Current Salary / Income is required',
+  // ),
+  currentSalaryIncome: Yup.string().when(
+    'incomeStatusSalaried',
+    (incomeStatusSalaried, schema) => {
+      if (incomeStatusSalaried[0] === 'Yes') {
+        return schema.required(
+          'Current Salary / Income is required is required',
+        );
+      }
+      return schema;
+    },
+  ),
+
   currentDailyTransactionPKR: Yup.string().required(
     'Current Daily Transaction (PKR) is required',
   ),
