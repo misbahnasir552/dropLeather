@@ -185,7 +185,8 @@ const QRModal: React.FC<QRModalProps> = ({
                         <div className="flex w-full flex-row items-center justify-center gap-2">
                           <B1>Expiry time would be : </B1>
                           <H6 textColor="text-primary-base">
-                            {expirationTime} {!isDynamic && 'seconds'}
+                            {expirationTime}{' '}
+                            {(isDynamic || generateDynamicQr) && 'seconds'}
                           </H6>
                         </div>
                       )}
