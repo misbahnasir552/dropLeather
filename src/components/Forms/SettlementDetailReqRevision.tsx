@@ -93,6 +93,7 @@ const SettlementDetailsReqRevision = () => {
   const [filteredData, setFilteredData] = useState<any[]>([]);
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [navRoute, setNavRoute] = useState('');
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -326,29 +327,37 @@ const SettlementDetailsReqRevision = () => {
       const validPages = fieldsData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
-        // request: {
+        status: 'Completed',
+        // businessNature,
         managerMobile: userData.managerMobile,
-        businessNature,
         page: {
-          pageName: SettlementDetailsFormData?.pageName,
-          categories: SettlementDetailsFormData?.categories.map(
-            (category: any) => ({
-              categoryName: `Settlement Details`,
-              data: category.fields.map((field: any) => ({
-                label: field.label,
-                // value: values[field.name] || '', // Fetching value from formik.values
-                value:
-                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-                ...(field.type === 'checkboxInput' ||
-                field.type === 'checkBoxInputMulti'
-                  ? { options: values[field.name] || '' }
-                  : {}), // Add options only if it's a checkbox
-              })),
-            }),
-          ),
-          status: 'Completed',
+          pageName: 'Settlement Details',
+          categories: SettlementDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  // value: values[field.name] || '', // Fetching value from formik.values
+                  value:
+                    field.type === 'checkBoxInputMulti'
+                      ? ''
+                      : values[field.name], // Fetching value from formik.values
+                  ...(field.type === 'checkboxInput' ||
+                  field.type === 'checkBoxInputMulti'
+                    ? { options: values[field.name] || '' }
+                    : {}), // Add options only if it's a checkbox
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
         },
-        // },
       };
 
       const mdRequest = {
@@ -365,10 +374,11 @@ const SettlementDetailsReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '?requestRevision=Completed';
+            finalEndpoint += '&requestRevision=Completed';
             dispatch(setIsLastTab(false));
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
@@ -406,12 +416,13 @@ const SettlementDetailsReqRevision = () => {
               setShowModal(true);
               // router.push(`/merchant/home`);
               dispatch(setLogout());
-              router.push('/login');
+              setNavRoute('/login');
             }
           } else {
             setTitle('Error Occurred');
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
+            setNavRoute('/merchant/home');
           }
         }
       } catch (e) {
@@ -431,7 +442,7 @@ const SettlementDetailsReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={navRoute}
         // routeName="/merchant/home"
       />
       <Formik

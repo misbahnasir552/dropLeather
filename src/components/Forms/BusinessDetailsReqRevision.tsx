@@ -114,6 +114,7 @@ const BusinessInformationReqRevision = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [apierror, setApierror] = useState('');
+  const [navRoute, setNavRoute] = useState('');
   // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
   // const BusinessInfoInitialValues = GetBusinessDetails();
   const handleCheckboxChange = () => {
@@ -776,23 +777,36 @@ const BusinessInformationReqRevision = () => {
       const validPages = fieldsData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
-        managerMobile: userData.managerMobile,
-        businessNature,
         status: 'Completed',
+        // businessNature,
+        managerMobile: userData.managerMobile,
         page: {
           pageName: 'Business Details',
-          categories: BusinessDetailsFormData.categories.map((category) => ({
-            categoryName: category.categoryName,
-            data: category.fields.map((field) => ({
-              label: field.label,
-              value:
-                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-              ...(field.type === 'checkboxInput' ||
-              field.type === 'checkBoxInputMulti'
-                ? { options: values[field.name] || '' }
-                : {}), // Add options only if it's a checkbox
-            })),
-          })),
+          categories: BusinessDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  // value: values[field.name] || '', // Fetching value from formik.values
+                  value:
+                    field.type === 'checkBoxInputMulti'
+                      ? ''
+                      : values[field.name], // Fetching value from formik.values
+                  ...(field.type === 'checkboxInput' ||
+                  field.type === 'checkBoxInputMulti'
+                    ? { options: values[field.name] || '' }
+                    : {}), // Add options only if it's a checkbox
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
         },
       };
 
@@ -810,10 +824,11 @@ const BusinessInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          let finalEndpoint = currentEndpoint;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '?requestRevision=Completed';
+            finalEndpoint += '&requestRevision=Completed';
             dispatch(setIsLastTab(false));
           }
           console.log('finalEndpoint', finalEndpoint);
@@ -851,7 +866,8 @@ const BusinessInformationReqRevision = () => {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              router.push('/login');
+              setNavRoute('/login');
+              // router.push('/login');
               // setTitle('Form submission completed.');
               // setDescription('Form submission completed.');
               // setShowModal(true);
@@ -862,6 +878,7 @@ const BusinessInformationReqRevision = () => {
             setApierror(response?.data?.responseDescription);
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
+            setNavRoute('/merchant/home');
           }
         }
       } catch (e) {
@@ -883,7 +900,7 @@ const BusinessInformationReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        // routeName={attachRoute}
+        routeName={navRoute}
         // routeName="/merchant/home"
       />
       {/* <AddStore
