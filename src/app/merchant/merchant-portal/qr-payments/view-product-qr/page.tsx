@@ -315,6 +315,13 @@ function ViewProductQR() {
                     <Button
                       label="Reset"
                       onClickHandler={() => {
+                        if (
+                          !Object.values(formik.values)?.some(
+                            (value) => value !== '',
+                          )
+                        ) {
+                          return;
+                        }
                         handleReset(formik);
                         setFilteredParams(undefined);
                       }}

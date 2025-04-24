@@ -242,6 +242,13 @@ function BulkFundsTransferReport() {
                       label="Reset"
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={() => {
+                        if (
+                          !Object.values(formik.values)?.some(
+                            (value) => value !== '',
+                          )
+                        ) {
+                          return;
+                        }
                         handleReset(formik);
                         setFilteredData(undefined);
                       }}

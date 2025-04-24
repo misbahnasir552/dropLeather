@@ -9,8 +9,9 @@ export const settlementReportInitialValues: ISettlementReport = {
 };
 
 export const settlementReportSchema = Yup.object().shape({
-  transferDateFrom: Yup.string(),
+  transferDateFrom: Yup.string().required('From Date is required'),
   transferDateTo: Yup.string()
+    .required('To Date is required')
     .test(
       'transferDateTo-required',
       'To Date is required',
@@ -22,8 +23,8 @@ export const settlementReportSchema = Yup.object().shape({
       },
     )
     .test(
-      'transferDateTo-max-15-days',
-      'To Date should not be more than 15 days from From Date',
+      'transferDateTo-max-30-days',
+      'To Date should not be more than 30 days from From Date',
       // eslint-disable-next-line func-names
       function (value) {
         // eslint-disable-next-line no-unsafe-optional-chaining
@@ -36,7 +37,7 @@ export const settlementReportSchema = Yup.object().shape({
 
         if (!isValid(fromDate) || !isValid(toDate)) return true;
 
-        return differenceInDays(toDate, fromDate) <= 15;
+        return differenceInDays(toDate, fromDate) <= 30;
       },
     ),
 });
