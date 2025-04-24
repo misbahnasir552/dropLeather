@@ -179,9 +179,9 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
-  currentMonthlyTransactionPKR: Yup.string()
-    .required('Current Monthly Transaction (PKR) is required')
-    .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  currentMonthlyTransactionPKR: Yup.string().required(
+    'Current Monthly Transaction (PKR) is required',
+  ),
   expectedMonthlyDebitTransactions: Yup.string()
     .required(
       'Expected monthly Debit turnover (No. of transactions) is required',
