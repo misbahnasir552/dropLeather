@@ -350,7 +350,7 @@ function IntegrationFormReqRevision() {
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '?requestRevision=Completed';
+            finalEndpoint += '&requestRevision=Completed';
             dispatch(setIsLastTab(false));
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
