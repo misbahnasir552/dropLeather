@@ -106,6 +106,7 @@ const ActivityInformationReqRevision = () => {
   const [isChecked, setIsChecked] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [navRoute, setNavRoute] = useState('');
   console.log('userdatais', userData);
   const { apiSecret } = userData;
   const router = useRouter();
@@ -500,7 +501,15 @@ const ActivityInformationReqRevision = () => {
                 categoryName: category.categoryName,
                 data: filteredFields.map((field) => ({
                   label: field.label,
-                  value: values[field.name], // Formik value
+                  // value: values[field.name] || '', // Fetching value from formik.values
+                  value:
+                    field.type === 'checkBoxInputMulti'
+                      ? ''
+                      : values[field.name], // Fetching value from formik.values
+                  ...(field.type === 'checkboxInput' ||
+                  field.type === 'checkBoxInputMulti'
+                    ? { options: values[field.name] || '' }
+                    : {}), // Add options only if it's a checkbox
                 })),
               };
             })
@@ -569,13 +578,14 @@ const ActivityInformationReqRevision = () => {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              // router.push('/login');
+              setNavRoute('/login');
               console.log('Form submission completed.');
             }
           } else {
             setTitle('Error Occurred');
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
+            setNavRoute('/merchant/home');
           }
         }
       } catch (e) {
@@ -614,7 +624,7 @@ const ActivityInformationReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName={'/login'}
+        routeName={navRoute}
         // routeName="/merchant/home"
       />
 

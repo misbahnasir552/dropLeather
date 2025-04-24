@@ -92,6 +92,7 @@ function IntegrationFormReqRevision() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const { currentTab } = useCurrentTab();
+  const [navRoute, setNavRoute] = useState('');
   const businessNature = fieldData?.pages?.natureOfBusiness;
 
   const IntegrationFormData = {
@@ -298,27 +299,37 @@ function IntegrationFormReqRevision() {
       console.log('valid pages', validPages);
 
       const transformedData = {
-        // request: {
-        managerMobile: userData.managerMobile,
+        status: 'Completed',
         // businessNature,
+        managerMobile: userData.managerMobile,
         page: {
-          pageName: IntegrationFormData?.pageName,
-          categories: IntegrationFormData?.categories.map((category: any) => ({
-            categoryName: `Integration`,
-            data: category.fields.map((field: any) => ({
-              label: field.label,
-              // value: values[field.name] || '', // Fetching value from formik.values
-              value:
-                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-              ...(field.type === 'checkboxInput' ||
-              field.type === 'checkBoxInputMulti'
-                ? { options: values[field.name] || '' }
-                : {}), // Add options only if it's a checkbox
-            })),
-          })),
-          status: 'Completed',
+          pageName: 'Integration',
+          categories: IntegrationFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
+
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  // value: values[field.name] || '', // Fetching value from formik.values
+                  value:
+                    field.type === 'checkBoxInputMulti'
+                      ? ''
+                      : values[field.name], // Fetching value from formik.values
+                  ...(field.type === 'checkboxInput' ||
+                  field.type === 'checkBoxInputMulti'
+                    ? { options: values[field.name] || '' }
+                    : {}), // Add options only if it's a checkbox
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
         },
-        // },
       };
 
       const mdRequest = {
@@ -378,7 +389,7 @@ function IntegrationFormReqRevision() {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               dispatch(setLogout());
-              // router.push('/login');
+              setNavRoute('/login');
               console.log('Form submission completed.');
             }
           } else {
@@ -386,6 +397,7 @@ function IntegrationFormReqRevision() {
             setApierror(response?.data?.responseDescription);
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
+            setNavRoute('/merchant/home');
           }
         }
       } catch (e) {
@@ -407,7 +419,7 @@ function IntegrationFormReqRevision() {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName={'/login'}
+        routeName={navRoute}
         // routeName="/merchant/home"
       />
       <Formik

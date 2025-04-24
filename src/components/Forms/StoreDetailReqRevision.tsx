@@ -114,6 +114,7 @@ const AddStoreReqRevision = () => {
   const [description, setDescription] = useState('');
   const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  const [navRoute, setNavRoute] = useState('');
   const businessNature = fieldData?.pages?.natureOfBusiness;
 
   const storeDetailsFormData = {
@@ -442,31 +443,38 @@ const AddStoreReqRevision = () => {
       const validPages = fieldData.pages.page.map((p) => p.pageName);
 
       const transformedData = {
-        // request: {
-        managerMobile,
+        status: 'Completed',
         // businessNature,
+        managerMobile,
         page: {
           pageName: storeDetailsFormData.pageName,
-          categories: storeDetailsFormData.categories.map(
-            (category: any, index: any) => ({
-              categoryName: `${category.categoryName} + ${index + 1}`,
-              data: category.fields.map((field: any) => ({
-                label: field.label,
-                // value: values[field.name] || '', // Fetching value from formik.values
-                value:
-                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-                ...(field.type === 'checkboxInput' ||
-                field.type === 'checkBoxInputMulti'
-                  ? { options: values[field.name] || '' }
-                  : {}), // Add options only if it's a checkbox
-              })),
-            }),
-          ),
-          status: 'Completed',
-        },
-        // },
-      };
+          categories: storeDetailsFormData.categories
+            .map((category) => {
+              const filteredFields = category.fields.filter((field) =>
+                Object.keys(values).includes(field.name),
+              );
 
+              if (filteredFields.length === 0) return null; // Exclude empty categories
+
+              return {
+                categoryName: category.categoryName,
+                data: filteredFields.map((field) => ({
+                  label: field.label,
+                  // value: values[field.name] || '', // Fetching value from formik.values
+                  value:
+                    field.type === 'checkBoxInputMulti'
+                      ? ''
+                      : values[field.name], // Fetching value from formik.values
+                  ...(field.type === 'checkboxInput' ||
+                  field.type === 'checkBoxInputMulti'
+                    ? { options: values[field.name] || '' }
+                    : {}), // Add options only if it's a checkbox
+                })),
+              };
+            })
+            .filter(Boolean), // Remove null categories
+        },
+      };
       const mdRequest = {
         ...transformedData,
         apisecret: apiSecret,
@@ -523,12 +531,13 @@ const AddStoreReqRevision = () => {
               setShowModal(true);
               // router.push(`/merchant/home`);
               dispatch(setLogout());
-              // router.push('/login');
+              setNavRoute('/login');
             }
           } else {
             setTitle('Error Occurred');
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
+            setNavRoute('/merchant/home');
           }
         }
       } catch (e) {
@@ -549,7 +558,7 @@ const AddStoreReqRevision = () => {
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName={'/login'}
+        routeName={navRoute}
         // routeName="/merchant/home"
       />
 
