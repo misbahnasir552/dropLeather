@@ -4,7 +4,7 @@ export const storeDetailsFormData = {
   pageName: 'Store Details',
   categories: [
     {
-      categoryName: 'Store ',
+      categoryName: '',
       fields: [
         {
           label: 'Store Type',

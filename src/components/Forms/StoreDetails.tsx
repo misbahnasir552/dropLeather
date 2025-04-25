@@ -210,21 +210,22 @@ const AddStore = () => {
         managerMobile,
         page: {
           pageName: storeDetailsFormData.pageName,
-          categories: storeDetailsFormData.categories.map(
-            (category: any, index: any) => ({
-              categoryName: `${category.categoryName} + ${index + 1}`,
-              data: category.fields.map((field: any) => ({
-                label: field.label,
-                // value: values[field.name] || '', // Fetching value from formik.values
-                value:
-                  field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
-                ...(field.type === 'checkboxInput' ||
-                field.type === 'checkBoxInputMulti'
-                  ? { options: values[field.name] || '' }
-                  : {}), // Add options only if it's a checkbox
-              })),
-            }),
-          ),
+          categories: storeDetailsFormData.categories.map((category: any) => ({
+            // DO NOT REMOVE CODE BELOW
+            // (category: any, index: any) => ({
+            // categoryName: `${category.categoryName} + ${index + 1}`,
+            categoryName: `${category.categoryName}`,
+            data: category.fields.map((field: any) => ({
+              label: field.label,
+              // value: values[field.name] || '', // Fetching value from formik.values
+              value:
+                field.type === 'checkBoxInputMulti' ? '' : values[field.name], // Fetching value from formik.values
+              ...(field.type === 'checkboxInput' ||
+              field.type === 'checkBoxInputMulti'
+                ? { options: values[field.name] || '' }
+                : {}), // Add options only if it's a checkbox
+            })),
+          })),
           status: 'Completed',
         },
         // },
