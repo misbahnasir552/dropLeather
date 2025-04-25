@@ -12,7 +12,7 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
@@ -346,12 +346,14 @@ function IntegrationFormReqRevision() {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
@@ -364,6 +366,10 @@ function IntegrationFormReqRevision() {
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
             console.log('nextIndex', nextIndex);
+            console.log(
+              'endpointArray[nextIndex]?.name',
+              endpointArray[5]?.name,
+            );
 
             //  Ensure nextIndex is within bounds and valid
             while (
@@ -385,11 +391,12 @@ function IntegrationFormReqRevision() {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              router.push(`/merchant/home/request-revision/review-form`);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
+              // dispatch(setLogout());
+              // setNavRoute('/login');
               console.log('Form submission completed.');
             }
           } else {

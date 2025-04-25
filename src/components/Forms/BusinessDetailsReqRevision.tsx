@@ -14,7 +14,7 @@ import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo } from '@/interfaces/interface';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
@@ -25,7 +25,8 @@ import CheckboxItem from '../UI/Inputs/CheckboxItem';
 // import DateInput from '../UI/Inputs/DateInput';
 import DateInputNew from '../UI/Inputs/DateInputNew';
 // import DateInputNew from '../UI/Inputs/DateInputNew';
-import DropdownInput from '../UI/Inputs/DropdownInput';
+// import DropdownInput from '../UI/Inputs/DropdownInput';
+import DropdownNew from '../UI/Inputs/DropDownNew';
 // import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
@@ -115,6 +116,10 @@ const BusinessInformationReqRevision = () => {
   const [description, setDescription] = useState('');
   const [apierror, setApierror] = useState('');
   const [navRoute, setNavRoute] = useState('');
+  const [natureOfBusiness, setNatureOfBusiness] = useState([]);
+  const [lowRiskType, setLowRiskType] = useState([]);
+  const [mediumRiskType, setMediumRiskType] = useState([]);
+  const [highRiskType, setHighRiskType] = useState([]);
   // const [selectedAssociation, setSelectedAssociation] = useState<string | undefined>(undefined);
   // const BusinessInfoInitialValues = GetBusinessDetails();
   const handleCheckboxChange = () => {
@@ -173,16 +178,16 @@ const BusinessInformationReqRevision = () => {
             name: 'natureofBusiness',
             label: 'Nature of Business',
             type: 'dropdown',
-            options: [
-              {
-                label: 'C5 (limit of max 500k)',
-                value: 'C5 (limit of max 500k)',
-              },
-              {
-                label: 'C10 (limit above than 500k)',
-                value: 'C10 (limit above than 500k)',
-              },
-            ],
+            // options: [
+            //   {
+            //     label: 'C5 (limit of max 500k)',
+            //     value: 'C5 (limit of max 500k)',
+            //   },
+            //   {
+            //     label: 'C10 (limit above than 500k)',
+            //     value: 'C10 (limit above than 500k)',
+            //   },
+            // ],
             required: true,
           },
           {
@@ -482,21 +487,21 @@ const BusinessInformationReqRevision = () => {
             name: 'highRiskType',
             label: 'High Risk Type',
             type: 'dropdown',
-            options: [{ label: 'High Risk Type', value: 'High Risk Type' }],
+            // options: [{ label: 'High Risk Type', value: 'High Risk Type' }],
             required: true,
           },
           {
             name: 'mediumRiskType',
             label: 'Medium Risk Type',
             type: 'dropdown',
-            options: [{ label: 'Medium Risk Type', value: 'Medium Risk Type' }],
+            // options: [{ label: 'Medium Risk Type', value: 'Medium Risk Type' }],
             required: true,
           },
           {
             name: 'lowRiskType',
             label: 'Low Risk Type',
             type: 'dropdown',
-            options: [{ label: 'Low Risk Type', value: 'Low Risk Type' }],
+            // options: [{ label: 'Low Risk Type', value: 'Low Risk Type' }],
             required: true,
           },
 
@@ -576,6 +581,80 @@ const BusinessInformationReqRevision = () => {
       setAddStoresValues,
     );
   }, [selectedDropDownValue]);
+
+  const getNatureOfBusiness = async () => {
+    try {
+      const response = await apiClient.get('merchant/getAllNatureOfBusiness');
+      // if (response?.data?.responseCode === '009') {
+      if (response?.data) {
+        setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+
+        console.log(
+          'nature of business is',
+          natureOfBusiness,
+          selectedCheckValue,
+          setPageTitle,
+          setAddStoresValues,
+        );
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  const getRiskTypes = async () => {
+    try {
+      const response = await apiClient.get('merchant/getAllLowRiskType');
+      if (response?.data) {
+        setLowRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+
+    try {
+      const response = await apiClient.get('merchant/getAllHighRiskType');
+      if (response?.data) {
+        setHighRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+    try {
+      const response = await apiClient.get('merchant/getAllMediumRiskType');
+      if (response?.data) {
+        setMediumRiskType(response?.data);
+        // setNatureOfBusiness(response?.data); // Store regions data
+        // console.log("categories are", storeCategories)
+      } else {
+        setApierror(response?.data.responseDescription);
+      }
+    } catch (error) {
+      console.log('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    getNatureOfBusiness();
+    console.log('natureOf business updated', natureOfBusiness);
+    getRiskTypes();
+  }, [
+    natureOfBusiness.length,
+    highRiskType.length,
+    lowRiskType.length,
+    mediumRiskType.length,
+  ]);
 
   const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
     const shape: Record<string, Yup.AnySchema> = {};
@@ -677,6 +756,7 @@ const BusinessInformationReqRevision = () => {
             );
           }
 
+          console.log('updated fields', updatedFields);
           return {
             ...category,
             fields: updatedFields,
@@ -704,6 +784,34 @@ const BusinessInformationReqRevision = () => {
             );
 
             if (matchedField) {
+              if (matchedField.name === 'natureofBusiness') {
+                console.log('banknames', natureOfBusiness);
+                return {
+                  ...matchedField,
+                  options: natureOfBusiness, // Set the fetched regions as options for 'region'
+                };
+              }
+              if (matchedField.name === 'highRiskType') {
+                console.log('banknames', highRiskType);
+                return {
+                  ...matchedField,
+                  options: highRiskType, // Set the fetched regions as options for 'region'
+                };
+              }
+              if (matchedField.name === 'lowRiskType') {
+                console.log('banknames', lowRiskType);
+                return {
+                  ...matchedField,
+                  options: lowRiskType, // Set the fetched regions as options for 'region'
+                };
+              }
+              if (matchedField.name === 'mediumRiskType') {
+                console.log('banknames', mediumRiskType);
+                return {
+                  ...matchedField,
+                  options: mediumRiskType, // Set the fetched regions as options for 'region'
+                };
+              }
               if (matchedField?.type !== 'checkItem') {
                 initialValues[matchedField.name] = '';
               }
@@ -746,7 +854,14 @@ const BusinessInformationReqRevision = () => {
         buildValidationSchemaFromMappedFields(mappedData);
       setValidationSchemaState(validationSchema);
     }
-  }, [currentTab, selectedDropDownValue]);
+  }, [
+    currentTab,
+    selectedDropDownValue,
+    natureOfBusiness.length,
+    highRiskType.length,
+    lowRiskType.length,
+    mediumRiskType.length,
+  ]);
 
   console.log('initialValuesState', initialValuesState);
 
@@ -824,12 +939,14 @@ const BusinessInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           console.log('finalEndpoint', finalEndpoint);
           const response = await apiClient.post(finalEndpoint, requestBody, {
@@ -851,6 +968,7 @@ const BusinessInformationReqRevision = () => {
               nextIndex += 1;
             }
 
+            console.log('next index', nextIndex, endpointArray[nextIndex]?.tab);
             // Ensure nextIndex is valid before accessing tab
             if (
               nextIndex < endpointArray.length &&
@@ -861,12 +979,13 @@ const BusinessInformationReqRevision = () => {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
+              router.push(`/merchant/home/request-revision/review-form`);
               console.log('Form submission completed.');
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
+              // dispatch(setLogout());
+              // setNavRoute('/login');
               // router.push('/login');
               // setTitle('Form submission completed.');
               // setDescription('Form submission completed.');
@@ -904,9 +1023,9 @@ const BusinessInformationReqRevision = () => {
         // routeName="/merchant/home"
       />
       {/* <AddStore
-        addStoresValues={addStoresValues}
-        setAddStoresValues={setAddStoresValues}
-      /> */}
+      addStoresValues={addStoresValues}
+      setAddStoresValues={setAddStoresValues}
+    /> */}
       <Formik
         enableReinitialize
         initialValues={initialValuesState}
@@ -931,7 +1050,7 @@ const BusinessInformationReqRevision = () => {
                         )
                         .map(
                           (
-                            item: { categoryName: any; fields: any[] },
+                            item: { categoryName: any; fields: any },
                             itemIndex: any,
                           ) => (
                             <FormLayoutDynamic
@@ -942,7 +1061,6 @@ const BusinessInformationReqRevision = () => {
                                 .sort((a, b) => a.priority - b.priority)
                                 .map((field, fieldIndex) => {
                                   // Ensure a unique key by combining all dynamic variables
-
                                   const uniqueKey = `${pageItem.pageName}-${
                                     item.categoryName
                                   }-${field.name || fieldIndex}`;
@@ -961,146 +1079,24 @@ const BusinessInformationReqRevision = () => {
 
                                   if (field?.type === 'dropdown') {
                                     const dropdownKey = `${uniqueKey}-dropdown`;
-
-                                    if (
-                                      field.name ===
-                                      'associationToHighRiskBusiness'
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-
-                                    if (
-                                      (field.name === 'highRiskType' &&
-                                        selectedDropDownValue ===
-                                          'High Risk Business / Person') ||
-                                      (field.name === 'mediumRiskType' &&
-                                        selectedDropDownValue ===
-                                          'Medium Risk Business / Person') ||
-                                      (field.name === 'lowRiskType' &&
-                                        selectedDropDownValue ===
-                                          'Low Risk Business / Person')
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-
-                                    if (
-                                      ![
-                                        'associationToHighRiskBusiness',
-                                        'highRiskType',
-                                        'mediumRiskType',
-                                        'lowRiskType',
-                                      ].includes(field.name)
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-                                  }
-
-                                  if (!field || !field.name) {
-                                    console.error(
-                                      '❌ Error: `field` or `field.name` is undefined!',
-                                      field,
-                                    );
-                                  }
-                                  if (
-                                    field.name ===
-                                    'accountBusinessDocumentationType'
-                                  ) {
-                                    console.log(
-                                      '✅ Rendering DropdownNew for:',
-                                      field.name,
-                                    );
                                     return (
-                                      <DropdownInput
-                                        key={uniqueKey}
+                                      <DropdownNew
+                                        key={dropdownKey}
                                         label={field.label}
                                         name={field.name}
-                                        options={field.options}
-                                        formik={formik} // ✅ Ensure formik is passed
-                                        asterik={field.required}
+                                        options={
+                                          field?.options?.map(
+                                            (option: {
+                                              label: any;
+                                              value: any;
+                                            }) => ({
+                                              label: option.label,
+                                              value: option.value,
+                                            }),
+                                          ) || []
+                                        }
+                                        formik={formik}
+                                        asterik={field?.required || false}
                                         setSelectedDropDownValue={(
                                           value: any,
                                         ) => {
@@ -1173,10 +1169,7 @@ const BusinessInformationReqRevision = () => {
                                           name={field.name}
                                           options={
                                             field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
+                                              (option: any) => ({
                                                 label: option.label,
                                                 value: option.value,
                                               }),
@@ -1204,6 +1197,7 @@ const BusinessInformationReqRevision = () => {
                                     );
                                   }
 
+                                  // If no matching type, return null
                                   return null;
                                 })}
                             </FormLayoutDynamic>
@@ -1217,17 +1211,10 @@ const BusinessInformationReqRevision = () => {
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   {/* <Button
-                    label={`Save & Continue Later`}
-                    // onClickHandler={() =>
-                    //   saveAndContinue(
-                    //     formik.values,
-                    //     formik.setSubmitting,
-                    //     formik.validateForm,
-                    //   )
-                    // }
-                    type="button"
-                    className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                  /> */}
+                  label={`Save & Continue Later`}
+                  type="button"
+                  className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                /> */}
                   <Button
                     label={`Next`}
                     type="submit"
@@ -1235,8 +1222,6 @@ const BusinessInformationReqRevision = () => {
                   />
                 </div>
               </div>
-              {/* <FormControlButtons /> */}
-              {/* <AddStore formik={formik}/> */}
             </Form>
           </div>
         )}
