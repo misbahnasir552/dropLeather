@@ -35,8 +35,11 @@ function ManageFundsTransfer() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
 
   const fetchRecords = async () => {
+    setExportError('');
     try {
       setLoading(true);
       const response = await apiClient.get(
@@ -78,7 +81,6 @@ function ManageFundsTransfer() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchRecords();
   }, [filteredData, pageNumber]);
@@ -95,7 +97,6 @@ function ManageFundsTransfer() {
     Formik.resetForm();
     fetchRecords();
   };
-  console.log('api error', apierror);
 
   const tableHeadings: string[] = [
     'Beneficiary Name',
@@ -116,6 +117,7 @@ function ManageFundsTransfer() {
   ];
 
   const onSubmit = (values: IManageFundsTransfer) => {
+    setExportError('');
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -160,16 +162,17 @@ function ManageFundsTransfer() {
     setBeneficiaryFilteredData(filteredData);
   };
 
-  const exportToExcel = () => {
+  const exportToExcel = (data: any) => {
     // if (!response) return;
+    console.log('data', data);
 
     // if (!response || response.length === 0) {
-    if (!beneficiaryFilteredData) {
+    if (!data?.length) {
       return;
     }
 
     // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(beneficiaryFilteredData);
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
@@ -178,12 +181,49 @@ function ManageFundsTransfer() {
     // Generate an Excel file and download it
     XLSX.writeFile(wb, 'funds_transfer_report.xlsx');
   };
+
+  const fetchExportedRecords = async (values: any) => {
+    setExportError('');
+    if (!values?.transferDateFrom || !values?.transferDateTo) {
+      return setExportError('Select From Date and To Date');
+    }
+    try {
+      setExportLoading(true);
+      const response = await apiClient.get(
+        '/merchant/getAllExportFundsTransferRecords',
+        {
+          params: {
+            ...(filteredData && typeof filteredData === 'object'
+              ? filteredData
+              : {}), // Spread existing filtered data
+            transferDateFrom: values?.transferDateFrom, // Add page parameter
+            transferDateTo: values?.transferDateTo, // Add size parameter
+          },
+          headers: {
+            merchantEmail: userData?.email,
+          },
+        },
+      );
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.fundsTransferReportRecords?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.fundsTransferReportRecords);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setExportError(e?.message);
+      // setShowModal(true);
+    } finally {
+      setExportLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col gap-6 pb-[120px] pt-9">
-      <HeaderWrapper
-        heading="Manage Funds Transfer"
-        // description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore"
-      />
+      <HeaderWrapper heading="Manage Funds Transfer" />
       <MerchantFormLayout>
         <Formik
           initialValues={manageFundsTransferInitialValues}
@@ -248,6 +288,11 @@ function ManageFundsTransfer() {
                   ]}
                 />
               </div>
+              {exportError && (
+                <div className="flex w-full justify-start px-3 pb-[16px] text-xs text-danger-base">
+                  {exportError}
+                </div>
+              )}
               <div className="flex w-full justify-start gap-6">
                 <Button
                   label="Search"
@@ -271,9 +316,10 @@ function ManageFundsTransfer() {
                   className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
                 />
                 <Button
-                  label="Export"
+                  label={exportLoading ? 'Exporting' : 'Export'}
                   className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                  onClickHandler={exportToExcel} // Export button click handler
+                  onClickHandler={() => fetchExportedRecords(formik?.values)} // Export button click handler
+                  disable={exportLoading}
                 />
                 <Button
                   label={`Funds Transfer`}
