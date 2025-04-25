@@ -81,7 +81,9 @@ const ImageInput = ({
         console.log('Caling TMB', data);
 
         const response = await apiClient.post(
-          '/merchant/fetchTitleTMB',
+          formik?.values?.bank === 'otherBanks'
+            ? '/merchant/fetchTitleOtherBanks'
+            : '/merchant/fetchTitleTMB',
           requestBody,
           { headers: { Authorization: `Bearer ${userData?.jwt}` } },
         );
