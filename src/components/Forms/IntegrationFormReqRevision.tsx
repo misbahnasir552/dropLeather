@@ -12,7 +12,7 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
@@ -346,12 +346,14 @@ function IntegrationFormReqRevision() {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
@@ -388,8 +390,8 @@ function IntegrationFormReqRevision() {
               setTitle(response?.data?.responseMessage);
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              // dispatch(setLogout());
+              // setNavRoute('/login');
               console.log('Form submission completed.');
             }
           } else {

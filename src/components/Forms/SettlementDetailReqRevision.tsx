@@ -12,11 +12,12 @@ import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 // import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 // import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
+// import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 
@@ -94,6 +95,8 @@ const SettlementDetailsReqRevision = () => {
   const [initialValuesState, setInitialValuesState] = useState<InitialValues>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [navRoute, setNavRoute] = useState('');
+  const [bankName, setBankName] = useState([]);
+  const [apierror, setApierror] = useState('');
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
   >(undefined);
@@ -128,10 +131,10 @@ const SettlementDetailsReqRevision = () => {
             label: 'Bank Name',
             type: 'dropdown',
             required: 'true',
-            options: [
-              { label: 'Bank Name1', value: 'Bank Name1' },
-              { label: 'Bank Name2', value: 'Bank Name2' },
-            ],
+            // options: [
+            //   { label: 'Bank Name1', value: 'Bank Name1' },
+            //   { label: 'Bank Name2', value: 'Bank Name2' },
+            // ],
           },
 
           {
@@ -179,6 +182,43 @@ const SettlementDetailsReqRevision = () => {
     return Yup.object().shape(shape);
   };
 
+  const getBankNames = async () => {
+    try {
+      const response: any = await apiClient.get(`merchant/getBankNames`);
+      if (response.data.responseCode === '009') {
+        setBankName(
+          response?.data?.bankNames?.map((item: any) => ({
+            label: item.label,
+            value: item.value,
+          })),
+        );
+      } else if (response?.data?.responseCode === '000') {
+        setApierror(response?.data?.responseDescription);
+      } else {
+        setTitle('Error Occured');
+        setDescription(response?.data?.responseDescription);
+        setShowModal(true);
+      }
+    } catch (e) {
+      console.log(e, 'Error', apierror);
+    }
+  };
+
+  useEffect(() => {
+    getBankNames();
+  }, [bankName.length]);
+
+  // const updatedStoreFields = SettlementDetailsFormData.map((field: any) => {
+  //   if (field.name === 'bankName') {
+  //     return {
+  //       ...field,
+  //       options: storeCategories, // Set the fetched regions as options for 'region'
+  //     };
+  //   }
+
+  //   return field;
+  // });
+
   useEffect(() => {
     const initialValues: InitialValues = {};
 
@@ -198,6 +238,16 @@ const SettlementDetailsReqRevision = () => {
         categories: item.categories.map((category) => {
           let updatedFields = category.fields;
 
+          updatedFields = updatedFields.map((field: any) => {
+            if (field.name === 'bankName') {
+              return {
+                ...field,
+                options: bankName,
+              };
+            }
+            return field;
+          });
+
           // ✅ Exclude 'bankName' field for specific conditions
           if (
             selectedCheckValue === 'easypaisabanklimited' ||
@@ -208,6 +258,7 @@ const SettlementDetailsReqRevision = () => {
               (field) => field.name !== 'bankName',
             );
           }
+          console.log('updated Fields', updatedFields);
 
           return {
             ...category,
@@ -239,6 +290,14 @@ const SettlementDetailsReqRevision = () => {
 
                 if (matchedField) {
                   console.log('Matched Field:', matchedField);
+
+                  if (matchedField.name === 'bankName') {
+                    console.log('banknames', bankName);
+                    return {
+                      ...matchedField,
+                      options: bankName, // Set the fetched regions as options for 'region'
+                    };
+                  }
 
                   // ✅ Populate initial values (ignore checkItems)
                   if (matchedField.type !== 'checkItem') {
@@ -374,12 +433,14 @@ const SettlementDetailsReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
@@ -415,8 +476,8 @@ const SettlementDetailsReqRevision = () => {
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
               // router.push(`/merchant/home`);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              // dispatch(setLogout());
+              // setNavRoute('/login');
             }
           } else {
             setTitle('Error Occurred');

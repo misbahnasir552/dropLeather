@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+// import BarLoader from 'react-spinners/BarLoader';
 import * as Yup from 'yup';
 
 // import { BarLoader } from 'react-spinners';
@@ -21,7 +22,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // } from "@/validations/merchant/onBoarding/activityInfo";
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import { buildValidationSchema } from './validationsOLD/helper';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
@@ -533,12 +534,14 @@ const ActivityInformationReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
@@ -579,8 +582,8 @@ const ActivityInformationReqRevision = () => {
               setTitle(response?.data?.responseMessage);
               setDescription(response?.data?.responseDescription);
               setShowModal(true);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              // dispatch(setLogout());
+              // setNavRoute('/login');
               console.log('Form submission completed.');
             }
           } else {

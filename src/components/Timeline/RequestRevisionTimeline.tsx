@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -11,12 +9,16 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 
 import ActivityInformationReqRevision from '../Forms/ActivityInformationReqRevision';
+import AttachmentsReqRevision from '../Forms/AttachmentsReqRevision';
 import BusinessInformationReqRevision from '../Forms/BusinessDetailsReqRevision';
 import IntegrationFormReqRevision from '../Forms/IntegrationFormReqRevision';
+import ReviewFormReqRevision from '../Forms/ReviewFormReqRevision';
 import SettlementDetailsReqRevision from '../Forms/SettlementDetailReqRevision';
 import StoreDetailReqRevision from '../Forms/StoreDetailReqRevision';
+import { ReviewFormIcon } from './CorporateTimeline/TimelineIcons/TimelineIcons';
 import {
   ActivityInformationIcon,
+  AttachmentsIcon,
   BusinessDetailsIcon,
   IntegrationsIcon,
   SettlementDetailsIcon,
@@ -46,6 +48,7 @@ const nameToLabelMapping: Record<string, string> = {
   Integration: 'Integration',
   Documents: 'Attachments',
   'Review Form': 'Review Form',
+  Attachments: 'Attachments',
 };
 
 const allTabs: Tab[] = [
@@ -84,23 +87,38 @@ const allTabs: Tab[] = [
     svg: <IntegrationsIcon color="#6F6B76" />,
     status: null,
   },
+  {
+    name: 'attachments',
+    label: 'Attachments',
+    component: <AttachmentsReqRevision />,
+    svg: <AttachmentsIcon color="#6F6B76" />,
+    status: null,
+  },
+  {
+    name: 'review-form',
+    label: 'Review Form',
+    component: <ReviewFormReqRevision />,
+    svg: <ReviewFormIcon color="#6F6B76" />,
+    status: null,
+  },
 ];
 
+// Function to get filtered tabs based on status
 const getFilteredTabs = (
   fetchedPages: { pageName: string }[],
   tabs: Tab[],
   statusMap: any,
 ) => {
-  // Fixed tab order
+  // Fixed tab order, excluding Review Form from the "last tab" logic
   const fixedTabOrder = [
     'activity-information',
     'business-details',
     'store-details',
     'settlement-details',
     'integration',
+    'attachments',
   ];
 
-  // Map over the fetchedPages to match tabs and their statuses
   const filteredTabs = fetchedPages
     .map((page) => {
       const matchedTab = tabs.find(
@@ -117,7 +135,7 @@ const getFilteredTabs = (
     })
     .filter((tab): tab is Tab => tab !== undefined);
 
-  // Now, sort the filteredTabs based on the fixedTabOrder
+  // Sort the tabs based on fixed tab order
   const sortedTabs = filteredTabs.sort((a, b) => {
     return fixedTabOrder.indexOf(a.name) - fixedTabOrder.indexOf(b.name);
   });
@@ -138,7 +156,6 @@ const RequestRevisionTimeline: React.FC = () => {
   useEffect(() => {
     const getDetails = async () => {
       try {
-        console.log('Fetching details...');
         const response = await apiClient.get(
           `merchant/fieldsForRevision?email=${userData?.email}`,
           {
@@ -147,13 +164,8 @@ const RequestRevisionTimeline: React.FC = () => {
             },
           },
         );
-        console.log('Response received:', response?.data);
-
         if (response?.data) {
           setData(response?.data);
-          console.log('Data set successfully.');
-        } else {
-          console.error('Empty response data.');
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -165,10 +177,10 @@ const RequestRevisionTimeline: React.FC = () => {
     const getPageStatus = async () => {
       try {
         const response: any = await apiClient.get(
-          `/merchant/getOnboardingPageStatus`,
+          `/merchant/getOnboardingPageStatus?requestRevision=Completed'`,
           {
             headers: {
-              username: userData.email, // You can send email in the Authorization header, or another header as needed
+              username: userData.email,
             },
           },
         );
@@ -180,13 +192,11 @@ const RequestRevisionTimeline: React.FC = () => {
           'store-details': statusResponse.storeDetailsStatus,
           'settlement-details': statusResponse.settlementDetailsStatus,
           integration: statusResponse.integrationStatus,
+          attachments: statusResponse.attachmentsStatus,
         };
         setStatusMap(statusMapResponse);
-
-        return null;
       } catch (error) {
-        console.log(error, 'error from onboarding forms');
-        return null;
+        console.log(error, 'Error from onboarding forms');
       }
     };
 
@@ -208,18 +218,26 @@ const RequestRevisionTimeline: React.FC = () => {
 
   const filteredTabs = getFilteredTabs(data.page, allTabs, statusMap);
 
-  const currentTabIndex = filteredTabs.findIndex(
-    (tab) => tab.name === activeTab,
-  );
-  const isLastTab = currentTabIndex === filteredTabs.length - 1;
-  console.log('isLastTab', isLastTab);
-
-  if (isLastTab) {
-    dispatch(setIsLastTab(true)); // Dispatch the action to set isLastTab to true
+  // Add the Review Form tab manually if it's not in the fetched data
+  if (!filteredTabs.find((tab) => tab.name === 'review-form')) {
+    filteredTabs.push(allTabs.find((tab) => tab.name === 'review-form')!);
   }
 
-  if (!isLastTab) {
-    dispatch(setIsLastTab(false)); // Dispatch the action to set isLastTab to false
+  // Determine if the current tab is the last tab, excluding Review Form
+  const filteredTabsWithoutReviewForm = filteredTabs.filter(
+    (tab) => tab.name !== 'review-form',
+  );
+
+  const currentTabIndex = filteredTabsWithoutReviewForm.findIndex(
+    (tab) => tab.name === activeTab,
+  );
+  const isLastTab =
+    currentTabIndex === filteredTabsWithoutReviewForm.length - 1;
+
+  if (isLastTab) {
+    dispatch(setIsLastTab(true));
+  } else {
+    dispatch(setIsLastTab(false));
   }
 
   const finalTabs = filteredTabs.map((tab) => ({
@@ -227,50 +245,47 @@ const RequestRevisionTimeline: React.FC = () => {
     component: React.cloneElement(tab.component, { isLastTab }),
   }));
 
-  console.log('filtered tabs', filteredTabs);
-  console.log('updated tabs', finalTabs);
-
   return (
     <div className="mx-4 flex flex-col justify-between py-2">
-      {/* Margin on left and right for the outer div */}
-      <div className="flex w-full justify-between overflow-auto px-4">
-        {' '}
-        {/* Added px-4 for space at both ends */}
-        {finalTabs.map((tab, index) => (
-          <React.Fragment key={index}>
-            <div className="flex flex-col">
-              <Link
-                href={
-                  tab.status === 'Completed'
-                    ? `/merchant/home/request-revision/${tab.name}`
-                    : '#'
-                }
-                className={`${
-                  tab.status === 'Completed'
-                    ? 'cursor-pointer'
-                    : 'cursor-not-allowed opacity-50'
-                }`}
-              >
-                <div className="flex justify-center px-[14px] pb-[8px]">
-                  <div
-                    className={`flex w-max rounded-lg border-[1px] ${
-                      tab.name === activeTab
-                        ? 'border-border-green'
-                        : tab.status === 'Completed'
-                        ? 'border-secondary-base bg-screen-grey'
-                        : 'border-border-light'
-                    } p-[12px]`}
-                  >
-                    {tab.svg}
+      <div className="flex w-full justify-center overflow-auto px-4">
+        <div className="flex gap-x-20">
+          {' '}
+          {finalTabs.map((tab, index) => (
+            <React.Fragment key={index}>
+              <div className="flex flex-col items-center">
+                <Link
+                  href={
+                    tab.status === 'Completed'
+                      ? `/merchant/home/request-revision/${tab.name}`
+                      : '#'
+                  }
+                  className={`${
+                    tab.status === 'Completed'
+                      ? 'cursor-pointer'
+                      : 'cursor-not-allowed opacity-50'
+                  }`}
+                >
+                  <div className="flex justify-center px-[14px] pb-[8px]">
+                    <div
+                      className={`flex w-max rounded-lg border-[1px] ${
+                        tab.name === activeTab
+                          ? 'border-border-green'
+                          : tab.status === 'Completed'
+                          ? 'border-secondary-base bg-screen-grey'
+                          : 'border-border-light'
+                      } p-[12px]`}
+                    >
+                      {tab.svg}
+                    </div>
                   </div>
-                </div>
-                <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
-                  {tab.label}
-                </div>
-              </Link>
-            </div>
-          </React.Fragment>
-        ))}
+                  <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
+                    {tab.label}
+                  </div>
+                </Link>
+              </div>
+            </React.Fragment>
+          ))}
+        </div>
       </div>
     </div>
   );
