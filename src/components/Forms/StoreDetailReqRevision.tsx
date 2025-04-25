@@ -17,7 +17,7 @@ import Input from '@/components/UI/Inputs/Input';
 // import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
-import { setLogout } from '@/redux/features/authSlice';
+// import { setLogout } from '@/redux/features/authSlice';
 // import type { AddStoreInfo } from '@/interfaces/interface';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
@@ -489,12 +489,14 @@ const AddStoreReqRevision = () => {
 
       try {
         if (currentEndpoint) {
-          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}`;
+          const updatedEndpoint = `${currentEndpoint}?natureOfBusiness=${businessNature}&requestRevision=Completed`;
           let finalEndpoint = updatedEndpoint;
 
           if (isLastTab) {
-            finalEndpoint += '&requestRevision=Completed';
+            finalEndpoint += '&requestRevisionStatus=Completed';
             dispatch(setIsLastTab(false));
+          } else {
+            finalEndpoint += '&requestRevisionStatus=null';
           }
           const response = await apiClient.post(finalEndpoint, requestBody, {
             headers: {
@@ -526,12 +528,13 @@ const AddStoreReqRevision = () => {
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              router.push(`/merchant/home/request-revision/review-form`);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               // router.push(`/merchant/home`);
-              dispatch(setLogout());
-              setNavRoute('/login');
+              // dispatch(setLogout());
+              // setNavRoute('/login');
             }
           } else {
             setTitle('Error Occurred');

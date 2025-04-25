@@ -176,7 +176,6 @@ function StaticQr() {
   };
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
-    // fetchRecords()
   };
 
   const showPrevPage = () => {
@@ -185,7 +184,6 @@ function StaticQr() {
   return (
     <div>
       <>
-        {isLoading && <BarLoader color="#21B25F" />}
         {showErrorModal && (
           <ErrorModal
             title={title}
@@ -286,7 +284,9 @@ function StaticQr() {
           </div>
         )}
         <div className="flex flex-col justify-center gap-3 pt-[30px]">
-          {stores?.length > 0 ? (
+          {isLoading ? (
+            <BarLoader color="#21B25F" className="mx-auto mt-6 block" />
+          ) : stores?.length > 0 ? (
             <>
               {' '}
               <IconTable

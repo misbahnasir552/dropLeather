@@ -2,6 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
@@ -24,10 +25,12 @@ function BulkReversalReport() {
   const [totalPages, setTotalPages] = useState(0);
   const [fileNames, setFileNames] = useState([]);
   const [filteredData, setFilteredData] = useState();
+  const [loading, setLoading] = useState(false);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
 
   const [response, setResponse] = useState<Array<any> | null>(null);
   const fetchRecords = async () => {
+    setLoading(true);
     try {
       const response = await apiClient.get('merchant/getBulkReversalRecords', {
         params: {
@@ -38,7 +41,8 @@ function BulkReversalReport() {
           size: +envPageSize, // Add size parameter
         },
       });
-      if (response?.data) {
+      if (response?.data?.responseCode === '009') {
+        setLoading(false);
         const formattedRoles = response?.data?.reversalRecords?.map(
           (file: any) => ({
             value: file?.fileName,
@@ -53,8 +57,12 @@ function BulkReversalReport() {
           })),
         );
         setTotalPages(response?.data?.totalPages);
+      } else {
+        setLoading(false);
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
+      setLoading(false);
       setApierror(e?.message);
     }
   };
@@ -236,6 +244,13 @@ function BulkReversalReport() {
                       label="Reset"
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={() => {
+                        if (
+                          !Object.values(formik.values)?.some(
+                            (value) => value !== '',
+                          )
+                        ) {
+                          return;
+                        }
                         handleReset(formik);
                         setFilteredData(undefined);
                       }}
@@ -260,22 +275,32 @@ function BulkReversalReport() {
 
         <div className="table">
           <div className="flex flex-col gap-4 overflow-x-auto">
-            {/* <Table /> */}
-            {response && response?.length > 0 ? (
-              <>
-                <FundsTransferTable
-                  tableHeadings={bulkTableHeadings}
-                  tableData={bulktableData}
-                />
-                <Pagination
-                  pageNumber={pageNumber}
-                  totalPages={totalPages}
-                  onNext={showNextPage}
-                  onPrev={showPrevPage}
-                />
-              </>
+            {loading ? (
+              <BarLoader color="#21B25F" className="mx-auto mt-6 block" />
             ) : (
-              <div className="flex justify-center">No Data Found</div>
+              <>
+                {' '}
+                {apierror ? (
+                  <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                    {apierror}
+                  </div>
+                ) : response && response?.length > 0 ? (
+                  <>
+                    <FundsTransferTable
+                      tableHeadings={bulkTableHeadings}
+                      tableData={bulktableData}
+                    />
+                    <Pagination
+                      pageNumber={pageNumber}
+                      totalPages={totalPages}
+                      onNext={showNextPage}
+                      onPrev={showPrevPage}
+                    />
+                  </>
+                ) : (
+                  <div className="flex justify-center">No Data Found</div>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -173,6 +173,13 @@ function SettlementReport() {
                       label="Reset"
                       type="button"
                       onClickHandler={() => {
+                        if (
+                          !Object.values(formik.values)?.some(
+                            (value) => value !== '',
+                          )
+                        ) {
+                          return;
+                        }
                         handleReset(formik);
                         setFilteredData(undefined);
                       }}
