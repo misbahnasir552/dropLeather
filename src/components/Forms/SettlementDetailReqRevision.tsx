@@ -123,7 +123,7 @@ const SettlementDetailsReqRevision = () => {
                 label: 'Easypaisa Bank Limited',
                 value: 'easypaisaBankLimited',
               },
-              { label: 'Other Banks', value: 'OtherBanks' },
+              { label: 'Other Banks', value: 'Other Banks' },
             ],
           },
           {
@@ -182,7 +182,10 @@ const SettlementDetailsReqRevision = () => {
     return Yup.object().shape(shape);
   };
 
-  console.log('hello');
+  // console.log('hello');
+  // console.log('otherbanks added');
+
+  console.log('fix');
 
   const getBankNames = async () => {
     try {

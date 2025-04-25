@@ -178,16 +178,16 @@ const BusinessInformationReqRevision = () => {
             name: 'natureofBusiness',
             label: 'Nature of Business',
             type: 'dropdown',
-            // options: [
-            //   {
-            //     label: 'C5 (limit of max 500k)',
-            //     value: 'C5 (limit of max 500k)',
-            //   },
-            //   {
-            //     label: 'C10 (limit above than 500k)',
-            //     value: 'C10 (limit above than 500k)',
-            //   },
-            // ],
+            options: [
+              {
+                label: 'C5 (limit of max 500k)',
+                value: 'C5 (limit of max 500k)',
+              },
+              {
+                label: 'C10 (limit above than 500k)',
+                value: 'C10 (limit above than 500k)',
+              },
+            ],
             required: true,
           },
           {
@@ -200,12 +200,12 @@ const BusinessInformationReqRevision = () => {
             ],
             required: true,
           },
-          {
-            name: 'Established Since',
-            label: 'establishedSince',
-            type: 'date',
-            required: false,
-          },
+          // {
+          //   name: 'Established Since',
+          //   label: 'establishedSince',
+          //   type: 'date',
+          //   required: false,
+          // },
         ],
       },
       {
@@ -224,7 +224,7 @@ const BusinessInformationReqRevision = () => {
         ],
       },
       {
-        categoryName: 'Payment Modes',
+        categoryName: 'Payment Modes  (Select all that required)',
         fields: [
           {
             name: 'paymentModes',
@@ -245,72 +245,72 @@ const BusinessInformationReqRevision = () => {
       {
         categoryName: 'Business Type Details',
         fields: [
-          {
-            name: 'permanentAddress',
-            label: 'Permanent Address',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'fatcaStatus',
-            label: 'FATCA Status',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'crsStatus',
-            label: 'CRS status',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'mandateName',
-            label: 'Mandate Name',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'mandateIdCardNumber',
-            label: 'Mandate Id Card Number',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'mandateRelationshipWithAccountHolder',
-            label: 'Mandate relationship with account holder',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'dateOfIssuanceOfApplicableIdentityDocument',
-            label: 'Date of issuance of applicable identity document',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'beneficialOwnerControllingRights',
-            label: 'Beneficial Owner/Controlling Rights',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'mandateDateOfBirth',
-            label: 'Mandate Date of Birth',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'mandatePlaceOfBirth',
-            label: 'Mandate Place of Birth',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'cityAndCountry',
-            label: 'City and Country',
-            type: 'text',
-            required: false,
-          },
+          // {
+          //   name: 'permanentAddress',
+          //   label: 'Permanent Address',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'fatcaStatus',
+          //   label: 'FATCA Status',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'crsStatus',
+          //   label: 'CRS status',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'mandateName',
+          //   label: 'Mandate Name',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'mandateIdCardNumber',
+          //   label: 'Mandate Id Card Number',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'mandateRelationshipWithAccountHolder',
+          //   label: 'Mandate relationship with account holder',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'dateOfIssuanceOfApplicableIdentityDocument',
+          //   label: 'Date of issuance of applicable identity document',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'beneficialOwnerControllingRights',
+          //   label: 'Beneficial Owner/Controlling Rights',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'mandateDateOfBirth',
+          //   label: 'Mandate Date of Birth',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'mandatePlaceOfBirth',
+          //   label: 'Mandate Place of Birth',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'cityAndCountry',
+          //   label: 'City and Country',
+          //   type: 'text',
+          //   required: false,
+          // },
           {
             name: 'nextOfKinCnic',
             label: 'Next of KIN CNIC',
@@ -329,66 +329,74 @@ const BusinessInformationReqRevision = () => {
             type: 'text',
             required: true,
           },
-          {
-            name: 'dateOfBirth',
-            label: 'Date Of Birth',
-            type: 'text',
-            required: false,
-          },
+          // {
+          //   name: 'dateOfBirth',
+          //   label: 'Date Of Birth',
+          //   type: 'text',
+          //   required: false,
+          // },
           {
             name: 'registerUnRegister',
             label: 'Register/UnRegister',
-            type: 'text',
+            type: 'dropdown',
+            options: [
+              { label: 'Yes', value: 'Yes' },
+              { label: 'No', value: 'No' },
+            ],
             required: true,
           },
           {
             name: 'specialCustomer',
             label: 'Special Customer',
-            type: 'text',
+            type: 'dropdown',
             required: true,
+            options: [
+              { label: 'Yes', value: 'Yes' },
+              { label: 'No', value: 'No' },
+            ],
           },
-          {
-            name: 'registrationIncorporationNo',
-            label: 'Registration/Incorporation No',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'placeOfIncorporationOrRegistration',
-            label: 'Place of Incorporation or Registration',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'geographiesInvolved',
-            label: 'Geographies Involved',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'expectedTypeOfCounterParties',
-            label: 'Expected Type of Counter-Parties',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'intendedNatureOfBusinessRelations',
-            label: 'Intended nature of business relations',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'expectedModesOfTransactionsDeliveryChannels',
-            label: 'Expected modes of transactions/ delivery channels',
-            type: 'text',
-            required: false,
-          },
-          {
-            name: 'industrySegment',
-            label: 'Industry/Segment',
-            type: 'text',
-            required: false,
-          },
+          // {
+          //   name: 'registrationIncorporationNo',
+          //   label: 'Registration/Incorporation No',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'placeOfIncorporationOrRegistration',
+          //   label: 'Place of Incorporation or Registration',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'geographiesInvolved',
+          //   label: 'Geographies Involved',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'expectedTypeOfCounterParties',
+          //   label: 'Expected Type of Counter-Parties',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'intendedNatureOfBusinessRelations',
+          //   label: 'Intended nature of business relations',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'expectedModesOfTransactionsDeliveryChannels',
+          //   label: 'Expected modes of transactions/ delivery channels',
+          //   type: 'text',
+          //   required: false,
+          // },
+          // {
+          //   name: 'industrySegment',
+          //   label: 'Industry/Segment',
+          //   type: 'text',
+          //   required: false,
+          // },
           {
             name: 'product',
             label: 'Product',
@@ -448,6 +456,16 @@ const BusinessInformationReqRevision = () => {
           {
             name: 'incomeStatusSalaried',
             label: 'Income Status (Salaried)',
+            type: 'dropdown',
+            required: true,
+            options: [
+              { label: 'Yes', value: 'Yes' },
+              { label: 'No', value: 'No' },
+            ],
+          },
+          {
+            name: 'currentSalaryIncome',
+            label: 'Current Salary / Income',
             type: 'text',
             required: true,
           },
@@ -457,12 +475,12 @@ const BusinessInformationReqRevision = () => {
             type: 'text',
             required: true,
           },
-          {
-            name: 'anyOtherDetails',
-            label: 'Any Other Details',
-            type: 'text',
-            required: false,
-          },
+          // {
+          //   name: 'anyOtherDetails',
+          //   label: 'Any Other Details',
+          //   type: 'text',
+          //   required: false,
+          // },
           {
             name: 'associationToHighRiskBusiness',
             label: 'Association to High Risk Business',
@@ -487,21 +505,21 @@ const BusinessInformationReqRevision = () => {
             name: 'highRiskType',
             label: 'High Risk Type',
             type: 'dropdown',
-            // options: [{ label: 'High Risk Type', value: 'High Risk Type' }],
+            options: [{ label: 'High Risk Type', value: 'High Risk Type' }],
             required: true,
           },
           {
             name: 'mediumRiskType',
             label: 'Medium Risk Type',
             type: 'dropdown',
-            // options: [{ label: 'Medium Risk Type', value: 'Medium Risk Type' }],
+            options: [{ label: 'Medium Risk Type', value: 'Medium Risk Type' }],
             required: true,
           },
           {
             name: 'lowRiskType',
             label: 'Low Risk Type',
             type: 'dropdown',
-            // options: [{ label: 'Low Risk Type', value: 'Low Risk Type' }],
+            options: [{ label: 'Low Risk Type', value: 'Low Risk Type' }],
             required: true,
           },
 
@@ -523,6 +541,17 @@ const BusinessInformationReqRevision = () => {
               { label: '75000 - 99999', value: '75000 - 99999' },
               { label: '100000 and Above', value: '100000 and Above' },
             ],
+            // DO NOT REMOVE CODE BELOW
+            // options: [
+            //   {
+            //     label: 'C5 (limit of max 500k)',
+            //     value: 'C5 (limit of max 500k)',
+            //   },
+            //   {
+            //     label: 'C10 (limit above than 500k)',
+            //     value: 'C10 (limit above than 500k)',
+            //   },
+            // ],
           },
 
           // Sole Above
