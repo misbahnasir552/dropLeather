@@ -46,7 +46,7 @@ const nameToLabelMapping: Record<string, string> = {
   'Store Details': 'Store Details',
   'Settlement Details': 'Settlement Details',
   Integration: 'Integration',
-  Documents: 'Attachments',
+  // Documents: 'Attachments',
   'Review Form': 'Review Form',
   Attachments: 'Attachments',
 };
@@ -88,7 +88,7 @@ const allTabs: Tab[] = [
     status: null,
   },
   {
-    name: 'attachments',
+    name: 'Attachments',
     label: 'Attachments',
     component: <AttachmentsReqRevision />,
     svg: <AttachmentsIcon color="#6F6B76" />,
@@ -116,7 +116,7 @@ const getFilteredTabs = (
     'store-details',
     'settlement-details',
     'integration',
-    'attachments',
+    'Attachments',
   ];
 
   const filteredTabs = fetchedPages
@@ -140,6 +140,7 @@ const getFilteredTabs = (
     return fixedTabOrder.indexOf(a.name) - fixedTabOrder.indexOf(b.name);
   });
 
+  console.log('sorted tabs', sortedTabs);
   return sortedTabs;
 };
 

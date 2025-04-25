@@ -579,9 +579,10 @@ const ActivityInformationReqRevision = () => {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              router.push(`/merchant/home/request-revision/review-form`);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               // dispatch(setLogout());
               // setNavRoute('/login');
               console.log('Form submission completed.');

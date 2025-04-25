@@ -528,9 +528,10 @@ const AddStoreReqRevision = () => {
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
               console.log('Form submission completed.');
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              router.push(`/merchant/home/request-revision/review-form`);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               // router.push(`/merchant/home`);
               // dispatch(setLogout());
               // setNavRoute('/login');

@@ -54,6 +54,8 @@ function ReviewForm() {
     fetchData();
   }, []);
 
+  console.log('onbording data,', onboardingData);
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {

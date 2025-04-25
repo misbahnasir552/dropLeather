@@ -25,7 +25,8 @@ import CheckboxItem from '../UI/Inputs/CheckboxItem';
 // import DateInput from '../UI/Inputs/DateInput';
 import DateInputNew from '../UI/Inputs/DateInputNew';
 // import DateInputNew from '../UI/Inputs/DateInputNew';
-import DropdownInput from '../UI/Inputs/DropdownInput';
+// import DropdownInput from '../UI/Inputs/DropdownInput';
+import DropdownNew from '../UI/Inputs/DropDownNew';
 // import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
@@ -755,6 +756,7 @@ const BusinessInformationReqRevision = () => {
             );
           }
 
+          console.log('updated fields', updatedFields);
           return {
             ...category,
             fields: updatedFields,
@@ -966,6 +968,7 @@ const BusinessInformationReqRevision = () => {
               nextIndex += 1;
             }
 
+            console.log('next index', nextIndex, endpointArray[nextIndex]?.tab);
             // Ensure nextIndex is valid before accessing tab
             if (
               nextIndex < endpointArray.length &&
@@ -976,10 +979,11 @@ const BusinessInformationReqRevision = () => {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
+              router.push(`/merchant/home/request-revision/review-form`);
               console.log('Form submission completed.');
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               // dispatch(setLogout());
               // setNavRoute('/login');
               // router.push('/login');
@@ -1019,9 +1023,9 @@ const BusinessInformationReqRevision = () => {
         // routeName="/merchant/home"
       />
       {/* <AddStore
-        addStoresValues={addStoresValues}
-        setAddStoresValues={setAddStoresValues}
-      /> */}
+      addStoresValues={addStoresValues}
+      setAddStoresValues={setAddStoresValues}
+    /> */}
       <Formik
         enableReinitialize
         initialValues={initialValuesState}
@@ -1046,7 +1050,7 @@ const BusinessInformationReqRevision = () => {
                         )
                         .map(
                           (
-                            item: { categoryName: any; fields: any[] },
+                            item: { categoryName: any; fields: any },
                             itemIndex: any,
                           ) => (
                             <FormLayoutDynamic
@@ -1057,7 +1061,6 @@ const BusinessInformationReqRevision = () => {
                                 .sort((a, b) => a.priority - b.priority)
                                 .map((field, fieldIndex) => {
                                   // Ensure a unique key by combining all dynamic variables
-
                                   const uniqueKey = `${pageItem.pageName}-${
                                     item.categoryName
                                   }-${field.name || fieldIndex}`;
@@ -1076,146 +1079,24 @@ const BusinessInformationReqRevision = () => {
 
                                   if (field?.type === 'dropdown') {
                                     const dropdownKey = `${uniqueKey}-dropdown`;
-
-                                    if (
-                                      field.name ===
-                                      'associationToHighRiskBusiness'
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-
-                                    if (
-                                      (field.name === 'highRiskType' &&
-                                        selectedDropDownValue ===
-                                          'High Risk Business / Person') ||
-                                      (field.name === 'mediumRiskType' &&
-                                        selectedDropDownValue ===
-                                          'Medium Risk Business / Person') ||
-                                      (field.name === 'lowRiskType' &&
-                                        selectedDropDownValue ===
-                                          'Low Risk Business / Person')
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-
-                                    if (
-                                      ![
-                                        'associationToHighRiskBusiness',
-                                        'highRiskType',
-                                        'mediumRiskType',
-                                        'lowRiskType',
-                                      ].includes(field.name)
-                                    ) {
-                                      return (
-                                        <DropdownInput
-                                          key={dropdownKey}
-                                          label={field.label}
-                                          name={field.name}
-                                          options={
-                                            field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
-                                                label: option.label,
-                                                value: option.value,
-                                              }),
-                                            ) || []
-                                          }
-                                          formik={formik}
-                                          asterik={field?.required || false}
-                                          setSelectedDropDownValue={(
-                                            value: any,
-                                          ) => {
-                                            console.log(
-                                              'Updating selectedDropDownValue:',
-                                              value,
-                                            );
-                                            setSelectedDropDownValue(value);
-                                          }}
-                                        />
-                                      );
-                                    }
-                                  }
-
-                                  if (!field || !field.name) {
-                                    console.error(
-                                      '❌ Error: `field` or `field.name` is undefined!',
-                                      field,
-                                    );
-                                  }
-                                  if (
-                                    field.name ===
-                                    'accountBusinessDocumentationType'
-                                  ) {
-                                    console.log(
-                                      '✅ Rendering DropdownNew for:',
-                                      field.name,
-                                    );
                                     return (
-                                      <DropdownInput
-                                        key={uniqueKey}
+                                      <DropdownNew
+                                        key={dropdownKey}
                                         label={field.label}
                                         name={field.name}
-                                        options={field.options}
-                                        formik={formik} // ✅ Ensure formik is passed
-                                        asterik={field.required}
+                                        options={
+                                          field?.options?.map(
+                                            (option: {
+                                              label: any;
+                                              value: any;
+                                            }) => ({
+                                              label: option.label,
+                                              value: option.value,
+                                            }),
+                                          ) || []
+                                        }
+                                        formik={formik}
+                                        asterik={field?.required || false}
                                         setSelectedDropDownValue={(
                                           value: any,
                                         ) => {
@@ -1288,10 +1169,7 @@ const BusinessInformationReqRevision = () => {
                                           name={field.name}
                                           options={
                                             field?.options?.map(
-                                              (option: {
-                                                label: any;
-                                                value: any;
-                                              }) => ({
+                                              (option: any) => ({
                                                 label: option.label,
                                                 value: option.value,
                                               }),
@@ -1319,6 +1197,7 @@ const BusinessInformationReqRevision = () => {
                                     );
                                   }
 
+                                  // If no matching type, return null
                                   return null;
                                 })}
                             </FormLayoutDynamic>
@@ -1332,17 +1211,10 @@ const BusinessInformationReqRevision = () => {
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   {/* <Button
-                    label={`Save & Continue Later`}
-                    // onClickHandler={() =>
-                    //   saveAndContinue(
-                    //     formik.values,
-                    //     formik.setSubmitting,
-                    //     formik.validateForm,
-                    //   )
-                    // }
-                    type="button"
-                    className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                  /> */}
+                  label={`Save & Continue Later`}
+                  type="button"
+                  className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
+                /> */}
                   <Button
                     label={`Next`}
                     type="submit"
@@ -1350,8 +1222,6 @@ const BusinessInformationReqRevision = () => {
                   />
                 </div>
               </div>
-              {/* <FormControlButtons /> */}
-              {/* <AddStore formik={formik}/> */}
             </Form>
           </div>
         )}

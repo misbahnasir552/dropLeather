@@ -386,6 +386,7 @@ const Attachments = () => {
             if (nextTab) {
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
+              router.push(`/merchant/home/request-revision/review-form`);
               console.log(
                 'Form submission completed, no more tabs to navigate.',
               );

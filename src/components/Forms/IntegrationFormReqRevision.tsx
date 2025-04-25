@@ -366,6 +366,10 @@ function IntegrationFormReqRevision() {
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
             console.log('nextIndex', nextIndex);
+            console.log(
+              'endpointArray[nextIndex]?.name',
+              endpointArray[5]?.name,
+            );
 
             //  Ensure nextIndex is within bounds and valid
             while (
@@ -387,9 +391,10 @@ function IntegrationFormReqRevision() {
               // setShowModal(true);
               router.push(`/merchant/home/request-revision/${nextTab}`);
             } else {
-              setTitle(response?.data?.responseMessage);
-              setDescription(response?.data?.responseDescription);
-              setShowModal(true);
+              router.push(`/merchant/home/request-revision/review-form`);
+              // setTitle(response?.data?.responseMessage);
+              // setDescription(response?.data?.responseDescription);
+              // setShowModal(true);
               // dispatch(setLogout());
               // setNavRoute('/login');
               console.log('Form submission completed.');
