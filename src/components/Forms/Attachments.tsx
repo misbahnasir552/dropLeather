@@ -260,7 +260,9 @@ const Attachments = () => {
                       </React.Fragment>
                     ))}
                   </div>
-
+                  <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                    {apierror}
+                  </div>
                   <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                     <Button
                       label={`Save & Continue Later`}

@@ -75,9 +75,9 @@ const BusinessInformation = () => {
   const [lowRiskType, setLowRiskType] = useState([]);
   const [mediumRiskType, setMediumRiskType] = useState([]);
   const [highRiskType, setHighRiskType] = useState([]);
-  // useEffect(()=>{
-  //   console.log("nature of business got", natureOfBusiness)
-  // }, [natureOfBusiness])
+  useEffect(() => {
+    console.log('nature of business got', setDescription, setTitle);
+  }, []);
 
   const getNatureOfBusiness = async () => {
     try {
@@ -411,11 +411,12 @@ const BusinessInformation = () => {
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
-          } else {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
           }
+          // else {
+          //   setTitle('Error Occured');
+          //   setDescription(response?.data?.responseDescription);
+          //   setShowModal(true);
+          // }
         }
       } catch (e: any) {
         setApierror(e.message);
