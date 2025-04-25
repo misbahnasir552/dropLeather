@@ -29,6 +29,8 @@ interface IInput {
     // msisdn?: string;
   };
   selectedCheckValue: string | undefined | string[];
+  inputApiError?: string;
+  setInputApiError?: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const ImageInput = ({
@@ -44,6 +46,8 @@ const ImageInput = ({
   data,
   formik,
   selectedCheckValue,
+  inputApiError,
+  setInputApiError,
 }: IInput) => {
   const userData = useAppSelector((state: any) => state.auth);
   // const [accountTitle, setAccountTtitle] = useState();
@@ -87,11 +91,16 @@ const ImageInput = ({
           requestBody,
           { headers: { Authorization: `Bearer ${userData?.jwt}` } },
         );
-        formik?.setFieldValue(name, response?.data?.accountTitle);
+        if (response?.data?.responseCode === '009') {
+          formik?.setFieldValue(name, response?.data?.accountTitle);
+        } else {
+          setInputApiError?.(response?.data?.responseMessage);
+        }
         // formik?.setFieldValue(name, response?.data?.accountTitle);
       }
-    } catch (e) {
+    } catch (e: any) {
       console.log('Image input', e);
+      setInputApiError?.(e?.message);
     }
   };
   return (
@@ -134,6 +143,12 @@ const ImageInput = ({
             <p>image isnt fetch title</p>
           ))}
       </div>
+
+      {inputApiError && (
+        <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+          {inputApiError}
+        </div>
+      )}
     </>
   );
 };

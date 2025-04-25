@@ -94,6 +94,7 @@ const SettlementDetails = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [bankName, setBankName] = useState('');
+  const [inputApiError, setInputApiError] = useState('');
 
   const getBankNames = async () => {
     try {
@@ -334,6 +335,8 @@ const SettlementDetails = () => {
                               type={field.type}
                               hasImage
                               image={field.image}
+                              inputApiError={inputApiError}
+                              setInputApiError={setInputApiError}
                               data={{
                                 accNumber: formik?.values?.accountNumber,
                                 // easypaisabankLimited otherwise if otherbanks then selected
