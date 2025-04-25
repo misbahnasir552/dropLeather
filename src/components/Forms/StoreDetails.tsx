@@ -271,7 +271,8 @@ const AddStore = () => {
             // setShowModal(true);
           }
         }
-      } catch (e) {
+      } catch (e: any) {
+        setApierror(e.message);
         // console.log('Error in submitting dynamic form', e);
         // setTitle('Network Failed');
         // setDescription('Network failed! Please try again later.');
@@ -466,6 +467,9 @@ const AddStore = () => {
                                 </div>
                               ),
                             )} */}
+                          </div>
+                          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                            {apierror}
                           </div>
                           <div className="flex w-full justify-end pt-5">
                             <Button

@@ -19,12 +19,12 @@ export const endpointArray = [
     tab: 'settlement-details',
     endpoint: `/merchant/saveOnboardingForms`,
   },
-  {
-    name: 'Integration',
-    tab: 'integration',
-    endpoint: `/merchant/saveOnboardingForms`,
-  },
-  { name: 'Attachments', tab: 'attachments', endpoint: `/merchant/upload` },
+  // {
+  //   name: 'Integration',
+  //   tab: 'integration',
+  //   endpoint: `/merchant/saveOnboardingForms`,
+  // },
+  { tab: 'attachments', endpoint: `/merchant/upload` },
   { tab: 'review-form', endpoint: null },
 ];
 
