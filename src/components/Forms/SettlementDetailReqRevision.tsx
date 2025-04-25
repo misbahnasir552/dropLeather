@@ -123,7 +123,7 @@ const SettlementDetailsReqRevision = () => {
                 label: 'Easypaisa Bank Limited',
                 value: 'easypaisaBankLimited',
               },
-              { label: 'Other Banks', value: 'otherBanks' },
+              { label: 'Other Banks', value: 'OtherBanks' },
             ],
           },
           {
@@ -181,6 +181,8 @@ const SettlementDetailsReqRevision = () => {
     console.log('✅ Dynamic schema includes:', Object.keys(shape));
     return Yup.object().shape(shape);
   };
+
+  console.log('hello');
 
   const getBankNames = async () => {
     try {
