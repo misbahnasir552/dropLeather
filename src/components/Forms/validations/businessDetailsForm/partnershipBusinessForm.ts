@@ -157,7 +157,7 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   specialCustomer: Yup.string().required('Special Customer is required'),
   registrationIncorporationNo: Yup.string()
     .required('Registration / Incorporation No is required')
-    .matches(/^\d+$/, 'Registration / Incorporation No Must be numeric value'),
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   placeOfIncorporationOrRegistration: Yup.string().required(
     'Place Of Incorporation Or Registration',
   ),
