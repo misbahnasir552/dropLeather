@@ -97,7 +97,8 @@ function ReviewForm() {
           <ReviewFormData
             onboardingData={onboardingData}
             businessNatureType={businessNatureActivity}
-            isEditable={true}
+            isEditable={false}
+            // isEditable={true}
             merchant={false}
           />
         ) : (
