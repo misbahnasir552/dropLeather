@@ -19,6 +19,9 @@ import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
+import { partnershipBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/partnershipBusinessDetails';
+import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/pnpLtdBusinessDetails';
+import { soleBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
 
 import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 import CheckboxItem from '../UI/Inputs/CheckboxItem';
@@ -93,6 +96,8 @@ const BusinessInformationReqRevision = () => {
   const router = useRouter();
   const [isChecked, setChecked] = useState(false);
   const dispatch = useAppDispatch();
+  const [businessDetailsFormData, setBusinessDetailsFormData] =
+    useState<any[]>();
 
   const { apiSecret } = userData;
   const [filteredData, setFilteredData] = useState<any[]>([]);
@@ -697,15 +702,17 @@ const BusinessInformationReqRevision = () => {
       // Access internal schema fields safely
       schemaFields = (soleBusinessDetailsFormSchema as Yup.ObjectSchema<any>)
         .fields;
+    } else if (businessNature === 'partnership') {
+      // Access internal schema fields safely
+      schemaFields = (
+        partnershipBusinessDetailsFormData as unknown as Yup.ObjectSchema<any>
+      ).fields;
+    } else if (businessNature === 'publicAndPrivateLtd') {
+      // Access internal schema fields safely
+      schemaFields = (
+        pnpLtdBusinessDetailsFormData as unknown as Yup.ObjectSchema<any>
+      ).fields;
     }
-    // } else if (businessNatureData?.businessNature === 'partnership') {
-    //   // Access internal schema fields safely
-    //   schemaFields = (partnershipBusinessDetailsFormData as Yup.ObjectSchema<any>).fields;
-    // }
-    // else if (businessNatureData?.businessNature === 'publicAndPrivateLtd') {
-    //   // Access internal schema fields safely
-    //   schemaFields = (pnpLtdBusinessDetailsFormData as Yup.ObjectSchema<any>).fields;
-    // }
 
     mappedData.forEach((section: any) => {
       section.categories.forEach((category: any) => {
@@ -726,6 +733,20 @@ const BusinessInformationReqRevision = () => {
     console.log('✅ Dynamic schema includes:', Object.keys(shape));
     return Yup.object().shape(shape);
   };
+
+  useEffect(() => {
+    if (businessNature === 'soleProprietor') {
+      setBusinessDetailsFormData(soleBusinessDetailsFormData?.categories);
+    } else if (businessNature === 'partnership') {
+      setBusinessDetailsFormData(
+        partnershipBusinessDetailsFormData?.categories,
+      );
+    } else if (businessNature === 'publicAndPrivateLtd') {
+      setBusinessDetailsFormData(pnpLtdBusinessDetailsFormData?.categories);
+    } else {
+      setBusinessDetailsFormData([]); // Set a default empty state to avoid undefined errors
+    }
+  }, [businessNatureData]);
 
   useEffect(() => {
     if (!currentTab) return;
@@ -800,7 +821,7 @@ const BusinessInformationReqRevision = () => {
     const mappedData = updatedFData?.map((item) => {
       const mappedCategories = item.categories.map((filteredCategory) => {
         // Find matching category in ActivityInformationFormData
-        const matchingCategory = BusinessDetailsFormData.categories.find(
+        const matchingCategory = businessDetailsFormData?.find(
           (category) => category.categoryName === filteredCategory.categoryName,
         );
 
