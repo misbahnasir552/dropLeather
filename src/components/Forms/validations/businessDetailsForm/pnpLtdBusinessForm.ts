@@ -37,7 +37,7 @@ export const pnpLtdBusinessDetailsFormInitialValues = {
   // nextOfKinRelationship: '',
   // nextOfKinName: '',
   // dateOfBirth: '',
-  registerUnRegister: '',
+  // registerUnRegister: '',
   specialCustomer: '',
   registrationIncorporationNo: '',
   placeOfIncorporationOrRegistration: '',
@@ -74,9 +74,9 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date()
-    .nullable()
-    .required('Established Since is required'),
+  establishedSince: Yup.date(),
+  // .nullable()
+  // .required('Established Since is required'),
   businessMode: Yup.array()
     .min(1, 'Please select at least one Business Mode')
     .required('Business Mode is required'),
@@ -161,7 +161,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   // ),
   // nextOfKinName: Yup.string().required('Next of Kin Name is required'),
   // dateOfBirth: Yup.string(),
-  registerUnRegister: Yup.string().required('Register/Unregister is required'),
+  // registerUnRegister: Yup.string().required('Register/Unregister is required'),
   specialCustomer: Yup.string().required('Special Customer is required'),
   registrationIncorporationNo: Yup.string()
     .required('Registration/Incorporation No is required')

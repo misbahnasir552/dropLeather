@@ -201,16 +201,16 @@ export const partnershipBusinessDetailsFormData = {
           type: 'date',
           required: true,
         },
-        {
-          name: 'registerUnRegister',
-          label: 'Register/UnRegister',
-          type: 'dropdown',
-          options: [
-            { label: 'Yes', value: 'Yes' },
-            { label: 'No', value: 'No' },
-          ],
-          required: true,
-        },
+        // {
+        //   name: 'registerUnRegister',
+        //   label: 'Register/UnRegister',
+        //   type: 'dropdown',
+        //   options: [
+        //     { label: 'Yes', value: 'Yes' },
+        //     { label: 'No', value: 'No' },
+        //   ],
+        //   required: true,
+        // },
         {
           name: 'specialCustomer',
           label: 'Special Customer',
