@@ -24,7 +24,8 @@ export const soleProprietorAttachmentsFormData = {
           required: true,
         },
         {
-          label: 'Certificate',
+          // label: 'Certificate',
+          label: 'Account maintenance certificate from  your external bank',
           name: 'certificate',
           type: 'file',
           required: true,
