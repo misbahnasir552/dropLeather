@@ -28,7 +28,9 @@ export const addOutletsSchema = Yup.object().shape({
     .min(1, 'Please select at least one store type')
     .required('Please fill this field'),
   region: Yup.string().required('Please fill this field'),
-  city: Yup.string().required('Please fill this field'),
+  city: Yup.string()
+    .required('Please fill this field')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),
   address: Yup.string().required('Please fill this field'),
   managerName: Yup.string().required('Please fill this field'),
   managerMobile: Yup.string()

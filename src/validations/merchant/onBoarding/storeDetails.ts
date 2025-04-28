@@ -136,7 +136,9 @@ export const storeDetailsSchema = Yup.object().shape({
   // webstoreURL: Yup.string().required('Website URL is required'),
   storeName: Yup.string().required('Store Name is required'),
   streetAddress: Yup.string().required('Street Address is required'),
-  city: Yup.string().required('Cityis required'),
+  city: Yup.string()
+    .required('Cityis required')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),
   category: Yup.string().required('Category is required'),
   countryCode: Yup.string().required('Country Code is required'),
   state: Yup.string().required('State is required'),

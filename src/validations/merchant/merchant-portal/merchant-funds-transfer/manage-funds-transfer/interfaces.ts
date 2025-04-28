@@ -1,13 +1,13 @@
 export interface IManageFundsTransfer {
   accountType: string;
-  msisdn: string;
-  availableBalance: string;
-  currentBalance: string;
+  // msisdn: string;
+  // availableBalance: string;
+  // currentBalance: string;
   beneficiaryName: string;
   transferDateTo: string;
   transferDateFrom: string;
   status: string;
-  transferAmount: string;
+  // transferAmount: string;
 }
 
 export interface IBulkUpload {

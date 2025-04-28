@@ -27,7 +27,6 @@ const SearchTransaction = () => {
   const [exportedData, setExportedData] = useState();
   const [filteredData, setFilteredData] = useState();
   const [apierror, setApierror] = useState('');
-
   const [isLoading, setIsLoading] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
@@ -101,10 +100,14 @@ const SearchTransaction = () => {
         setExportedData(response?.data?.transactions);
         setTotalPages(response?.data?.totalPages);
       } else {
+        console.log('res', response);
+
         setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      setApierror(e?.message);
+      console.log('eee', e);
+
+      setApierror(e?.response?.data?.responseDescription);
     } finally {
       setIsLoading(false);
     }
@@ -195,7 +198,6 @@ const SearchTransaction = () => {
     });
 
     if (Object.keys(filteredValues).length === 0) {
-      setApierror('Please enter at least one filter to search.');
       return;
     }
     setPageNumber(0);
@@ -371,6 +373,11 @@ const SearchTransaction = () => {
                 label="Reset"
                 // routeName="/sign-up"
                 onClickHandler={() => {
+                  if (
+                    !Object.values(formik.values)?.some((value) => value !== '')
+                  ) {
+                    return;
+                  }
                   handleReset(formik);
                   setFilteredData(undefined);
                 }}
@@ -388,9 +395,6 @@ const SearchTransaction = () => {
                 className="button-secondary h-9 w-[120px] px-3 py-[19px] text-sm"
               />
             </div>
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-              {apierror}
-            </div>
           </Form>
         )}
       </Formik>
@@ -399,7 +403,11 @@ const SearchTransaction = () => {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {data?.length > 0 ? (
+          {apierror ? (
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
+          ) : data?.length > 0 ? (
             <>
               <SearchTransactionTable
                 tableHeadings={tableHeadings}

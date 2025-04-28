@@ -65,7 +65,9 @@ const activityInformationFormSchema = Yup.object().shape({
   ),
   residency: Yup.string().required('Residency selection is required'),
   email: Yup.string().email('Invalid email').required('Email is required'),
-  city: Yup.string().required('City is required'),
+  city: Yup.string()
+    .required('City is required')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),
   businessAddress: Yup.string()
     .required('Business Address is required')
     .min(5, 'Cannot be less than 5 letters')

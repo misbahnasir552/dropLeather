@@ -64,7 +64,9 @@ export const addStoreSchema = Yup.object().shape({
   //   'Merchant Addendum Name is required',
   // ),
   streetAddress: Yup.string().required('Street Address is required'),
-  city: Yup.string().required('City is required'),
+  city: Yup.string()
+    .required('City is required')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),
   category: Yup.string().required('Category is required'),
   // subMerchantState: Yup.string().required('Sub Merchant State is required'),
   countryCode: Yup.string().required('Country Code is required'),
