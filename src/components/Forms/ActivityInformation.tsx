@@ -35,6 +35,7 @@ const ActivityInformation = () => {
   const [formData, setFormData] = useState(
     ActivityInformationFormData.categories,
   );
+  const [apierror, setApierror] = useState('');
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature,
   );
@@ -56,6 +57,8 @@ const ActivityInformation = () => {
   const [description, setDescription] = useState('');
   console.log(
     'userdatais',
+    setDescription,
+    setTitle,
     userData,
     filteredData,
     validationSchemaState,
@@ -240,14 +243,16 @@ const ActivityInformation = () => {
               );
             }
           } else if (response?.data?.responseCode === '000') {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
-          } else {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
+            setApierror(response?.data?.responseMessage);
+            // setTitle('Error Occured');
+            // setDescription(response?.data?.responseDescription);
+            // setShowModal(true);
           }
+          //  else {
+          //   setTitle('Error Occured');
+          //   setDescription(response?.data?.responseDescription);
+          //   setShowModal(true);
+          // }
         }
 
         // Navigate to the next tab after successful submission
@@ -257,11 +262,12 @@ const ActivityInformation = () => {
         } else {
           console.log('Form submission completed, no more tabs to navigate.');
         }
-      } catch (e) {
-        console.log('Error in submitting dynamic form', e);
-        console.error('Network Failed');
-        setDescription('Network failed! Please try again later.');
-        setShowModal(true);
+      } catch (e: any) {
+        setApierror(e?.message);
+        // console.log('Error in submitting dynamic form', e);
+        // console.error('Network Failed');
+        // setDescription('Network failed! Please try again later.');
+        // setShowModal(true);
       } finally {
         setSubmitting(false);
       }
@@ -367,6 +373,9 @@ const ActivityInformation = () => {
                   {/* // ))} */}
                 </React.Fragment>
               ))}
+              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                {apierror}
+              </div>
 
               {/* <FormControlButtons saveAndContinue={saveAndContinue} /> */}
               <div className=" sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">

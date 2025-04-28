@@ -52,7 +52,7 @@ const Attachments = () => {
   console.log(
     'businessNature',
     businessNature.businessNature,
-    apierror,
+    // apierror,
     setFilteredData,
   );
   const router = useRouter();
@@ -105,7 +105,7 @@ const Attachments = () => {
 
     if (currentIndex !== -1) {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
-      if (currentIndex === 5) {
+      if (currentIndex === 4) {
         // tested running code without labels
         // Object.keys(values).forEach((key) => {
         //   if (values[key]) {
@@ -168,12 +168,14 @@ const Attachments = () => {
               );
             }
           } else if (response?.data?.responseCode === '000') {
+            console.log('no');
             setApierror(response?.data?.responseMessage);
-          } else {
-            setTitle('Error Occured');
-            setDescription(response?.data?.responseDescription);
-            setShowModal(true);
           }
+          // else {
+          //   setTitle('Error Occured');
+          //   setDescription(response?.data?.responseDescription);
+          //   setShowModal(true);
+          // }
           // return;
         } catch (e: any) {
           console.log('Error in submitting dynamic form', e);
@@ -260,7 +262,9 @@ const Attachments = () => {
                       </React.Fragment>
                     ))}
                   </div>
-
+                  <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                    {apierror}
+                  </div>
                   <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                     <Button
                       label={`Save & Continue Later`}
