@@ -3,6 +3,7 @@
 // import Image from 'next/image';
 
 // import DownloadIcon from '@/assets/icons/Download-Table-Icon.svg';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
@@ -12,7 +13,9 @@ import SuccessModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
-import { useAppSelector } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { setLogout } from '@/redux/features/authSlice';
+import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
 
 // import B3 from '../UI/Body/B3';
 import Button from '../UI/Button/PrimaryButton';
@@ -69,6 +72,14 @@ function ReviewFormData({
   console.log('onboarding ', onboardingData);
   console.log('businessnaturetype', businessNatureType);
 
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const logOut = () => {
+    dispatch(setLogout());
+    dispatch(resetForms());
+    router.push('/login');
+  };
+
   const onSubmit = async () => {
     // const onSubmit = async ( { resetForm }: any) => {
     // setIsSubmitting(true);
@@ -109,7 +120,7 @@ function ReviewFormData({
         description={description}
         show={showModal}
         setShowModal={setShowModal}
-        routeName="/merchant/home"
+        routeName={logOut}
         // routeName={route}
       />
       {onboardingData?.pages.map((page: any) => (
