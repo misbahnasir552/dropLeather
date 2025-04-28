@@ -31,6 +31,8 @@ function SettlementReport() {
   const [pageNumber, setPageNumber] = useState(0);
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
 
   const settlementTransactionHistoryTableHeadings: string[] = [
     'Financial Transaction ID',
@@ -102,23 +104,60 @@ function SettlementReport() {
     fetchRecords();
   }, [filteredData, pageNumber]);
 
-  const exportToExcel = () => {
+  const exportToExcel = (data: any) => {
     // if (!response) return;
 
     // if (!response || response.length === 0) {
-    if (!settlementFilteredData) {
+    if (data?.length === 0) {
       return;
     }
 
     // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(settlementFilteredData);
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
     XLSX?.utils?.book_append_sheet(wb, ws, 'Settlement Report');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'Settlement-Report.xlsx');
+    XLSX.writeFile(wb, 'Settlement Report.xlsx');
+  };
+
+  const fetchExportedRecords = async (values: any) => {
+    setExportError('');
+    if (!values?.transferDateFrom || !values?.transferDateTo) {
+      return setExportError('Select From Date and To Date');
+    }
+    try {
+      setExportLoading(true);
+      const response = await apiClient.get(
+        '/merchant/getExportSettlementTransferReport',
+        {
+          params: {
+            transferDateFrom: values?.transferDateFrom,
+            transferDateTo: values?.transferDateTo,
+          },
+          headers: {
+            merchantEmail: userData?.email,
+          },
+        },
+      );
+
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.settlementReportResponse?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.settlementReportResponse);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setExportError(e?.message);
+    } finally {
+      setExportLoading(false);
+    }
   };
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
@@ -163,6 +202,11 @@ function SettlementReport() {
                       minDate={formik.values.transferDateFrom}
                     />
                   </div>
+                  {exportError && (
+                    <div className="flex w-full justify-start px-3 pb-[16px] text-xs text-danger-base">
+                      {exportError}
+                    </div>
+                  )}
                   <div className="flex w-full justify-start gap-6">
                     <Button
                       label="Search"
@@ -187,9 +231,12 @@ function SettlementReport() {
                       className="button-secondary h-9 w-[120px] px-2 py-[19px] text-xs leading-tight"
                     />
                     <Button
-                      label="Export"
-                      className="button-secondary w-[120px] px-2 py-[10px] text-xs leading-tight transition duration-300"
-                      onClickHandler={exportToExcel} // Export button click handler
+                      label={exportLoading ? 'Exporting' : 'Export'}
+                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                      onClickHandler={() =>
+                        fetchExportedRecords(formik?.values)
+                      }
+                      disable={exportLoading}
                     />
                   </div>
                 </Form>

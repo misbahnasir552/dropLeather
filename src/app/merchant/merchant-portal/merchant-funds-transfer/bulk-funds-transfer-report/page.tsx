@@ -27,6 +27,8 @@ function BulkFundsTransferReport() {
   const [filteredData, setFilteredData] = useState();
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState(+envPageSize);
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
 
   const [response, setResponse] = useState<Array<any> | null>(null);
   const fetchRecords = async () => {
@@ -97,24 +99,59 @@ function BulkFundsTransferReport() {
     setApierror('');
     fetchRecords();
   };
-  const exportToExcel = () => {
-    // if (!response) return;
-
-    // if (!response || response.length === 0) {
-    if (!response) {
+  const exportToExcel = (data: any) => {
+    if (!data) {
       return;
     }
 
-    // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(response);
+    // Create a worksheet from the data data
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
     XLSX?.utils?.book_append_sheet(wb, ws, 'Funds Transfer Report');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'funds_transfer_report.xlsx');
+    XLSX.writeFile(wb, 'Bulk Funds Transfer Report.xlsx');
   };
+
+  const fetchExportedRecords = async (values: any) => {
+    setExportError('');
+    if (!values?.fromDate || !values?.toDate) {
+      return setExportError('Select From Date and To Date');
+    }
+    try {
+      setExportLoading(true);
+      const response = await apiClient.get(
+        '/merchant/getExportBulkFundsTransferRecords',
+        {
+          params: {
+            fromDate: values?.fromDate, // Add page parameter
+            toDate: values?.toDate, // Add size parameter
+          },
+          headers: {
+            merchantEmail: userData?.email,
+          },
+        },
+      );
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.fundsTransferRecords?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.fundsTransferRecords);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setExportError(e?.message);
+      // setShowModal(true);
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   const onSubmit = (values: any) => {
     const filteredValues: any = {};
 
@@ -231,6 +268,11 @@ function BulkFundsTransferReport() {
                       isDisabled={!formik.values.fromDate}
                     />
                   </div>
+                  {exportError && (
+                    <div className="flex w-full justify-start px-3 pb-[16px] text-xs text-danger-base">
+                      {exportError}
+                    </div>
+                  )}
                   <div className="flex w-full items-end gap-5 px-6">
                     <Button
                       label="Search"
@@ -254,9 +296,12 @@ function BulkFundsTransferReport() {
                       }}
                     />
                     <Button
-                      label="Export"
+                      label={exportLoading ? 'Exporting' : 'Export'}
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                      onClickHandler={exportToExcel} // Export button click handler
+                      onClickHandler={() =>
+                        fetchExportedRecords(formik?.values)
+                      }
+                      disable={exportLoading}
                     />
                     <Button
                       label="Bulk Transfer"
