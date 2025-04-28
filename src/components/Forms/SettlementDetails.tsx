@@ -97,6 +97,7 @@ const SettlementDetails = () => {
   const [inputApiError, setInputApiError] = useState('');
 
   const getBankNames = async () => {
+    console.log(setDescription, setTitle);
     try {
       const response: any = await apiClient.get(`merchant/getBankNames`);
       if (response.data.responseCode === '009') {
@@ -109,12 +110,14 @@ const SettlementDetails = () => {
       } else if (response?.data?.responseCode === '000') {
         setApierror(response?.data?.responseDescription);
       } else {
-        setTitle('Error Occured');
-        setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseMessage);
+        // setTitle('Error Occured');
+        // setDescription(response?.data?.responseDescription);
+        // setShowModal(true);
       }
-    } catch (e) {
-      console.log(e, 'Error', apierror);
+    } catch (e: any) {
+      // console.log(e, 'Error', apierror);
+      setApierror(e?.message);
     }
   };
 
@@ -253,17 +256,22 @@ const SettlementDetails = () => {
       );
       if (response.data.responseCode === '009') {
         dispatch(setSettlementForm(values));
-        router.push('/merchant/home/business-nature/integration');
+        // DO NOT REMOVE COMMENTED CODE
+        // router.push('/merchant/home/business-nature/integration');
+        router.push('/merchant/home/business-nature/attachments');
       } else if (response?.data?.responseCode === '000') {
-        setTitle('Error Occured');
-        setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseMessage);
+        // setTitle('Error Occured');
+        // setDescription(response?.data?.responseDescription);
+        // setShowModal(true);
       } else {
-        setTitle('Error Occured');
-        setDescription(response?.data?.responseDescription);
-        setShowModal(true);
+        setApierror(response?.data?.responseMessage);
+        // setTitle('Error Occured');
+        // setDescription(response?.data?.responseDescription);
+        // setShowModal(true);
       }
-    } catch (e) {
+    } catch (e: any) {
+      setApierror(e?.data?.message);
       console.log(e, 'Error');
     }
     setSubmitting(false);
@@ -356,6 +364,9 @@ const SettlementDetails = () => {
                       {/* // ))} */}
                     </React.Fragment>
                   ))}
+                </div>
+                <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                  {apierror}
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
                   {/* <Button
