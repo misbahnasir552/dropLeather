@@ -68,7 +68,7 @@ export const partnershipBusinessDetailsFormData = {
           name: 'establishedSince',
           label: 'Established Since',
           type: 'date',
-          required: true,
+          required: false,
         },
       ],
     },
