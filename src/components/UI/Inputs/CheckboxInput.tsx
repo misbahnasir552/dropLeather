@@ -225,8 +225,8 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
   console.log(`form?.values[${name}]`, form?.values?.[name]);
 
   return (
-    <div className="flex flex-col  gap-[6px]">
-      <div className={`flex w-full ${layout || 'flex-col'} gap-4`}>
+    <div className="flex w-full flex-col gap-[6px]">
+      <div className={`flex w-full  ${layout || 'flex-col'} gap-4`}>
         {options?.map(
           (option: {
             value: Key | null | undefined;
@@ -294,7 +294,7 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
             // </label>
 
             <label
-              className="flex h-[60px] w-full flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
+              className="flex h-[60px] w-full  flex-col gap-4 rounded-lg border-[0.5px] border-border-light bg-neutral-white-base px-5 py-4"
               key={option.value}
             >
               <div className="flex items-center justify-between gap-4">
@@ -334,7 +334,7 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                     </div>
                   </div>
                 ) : (
-                  <div className="flex h-6 w-6 justify-center rounded-full border-2 border-border-dark px-[7px] py-2">
+                  <div className="flex h-6 w-6 justify-center rounded-full border-2  border-border-dark px-[7px] py-2">
                     <div className="h-[8px] w-[10px]"></div>
                   </div>
                 )}
