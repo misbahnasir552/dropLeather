@@ -214,7 +214,7 @@ const SearchTransaction = () => {
     // if (!response) return;
 
     // if (!response || response.length === 0) {
-    if (!data) {
+    if (data?.length === 0) {
       return;
     }
 
@@ -234,33 +234,44 @@ const SearchTransaction = () => {
     if (!values?.fromDate || !values?.toDate) {
       return setExportError('Select Order From Date and Order To Date');
     }
+    const transactionHistoryValues = {
+      // merchantEmail: 'misbah55@yopmail.com',
+      merchantEmail: userData.email,
+      managerMobile: userData?.managerMobile,
+      fromDate: values?.fromDate,
+      toDate: values?.toDate,
+    };
+    const mdRequest = {
+      ...transactionHistoryValues,
+      apisecret: userData?.apiSecret,
+    };
+    const md5Hash = generateMD5Hash(mdRequest);
+    const requestBody = {
+      request: transactionHistoryValues,
+      signature: md5Hash,
+    };
     try {
       setExportLoading(true);
-      const response = await apiClient.get(
-        '/qrcode/getExportTransactionsHistoryByDate',
+      const response = await apiClient.post(
+        'qrcode/getExportTransactionsHistoryByDate',
+        requestBody,
         {
-          params: {
-            fromDate: values?.fromDate,
-            toDate: values?.toDate,
-          },
-          headers: {
-            merchantEmail: userData?.email,
-          },
+          headers: { Authorization: `Bearer ${userData.jwt}` },
         },
       );
-
       if (response?.data?.responseCode === '009') {
-        if (response?.data?.settlementReportResponse?.length === 0) {
+        if (response?.data?.transactions?.length === 0) {
           setExportError('No Data Available for Export');
         }
-        exportToExcel(response?.data?.settlementReportResponse);
+        exportToExcel(response?.data?.transactions);
       } else if (response?.data?.responseCode === '000') {
         setExportError(response?.data?.responseDescription);
       } else {
         setExportError(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      setExportError(e?.message);
+      console.log('eeee', e);
+      setExportError(e?.response?.data?.responseMessage);
     } finally {
       setExportLoading(false);
     }

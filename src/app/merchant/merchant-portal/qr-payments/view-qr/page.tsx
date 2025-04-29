@@ -30,6 +30,8 @@ function StaticQr() {
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [qrString, setQrString] = useState('');
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
 
   const base64ToJpg = (base64String: any) => {
     if (!base64String) {
@@ -157,23 +159,53 @@ function StaticQr() {
   // const handleReset = (Formik: any) => {
   //   Formik.resetForm();
   // };
-  const exportToExcel = () => {
+  const exportToExcel = (data: any) => {
     // if (!stores) return;
 
-    if (!stores) {
+    if (data?.length === 0) {
       return;
     }
 
-    // Create a worksheet from the stores data
-    const ws = XLSX?.utils?.json_to_sheet(stores);
+    // Create a worksheet from the data
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
     XLSX?.utils?.book_append_sheet(wb, ws, 'Static QR Report');
 
     // Generate an Excel file and download it
-    XLSX.writeFile(wb, 'Static-QR-Report.xlsx');
+    XLSX.writeFile(wb, 'Static QR Report.xlsx');
   };
+  const fetchExportedRecords = async () => {
+    setExportError('');
+    try {
+      setExportLoading(true);
+      const response = await apiClient.get('/merchant/exportStores', {
+        params: {
+          merchantEmail: userData?.email,
+        },
+        headers: {
+          Authorization: `Bearer ${userData?.jwt}`,
+        },
+      });
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.merchantStores?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.merchantStores);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setExportError(e?.message);
+      // setShowModal(true);
+    } finally {
+      setExportLoading(false);
+    }
+  };
+
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
   };
@@ -275,12 +307,18 @@ function StaticQr() {
           {/* <div className="flex flex-col p-[60px] bg-screen-grey border-[0.5px] border-border-light rounded-lg"></div> */}
         </div>
         {stores?.length > 0 && (
-          <div className="flex justify-end">
+          <div className="flex flex-col items-end justify-end">
             <Button
-              label="Export"
+              label={exportLoading ? 'Exporting' : 'Export'}
               className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-              onClickHandler={exportToExcel} // Export button click handler
+              onClickHandler={fetchExportedRecords} // Export button click handler
+              disable={exportLoading}
             />
+            {exportError && (
+              <div className="flex w-full justify-end px-3 pt-[16px] text-xs text-danger-base">
+                {exportError}
+              </div>
+            )}
           </div>
         )}
         <div className="flex flex-col justify-center gap-3 pt-[30px]">

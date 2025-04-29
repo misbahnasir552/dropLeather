@@ -43,6 +43,8 @@ function ViewProductQR() {
   const [expirationTime, setExpirationTime] = useState('');
   const [qrAmount, setQrAmount] = useState('');
   const [qrString, setQrString] = useState('');
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
   const viewProductQrTableHeadings: string[] = [
     'Product Name',
     'Amount (Rs.)',
@@ -98,13 +100,13 @@ function ViewProductQR() {
       console.log('Error in fetching dynamic QR list', e);
     }
   };
-  const exportToExcel = () => {
-    if (!qrFilteredData) {
+  const exportToExcel = (data: any) => {
+    if (data?.length === 0) {
       return;
     }
 
     // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(qrFilteredData);
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
@@ -232,6 +234,35 @@ function ViewProductQR() {
   useEffect(() => {
     fetchRecords();
   }, [filteredParams, pageNumber]);
+  const fetchExportedRecords = async () => {
+    setExportError('');
+    try {
+      setExportLoading(true);
+      const response = await apiClient.get(
+        `/merchantportal/searchExportDynamicQr?email=${userData?.email}`,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.jwt}`,
+          },
+        },
+      );
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.dynamicQrResponse?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.dynamicQrResponse);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      setExportError(e?.message);
+      // setShowModal(true);
+    } finally {
+      setExportLoading(false);
+    }
+  };
   return (
     <div>
       <>
@@ -308,9 +339,10 @@ function ViewProductQR() {
                       className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
                     />
                     <Button
-                      label="Export"
+                      label={exportLoading ? 'Exporting' : 'Export'}
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                      onClickHandler={exportToExcel} // Export button click handler
+                      onClickHandler={fetchExportedRecords} // Export button click handler
+                      disable={exportLoading}
                     />
                     <Button
                       label="Reset"
@@ -331,6 +363,11 @@ function ViewProductQR() {
                 </Form>
               )}
             </Formik>
+            {exportError && (
+              <div className="flex w-full justify-start px-3 pt-[16px] text-xs text-danger-base">
+                {exportError}
+              </div>
+            )}
           </MerchantFormLayout>
         </div>
         {apierror && (
