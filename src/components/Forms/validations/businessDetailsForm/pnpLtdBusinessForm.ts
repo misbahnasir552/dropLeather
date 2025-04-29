@@ -5,7 +5,7 @@ export const pnpLtdBusinessDetailsFormInitialValues = {
   limitCategory: '',
   natureofBusiness: '',
   raastEnabled: '',
-  establishedSince: null,
+  establishedSince: '',
   businessMode: [],
   paymentModes: [],
   signatoryName: '',
@@ -74,7 +74,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date(),
+  establishedSince: Yup.string(),
   // .nullable()
   // .required('Established Since is required'),
   businessMode: Yup.array()

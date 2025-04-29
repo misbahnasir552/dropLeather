@@ -68,7 +68,7 @@ export const pnpLtdBusinessDetailsFormData = {
           name: 'establishedSince',
           label: 'Established Since',
           type: 'date',
-          required: true,
+          required: false,
         },
       ],
     },
