@@ -24,12 +24,14 @@ const CustomModal = ({
     setShowModal(false);
   };
   const handleContinue = () => {
-    if (routeName) {
+    if (typeof routeName === 'string') {
       // router.push(routeName);
       // router.push('');
       router.push(routeName);
       // router.push('');
       setShowModal(!show);
+    } else if (typeof routeName === 'function') {
+      routeName();
     } else {
       setShowModal(!show);
     }

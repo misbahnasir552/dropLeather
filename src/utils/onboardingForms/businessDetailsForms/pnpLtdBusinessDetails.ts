@@ -15,10 +15,10 @@ export const pnpLtdBusinessDetailsFormData = {
               value: 'Public and Private Ltd.',
             },
             { label: 'Partnership', value: 'Partnership' },
-            { label: 'Other', value: 'Other' },
-            { label: 'Trusts', value: 'Trusts' },
-            { label: 'Clubs,Societies', value: 'Clubs,Societies' },
-            { label: 'NGO,NPO,Charities', value: 'NGO,NPO,Charities' },
+            // { label: 'Other', value: 'Other' },
+            // { label: 'Trusts', value: 'Trusts' },
+            // { label: 'Clubs,Societies', value: 'Clubs,Societies' },
+            // { label: 'NGO,NPO,Charities', value: 'NGO,NPO,Charities' },
           ],
           required: true,
         },
@@ -194,16 +194,16 @@ export const pnpLtdBusinessDetailsFormData = {
           required: true,
         },
 
-        {
-          name: 'registerUnRegister',
-          label: 'Register/UnRegister',
-          type: 'dropdown',
-          options: [
-            { label: 'Yes', value: 'Yes' },
-            { label: 'No', value: 'No' },
-          ],
-          required: true,
-        },
+        // {
+        //   name: 'registerUnRegister',
+        //   label: 'Register/UnRegister',
+        //   type: 'dropdown',
+        //   options: [
+        //     { label: 'Yes', value: 'Yes' },
+        //     { label: 'No', value: 'No' },
+        //   ],
+        //   required: true,
+        // },
         {
           name: 'specialCustomer',
           label: 'Special Customer',

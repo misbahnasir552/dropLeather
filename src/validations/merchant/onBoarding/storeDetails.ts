@@ -134,8 +134,12 @@ export const storeDetailsSchema = Yup.object().shape({
   // webstoreName: Yup.string().required('Website Name is required'),
 
   // webstoreURL: Yup.string().required('Website URL is required'),
-  storeName: Yup.string().required('Store Name is required'),
-  streetAddress: Yup.string().required('Street Address is required'),
+  storeName: Yup.string()
+    .required('Store Name is required')
+    .min(5, 'Store Name Cannot be less than 5 letters'),
+  streetAddress: Yup.string()
+    .required('Street Address is required')
+    .min(5, 'Street Address Cannot be less than 5 letters'),
   city: Yup.string()
     .required('Cityis required')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),

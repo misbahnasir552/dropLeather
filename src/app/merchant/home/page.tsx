@@ -295,13 +295,23 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: 'business-nature',
-      hide: userData.onboardingCompleted,
+      hide:
+        // (userData.onboardingCompleted === false && userData.onboardingCompleted===false) ||
+
+        (userData.onboardingCompleted === true &&
+          userData.onboardingCompleted === false) ||
+        (userData.onboardingCompleted === true &&
+          userData.onboardingCompleted === true),
     },
     {
       title: 'Request Revision',
       description: 'All you need is to select...',
       // routeName: '/merchant/home/request-revision',
-      hide: !userData.isrequestRevision,
+      hide:
+        (userData.onboardingCompleted === false &&
+          userData.isrequestRevision === false) ||
+        (userData.onboardingCompleted === true &&
+          userData.isrequestRevision === false),
       onClick: handleRequestRevisionClick,
     },
     {
@@ -309,7 +319,11 @@ const LoginSucessHome = () => {
       description:
         'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
       routeName: '/merchant/merchant-portal/home/',
-      hide: userData.onboardingCompleted,
+      hide:
+        (userData.onboardingCompleted === false &&
+          userData.isrequestRevision === false) ||
+        (userData.onboardingCompleted === true &&
+          userData.isrequestRevision === true),
     },
     // PLease DO NOT REMOVE THE CODE BELOw
     // {
