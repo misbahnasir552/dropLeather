@@ -5,7 +5,7 @@ export const partnershipBusinessDetailsFormInitialValues = {
   limitCategory: '',
   natureofBusiness: '',
   raastEnabled: '',
-  establishedSince: null,
+  establishedSince: '',
   businessMode: [],
   paymentModes: [],
   signatoryName: '',
@@ -72,7 +72,7 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date(),
+  establishedSince: Yup.string(),
   // .nullable()
   // .required('Established Since is required'),
   businessMode: Yup.array()
@@ -96,7 +96,8 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   signatoryCityAndCountry: Yup.string()
     .required('Signatory City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
+
     .max(25, 'Cannot be more than 25 letters'),
   beneficialOwnerName: Yup.string()
     .required('Beneficial Owner Name is required')
@@ -113,7 +114,7 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   beneficialOwnerCityAndCountry: Yup.string()
     .required('Beneficial Owner City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   partnersName: Yup.string()
     .required('Partners Name is required')
@@ -130,7 +131,7 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   partnersCityAndCountry: Yup.string()
     .required('Partners City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   permanentAddress: Yup.string()
     .required('Permanent Address is required')

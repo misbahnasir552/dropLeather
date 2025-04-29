@@ -5,7 +5,7 @@ export const pnpLtdBusinessDetailsFormInitialValues = {
   limitCategory: '',
   natureofBusiness: '',
   raastEnabled: '',
-  establishedSince: null,
+  establishedSince: '',
   businessMode: [],
   paymentModes: [],
   signatoryName: '',
@@ -74,7 +74,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date(),
+  establishedSince: Yup.string(),
   // .nullable()
   // .required('Established Since is required'),
   businessMode: Yup.array()
@@ -94,7 +94,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   signatoryCityAndCountry: Yup.string()
     .required('Signatory City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   beneficialOwnerName: Yup.string()
     .required('Beneficial Owner Name is required')
@@ -111,7 +111,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   beneficialOwnerCityAndCountry: Yup.string()
     .required('Beneficial Owner City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   shareholdingEntities: Yup.string()
     .required('Shareholding Entities is required')
@@ -138,7 +138,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   directorCityAndCountry: Yup.string()
     .required('Director City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   signatoryIdCardNo: Yup.string()
     .required('Signatory Id Card No is required')

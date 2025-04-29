@@ -77,7 +77,10 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   beneficialOwnerControllingRights: Yup.string(),
   mandateDateOfBirth: Yup.string(),
   mandatePlaceOfBirth: Yup.string(),
-  cityAndCountry: Yup.string(),
+  cityAndCountry: Yup.string().matches(
+    /^[a-zA-ZÀ-ÿ\s,]+$/,
+    'Only alphabets are allowed',
+  ),
   nextOfKinCnic: Yup.string()
     .required('Next of Kin CNIC is required')
     .matches(/^\d+$/, 'Invalid CNIC')
