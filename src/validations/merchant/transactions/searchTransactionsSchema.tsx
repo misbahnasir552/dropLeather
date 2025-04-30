@@ -85,8 +85,8 @@ export const searchTransactionsSchema = Yup.object().shape({
       },
     )
     .test(
-      'toDate-max-30-days',
-      'To Date should not be more than 30 days from From Date',
+      `toDate-max-${process.env.NEXT_PUBLIC_DAYS_RANGE}-days`,
+      `To Date should not be more than ${process.env.NEXT_PUBLIC_DAYS_RANGE} days from From Date`,
       // eslint-disable-next-line func-names
       function (value) {
         // eslint-disable-next-line no-unsafe-optional-chaining
@@ -99,7 +99,10 @@ export const searchTransactionsSchema = Yup.object().shape({
 
         if (!isValid(fromDates) || !isValid(toDate)) return true;
 
-        return differenceInDays(toDate, fromDates) <= 30;
+        return (
+          differenceInDays(toDate, fromDates) <=
+          Number(process.env.NEXT_PUBLIC_DAYS_RANGE)
+        );
       },
     ),
   storeName: Yup.string(),
