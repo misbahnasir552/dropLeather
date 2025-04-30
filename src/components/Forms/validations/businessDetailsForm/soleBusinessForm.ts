@@ -77,7 +77,10 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   beneficialOwnerControllingRights: Yup.string(),
   mandateDateOfBirth: Yup.string(),
   mandatePlaceOfBirth: Yup.string(),
-  cityAndCountry: Yup.string(),
+  cityAndCountry: Yup.string().matches(
+    /^[a-zA-ZÀ-ÿ\s,]+$/,
+    'Only alphabets are allowed',
+  ),
   nextOfKinCnic: Yup.string()
     .required('Next of Kin CNIC is required')
     .matches(/^\d+$/, 'Invalid CNIC')
@@ -115,10 +118,10 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
-  expectedModesOfTransactionsDeliveryChannels: Yup.string()
-    .min(3, 'Cannot be less than 3 digits')
-    .matches(/^\d+$/, 'Only numbers are allowed')
-    .max(25, 'Cannot be more than 25 digits'),
+  expectedModesOfTransactionsDeliveryChannels: Yup.string().matches(
+    /^\d+$/,
+    'Only numbers are allowed',
+  ),
   industrySegment: Yup.string()
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
@@ -139,9 +142,9 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
     'incomeStatusSalaried',
     (incomeStatusSalaried, schema) => {
       if (incomeStatusSalaried[0] === 'Yes') {
-        return schema.required(
-          'Current Salary / Income is required is required',
-        );
+        return schema
+          .required('Current Salary / Income is required is required')
+          .matches(/^\d+$/, 'Current Salary / Income Must be numeric value');
       }
       return schema;
     },

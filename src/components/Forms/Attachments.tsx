@@ -15,6 +15,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 // import { buildValidationSchema } from './validationsOLD/helper';
 import {
   partnershipAttachmentsFormData,
+  pnpAttachmentsFormData,
   soleProprietorAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
 
@@ -28,6 +29,9 @@ import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import partnershipAttachmentsFormSchema, {
   partnershipAttachmentsFormInitialValues,
 } from './validations/attachmentForm/partnershipAttachmentsForm';
+import pnpAttachmentsFormSchema, {
+  pnpAttachmentsFormInitialValues,
+} from './validations/attachmentForm/pnpAttachmentsForm';
 import soleAttachmentFormSchema, {
   soleAttachmentFormInitialValues,
 } from './validations/attachmentForm/soleAttachmentsForm';
@@ -81,7 +85,13 @@ const Attachments = () => {
       setInitialValuesState(partnershipAttachmentsFormInitialValues);
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData.categories);
-    } else {
+    } else if (businessNature?.businessNature === 'publicAndPrivateLtd') {
+      setInitialValuesState(pnpAttachmentsFormInitialValues);
+      setValidationSchemaState(pnpAttachmentsFormSchema);
+      setAttachmentData(pnpAttachmentsFormData.categories);
+    }
+    // publicAndPrivateLtd
+    else {
       setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
 
@@ -266,11 +276,11 @@ const Attachments = () => {
                     {apierror}
                   </div>
                   <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
-                    <Button
+                    {/* <Button
                       label={`Save & Continue Later`}
                       type="button"
                       className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                    />
+                    /> */}
                     <Button
                       label={`Next`}
                       type="submit"

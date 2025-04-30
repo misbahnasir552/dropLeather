@@ -19,7 +19,7 @@ import { useAppSelector } from '@/hooks/redux';
 //   GetActivityInfoDetails,
 // } from "@/validations/merchant/onBoarding/activityInfo";
 import useCurrentTab from '@/hooks/useCurrentTab';
-import type { ActivityFormInfo } from '@/interfaces/interface';
+// import type { ActivityFormInfo } from '@/interfaces/interface';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
 import { generateMD5Hash } from '@/utils/helper';
@@ -101,55 +101,55 @@ const ActivityInformation = () => {
       </div>
     );
   }
-  const saveAndContinue = async (
-    values: ActivityFormInfo,
-    { setSubmitting }: any,
-  ) => {
-    try {
-      const response: any = await apiClient.post(
-        `merchant/activity/${userData.email}`,
-        {
-          businessNature: formData?.businessNature?.businessTypeNature,
-          managerMobile: userData.managerMobile,
-          fatherName: values.fatherName,
-          businessName: values.businessName,
-          nameOfBusinessOwner: values.businessOwner,
-          legalNameOfBusiness: values.legalName,
-          dateOfIncorporation: values.incorporationDate,
-          ntnNumber: values.ntnNumber,
-          purposeOfAccount: values.purposeOfAccount,
-          emailAddress: values.emailAddress,
-          city: values.city,
-          businessAddress: values.businessAddress,
-          correspondenceAddress: values.correspondenceAddress,
-          primaryPhoneNumber: values.primaryPhoneNumber,
-          otherPhoneNumber: values.otherPhoneNumber,
-          status: 'partial',
-          terrorFinancing: values.terrorFinancing,
-          politicallyExposed: values.politicallyExposed,
-          accountHolder: values.accountHolder,
-          gender: values.gender,
-          citizenship: values.citizenship,
-          countryOfResidency: values.residency,
-        },
-        {
-          headers: { Authorization: `Bearer ${userData.jwt}` },
-        },
-      );
+  // const saveAndContinue = async (
+  //   values: ActivityFormInfo,
+  //   { setSubmitting }: any,
+  // ) => {
+  //   try {
+  //     const response: any = await apiClient.post(
+  //       `merchant/activity/${userData.email}`,
+  //       {
+  //         businessNature: formData?.businessNature?.businessTypeNature,
+  //         managerMobile: userData.managerMobile,
+  //         fatherName: values.fatherName,
+  //         businessName: values.businessName,
+  //         nameOfBusinessOwner: values.businessOwner,
+  //         legalNameOfBusiness: values.legalName,
+  //         dateOfIncorporation: values.incorporationDate,
+  //         ntnNumber: values.ntnNumber,
+  //         purposeOfAccount: values.purposeOfAccount,
+  //         emailAddress: values.emailAddress,
+  //         city: values.city,
+  //         businessAddress: values.businessAddress,
+  //         correspondenceAddress: values.correspondenceAddress,
+  //         primaryPhoneNumber: values.primaryPhoneNumber,
+  //         otherPhoneNumber: values.otherPhoneNumber,
+  //         status: 'partial',
+  //         terrorFinancing: values.terrorFinancing,
+  //         politicallyExposed: values.politicallyExposed,
+  //         accountHolder: values.accountHolder,
+  //         gender: values.gender,
+  //         citizenship: values.citizenship,
+  //         countryOfResidency: values.residency,
+  //       },
+  //       {
+  //         headers: { Authorization: `Bearer ${userData.jwt}` },
+  //       },
+  //     );
 
-      if (response.data.responseCode === '000') {
-        console.log(response, 'Activity Information');
-        router.push('/business-details');
-      } else {
-        router.push('/login');
-        console.log('Data submission failure');
-      }
-    } catch (e) {
-      console.log(e, 'Error');
-    }
+  //     if (response.data.responseCode === '000') {
+  //       console.log(response, 'Activity Information');
+  //       router.push('/business-details');
+  //     } else {
+  //       router.push('/login');
+  //       console.log('Data submission failure');
+  //     }
+  //   } catch (e) {
+  //     console.log(e, 'Error');
+  //   }
 
-    setSubmitting(false);
-  };
+  //   setSubmitting(false);
+  // };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('activity valuesssssssssssss', values);
@@ -355,7 +355,7 @@ const ActivityInformation = () => {
               )}
               {/* <FormControlButtons saveAndContinue={saveAndContinue} /> */}
               <div className=" sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
-                <Button
+                {/* <Button
                   label={`Save & Continue Later`}
                   onClickHandler={() =>
                     saveAndContinue(
@@ -366,7 +366,7 @@ const ActivityInformation = () => {
                   }
                   type="button"
                   className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                />
+                /> */}
                 <Button
                   label={`Next`}
                   type="submit"

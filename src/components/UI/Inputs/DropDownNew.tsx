@@ -26,7 +26,8 @@ const DropdownNew = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [toggle, setToggle] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  // DO NOT REMOVE THIS CODE
+  // const [searchTerm, setSearchTerm] = useState('');
 
   // const filteredOptions = options.filter((item: { label: string }) =>
   //   item.label.toLowerCase().startsWith(searchTerm.toLowerCase()),
@@ -57,7 +58,8 @@ const DropdownNew = ({
     // formik?.setFieldValue(name, item.label.split('-')[0]);
 
     setToggle(false);
-    setSearchTerm('');
+    // DO NOT REMOVE THIS CODE
+    // setSearchTerm('');
   };
 
   useEffect(() => {
@@ -105,7 +107,8 @@ const DropdownNew = ({
 
   const handleToggle = () => {
     setToggle(!toggle);
-    setSearchTerm('');
+    // DO NOT REMOVE THIS CODE
+    // setSearchTerm('');
   };
 
   const handleFocus = () => {
@@ -167,7 +170,8 @@ const DropdownNew = ({
             className="absolute z-10 mt-[4px] max-h-40 w-full overflow-y-auto rounded-lg bg-screen-white shadow-md"
             // style={{ top: "-100%" }}
           >
-            {filteredOptions?.length > 10 ? (
+            {/* DO NOT REMOVE THIS CODE */}
+            {/* {filteredOptions?.length > 10 ? (
               <input
                 type="text"
                 value={searchTerm}
@@ -177,7 +181,7 @@ const DropdownNew = ({
               />
             ) : (
               <></>
-            )}
+            )} */}
 
             {filteredOptions?.map(
               (

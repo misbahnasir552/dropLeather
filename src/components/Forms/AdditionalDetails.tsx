@@ -212,7 +212,7 @@ const AdditionalDetails = () => {
                   </FormWrapper>
                 </div>
                 <div className="sm:max-md:[24px] flex w-full items-center justify-end gap-9 sm:max-md:flex-col-reverse sm:max-md:gap-4">
-                  <Button
+                  {/* <Button
                     label={`Save & Continue Later`}
                     // onClickHandler={() =>
                     //   saveAndContinue(
@@ -225,7 +225,7 @@ const AdditionalDetails = () => {
                     className={`button-secondary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
                     type="submit"
                     // className={`button-secondary ${'bg-primary-300'} w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
-                  />
+                  /> */}
                   <Button
                     label={`Next`}
                     type="submit"

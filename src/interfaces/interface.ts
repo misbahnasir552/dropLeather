@@ -158,7 +158,7 @@ export interface ICustomModalProps {
   description?: string;
   show: boolean;
   setShowModal: (value: boolean) => void;
-  routeName?: string;
+  routeName?: string | (() => void);
   image?: any;
   isVisible?: boolean;
 }

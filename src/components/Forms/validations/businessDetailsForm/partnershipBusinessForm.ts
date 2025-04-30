@@ -5,7 +5,7 @@ export const partnershipBusinessDetailsFormInitialValues = {
   limitCategory: '',
   natureofBusiness: '',
   raastEnabled: '',
-  establishedSince: null,
+  establishedSince: '',
   businessMode: [],
   paymentModes: [],
   signatoryName: '',
@@ -35,7 +35,7 @@ export const partnershipBusinessDetailsFormInitialValues = {
   // nextOfKinRelationship: '',
   // nextOfKinName: '',
   dateOfBirth: '',
-  registerUnRegister: '',
+  // registerUnRegister: '',
   specialCustomer: '',
   registrationIncorporationNo: '',
   placeOfIncorporationOrRegistration: '',
@@ -72,9 +72,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date()
-    .nullable()
-    .required('Established Since is required'),
+  establishedSince: Yup.string(),
+  // .nullable()
+  // .required('Established Since is required'),
   businessMode: Yup.array()
     .min(1, 'Please select at least one Business Mode')
     .required('Business Mode is required'),
@@ -96,7 +96,8 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   signatoryCityAndCountry: Yup.string()
     .required('Signatory City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
+
     .max(25, 'Cannot be more than 25 letters'),
   beneficialOwnerName: Yup.string()
     .required('Beneficial Owner Name is required')
@@ -113,7 +114,7 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   beneficialOwnerCityAndCountry: Yup.string()
     .required('Beneficial Owner City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   partnersName: Yup.string()
     .required('Partners Name is required')
@@ -130,9 +131,11 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   partnersCityAndCountry: Yup.string()
     .required('Partners City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
-  permanentAddress: Yup.string().required('Permanent Address is required'),
+  permanentAddress: Yup.string()
+    .required('Permanent Address is required')
+    .min(5, 'Cannot be less than 5 letters'),
   // fatcaStatus: Yup.string(),
   // crsStatus: Yup.string(),
   // mandateName: Yup.string(),
@@ -151,27 +154,37 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   // ),
   // nextOfKinName: Yup.string().required('Next of Kin Name is required'),
   dateOfBirth: Yup.string().required('Date of Birth is required'),
-  registerUnRegister: Yup.string().required('Register/Unregister is required'),
+  // registerUnRegister: Yup.string().required('Register/Unregister is required'),
   specialCustomer: Yup.string().required('Special Customer is required'),
-  registrationIncorporationNo: Yup.string().required(
-    '  Registration / Incorporation No is required',
-  ),
+  registrationIncorporationNo: Yup.string()
+    .required('Registration / Incorporation No is required')
+    .matches(/^\d+$/, 'Only Numeric values are allowed'),
   placeOfIncorporationOrRegistration: Yup.string().required(
     'Place Of Incorporation Or Registration',
   ),
-  geographiesInvolved: Yup.string().required(
-    'Geographies Involved is required',
-  ),
-  expectedTypeOfCounterParties: Yup.string().required(
-    'Expected Type of Counter-Parties is required',
-  ),
-  intendedNatureOfBusinessRelations: Yup.string().required(
-    'Intended nature of business relations is required',
-  ),
+  geographiesInvolved: Yup.string()
+    .required('Geographies Involved is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  expectedTypeOfCounterParties: Yup.string()
+    .required('Expected Type of Counter-Parties is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
+  intendedNatureOfBusinessRelations: Yup.string()
+    .required('Intended nature of business relations is required')
+    .min(3, 'Cannot be less than 3 digits')
+    .matches(/^\d+$/, 'Only numbers are allowed')
+    .max(25, 'Cannot be more than 25 digits'),
   expectedModesOfTransactionsDeliveryChannels: Yup.string()
     .required('Expected modes of transactions/ delivery channels is required')
     .matches(/^\d+$/, 'Only Numeric values are allowed'),
-  industrySegment: Yup.string().required('Industry/Segment is required'),
+  industrySegment: Yup.string()
+    .required('Industry/Segment is required')
+    .min(3, 'Cannot be less than 3 letters')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    .max(25, 'Cannot be more than 25 letters'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
   natureOfActivity: Yup.array()
@@ -184,9 +197,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
     'incomeStatusSalaried',
     (incomeStatusSalaried, schema) => {
       if (incomeStatusSalaried[0] === 'Yes') {
-        return schema.required(
-          'Current Salary / Income is required is required',
-        );
+        return schema
+          .required('Current Salary / Income is required is required')
+          .matches(/^\d+$/, 'Current Salary / Income Must be numeric value');
       }
       return schema;
     },

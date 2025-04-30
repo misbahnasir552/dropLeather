@@ -73,32 +73,35 @@ const OtpInputWithValidation = () => {
               setTitle('Failure!');
               setDescription(res.data.responseDescription);
             }
-          } catch (e) {
+          } catch (e: any) {
+            setApierror(e?.message);
             // merchant register request failure
             console.log(e, 'Merchant registration failed');
-            setShowModal(true);
-            setTitle('Network Error');
-            setDescription('Merchant registration failed. Please try again!');
+            // setShowModal(true);
+            // setTitle('Network Error');
+            // setDescription('Merchant registration failed. Please try again!');
           }
         } else if (response?.data?.responseCode === '000') {
-          setApierror(`${response?.data?.responseMessage}`);
+          setApierror(response?.data?.responseMessage);
         } else {
           // merchant verify otp failure
           setTitle('Failure!');
           setDescription(response.data.errorDescription);
           setShowModal(true);
         }
-      } catch (e) {
+      } catch (e: any) {
+        setApierror(e?.message);
         // merchant verify otp request failure
-        console.log(e, 'Merchant OTP Verification Failed');
-        setTitle('Network Error');
-        setDescription('Merchant OTP Verification Failed');
-        setShowModal(true);
+        // console.log(e, 'Merchant OTP Verification Failed');
+        // setTitle('Network Error');
+        // setDescription('Merchant OTP Verification Failed');
+        // setShowModal(true);
       }
     } catch (e: any) {
-      console.log(e);
-      setTitle(e.code);
-      setDescription(e.message);
+      setApierror(e?.message);
+      // console.log(e);
+      // setTitle(e.code);
+      // setDescription(e.message);
     } finally {
       setIsLoading(false);
     }

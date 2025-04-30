@@ -364,6 +364,7 @@ const AddStore = () => {
                                           <CheckboxInput
                                             key={fieldIndex}
                                             isMulti
+                                            // layout='flex-row'
                                             name={field.name}
                                             options={field.options}
                                             form={formik}
