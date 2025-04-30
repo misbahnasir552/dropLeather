@@ -14,6 +14,11 @@ import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { endpointArray } from '@/utils/merchantForms/helper';
+import {
+  partnershipAttachmentsFormData,
+  pnpAttachmentsFormData,
+  soleProprietorAttachmentsFormData,
+} from '@/utils/onboardingForms/attachments';
 // import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 // import { buildValidationSchema } from './validationsOLD/helper';
 // import {
@@ -30,6 +35,7 @@ import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import partnershipAttachmentsFormSchema from './validations/attachmentForm/partnershipAttachmentsForm';
+import pnpAttachmentsFormSchema from './validations/attachmentForm/pnpAttachmentsForm';
 import soleAttachmentFormSchema from './validations/attachmentForm/soleAttachmentsForm';
 // import type { FieldsData } from './validations/types';
 
@@ -104,40 +110,40 @@ const Attachments = () => {
     Array(5).fill(null),
   );
 
-  const soleProprietorAttachmentsFormData = {
-    pageName: 'Attachments',
-    categories: [
-      {
-        categoryName: 'Upload Documents(What would you like to integrate)',
-        fields: [
-          {
-            label: 'CNIC Front',
-            name: 'cnicFront',
-            type: 'file',
-            required: true,
-          },
-          {
-            label: 'CNIC Back',
-            name: 'cnicBack',
-            type: 'file',
-            required: true,
-          },
-          {
-            label: 'Selfie',
-            name: 'selfie',
-            type: 'file',
-            required: true,
-          },
-          {
-            label: 'Certificate',
-            name: 'certificate',
-            type: 'file',
-            required: true,
-          },
-        ],
-      },
-    ],
-  };
+  // const soleProprietorAttachmentsFormData = {
+  //   pageName: 'Attachments',
+  //   categories: [
+  //     {
+  //       categoryName: 'Upload Documents(What would you like to integrate)',
+  //       fields: [
+  //         {
+  //           label: 'CNIC Front',
+  //           name: 'cnicFront',
+  //           type: 'file',
+  //           required: true,
+  //         },
+  //         {
+  //           label: 'CNIC Back',
+  //           name: 'cnicBack',
+  //           type: 'file',
+  //           required: true,
+  //         },
+  //         {
+  //           label: 'Selfie',
+  //           name: 'selfie',
+  //           type: 'file',
+  //           required: true,
+  //         },
+  //         {
+  //           label: 'Certificate',
+  //           name: 'certificate',
+  //           type: 'file',
+  //           required: true,
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const router = useRouter();
   const [attachmentData, setAttachmentData] = useState<any[]>();
@@ -157,8 +163,13 @@ const Attachments = () => {
   useEffect(() => {
     if (businessNature === 'soleProprietor') {
       setValidationSchemaState(soleAttachmentFormSchema);
+      setAttachmentData(soleProprietorAttachmentsFormData?.categories);
     } else if (businessNature === 'partnership') {
       setValidationSchemaState(partnershipAttachmentsFormSchema);
+      setAttachmentData(partnershipAttachmentsFormData?.categories);
+    } else if (businessNature === 'publicAndPrivateLtd') {
+      setValidationSchemaState(pnpAttachmentsFormSchema);
+      setAttachmentData(pnpAttachmentsFormData?.categories);
     } else {
       setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
@@ -238,11 +249,10 @@ const Attachments = () => {
       const mappedData = filteredData.map((item) => {
         const mappedCategories = item.categories.map((filteredCategory) => {
           // Find matching category in ActivityInformationFormData
-          const matchingCategory =
-            soleProprietorAttachmentsFormData.categories.find(
-              (category) =>
-                category.categoryName === filteredCategory.categoryName,
-            );
+          const matchingCategory = attachmentData?.find(
+            (category) =>
+              category.categoryName === filteredCategory.categoryName,
+          );
 
           if (matchingCategory) {
             // Collect matched fields with full field info
@@ -320,9 +330,10 @@ const Attachments = () => {
       (item) => item.tab === currentTab,
     );
 
+    console.log('values', values);
     if (currentIndex !== -1) {
       console.log(currentIndex, 'TESTTTTT CURRENT INDEX');
-      if (currentIndex === 5) {
+      if (currentIndex === 4) {
         // tested running code without labels
         // Object.keys(values).forEach((key) => {
         //   if (values[key]) {
@@ -425,7 +436,7 @@ const Attachments = () => {
       {/* Formik Form for handling form state and submission */}
       <Formik
         enableReinitialize
-        initialValues={initialValuesState || {}}
+        initialValues={initialValuesState}
         validationSchema={validationSchemaState}
         onSubmit={onSubmit}
       >

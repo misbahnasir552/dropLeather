@@ -182,7 +182,8 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
   intendedNatureOfBusinessRelations: Yup.string()
     .required('Intended nature of business relations is required')
     .min(3, 'Cannot be less than 3 digits')
-    .matches(/^\d+$/, 'Only numbers are allowed')
+    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+    // .matches(/^\d+$/, 'Only numbers are allowed')
     .max(25, 'Cannot be more than 25 digits'),
   expectedModesOfTransactionsDeliveryChannels: Yup.string()
     .required('Expected modes of transactions/ delivery channels is required')

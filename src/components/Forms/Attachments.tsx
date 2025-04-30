@@ -15,6 +15,7 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 // import { buildValidationSchema } from './validationsOLD/helper';
 import {
   partnershipAttachmentsFormData,
+  pnpAttachmentsFormData,
   soleProprietorAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
 
@@ -28,6 +29,9 @@ import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import partnershipAttachmentsFormSchema, {
   partnershipAttachmentsFormInitialValues,
 } from './validations/attachmentForm/partnershipAttachmentsForm';
+import pnpAttachmentsFormSchema, {
+  pnpAttachmentsFormInitialValues,
+} from './validations/attachmentForm/pnpAttachmentsForm';
 import soleAttachmentFormSchema, {
   soleAttachmentFormInitialValues,
 } from './validations/attachmentForm/soleAttachmentsForm';
@@ -81,7 +85,13 @@ const Attachments = () => {
       setInitialValuesState(partnershipAttachmentsFormInitialValues);
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData.categories);
-    } else {
+    } else if (businessNature?.businessNature === 'publicAndPrivateLtd') {
+      setInitialValuesState(pnpAttachmentsFormInitialValues);
+      setValidationSchemaState(pnpAttachmentsFormSchema);
+      setAttachmentData(pnpAttachmentsFormData.categories);
+    }
+    // publicAndPrivateLtd
+    else {
       setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
 
