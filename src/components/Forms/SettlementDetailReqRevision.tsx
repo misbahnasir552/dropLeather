@@ -457,6 +457,8 @@ const SettlementDetailsReqRevision = () => {
           if (response?.data?.responseCode === '009') {
             let nextIndex = currentIndex + 1;
 
+            console.log('nextIndex', endpointArray[nextIndex]?.name);
+
             //  Ensure nextIndex is within bounds and valid
             while (
               nextIndex < endpointArray.length &&
@@ -605,6 +607,7 @@ const SettlementDetailsReqRevision = () => {
                                   );
                                 }
                                 if (field?.type === 'imageInput') {
+                                  console.log('Field name:', field.name);
                                   return (
                                     <ImageInput
                                       key={fieldIndex}
