@@ -27,7 +27,7 @@ const Home = (): JSX.Element => {
       /> */}
       <UIWrapper>
         <Header
-          title={{ main: 'Designed for', sub: 'Entrepreneurs' }}
+          title={{ main: 'Designed for', sub: 'Entrepreneurs (deployed)' }}
           description={
             'Our portal accelerates your financial journey. Experience hasslle-free payments and sieze new opportunities.'
           }
