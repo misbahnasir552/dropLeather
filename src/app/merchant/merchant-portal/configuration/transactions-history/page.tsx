@@ -24,7 +24,6 @@ import {
 const SearchTransaction = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const [data, setData] = useState([]);
-  const [exportedData, setExportedData] = useState();
   const [filteredData, setFilteredData] = useState();
   const [apierror, setApierror] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +31,8 @@ const SearchTransaction = () => {
   const envPageSize = process.env.NEXT_PUBLIC_PAGE_SIZE || 10;
   const [totalPages, setTotalPages] = useState<number>(+envPageSize);
   const [tableHeadings, setTableHeadings] = useState<string[]>([]);
+  const [exportError, setExportError] = useState('');
+  const [exportLoading, setExportLoading] = useState(false);
 
   const showNextPage = () => {
     setPageNumber((prev) => Math.min(prev + 1, totalPages - 1));
@@ -97,7 +98,6 @@ const SearchTransaction = () => {
         }
 
         setData(response?.data?.transactions);
-        setExportedData(response?.data?.transactions);
         setTotalPages(response?.data?.totalPages);
       } else {
         console.log('res', response);
@@ -112,7 +112,6 @@ const SearchTransaction = () => {
       setIsLoading(false);
     }
   };
-
   // const fetchRecords = async () => {
   //   try {
   //     setIsLoading(true);
@@ -211,16 +210,16 @@ const SearchTransaction = () => {
     setPageNumber(0);
     // fetchRecords();
   };
-  const exportToExcel = () => {
+  const exportToExcel = (data: any) => {
     // if (!response) return;
 
     // if (!response || response.length === 0) {
-    if (!exportedData) {
+    if (data?.length === 0) {
       return;
     }
 
     // Create a worksheet from the response data
-    const ws = XLSX?.utils?.json_to_sheet(exportedData);
+    const ws = XLSX?.utils?.json_to_sheet(data);
 
     // Create a new workbook and append the worksheet
     const wb = XLSX?.utils?.book_new();
@@ -230,6 +229,53 @@ const SearchTransaction = () => {
     XLSX.writeFile(wb, 'transaction_history.xlsx');
   };
 
+  const fetchExportedRecords = async (values: any) => {
+    setExportError('');
+    if (!values?.fromDate || !values?.toDate) {
+      return setExportError('Select Order From Date and Order To Date');
+    }
+    const transactionHistoryValues = {
+      // merchantEmail: 'misbah55@yopmail.com',
+      merchantEmail: userData.email,
+      managerMobile: userData?.managerMobile,
+      fromDate: values?.fromDate,
+      toDate: values?.toDate,
+    };
+    const mdRequest = {
+      ...transactionHistoryValues,
+      apisecret: userData?.apiSecret,
+    };
+    const md5Hash = generateMD5Hash(mdRequest);
+    const requestBody = {
+      request: transactionHistoryValues,
+      signature: md5Hash,
+    };
+    try {
+      setExportLoading(true);
+      const response = await apiClient.post(
+        'qrcode/getExportTransactionsHistoryByDate',
+        requestBody,
+        {
+          headers: { Authorization: `Bearer ${userData.jwt}` },
+        },
+      );
+      if (response?.data?.responseCode === '009') {
+        if (response?.data?.transactions?.length === 0) {
+          setExportError('No Data Available for Export');
+        }
+        exportToExcel(response?.data?.transactions);
+      } else if (response?.data?.responseCode === '000') {
+        setExportError(response?.data?.responseDescription);
+      } else {
+        setExportError(response?.data?.responseDescription);
+      }
+    } catch (e: any) {
+      console.log('eeee', e);
+      setExportError(e?.response?.data?.responseMessage);
+    } finally {
+      setExportLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col gap-6">
       <HeaderWrapper heading="Transactions History" />
@@ -358,6 +404,11 @@ const SearchTransaction = () => {
                 options={statusOptions}
               /> */}
             </div>
+            {exportError && (
+              <div className="flex w-full justify-start px-3 pb-[16px] text-xs text-danger-base">
+                {exportError}
+              </div>
+            )}
             <div className="flex w-full items-center justify-start gap-6">
               <Button
                 label="Search"
@@ -384,9 +435,10 @@ const SearchTransaction = () => {
                 className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
               />
               <Button
-                label="Export"
+                label={exportLoading ? 'Exporting' : 'Export'}
                 className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                onClickHandler={exportToExcel} // Export button click handler
+                onClickHandler={() => fetchExportedRecords(formik?.values)}
+                disable={exportLoading}
               />
               <Button
                 label="Bulk Reversal"

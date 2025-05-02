@@ -24,8 +24,8 @@ export const manageFundsTransferSchema = Yup.object().shape({
   transferDateTo: Yup.string()
     .required('To Date is required')
     .test(
-      'max-30-days',
-      'To Date should not be more than 30 days from From Date',
+      `max-${process.env.NEXT_PUBLIC_DAYS_RANGE}-days`,
+      `To Date should not be more than ${process.env.NEXT_PUBLIC_DAYS_RANGE} days from From Datess`,
       // eslint-disable-next-line func-names
       function (value) {
         const { transferDateFrom } = this.parent;
@@ -36,7 +36,10 @@ export const manageFundsTransferSchema = Yup.object().shape({
 
         if (!isValid(fromDate) || !isValid(toDate)) return true;
 
-        return differenceInDays(toDate, fromDate) <= 30;
+        return (
+          differenceInDays(toDate, fromDate) <=
+          Number(process.env.NEXT_PUBLIC_DAYS_RANGE)
+        );
       },
     ),
 });
