@@ -30,7 +30,9 @@ function FundsTranfer() {
 
   const fetchBeneficiariesRecords = async () => {
     try {
-      const response = await apiClient.get('/merchant/getAllBeneficiaries');
+      const response = await apiClient.get('/merchant/getAllBeneficiaries', {
+        headers: { merchantEmail: userData?.email },
+      });
       console.log(response.data.beneficiaryList, 'RESPONSE');
       if (response?.data.responseCode === '009') {
         setRecords(response.data.beneficiaryList);
