@@ -9,16 +9,18 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import H4 from '@/components/UI/Headings/H4';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
+import { useAppSelector } from '@/hooks/redux';
 
 function ManageBeneficiary() {
+  const userData = useAppSelector((state) => state.auth);
   const [beneficiaryFilteredData, setBeneficiaryFilteredData] = useState<any[]>(
     [],
   );
   const [loading, setLoading] = useState(false);
-
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [apierror, setApierror] = useState('');
   // const [filteredParams, setFilteredParams] = useState();
   const fetchRecords = async () => {
     try {
@@ -26,22 +28,19 @@ function ManageBeneficiary() {
       setTimeout(() => {
         setLoading(false);
       }, 2000);
-      const response = await apiClient.get('/merchant/getAllBeneficiaries');
+      const response = await apiClient.get('/merchant/getAllBeneficiaries', {
+        headers: { merchantEmail: userData?.email },
+      });
       if (response?.data.responseCode === '009') {
         const filteredValues = response?.data?.beneficiaryList.map(
           ({ ...rest }) => rest,
         );
         setBeneficiaryFilteredData(filteredValues);
       } else {
-        setTitle('Failure');
-        setDescription(response.data.responseDescription);
-        setShowModal(true);
+        setApierror(response.data.responseDescription);
       }
     } catch (e: any) {
-      console.log('Error in fetching dynamic QR list', e);
-      setTitle('Network Failure');
-      setDescription(e.message);
-      setShowModal(true);
+      setApierror(e.message);
     } finally {
       setLoading(false);
     }
@@ -99,7 +98,11 @@ function ManageBeneficiary() {
         <BarLoader color="#21B25F" />
       ) : (
         <>
-          {beneficiaryFilteredData.length > 0 ? (
+          {apierror ? (
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+              {apierror}
+            </div>
+          ) : beneficiaryFilteredData?.length > 0 ? (
             <IconTable
               tableData={beneficiaryFilteredData}
               tableHeadings={tableHeadings}
