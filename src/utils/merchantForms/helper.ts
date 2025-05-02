@@ -24,7 +24,7 @@ export const endpointArray = [
   //   tab: 'integration',
   //   endpoint: `/merchant/saveOnboardingForms`,
   // },
-  { tab: 'attachments', endpoint: `/merchant/upload` },
+  { name: 'Attachments', tab: 'attachments', endpoint: `/merchant/upload` },
   { tab: 'review-form', endpoint: null },
 ];
 

@@ -70,6 +70,7 @@ const ImageInput = ({
         signature: md5Hash,
       };
 
+      console.log('selectedCheckValue', selectedCheckValue);
       if (selectedCheckValue === 'bankaccount') {
         console.log('Caling OTHER BANK', data);
 
