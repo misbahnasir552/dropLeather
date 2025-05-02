@@ -19,6 +19,7 @@ const resetPasswordSchema = Yup.object().shape({
       /[@$!%*#?&]/,
       'Password must contain at least one special character',
     )
+    .max(15, 'Password can be maximum 15 characters long')
     .required('Password is required'),
   confirmNewPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), ''], 'Passwords must match')
