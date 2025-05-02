@@ -14,6 +14,7 @@ import H6 from '../Headings/H6';
 // import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const Input = ({
+  desclaimer,
   asterik = false,
   label,
   formik,
@@ -93,6 +94,7 @@ const Input = ({
           </div>
         )}
       </div>
+      <div className="flex text-xs text-neutral-white-600">{desclaimer}</div>
       <FormikErrorMessage name={name} />
     </div>
   );

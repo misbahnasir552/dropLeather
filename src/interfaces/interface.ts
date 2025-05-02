@@ -85,6 +85,7 @@ export interface IInputPrimary {
 }
 
 export interface IInput {
+  desclaimer?: string;
   asterik?: boolean;
   name: string;
   label: string;

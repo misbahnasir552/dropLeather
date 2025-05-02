@@ -475,6 +475,7 @@ const BusinessInformation = () => {
                                 formik={formik}
                                 asterik={field.required}
                                 error={field.validation?.errorMessage}
+                                desclaimer={field.desclaimer}
                               />
                             ) : field?.type === 'checkBoxInputMulti' ? (
                               <CheckboxInput

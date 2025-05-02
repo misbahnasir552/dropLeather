@@ -45,16 +45,17 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Business Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Business Name must be alphanumeric only')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(40, 'Cannot be more than 40 letters'),
   legalName: Yup.string()
     .required('Legal Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Legal Name must be alphanumeric only')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(40, 'Cannot be more than 40 letters'),
   ntnNO: Yup.string()
     .required('NTN No is required')
     .min(5, 'Cannot be less than 5 digits')
-    .matches(/^\d+$/, 'NTN No must contain only numbers')
+    // .matches(/^\d+$/, 'NTN No must contain only numbers')
+    .matches(/^[a-zA-Z0-9\s]+$/, 'NTN No must be alphanumeric only')
     .max(13, 'Cannot be more than 13 digits'),
   dateOfCorporation: Yup.date().required('Date of Corporation is required'),
   terrorFinancing: Yup.string().required(
