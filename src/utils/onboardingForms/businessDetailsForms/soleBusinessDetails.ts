@@ -186,6 +186,7 @@ export const soleBusinessDetailsFormData = {
           name: 'nextOfKinRelationship',
           label: 'Next of KIN Relationship',
           type: 'text',
+          desclaimer: '( Next of kin can be any blood relation or spouse )',
           required: true,
         },
         {
