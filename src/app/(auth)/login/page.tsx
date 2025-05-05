@@ -9,12 +9,14 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import eye from '@/assets/icons/eye.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
+// import ApiError from '@/components/UI/Error/Error';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { LoginForm } from '@/interfaces/interface';
 import { loginSuccess } from '@/redux/features/authSlice';
 import { setLoginCredentials } from '@/redux/features/corporateSlices/loginCredentials';
+import { setApiError } from '@/redux/features/errorSlices/errorSlice';
 import loginSchema, {
   loginInitialValues,
 } from '@/validations/merchant/onBoarding/loginSchema';
@@ -121,6 +123,9 @@ const NewLogin = () => {
         setShowModal(true);
       }
     } catch (error: any) {
+      console.log('error', error);
+
+      dispatch(setApiError(error?.message));
       setApierror('An Unexpected Error Occured. Please check your network');
     } finally {
       setSubmitting(false);
@@ -167,6 +172,11 @@ const NewLogin = () => {
             <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
             </div>
+            {/* <div>
+              {' '}
+              <ApiError />
+            </div> */}
+
             <AccessFormikValues />
             <Button
               label="Login"
