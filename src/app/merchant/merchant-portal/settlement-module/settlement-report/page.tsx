@@ -41,6 +41,7 @@ function SettlementReport() {
     'To Account',
     'To Account Title',
     'To Bank',
+    'Amount',
     'Status',
     'Remarks',
   ];

@@ -1,4 +1,5 @@
 // import { differenceInDays, isValid, parseISO } from 'date-fns';
+import { differenceInDays, isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
 import type { SearchTransactionsForm } from '@/interfaces/interface';
@@ -80,10 +81,38 @@ export const searchTransactionsSchema = Yup.object().shape({
   storeID: Yup.string(),
 
   fromDate: Yup.string(),
-  toDate: Yup.string().when('fromDate', {
-    is: (val: any) => val !== undefined && val !== '',
-    then: (schema) => schema.required('To Date is required'),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  toDate: Yup.string()
+    // .required('To Date is required')
+    .test(
+      'toDate-required',
+      'To Date is required',
+      // eslint-disable-next-line func-names
+      function (value) {
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const { fromDate } = this?.parent;
+        return !fromDate || (fromDate && value);
+      },
+    )
+    .test(
+      `toDate-max-${process.env.NEXT_PUBLIC_DAYS_RANGE}-days`,
+      `To Date should not be more than ${process.env.NEXT_PUBLIC_DAYS_RANGE} days from From Date`,
+      // eslint-disable-next-line func-names
+      function (value) {
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        const { fromDate } = this?.parent;
+
+        if (!fromDate || !value) return true;
+
+        const fromDates = parseISO(fromDate);
+        const toDate = parseISO(value);
+
+        if (!isValid(fromDates) || !isValid(toDate)) return true;
+
+        return (
+          differenceInDays(toDate, fromDates) <=
+          Number(process.env.NEXT_PUBLIC_DAYS_RANGE)
+        );
+      },
+    ),
   storeName: Yup.string(),
 });
