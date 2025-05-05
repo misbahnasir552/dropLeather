@@ -85,8 +85,10 @@ const ImageInput = ({
       } else {
         console.log('Caling TMB', data);
 
+        console.log('hello', formik?.values?.bank);
+
         const response = await apiClient.post(
-          formik?.values?.bank === 'otherBanks'
+          formik?.values?.bank === 'Other Banks'
             ? '/merchant/fetchTitleOtherBanks'
             : '/merchant/fetchTitleTMB',
           requestBody,

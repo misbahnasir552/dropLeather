@@ -104,6 +104,7 @@ const SettlementDetailsReqRevision = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [inputApiError, setInputApiError] = useState('');
   const businessNature = fieldsData?.pages?.natureOfBusiness;
 
   const SettlementDetailsFormData = {
@@ -253,14 +254,16 @@ const SettlementDetailsReqRevision = () => {
             return field;
           });
 
+          console.log('selectedCheckValue', selectedCheckValue);
           // ✅ Exclude 'bankName' field for specific conditions
           if (
-            selectedCheckValue === 'easypaisabanklimited' ||
+            selectedCheckValue === 'easypaisaBankLimited' ||
             selectedCheckValue === '' ||
             selectedCheckValue === undefined
           ) {
+            console.log('hello 123');
             updatedFields = updatedFields.filter(
-              (field) => field.name !== 'bankName',
+              (field: any) => field !== 'Bank Name',
             );
           }
           console.log('updated Fields', updatedFields);
@@ -364,7 +367,12 @@ const SettlementDetailsReqRevision = () => {
         setValidationSchemaState(validationSchema);
       }
     }
-  }, [currentTab, fieldsData?.pages?.page, selectedCheckValue]);
+  }, [
+    currentTab,
+    fieldsData?.pages?.page,
+    selectedCheckValue,
+    bankName.length,
+  ]);
 
   if (!initialValuesState || !filteredData) {
     setTimeout(() => {}, 12000);
@@ -623,10 +631,12 @@ const SettlementDetailsReqRevision = () => {
                                         // easypaisabankLimited otherwise if otherbanks then selected
                                         bankName:
                                           selectedCheckValue ===
-                                          'easypaisabanklimited'
-                                            ? 'easypaisabanklimited'
+                                          'easypaisaBankLimited'
+                                            ? 'easypaisaBankLimited'
                                             : formik?.values?.bankName,
                                       }}
+                                      inputApiError={inputApiError}
+                                      setInputApiError={setInputApiError}
                                       formik={formik}
                                       selectedCheckValue={selectedCheckValue}
                                     />

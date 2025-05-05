@@ -12,7 +12,7 @@ export const SettlementDetailsFormData = {
           required: 'true',
           options: [
             { label: 'Easypaisa Bank Limited', value: 'easypaisaBankLimited' },
-            { label: 'Other Banks', value: 'otherBanks' },
+            { label: 'Other Banks', value: 'Other Banks' },
           ],
         },
         {
