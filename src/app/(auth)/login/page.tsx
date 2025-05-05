@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import eye from '@/assets/icons/eye.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
-import ApiError from '@/components/UI/Error/Error';
+// import ApiError from '@/components/UI/Error/Error';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -169,13 +169,13 @@ const NewLogin = () => {
               hasImage={true}
               image={eye}
             />
-            {/* <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
-            </div> */}
-            <div>
+            </div>
+            {/* <div>
               {' '}
               <ApiError />
-            </div>
+            </div> */}
 
             <AccessFormikValues />
             <Button
