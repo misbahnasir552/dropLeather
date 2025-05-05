@@ -1,4 +1,4 @@
-import { differenceInDays, isValid, parseISO } from 'date-fns';
+// import { differenceInDays, isValid, parseISO } from 'date-fns';
 import * as Yup from 'yup';
 
 import type { SearchTransactionsForm } from '@/interfaces/interface';
@@ -40,6 +40,14 @@ export const searchTransactionsInitialValues: SearchTransactionsForm = {
   storeName: '',
 };
 
+// const isOtherFiltersUsed = (values: any) => {
+//   const { orderID, fromDate, toDate, ...rest } = values;
+
+//   return Object.entries(rest)?.some(
+//     ([key, val]) => val !== undefined && val !== '' && key !== 'storeName',
+//   );
+// };
+
 export const searchTransactionsSchema = Yup.object().shape({
   paymentMethod: Yup.string(),
   customerEmail: Yup.string(),
@@ -69,41 +77,13 @@ export const searchTransactionsSchema = Yup.object().shape({
   escrow: Yup.string(),
   transactionPoint: Yup.string(),
   channel: Yup.string(),
-  // status: Yup.string(),
   storeID: Yup.string(),
-  fromDate: Yup.string().required('From Date is required'),
-  toDate: Yup.string()
-    .required('To Date is required')
-    .test(
-      'toDate-required',
-      'To Date is required',
-      // eslint-disable-next-line func-names
-      function (value) {
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        const { fromDate } = this?.parent;
-        return !fromDate || (fromDate && value);
-      },
-    )
-    .test(
-      `toDate-max-${process.env.NEXT_PUBLIC_DAYS_RANGE}-days`,
-      `To Date should not be more than ${process.env.NEXT_PUBLIC_DAYS_RANGE} days from From Date`,
-      // eslint-disable-next-line func-names
-      function (value) {
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        const { fromDate } = this?.parent;
 
-        if (!fromDate || !value) return true;
-
-        const fromDates = parseISO(fromDate);
-        const toDate = parseISO(value);
-
-        if (!isValid(fromDates) || !isValid(toDate)) return true;
-
-        return (
-          differenceInDays(toDate, fromDates) <=
-          Number(process.env.NEXT_PUBLIC_DAYS_RANGE)
-        );
-      },
-    ),
+  fromDate: Yup.string(),
+  toDate: Yup.string().when('fromDate', {
+    is: (val: any) => val !== undefined && val !== '',
+    then: (schema) => schema.required('To Date is required'),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   storeName: Yup.string(),
 });
