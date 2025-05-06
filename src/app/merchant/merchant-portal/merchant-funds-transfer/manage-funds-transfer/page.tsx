@@ -303,6 +303,7 @@ function ManageFundsTransfer() {
                   label="Reset"
                   type="button"
                   onClickHandler={() => {
+                    setExportError('');
                     if (
                       !Object.values(formik.values)?.some(
                         (value) => value !== '',

@@ -188,6 +188,7 @@ const SearchTransaction = () => {
   // ];
 
   const onSubmit = async (values: SearchTransactionsForm) => {
+    setExportError('');
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -424,6 +425,7 @@ const SearchTransaction = () => {
                 label="Reset"
                 // routeName="/sign-up"
                 onClickHandler={() => {
+                  setExportError('');
                   if (
                     !Object.values(formik.values)?.some((value) => value !== '')
                   ) {

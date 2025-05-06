@@ -47,6 +47,7 @@ function SettlementReport() {
   ];
 
   const onSubmit = async (values: ISettlementReport) => {
+    setExportError('');
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -218,6 +219,7 @@ function SettlementReport() {
                       label="Reset"
                       type="button"
                       onClickHandler={() => {
+                        setExportError('');
                         if (
                           !Object.values(formik.values)?.some(
                             (value) => value !== '',
