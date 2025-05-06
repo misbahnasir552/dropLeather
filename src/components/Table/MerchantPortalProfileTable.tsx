@@ -63,7 +63,7 @@ function MerchantPortalProfileTable({
                 {/* <td className="w-1/2 py-[18px] text-center"> */}
                 <td className="py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
-                    {item?.webSiteUrl ? item?.webSiteUrl : ''}
+                    {item?.webSiteUrl ? item?.webSiteUrl : 'N/A'}
                   </B3>
                 </td>
                 {/* <td className="w-1/2 py-[18px] text-center"> */}
@@ -196,7 +196,7 @@ function MerchantPortalProfileTable({
                 </td>
                 <td className="w-1/2 py-[18px] text-center">
                   <B3 textColor="text-secondary-base">
-                    {item?.webSiteUrl ? item?.webSiteUrl : ''}
+                    {item?.webSiteUrl ? item?.webSiteUrl : 'N/A'}
                   </B3>
                 </td>
                 <td className="w-1/2 py-[18px] text-center">
