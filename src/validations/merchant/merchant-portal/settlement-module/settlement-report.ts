@@ -9,9 +9,9 @@ export const settlementReportInitialValues: ISettlementReport = {
 };
 
 export const settlementReportSchema = Yup.object().shape({
-  transferDateFrom: Yup.string().required('From Date is required'),
+  transferDateFrom: Yup.string(),
   transferDateTo: Yup.string()
-    .required('To Date is required')
+    // .required('To Date is required')
     .test(
       'transferDateTo-required',
       'To Date is required',

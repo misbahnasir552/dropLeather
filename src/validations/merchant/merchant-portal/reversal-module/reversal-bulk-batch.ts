@@ -13,9 +13,9 @@ export const searchBulkInitialValues: any = {
 export const searchBulkSchema = Yup.object().shape({
   batchId: Yup.string(),
   file: Yup.string(),
-  fromDate: Yup.string().required('From Date is required'),
+  fromDate: Yup.string(),
   toDate: Yup.string()
-    .required('To Date is required')
+    // .required('To Date is required')
     .test(
       'toDate-required',
       'To Date is required',

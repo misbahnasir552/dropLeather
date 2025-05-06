@@ -153,6 +153,7 @@ function BulkFundsTransferReport() {
   };
 
   const onSubmit = (values: any) => {
+    setExportError('');
     const filteredValues: any = {};
 
     Object.entries(values).forEach(([key, value]) => {
@@ -160,6 +161,9 @@ function BulkFundsTransferReport() {
         filteredValues[key] = value;
       }
     });
+    if (Object.keys(filteredValues).length === 0) {
+      return;
+    }
     setFilteredData(filteredValues);
     const filteredData: any = response
       ?.map((record: any) => {
@@ -284,6 +288,7 @@ function BulkFundsTransferReport() {
                       label="Reset"
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={() => {
+                        setExportError('');
                         if (
                           !Object.values(formik.values)?.some(
                             (value) => value !== '',
