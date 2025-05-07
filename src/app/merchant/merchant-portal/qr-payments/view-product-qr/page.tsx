@@ -46,13 +46,13 @@ function ViewProductQR() {
   const [exportError, setExportError] = useState('');
   const [exportLoading, setExportLoading] = useState(false);
   const viewProductQrTableHeadings: string[] = [
-    'Product Name',
+    // 'Product Name',
     'Amount (Rs.)',
     'Product Number',
     'Store Name',
     'Store ID',
     'QR Generation Date/Time',
-    'QR Expiry Time(seconds)',
+    'QR Expiry Time(minutes)',
     'Actions',
   ];
 
@@ -78,6 +78,8 @@ function ViewProductQR() {
           qrFormatIndicator,
           branchCode,
           productDetails,
+          productName,
+          expirationTimeRemaining,
           // qrCode,
           // tillNumber,
           // createdAt,
@@ -313,12 +315,12 @@ function ViewProductQR() {
               {(formik) => (
                 <Form className=" bg-screen-grey">
                   <div className="mb-9 grid grid-cols-3 gap-5 bg-screen-grey ">
-                    <Input
+                    {/* <Input
                       label="Product Name"
                       name="productName"
                       type="text"
                       error={formik.errors.productName}
-                    />
+                    /> */}
                     <Input
                       label="Product Number"
                       name="productNumber"
