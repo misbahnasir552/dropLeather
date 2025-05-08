@@ -78,8 +78,8 @@ const ActivityInformation = () => {
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
       const fData = fieldData.pages?.page?.filter((item) => {
         console.log(item.name, 'ITEM NAME');
-        // return convertSlugToTitle(item.name) === title;
-        return item.name;
+        return convertSlugToTitle(item.name) === title;
+        // return item.name;
       });
       setFilteredData(fData);
       console.log('FDATAAAA:', fData);
