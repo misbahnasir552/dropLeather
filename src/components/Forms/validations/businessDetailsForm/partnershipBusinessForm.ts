@@ -69,9 +69,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   accountBusinessDocumentationType: Yup.string().required(
     'Account/Business Documentation Type is required',
   ),
-  limitCategory: Yup.string().required('Limit Category is required'),
+  // limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
-  raastEnabled: Yup.string().required('Raast Enabled is required'),
+  // raastEnabled: Yup.string().required('Raast Enabled is required'),
   establishedSince: Yup.string(),
   // .nullable()
   // .required('Established Since is required'),

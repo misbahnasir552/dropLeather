@@ -25,16 +25,16 @@ export const activityInformationFormInitialValues = {
 
 const activityInformationFormSchema = Yup.object().shape({
   businessOwnerName: Yup.string()
-    .required('Business Owner Name is required')
+    .required('Signatory name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
   ownerOfCNIC: Yup.string()
-    .required('Owner of CNIC is required')
+    .required('Signatory CNIC is required')
     .matches(/^\d+$/, 'Invalid CNIC')
     .length(13, 'CNIC must be exactly 13 digits'),
   fatherSpouseName: Yup.string()
-    .required('Father/Spouse Name is required')
+    .required('Father/Husband/Spouse Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     .max(25, 'Cannot be more than 25 letters'),
@@ -45,18 +45,17 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Business Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Business Name must be alphanumeric only')
-    .max(40, 'Cannot be more than 40 letters'),
+    .max(50, 'Cannot be more than 50 letters'),
   legalName: Yup.string()
     .required('Legal Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Legal Name must be alphanumeric only')
-    .max(40, 'Cannot be more than 40 letters'),
+    .max(50, 'Cannot be more than 50 letters'),
   ntnNO: Yup.string()
     .required('NTN No is required')
-    .min(5, 'Cannot be less than 5 digits')
-    // .matches(/^\d+$/, 'NTN No must contain only numbers')
+    .min(5, 'Cannot be less than 5 characters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'NTN No must be alphanumeric only')
-    .max(13, 'Cannot be more than 13 digits'),
+    .max(13, 'Cannot be more than 13 characters'),
   dateOfCorporation: Yup.date().required('Date of Corporation is required'),
   terrorFinancing: Yup.string().required(
     'Terror Financing selection is required',

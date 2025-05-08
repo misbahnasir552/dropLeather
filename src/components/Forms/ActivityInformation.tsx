@@ -20,6 +20,7 @@ import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInf
 
 import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import CheckboxItem from '../UI/Inputs/CheckboxItem';
+import DisabledField from '../UI/Inputs/DisabledField';
 import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
@@ -77,7 +78,8 @@ const ActivityInformation = () => {
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
       const fData = fieldData.pages?.page?.filter((item) => {
         console.log(item.name, 'ITEM NAME');
-        return convertSlugToTitle(item.name) === title;
+        // return convertSlugToTitle(item.name) === title;
+        return item.name;
       });
       setFilteredData(fData);
       console.log('FDATAAAA:', fData);
@@ -323,6 +325,22 @@ const ActivityInformation = () => {
                           formik={formik}
                           asterik={field.required}
                           error={field.validation?.errorMessage}
+                          desclaimer={field.desclaimer}
+                        />
+                      ) : field.type === 'disabledInput' ? (
+                        <DisabledField
+                          data={[
+                            {
+                              label:
+                                field.name === 'primaryPhoneNo'
+                                  ? 'Primary Phone No'
+                                  : 'Email Address',
+                              value:
+                                field.name === 'primaryPhoneNo'
+                                  ? userData?.managerMobile
+                                  : userData?.email,
+                            },
+                          ]}
                         />
                       ) : field?.type === 'checkItem' ? (
                         <CheckboxItem

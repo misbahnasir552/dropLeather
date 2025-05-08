@@ -58,7 +58,7 @@ export const GetActivityInfoDetails = () => {
 
 export const ActivityFormInfoSchema = Yup.object().shape({
   fatherName: Yup.string().required('Father name is required'),
-  businessOwner: Yup.string().required('Business Owner Name is required'),
+  businessOwner: Yup.string().required('Signatory name is required'),
   businessName: Yup.string()
     .min(6, 'Business Name must be at least 6 characters')
     .required('Business Name is required'),
