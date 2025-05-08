@@ -3,9 +3,9 @@ import * as Yup from 'yup';
 import type { IDynamicQR } from './interfaces';
 
 export const dynamicQRInitialValues: IDynamicQR = {
-  productName: '',
+  // productName: '',
   amount: '',
-  productDetails: '',
+  // productDetails: '',
   productNumber: '',
   storeId: '',
   qrExpirationTime: '',
@@ -13,7 +13,7 @@ export const dynamicQRInitialValues: IDynamicQR = {
 };
 
 export const dynamicQRSchema = Yup.object().shape({
-  productName: Yup.string().required('Please fill this field'),
+  // productName: Yup.string().required('Please fill this field'),
   amount: Yup.string()
     .required('Please fill this field')
     .matches(/^\d+$/, 'Only numeric values are allowed')
@@ -22,7 +22,7 @@ export const dynamicQRSchema = Yup.object().shape({
       'Amount must be greater than 0',
       (value) => !!value && Number(value) > 0,
     ),
-  productDetails: Yup.string().required('Please fill this field'),
+  // productDetails: Yup.string().required('Please fill this field'),
   productNumber: Yup.string().required('Please fill this field'),
   storeId: Yup.string().required('Please fill this field'),
   qrExpirationTime: Yup.number()
