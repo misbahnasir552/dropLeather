@@ -9,12 +9,10 @@ export const soleAttachmentFormInitialValues = {
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const SUPPORTED_FORMATS = [
+  'application/pdf',
   'image/png',
   'image/jpeg',
-  'image/jpg',
-  'application/pdf',
-  'application/msword', // .doc
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
+  'application/msword',
 ];
 
 const soleAttachmentFormSchema = Yup.object().shape({
@@ -23,14 +21,32 @@ const soleAttachmentFormSchema = Yup.object().shape({
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value) => {
-        if (!value) return false; // Field is required
-        return value instanceof File && SUPPORTED_FORMATS.includes(value.type); // Check type exists
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
       },
     )
-    .test('fileSize', 'File size must not exceed 10MB.', (value) => {
-      if (!value) return false;
-      return value instanceof File && value.size <= MAX_FILE_SIZE;
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
     }),
 
   cnicBack: Yup.mixed()
@@ -38,14 +54,32 @@ const soleAttachmentFormSchema = Yup.object().shape({
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value) => {
-        if (!value) return false; // Field is required
-        return value instanceof File && SUPPORTED_FORMATS.includes(value.type); // Check type exists
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
       },
     )
-    .test('fileSize', 'File size must not exceed 10MB.', (value) => {
-      if (!value) return false;
-      return value instanceof File && value.size <= MAX_FILE_SIZE;
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
     }),
 
   selfie: Yup.mixed()
@@ -53,14 +87,32 @@ const soleAttachmentFormSchema = Yup.object().shape({
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value) => {
-        if (!value) return false; // Field is required
-        return value instanceof File && SUPPORTED_FORMATS.includes(value.type); // Check type exists
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
       },
     )
-    .test('fileSize', 'File size must not exceed 10MB.', (value) => {
-      if (!value) return false;
-      return value instanceof File && value.size <= MAX_FILE_SIZE;
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
     }),
 
   certificate: Yup.mixed()
@@ -68,14 +120,32 @@ const soleAttachmentFormSchema = Yup.object().shape({
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value) => {
-        if (!value) return false; // Field is required
-        return value instanceof File && SUPPORTED_FORMATS.includes(value.type); // Check type exists
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
       },
     )
-    .test('fileSize', 'File size must not exceed 2MB.', (value) => {
-      if (!value) return false;
-      return value instanceof File && value.size <= MAX_FILE_SIZE;
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
     }),
 });
 
