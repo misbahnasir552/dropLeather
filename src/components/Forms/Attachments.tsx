@@ -14,9 +14,10 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { endpointArray } from '@/utils/merchantForms/helper';
 // import { buildValidationSchema } from './validationsOLD/helper';
 import {
+  C5soleProprietorAttachmentsFormData,
+  C10soleProprietorAttachmentsFormData,
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
-  soleProprietorAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
 
 import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
@@ -26,15 +27,18 @@ import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
 // import Input from '../UI/Inputs/Input';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import C5soleAttachmentFormSchema, {
+  C5soleAttachmentFormInitialValues,
+} from './validations/attachmentForm/c5SoleAttachmentsForm';
+import C10soleAttachmentFormSchema, {
+  C10soleAttachmentFormInitialValues,
+} from './validations/attachmentForm/c10SoleAttachmentForm';
 import partnershipAttachmentsFormSchema, {
   partnershipAttachmentsFormInitialValues,
 } from './validations/attachmentForm/partnershipAttachmentsForm';
 import pnpAttachmentsFormSchema, {
   pnpAttachmentsFormInitialValues,
 } from './validations/attachmentForm/pnpAttachmentsForm';
-import soleAttachmentFormSchema, {
-  soleAttachmentFormInitialValues,
-} from './validations/attachmentForm/soleAttachmentsForm';
 
 const Attachments = () => {
   // const fieldsData = useAppSelector((state: any) => state.fields);
@@ -70,6 +74,11 @@ const Attachments = () => {
 
   const formData = new FormData();
   console.log(filteredData, 'filtered data from attachmentsssssssssss');
+  const limitCategory = useAppSelector(
+    (state: any) => state.onBoardingForms.limitCategory,
+  );
+
+  console.log('limitCategory', limitCategory);
 
   useEffect(() => {
     console.log(initialValuesState, 'initial values');
@@ -77,10 +86,20 @@ const Attachments = () => {
   }, [initialValuesState, validationSchemaState]);
 
   useEffect(() => {
-    if (businessNature?.businessNature === 'soleProprietor') {
-      setInitialValuesState(soleAttachmentFormInitialValues);
-      setValidationSchemaState(soleAttachmentFormSchema);
-      setAttachmentData(soleProprietorAttachmentsFormData.categories);
+    if (
+      businessNature?.businessNature === 'soleProprietor' &&
+      limitCategory === 'C5 (limit of max 500k)'
+    ) {
+      setInitialValuesState(C5soleAttachmentFormInitialValues);
+      setValidationSchemaState(C5soleAttachmentFormSchema);
+      setAttachmentData(C5soleProprietorAttachmentsFormData.categories);
+    } else if (
+      businessNature?.businessNature === 'soleProprietor' &&
+      limitCategory === 'C10 (limit above than 500k)'
+    ) {
+      setInitialValuesState(C10soleAttachmentFormInitialValues);
+      setValidationSchemaState(C10soleAttachmentFormSchema);
+      setAttachmentData(C10soleProprietorAttachmentsFormData.categories);
     } else if (businessNature?.businessNature === 'partnership') {
       setInitialValuesState(partnershipAttachmentsFormInitialValues);
       setValidationSchemaState(partnershipAttachmentsFormSchema);

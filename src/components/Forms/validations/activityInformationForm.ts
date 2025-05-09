@@ -64,7 +64,7 @@ const activityInformationFormSchema = Yup.object().shape({
     'Politically Exposed selection is required',
   ),
   residency: Yup.string().required('Residency selection is required'),
-  email: Yup.string().email('Invalid email').required('Email is required'),
+  // email: Yup.string().email('Invalid email').required('Email is required'),
   city: Yup.string().required('City is required'),
   businessAddress: Yup.string()
     .required('Business Address is required')
@@ -82,10 +82,10 @@ const activityInformationFormSchema = Yup.object().shape({
   accountHandlerIsdifferentfromOwnerAccountHolder: Yup.string().required(
     'Account Handler selection is required',
   ),
-  primaryPhoneNo: Yup.string()
-    .required('Primary Phone No is required')
-    .matches(/^\d+$/, 'Invalid primary phone number')
-    .length(11, 'Primary Phone Number must be exactly 11 digits'),
+  // primaryPhoneNo: Yup.string()
+  //   .required('Primary Phone No is required')
+  //   .matches(/^\d+$/, 'Invalid primary phone number')
+  //   .length(11, 'Primary Phone Number must be exactly 11 digits'),
   secondaryPhoneNo: Yup.string()
     .matches(/^\d+$/, 'Invalid Secondary phone number')
     .length(11, 'Secondary Phone Number must be exactly 11 digits'),

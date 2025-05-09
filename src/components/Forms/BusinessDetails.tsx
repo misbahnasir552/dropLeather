@@ -3,6 +3,7 @@
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -11,6 +12,7 @@ import Input from '@/components/UI/Inputs/Input';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo } from '@/interfaces/interface';
+import { setLimitCategory } from '@/redux/features/formSlices/onBoardingForms';
 // import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
@@ -78,6 +80,8 @@ const BusinessInformation = () => {
   useEffect(() => {
     console.log('nature of business got', setDescription, setTitle);
   }, []);
+
+  const dispatch = useDispatch();
 
   const getNatureOfBusiness = async () => {
     try {
@@ -400,6 +404,7 @@ const BusinessInformation = () => {
           );
           console.log(response);
           if (response?.data?.responseCode === '009') {
+            dispatch(setLimitCategory(values.limitCategory));
             // Navigate to the next tab after successful submission
             const nextTab = endpointArray[currentIndex + 1]?.tab;
             if (nextTab) {
