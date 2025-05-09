@@ -95,6 +95,11 @@ const SettlementDetails = () => {
   const [description, setDescription] = useState('');
   const [bankName, setBankName] = useState('');
   const [inputApiError, setInputApiError] = useState('');
+  const businessNature = useAppSelector(
+    (state: any) => state.onBoardingForms.businessNature.businessNature,
+  );
+
+  console.log('businessNature', businessNature);
 
   const getBankNames = async () => {
     console.log(setDescription, setTitle);
@@ -142,35 +147,51 @@ const SettlementDetails = () => {
 
       const updatedFormData = SettlementDetailsFormData.categories?.map(
         (category) => {
-          let updatedFields = category.fields;
-
-          updatedFields = updatedFields.map((field: any) => {
+          let updatedFields = category.fields.map((field: any) => {
+            // Step 1: Inject dynamic options into bankName field
             if (field.name === 'bankName') {
               return {
                 ...field,
                 options: bankName,
               };
             }
+
+            // Step 2: Restrict bank options if sole proprietor
+            if (field.name === 'bank' && businessNature === 'soleProprietor') {
+              return {
+                ...field,
+                options: [
+                  {
+                    label: 'Easypaisa Bank Limited',
+                    value: 'easypaisaBankLimited',
+                  },
+                ],
+              };
+            }
+
             return field;
           });
+
+          // Step 3: Check if bank checkbox exists
           const hasAssociationField = category.fields.some(
             (field: any) =>
               field.name === 'bank' && field.type === 'checkBoxInput',
           );
 
           if (!hasAssociationField) return category;
+
+          // Step 4: Remove bankName field if Easypaisa is selected or none selected
           if (
             selectedCheckValue === 'easypaisaBankLimited' ||
             selectedCheckValue === '' ||
             selectedCheckValue === undefined
           ) {
-            console.log('here i am ');
-            // console.log("updated fields",updatedFields)
-            updatedFields = category.fields.filter(
+            updatedFields = updatedFields.filter(
               (field: any) => field.name !== 'bankName',
             );
-            console.log('updated fields ', updatedFields);
           }
+
+          console.log('Updated fields:', updatedFields);
 
           return {
             ...category,

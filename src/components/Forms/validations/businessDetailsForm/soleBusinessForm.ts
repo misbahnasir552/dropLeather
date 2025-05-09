@@ -59,7 +59,7 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   ),
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
-  raastEnabled: Yup.string().required('Raast Enabled is required'),
+  // raastEnabled: Yup.string().required('Raast Enabled is required'),
   establishedSince: Yup.date().nullable(),
   businessMode: Yup.array()
     .min(1, 'Please select at least one Business Mode')
@@ -94,7 +94,7 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
     .required('Next of Kin Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   dateOfBirth: Yup.string().required('Date of Birth is required'),
   registerUnRegister: Yup.string().required('Register/Unregister is required'),
   specialCustomer: Yup.string().required('Special Customer is required'),
@@ -105,19 +105,19 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   placeOfIncorporationOrRegistration: Yup.string()
     .min(4, 'Cannot be less than 4 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   geographiesInvolved: Yup.string()
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   expectedTypeOfCounterParties: Yup.string()
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   intendedNatureOfBusinessRelations: Yup.string()
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   expectedModesOfTransactionsDeliveryChannels: Yup.string().matches(
     /^\d+$/,
     'Only numbers are allowed',
@@ -125,7 +125,7 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   industrySegment: Yup.string()
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
   natureOfActivity: Yup.array()
@@ -198,7 +198,7 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
     .required('Source of Funds is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   currentMonthlyTransactionPKR: Yup.string().required(
     'Current Monthly Transaction (PKR) is required',
   ),

@@ -22,22 +22,23 @@ export const partnershipBusinessDetailsFormData = {
           ],
           required: true,
         },
-        {
-          name: 'limitCategory',
-          label: 'Limit Category',
-          type: 'dropdown',
-          options: [
-            {
-              label: 'C5 (limit of max 500k)',
-              value: 'C5 (limit of max 500k)',
-            },
-            {
-              label: 'C10 (limit above than 500k)',
-              value: 'C10 (limit above than 500k)',
-            },
-          ],
-          required: true,
-        },
+        // Bet Requirement
+        // {
+        //   name: 'limitCategory',
+        //   label: 'Limit Category',
+        //   type: 'dropdown',
+        //   options: [
+        //     {
+        //       label: 'C5 (limit of max 500k)',
+        //       value: 'C5 (limit of max 500k)',
+        //     },
+        //     {
+        //       label: 'C10 (limit above than 500k)',
+        //       value: 'C10 (limit above than 500k)',
+        //     },
+        //   ],
+        //   required: true,
+        // },
         {
           name: 'natureofBusiness',
           label: 'Nature of Business',
@@ -54,16 +55,17 @@ export const partnershipBusinessDetailsFormData = {
           ],
           required: true,
         },
-        {
-          name: 'raastEnabled',
-          label: 'Raast Enabled',
-          type: 'dropdown',
-          options: [
-            { label: 'Yes', value: 'Yes' },
-            { label: 'No', value: 'No' },
-          ],
-          required: true,
-        },
+        // BET Requirement
+        // {
+        //   name: 'raastEnabled',
+        //   label: 'Raast Enabled',
+        //   type: 'dropdown',
+        //   options: [
+        //     { label: 'Yes', value: 'Yes' },
+        //     { label: 'No', value: 'No' },
+        //   ],
+        //   required: true,
+        // },
         {
           name: 'establishedSince',
           label: 'Established Since',

@@ -55,16 +55,17 @@ export const soleBusinessDetailsFormData = {
           ],
           required: true,
         },
-        {
-          name: 'raastEnabled',
-          label: 'Raast Enabled',
-          type: 'dropdown',
-          options: [
-            { label: 'Yes', value: 'Yes' },
-            { label: 'No', value: 'No' },
-          ],
-          required: true,
-        },
+        // BET Requirement
+        // {
+        //   name: 'raastEnabled',
+        //   label: 'Raast Enabled',
+        //   type: 'dropdown',
+        //   options: [
+        //     { label: 'Yes', value: 'Yes' },
+        //     { label: 'No', value: 'No' },
+        //   ],
+        //   required: true,
+        // },
         // {
         //   name: 'Established Since',
         //   label: 'establishedSince',
