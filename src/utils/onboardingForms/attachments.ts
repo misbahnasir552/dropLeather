@@ -1,5 +1,5 @@
 // Sole Documents
-export const soleProprietorAttachmentsFormData = {
+export const C5soleProprietorAttachmentsFormData = {
   pageName: 'Attachments',
   categories: [
     {
@@ -27,6 +27,70 @@ export const soleProprietorAttachmentsFormData = {
           // label: 'Certificate',
           label: 'Account maintenance certificate from  your external bank',
           name: 'certificate',
+          type: 'file',
+          required: true,
+        },
+      ],
+    },
+  ],
+};
+
+export const C10soleProprietorAttachmentsFormData = {
+  pageName: 'Attachments',
+  categories: [
+    {
+      categoryName: 'Upload Documents(What would you like to integrate)',
+      fields: [
+        {
+          label:
+            'Copy of the applicable valid identity document of sole proprietor/beneficial owner and signatory',
+          name: 'validIdentityDocument',
+          type: 'file',
+          required: true,
+        },
+        {
+          label: 'NTN certificate',
+          name: 'NTNcertificate',
+          type: 'file',
+          required: true,
+        },
+        {
+          label: 'Declaration of sole proprietorship on business letterhead',
+          name: 'soleProprietorshipDeclaration',
+          type: 'file',
+          required: true,
+        },
+        {
+          // label: 'Certificate',
+          label: 'Account opening requisition on business letterhead',
+          name: 'accountOpeningRequisition',
+          type: 'file',
+          required: true,
+        },
+        {
+          // label: 'Certificate',
+          label: 'Proof of source of income',
+          name: 'ProofOfSourceOfIncome',
+          type: 'file',
+          required: true,
+        },
+        {
+          // label: 'Certificate',
+          label: 'CRS form',
+          name: 'CRSform',
+          type: 'file',
+          required: true,
+        },
+        {
+          // label: 'Certificate',
+          label: 'FATCA W8 Ben form',
+          name: 'W8Benform',
+          type: 'file',
+          required: true,
+        },
+        {
+          label: 'Account Maintainance Certificate From Your External Bank',
+          name: 'accountMaintainanceCertificateFromYourExternalBank',
           type: 'file',
           required: true,
         },

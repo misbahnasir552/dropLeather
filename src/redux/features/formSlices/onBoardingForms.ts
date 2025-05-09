@@ -23,6 +23,7 @@ import { SettlementFormInfoInitialValues } from '@/validations/merchant/onBoardi
 
 const initialState: any = {
   businessNature: '',
+  limitCategory: '',
   corporateProducts: '',
   managedDisbursementProducts: '',
   othersProducts: '',
@@ -54,6 +55,12 @@ const onBoardingFormSlice = createSlice({
       console.log('businessNature redux ', action.payload);
 
       state.businessNature = action.payload;
+      // state.businessEndpoint = action.payload;
+    },
+    setLimitCategory: (state, action: PayloadAction<string>) => {
+      console.log('limitCategory redux ', action.payload);
+
+      state.limitCategory = action.payload;
       // state.businessEndpoint = action.payload;
     },
     setBusinessEndpoint: (state, action: PayloadAction<string>) => {
@@ -207,6 +214,7 @@ const onBoardingFormSlice = createSlice({
 // Export action creators
 export const {
   setBusinessNature,
+  setLimitCategory,
   setSoleName,
   setMerchantEntity,
   setAdditionalForm,

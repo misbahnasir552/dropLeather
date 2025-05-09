@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const soleAttachmentFormInitialValues = {
+export const C5soleAttachmentFormInitialValues = {
   cnicFront: null,
   cnicBack: null,
   selfie: null,
@@ -15,7 +15,7 @@ const SUPPORTED_FORMATS = [
   'application/msword',
 ];
 
-const soleAttachmentFormSchema = Yup.object().shape({
+const C5soleAttachmentFormSchema = Yup.object().shape({
   cnicFront: Yup.mixed()
     .required('CNIC Front is required')
     .test(
@@ -149,4 +149,4 @@ const soleAttachmentFormSchema = Yup.object().shape({
     }),
 });
 
-export default soleAttachmentFormSchema;
+export default C5soleAttachmentFormSchema;
