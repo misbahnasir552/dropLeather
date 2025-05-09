@@ -28,7 +28,7 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Signatory name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   ownerOfCNIC: Yup.string()
     .required('Signatory CNIC is required')
     .matches(/^\d+$/, 'Invalid CNIC')
@@ -37,7 +37,7 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Father/Husband/Spouse Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   gender: Yup.string().required('Gender is required'),
   purposeOfAccount: Yup.string().required('Purpose Of Account is required'),
   citizenship: Yup.string().required('Citizenship is required'),
@@ -45,12 +45,12 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Business Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Business Name must be alphanumeric only')
-    .max(50, 'Cannot be more than 50 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   legalName: Yup.string()
     .required('Legal Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Legal Name must be alphanumeric only')
-    .max(50, 'Cannot be more than 50 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   ntnNO: Yup.string()
     .required('NTN No is required')
     .min(5, 'Cannot be less than 5 characters')
@@ -72,7 +72,7 @@ const activityInformationFormSchema = Yup.object().shape({
     .required('Business Address is required')
     .min(5, 'Cannot be less than 5 letters')
     .matches(/^[a-zA-Z0-9\s]+$/, 'Business Address must be alphanumeric only')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   correspondenceAddress: Yup.string()
     .required('Correspondence Address is required')
     .min(5, 'Cannot be less than 5 letters')
@@ -80,7 +80,7 @@ const activityInformationFormSchema = Yup.object().shape({
       /^[a-zA-Z0-9\s]+$/,
       'Correspondence Address must be alphanumeric only',
     )
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   accountHandlerIsdifferentfromOwnerAccountHolder: Yup.string().required(
     'Account Handler selection is required',
   ),

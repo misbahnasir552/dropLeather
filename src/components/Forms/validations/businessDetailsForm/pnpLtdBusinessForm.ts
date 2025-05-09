@@ -87,7 +87,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Signatory Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   signatoryDateOfBirth: Yup.date().required(
     'Signatory Date Of Birth is required',
   ),
@@ -95,12 +95,12 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Signatory City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   beneficialOwnerName: Yup.string()
     .required('Beneficial Owner Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   beneficialOwnerIDCardNo: Yup.string()
     .required('Beneficial Owner ID Card No is required')
     .matches(/^\d+$/, 'Invalid CNIC')
@@ -112,22 +112,22 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Beneficial Owner City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   shareholdingEntities: Yup.string()
     .required('Shareholding Entities is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   relatedParties: Yup.string()
     .required('Related Parties is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   directorName: Yup.string()
     .required('Director Name is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   directorIdCardNo: Yup.string()
     .required('Director Id Card No is required')
     .matches(/^\d+$/, 'Invalid CNIC')
@@ -139,7 +139,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Director City & Country is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s,]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   signatoryIdCardNo: Yup.string()
     .required('Signatory Id Card No is required')
     .matches(/^\d+$/, 'Invalid CNIC')
@@ -173,18 +173,18 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Geographies Involved is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   expectedTypeOfCounterParties: Yup.string()
     .required('Expected Type of Counter-Parties is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   intendedNatureOfBusinessRelations: Yup.string()
     .required('Intended nature of business relations is required')
-    .min(3, 'Cannot be less than 3 digits')
+    .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     // .matches(/^\d+$/, 'Only numbers are allowed')
-    .max(25, 'Cannot be more than 25 digits'),
+    .max(60, 'Cannot be more than 60 letters'),
   expectedModesOfTransactionsDeliveryChannels: Yup.string()
     .required('Expected modes of transactions/ delivery channels is required')
     .matches(/^\d+$/, 'Only Numeric values are allowed'),
@@ -192,7 +192,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Industry/Segment is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
   natureOfActivity: Yup.array()
@@ -261,7 +261,7 @@ export const pnpLtdBusinessDetailsFormSchema = Yup.object().shape({
     .required('Source of Funds is required')
     .min(3, 'Cannot be less than 3 letters')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(25, 'Cannot be more than 25 letters'),
+    .max(60, 'Cannot be more than 60 letters'),
   currentMonthlyTransactionPKR: Yup.string().required(
     'Current Monthly Transaction (PKR) is required',
   ),
