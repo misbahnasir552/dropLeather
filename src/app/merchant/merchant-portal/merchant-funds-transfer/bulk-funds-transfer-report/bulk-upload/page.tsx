@@ -71,11 +71,13 @@ function BulkFileUpload() {
     }
   };
   const viewSampleFile = () => {
-    const EncryptedFile = generateAESEncryption('Sample Bulk Document.csv');
-    const EncryptedEmmail = generateAESEncryption(
+    const EncryptedFile = generateAESEncryption(
+      'SampleBulkFundsTransferFile.xlsx',
+    );
+    const EncryptedEmail = generateAESEncryption(
       'samplebulkdocuments@gmail.com',
     );
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmail}&type=merchant`;
 
     window.open(downloadUrl, '_blank');
   };
