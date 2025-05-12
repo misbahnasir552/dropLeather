@@ -223,7 +223,6 @@ export interface LoginForm {
 export interface ILoginCard {
   title: string;
   description: string;
-  heading?: string;
   routeName?: string;
   isDisabled?: boolean;
   type?: string;

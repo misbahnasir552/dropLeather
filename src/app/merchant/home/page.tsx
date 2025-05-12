@@ -277,7 +277,6 @@ const LoginSucessHome = () => {
   const LoginCardData = [
     {
       title: 'Merchant Onboarding',
-      heading: 'Start your journey with easypaisa in just a few clicks!',
       description:
         'Get your business online and start accepting digital payments securely and swiftly. Complete a simple sign-up process and get verified to enjoy full access to easypaisa merchant services.',
       routeName: 'business-nature',
@@ -289,7 +288,6 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Request Revision',
-      heading: 'Action Required: Update Your Submitted Information',
       description:
         'We’ve reviewed your onboarding details and need a few corrections or additional documents to proceed. Please revise the highlighted sections to complete your registration process.',
       // routeName: '/merchant/home/request-revision',
@@ -301,8 +299,7 @@ const LoginSucessHome = () => {
       onClick: handleRequestRevisionClick,
     },
     {
-      title: 'Continue to My Dashboard',
-      heading: 'Your business at a glance – all in one place.',
+      title: 'Merchant Dashboard',
       description:
         'Monitor transactions, track earnings, download reports, and manage your business profile with ease.',
       routeName: '/merchant/merchant-portal/home/',
@@ -346,7 +343,6 @@ const LoginSucessHome = () => {
             <LoginCard
               key={index}
               title={item.title}
-              heading={item?.heading}
               description={item.description}
               routeName={item.routeName}
               onClick={item.onClick}
