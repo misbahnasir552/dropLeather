@@ -11,8 +11,8 @@ const ApiError: React.FC<ApiErrorProps> = ({ apiError }) => {
 
   return (
     // <div className='flex flex-col bg-secondary-500 w-full'>
-    <div className="flex w-full justify-start bg-primary-300 px-3 pt-[8px] text-xs text-danger-base">
-      {apiError}hiiii
+    <div className="flex w-full justify-start  px-3 pt-[8px] text-xs text-danger-base">
+      {apiError}
       {/* </div> */}
     </div>
   );

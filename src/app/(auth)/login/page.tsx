@@ -32,6 +32,7 @@ const NewLogin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const session = null;
   const jwt = Cookies.get('jwt');
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchUserDetails = async (email: string) => {
     try {
@@ -56,6 +57,7 @@ const NewLogin = () => {
           setDescription('Some Network Issue');
           setShowModal(true);
         }
+        console.log(isLoading);
       }
     } catch (error) {
       console.error('Error fetching details:', error);
@@ -113,7 +115,63 @@ const NewLogin = () => {
         };
         dispatch(setLoginCredentials(credentials));
 
-        router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
+        // OTP CODE
+        try {
+          setIsLoading(true);
+          const response: any = await apiClient.post(
+            'auth/login',
+            {},
+            {
+              params: {
+                channel: 'merchant',
+              },
+              headers: {
+                username: credentials.username,
+                password: credentials.password,
+                otp: '123123',
+                messageOtp: '123123',
+                // otp: emailOtp.join(''),
+                // messageOtp: smsOtp.join(''),
+              },
+            },
+          );
+
+          console.log('LOGIN API response TESTTT:', response);
+
+          if (response?.data?.responseCode === '000') {
+            dispatch(loginSuccess(response?.data));
+            Cookies.set('jwt', response?.data?.jwt, {
+              expires: 1,
+              path: '/',
+            });
+            Cookies.set('browser_number', response?.data?.apiSecret, {
+              expires: 1,
+              path: '/',
+            });
+            Cookies.set('username', response?.data?.email, {
+              expires: 1,
+              path: '/',
+            });
+            // dispatch(clearApplicants());
+            router.push('/merchant/home');
+          } else if (response?.data?.responseCode == '010') {
+            router.push(`/reset-password?email=${credentials.username}`);
+          } else {
+            setApierror(response?.data?.responseMessage);
+            throw new Error('Login failed');
+          }
+        } catch (e: any) {
+          console.log(e);
+          setTitle(e.code);
+          setDescription(e.message);
+        } finally {
+          setIsLoading(false);
+        }
+
+        // router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
+        router.push('/merchant/home');
+
+        // router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
         // dispatch(setApiError("mnjs"));
         setApierror(loginResponse?.data?.responseMessage);
