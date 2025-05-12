@@ -16,6 +16,7 @@ export default function LoginCard({
   description,
   routeName,
   type,
+  heading,
   onClick,
 }: ILoginCard) {
   // const userData = useAppSelector((state) => state.auth);
@@ -49,9 +50,14 @@ export default function LoginCard({
           <p className="text-2xl font-semibold leading-[30px] text-secondary-base group-hover:text-neutral-white-base sm:max-md:text-xl sm:max-md:leading-6">
             {title}
           </p>
-          <p className="text-sm font-normal text-secondary-600 group-hover:text-neutral-white-base sm:max-md:leading-[18px]">
-            {description}{' '}
-          </p>
+          <div>
+            <p className=" font-medium text-secondary-700 group-hover:text-neutral-white-base ">
+              {heading}
+            </p>
+            <p className="text-sm font-normal text-secondary-600 group-hover:text-neutral-white-base sm:max-md:leading-[18px]">
+              {description}{' '}
+            </p>
+          </div>
           <div className="flex w-full gap-1">
             <p className="text-sm font-semibold text-secondary-base hover:cursor-pointer group-hover:text-neutral-white-base">
               Get Started

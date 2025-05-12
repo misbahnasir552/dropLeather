@@ -277,8 +277,9 @@ const LoginSucessHome = () => {
   const LoginCardData = [
     {
       title: 'Merchant Onboarding',
+      heading: 'Start your journey with easypaisa in just a few clicks!',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Get your business online and start accepting digital payments securely and swiftly. Complete a simple sign-up process and get verified to enjoy full access to easypaisa merchant services.',
       routeName: 'business-nature',
       hide:
         (userData.onboardingCompleted === true &&
@@ -288,7 +289,9 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Request Revision',
-      description: 'All you need is to select...',
+      heading: 'Action Required: Update Your Submitted Information',
+      description:
+        'We’ve reviewed your onboarding details and need a few corrections or additional documents to proceed. Please revise the highlighted sections to complete your registration process.',
       // routeName: '/merchant/home/request-revision',
       hide:
         (userData.onboardingCompleted === false &&
@@ -299,8 +302,9 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Continue to My Dashboard',
+      heading: 'Your business at a glance – all in one place.',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Monitor transactions, track earnings, download reports, and manage your business profile with ease.',
       routeName: '/merchant/merchant-portal/home/',
       hide:
         (userData.onboardingCompleted === false &&
@@ -342,6 +346,7 @@ const LoginSucessHome = () => {
             <LoginCard
               key={index}
               title={item.title}
+              heading={item?.heading}
               description={item.description}
               routeName={item.routeName}
               onClick={item.onClick}
