@@ -278,7 +278,7 @@ const LoginSucessHome = () => {
     {
       title: 'Merchant Onboarding',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Get your business online and start accepting digital payments securely and swiftly. Complete a simple sign-up process and get verified to enjoy full access to easypaisa merchant services.',
       routeName: 'business-nature',
       hide:
         (userData.onboardingCompleted === true &&
@@ -288,7 +288,8 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Request Revision',
-      description: 'All you need is to select...',
+      description:
+        'We’ve reviewed your onboarding details and need a few corrections or additional documents to proceed. Please revise the highlighted sections to complete your registration process.',
       // routeName: '/merchant/home/request-revision',
       hide:
         (userData.onboardingCompleted === false &&
@@ -298,9 +299,9 @@ const LoginSucessHome = () => {
       onClick: handleRequestRevisionClick,
     },
     {
-      title: 'Continue to My Dashboard',
+      title: 'Merchant Dashboard',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Monitor transactions, track earnings, download reports, and manage your business profile with ease.',
       routeName: '/merchant/merchant-portal/home/',
       hide:
         (userData.onboardingCompleted === false &&
