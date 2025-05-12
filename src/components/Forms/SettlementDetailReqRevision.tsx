@@ -299,6 +299,22 @@ const SettlementDetailsReqRevision = () => {
                 if (matchedField) {
                   console.log('Matched Field:', matchedField);
 
+                  if (
+                    matchedField.name === 'bank' &&
+                    businessNature === 'soleProprietor'
+                  ) {
+                    return {
+                      ...matchedField,
+                      options: [
+                        {
+                          label: 'Easypaisa Bank Limited',
+                          value: 'easypaisaBankLimited',
+                        },
+                      ],
+                      required: matchedField.required || false,
+                    };
+                  }
+
                   if (matchedField.name === 'bankName') {
                     console.log('banknames', bankName);
                     return {

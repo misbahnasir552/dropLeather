@@ -11,9 +11,9 @@ export interface IQrPayments {
 }
 
 export interface IDynamicQR {
-  productName: string;
+  // productName: string;
   amount: string;
-  productDetails: string;
+  // productDetails: string;
   productNumber: string;
   storeId: string;
   // categoryCode: string;

@@ -162,6 +162,7 @@ export interface ICustomModalProps {
   routeName?: string | (() => void);
   image?: any;
   isVisible?: boolean;
+  type?: string;
 }
 
 // export  interface ICustomModalHookProps{

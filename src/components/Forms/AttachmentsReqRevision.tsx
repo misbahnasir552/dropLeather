@@ -15,9 +15,9 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { endpointArray } from '@/utils/merchantForms/helper';
 import {
+  C5soleProprietorAttachmentsFormData,
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
-  soleProprietorAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
 // import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 // import { buildValidationSchema } from './validationsOLD/helper';
@@ -34,9 +34,9 @@ import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
 // import Input from '../UI/Inputs/Input';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import C5soleAttachmentFormSchema from './validations/attachmentForm/c5SoleAttachmentsForm';
 import partnershipAttachmentsFormSchema from './validations/attachmentForm/partnershipAttachmentsForm';
 import pnpAttachmentsFormSchema from './validations/attachmentForm/pnpAttachmentsForm';
-import soleAttachmentFormSchema from './validations/attachmentForm/soleAttachmentsForm';
 // import type { FieldsData } from './validations/types';
 
 interface Field {
@@ -162,8 +162,8 @@ const Attachments = () => {
 
   useEffect(() => {
     if (businessNature === 'soleProprietor') {
-      setValidationSchemaState(soleAttachmentFormSchema);
-      setAttachmentData(soleProprietorAttachmentsFormData?.categories);
+      setValidationSchemaState(C5soleAttachmentFormSchema);
+      setAttachmentData(C5soleProprietorAttachmentsFormData?.categories);
     } else if (businessNature === 'partnership') {
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData?.categories);

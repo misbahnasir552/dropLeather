@@ -60,7 +60,7 @@ const QRModal: React.FC<QRModalProps> = ({
         tillNo: tilNum || '',
         ...((isDynamic || generateDynamicQr) && {
           amount,
-          expireTime: expirationTime,
+          expireTime: `${expirationTime} ${generateDynamicQr ? 'Minutes' : ''}`,
         }),
         managerMobile: userData?.managerMobile,
       };
@@ -186,7 +186,7 @@ const QRModal: React.FC<QRModalProps> = ({
                           <B1>Expiry time would be : </B1>
                           <H6 textColor="text-primary-base">
                             {expirationTime}{' '}
-                            {(isDynamic || generateDynamicQr) && 'seconds'}
+                            {generateDynamicQr ? 'Minutes' : ''}
                           </H6>
                         </div>
                       )}

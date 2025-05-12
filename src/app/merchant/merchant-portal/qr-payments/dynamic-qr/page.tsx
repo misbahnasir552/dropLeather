@@ -231,14 +231,14 @@ function AddDynamicQR() {
           <Form className="flex flex-col gap-6">
             <FormLayout formHeading="Add Product Details">
               <div className="flex flex-col gap-5">
-                <Input
+                {/* <Input
                   asterik
                   label="Product Name"
                   name="productName"
                   type="text"
                   error={formik.errors.productName}
                   touched={formik.touched.productName}
-                />
+                /> */}
                 <Input
                   asterik
                   label="Amount"
@@ -249,7 +249,7 @@ function AddDynamicQR() {
                 />
                 <Input
                   asterik
-                  label="Expiration Time (in seconds)"
+                  label="Expiration Time (in minutes)"
                   name="qrExpirationTime"
                   type="text"
                   placeholder={'0'}
@@ -257,14 +257,14 @@ function AddDynamicQR() {
                   touched={formik.touched.qrExpirationTime}
                   onKeyDown={handleKeyDown}
                 />
-                <Input
+                {/* <Input
                   asterik
                   label="Product Details"
                   name="productDetails"
                   type="text"
                   error={formik.errors.productDetails}
                   touched={formik.touched.productDetails}
-                />
+                /> */}
                 <Input
                   asterik
                   label="Product Number"
@@ -316,7 +316,7 @@ function AddDynamicQR() {
           setShowModal={setShowModal}
           imageUrl={imageUrl}
           amount={amount}
-          expirationTime={qrExpirationTime}
+          expirationTime={`${qrExpirationTime}`}
           tilNum={tillNum}
           qrString={qrString}
           generateDynamicQr={true}

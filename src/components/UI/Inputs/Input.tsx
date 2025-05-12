@@ -94,7 +94,9 @@ const Input = ({
           </div>
         )}
       </div>
-      <div className="flex text-xs text-neutral-white-600">{desclaimer}</div>
+      <div className="ml-2 flex text-xs text-neutral-white-600">
+        {desclaimer}
+      </div>
       <FormikErrorMessage name={name} />
     </div>
   );

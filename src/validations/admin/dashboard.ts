@@ -26,7 +26,7 @@ export const AdminDashboardInitialValues: AdminDashboardQueue = {
 
 export const AdminDashboardInfoSchema = Yup.object().shape({
   merchantName: Yup.string().required('Father name is required'),
-  websiteAddress: Yup.string().required('Business Owner Name is required'),
+  websiteAddress: Yup.string().required('Signatory name is required'),
   dateOfApplication: Yup.date().required('Please select a valid date'),
   merchantEmail: Yup.string().required('Email Address is required'),
   sellerCode: Yup.string().required('City is required'),

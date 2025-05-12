@@ -126,7 +126,7 @@ function DynamicDetailsForm({ isEditable, data, admin }: IRevieFormData) {
                     value={applicant.applicantFullName}
                   />
                   <ReviewInput
-                    label="Father / Spouse Name"
+                    label="Father / Husband / Spouse Name"
                     value={applicant.fatherFullName}
                   />
                   <ReviewInput

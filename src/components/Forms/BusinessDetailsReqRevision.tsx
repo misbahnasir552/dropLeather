@@ -33,6 +33,8 @@ import DropdownNew from '../UI/Inputs/DropDownNew';
 // import DropdownNew from '../UI/Inputs/DropDownNew';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import { partnershipBusinessDetailsFormSchema } from './validations/businessDetailsForm/partnershipBusinessForm';
+import { pnpLtdBusinessDetailsFormSchema } from './validations/businessDetailsForm/pnpLtdBusinessForm';
 import { soleBusinessDetailsFormSchema } from './validations/businessDetailsForm/soleBusinessForm';
 // import { partnershipBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/partnershipBusinessDetails';
 // import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/pnpLtdBusinessDetails';
@@ -705,13 +707,12 @@ const BusinessInformationReqRevision = () => {
     } else if (businessNature === 'partnership') {
       // Access internal schema fields safely
       schemaFields = (
-        partnershipBusinessDetailsFormData as unknown as Yup.ObjectSchema<any>
+        partnershipBusinessDetailsFormSchema as Yup.ObjectSchema<any>
       ).fields;
     } else if (businessNature === 'publicAndPrivateLtd') {
       // Access internal schema fields safely
-      schemaFields = (
-        pnpLtdBusinessDetailsFormData as unknown as Yup.ObjectSchema<any>
-      ).fields;
+      schemaFields = (pnpLtdBusinessDetailsFormSchema as Yup.ObjectSchema<any>)
+        .fields;
     }
 
     mappedData.forEach((section: any) => {
