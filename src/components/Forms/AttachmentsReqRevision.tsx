@@ -20,14 +20,13 @@ import {
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
+
 // import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 // import { buildValidationSchema } from './validationsOLD/helper';
 // import {
 //   partnershipAttachmentsFormData,
 //   soleProprietorAttachmentsFormData,
 // } from '@/utils/onboardingForms/attachments';
-import { AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
-
 import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
 // import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
@@ -199,9 +198,34 @@ const Attachments = () => {
   const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
     const shape: Record<string, Yup.AnySchema> = {};
 
-    // Access internal schema fields safely
-    const schemaFields = (AttachmentFormInfoSchema as Yup.ObjectSchema<any>)
-      .fields;
+    let schemaFields: {
+      [x: string]:
+        | Yup.Reference<unknown>
+        | Yup.ISchema<any, Yup.AnyObject, any, any>;
+    };
+
+    if (
+      businessNature === 'soleProprietor' &&
+      limitCategory === 'C5(limit of max 500k)'
+    ) {
+      // Access internal schema fields safely
+      schemaFields = (C5soleAttachmentFormSchema as Yup.ObjectSchema<any>)
+        .fields;
+    } else if (
+      businessNature === 'soleProprietor' &&
+      limitCategory === 'C10 (limit above than 500k)'
+    ) {
+      // Access internal schema fields safely
+      schemaFields = (C10soleAttachmentFormSchema as Yup.ObjectSchema<any>)
+        .fields;
+    } else if (businessNature === 'partnership') {
+      // Access internal schema fields safely
+      schemaFields = (partnershipAttachmentsFormSchema as Yup.ObjectSchema<any>)
+        .fields;
+    } else if (businessNature === 'publicAndPrivateLtd') {
+      // Access internal schema fields safely
+      schemaFields = (pnpAttachmentsFormSchema as Yup.ObjectSchema<any>).fields;
+    }
 
     mappedData.forEach((section: any) => {
       section.categories.forEach((category: any) => {
