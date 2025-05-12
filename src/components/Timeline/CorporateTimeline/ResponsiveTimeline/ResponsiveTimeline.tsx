@@ -6,10 +6,10 @@ import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import ArrowTimeline from '@/assets/icons/Arrow-timeline.svg';
-import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
-import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
-import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
-import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
+// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+// import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
+// import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
+// import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
 import ReviewForm from '@/components/Forms/ReviewForm';
 // import SettlementDetails from '@/components/Forms/SettlementDetails';
 import {
@@ -91,7 +91,7 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
     {
       name: 'activity-info',
       label: 'Activity Information',
-      component: <ActivityInformation />,
+      // component: <ActivityInformation />,
       status: data?.activityInformation?.status,
       svg: (
         <ApplicationFormIcon
@@ -110,7 +110,7 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
     {
       name: 'business-details',
       label: 'Business Details',
-      component: <BusinessInformation />,
+      // component: <BusinessInformation />,
       svg: (
         <LivePictureIcon
           // color={"#6F6B76"}
@@ -131,7 +131,7 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
     {
       name: 'integration-information',
       label: 'Integration',
-      component: <IntegrationForm />,
+      // component: <IntegrationForm />,
       svg: (
         <CheckListIcon
           // color={"#6F6B76"}
@@ -150,7 +150,7 @@ const ResponsiveTimeline = ({ activeStep }: any) => {
     {
       name: 'attachments-information',
       label: 'Attachments',
-      component: <AttachmentsForm />,
+      // component: <AttachmentsForm />,
       svg: (
         <AttachmentsIcon
           // color={"#6F6B76"}

@@ -10,7 +10,7 @@ import H6 from '@/components/UI/Headings/H6';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppDispatch, useAppSelector } from '@/hooks/redux';
+import { useAppDispatch } from '@/hooks/redux';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import {
   setBusinessEndpoint,
@@ -33,15 +33,7 @@ const BusinessNature = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  const corporateJourneyType = useAppSelector(
-    (state: any) => state.corporateJourneyType,
-  );
-  console.log(
-    'business nature type',
-    corporateJourneyType,
-    setTitle,
-    setDescription,
-  );
+  console.log('business nature type', setTitle, setDescription);
   // const userData = useAppSelector((state) => state.auth);
 
   const options = [

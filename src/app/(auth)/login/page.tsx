@@ -9,14 +9,13 @@ import React, { useEffect, useState } from 'react';
 import apiClient from '@/api/apiClient';
 import eye from '@/assets/icons/eye.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
-// import ApiError from '@/components/UI/Error/Error';
+import ApiError from '@/components/UI/Error/Error';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { LoginForm } from '@/interfaces/interface';
 import { loginSuccess } from '@/redux/features/authSlice';
 import { setLoginCredentials } from '@/redux/features/corporateSlices/loginCredentials';
-import { setApiError } from '@/redux/features/errorSlices/errorSlice';
 import loginSchema, {
   loginInitialValues,
 } from '@/validations/merchant/onBoarding/loginSchema';
@@ -73,6 +72,8 @@ const NewLogin = () => {
   const AccessFormikValues = () => {
     const { values, errors } = useFormikContext<LoginForm>();
     useEffect(() => {
+      // dispatch(setApiError(''))
+      // dispatch(setApiError("hiiiiiiiii"))
       if (Object.keys(errors).length !== 0) {
         setApierror('');
       }
@@ -114,6 +115,7 @@ const NewLogin = () => {
 
         router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
       } else if (loginResponse?.data?.responseCode === '009') {
+        // dispatch(setApiError("mnjs"));
         setApierror(loginResponse?.data?.responseMessage);
       } else if (loginResponse?.data?.responseCode === '010') {
         setApierror(loginResponse?.data?.responseMessage);
@@ -123,10 +125,7 @@ const NewLogin = () => {
         setShowModal(true);
       }
     } catch (error: any) {
-      console.log('error', error);
-
-      dispatch(setApiError(error?.message));
-      setApierror('An Unexpected Error Occured. Please check your network');
+      setApierror(error?.message);
     } finally {
       setSubmitting(false);
       setIsSubmitting(false); // Re-enable the button after response
@@ -152,6 +151,7 @@ const NewLogin = () => {
         {(formik) => (
           <Form className="flex flex-col items-center">
             <div className="mb-6 flex w-full flex-col">
+              {/* <ApiError/> */}
               <Input
                 label="Username or Email"
                 name="Username"
@@ -169,13 +169,13 @@ const NewLogin = () => {
               hasImage={true}
               image={eye}
             />
-            <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+            {/* <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
-            </div>
-            {/* <div>
-              {' '}
-              <ApiError />
             </div> */}
+            {/* <div> */}
+
+            <ApiError apiError={apierror} />
+            {/* </div> */}
 
             <AccessFormikValues />
             <Button

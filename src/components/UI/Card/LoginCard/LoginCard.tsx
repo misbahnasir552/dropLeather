@@ -10,7 +10,6 @@ import type { ILoginCard } from '@/interfaces/interface';
 // import apiClient from '@/api/apiClient';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
-// import { setJourneyType } from '@/redux/features/adminSlices/corporateSlices/corporateJourneyTypeSlice';
 
 export default function LoginCard({
   title,

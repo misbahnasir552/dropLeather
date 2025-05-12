@@ -9,13 +9,11 @@ import React, {
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
-import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
-import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
-import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
+// import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
 // DO NOT REMOVE COMMENTED CODE
 // import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
 import ReviewForm from '@/components/Forms/ReviewForm';
-import SettlementDetailsStatic from '@/components/Forms/SettlementDetailsOLD';
+// import SettlementDetailsStatic from '@/components/Forms/SettlementDetailsOLD';
 import StoreDetails from '@/components/Forms/StoreDetails';
 import {
   ActivityInformationIcon,
@@ -27,6 +25,13 @@ import {
 } from '@/components/Timeline/TimelineIcons/Timelineicons';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
+
+// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+import ActivityInformation from '../Forms/ActivityInformation';
+import AttachmentsForm from '../Forms/Attachments';
+// import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
+import BusinessInformation from '../Forms/BusinessDetails';
+import SettlementDetailsStatic from '../Forms/SettlementDetails';
 
 interface Tab {
   name: string;

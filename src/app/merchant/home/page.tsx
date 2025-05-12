@@ -274,21 +274,6 @@ const LoginSucessHome = () => {
     }
   };
 
-  // const PendingMerchantCardData = [
-  //   {
-  //     title: 'Sandbox Integrations',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-  //   {
-  //     title: 'Merchant Onboarding',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-  // ];
-
   const LoginCardData = [
     {
       title: 'Merchant Onboarding',
@@ -353,17 +338,7 @@ const LoginSucessHome = () => {
           </p>
         </div>
         <div className="flex gap-5 sm:max-md:flex-col sm:max-md:gap-6">
-          {// data?.applicationFormStatus === 'PENDING'
-          //   ? PendingMerchantCardData.map((item, index) => (
-          //       <LoginCard
-          //         key={index}
-          //         title={item.title}
-          //         description={item.description}
-          //         routeName={item.routeName}
-          //       />
-          //     ))
-          //   :
-          LoginCardData?.map((item, index) => (
+          {LoginCardData?.map((item, index) => (
             <LoginCard
               key={index}
               title={item.title}
