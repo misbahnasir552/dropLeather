@@ -141,7 +141,7 @@ export const storeDetailsSchema = Yup.object().shape({
     .required('Street Address is required')
     .min(5, 'Street Address Cannot be less than 5 letters'),
   city: Yup.string()
-    .required('Cityis required')
+    .required('City is required')
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed'),
   category: Yup.string().required('Category is required'),
   countryCode: Yup.string().required('Country Code is required'),

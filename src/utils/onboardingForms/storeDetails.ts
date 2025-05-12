@@ -46,7 +46,7 @@ export const storeDetailsFormData = {
         {
           label: 'City',
           name: 'city',
-          type: 'dropDown',
+          type: 'dropdown',
           show: ['Online', 'Retail'],
           required: true,
           options: [
