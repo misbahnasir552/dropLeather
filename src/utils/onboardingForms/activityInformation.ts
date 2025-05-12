@@ -60,6 +60,7 @@ export const ActivityInformationFormData = {
             { label: 'Algeria', value: 'Algeria' },
             { label: 'Andorra', value: 'Andorra' },
             { label: 'Angola', value: 'Angola' },
+            { label: 'Antigua', value: 'Antigua' },
             { label: 'Argentina', value: 'Argentina' },
             { label: 'Armenia', value: 'Armenia' },
             { label: 'Australia', value: 'Australia' },
@@ -69,6 +70,7 @@ export const ActivityInformationFormData = {
             { label: 'Bahrain', value: 'Bahrain' },
             { label: 'Bangladesh', value: 'Bangladesh' },
             { label: 'Barbados', value: 'Barbados' },
+            { label: 'Barbuda', value: 'Barbuda' },
             { label: 'Belarus', value: 'Belarus' },
             { label: 'Belgium', value: 'Belgium' },
             { label: 'Belize', value: 'Belize' },
@@ -186,6 +188,7 @@ export const ActivityInformationFormData = {
             { label: 'North Macedonia', value: 'North Macedonia' },
             { label: 'Norway', value: 'Norway' },
             { label: 'Oman', value: 'Oman' },
+            { label: 'Palau', value: 'Palau' },
             { label: 'Pakistan', value: 'Pakistan' },
             { label: 'Palestine', value: 'Palestine' },
             { label: 'Panama', value: 'Panama' },
@@ -199,7 +202,10 @@ export const ActivityInformationFormData = {
             { label: 'Romania', value: 'Romania' },
             { label: 'Russia', value: 'Russia' },
             { label: 'Rwanda', value: 'Rwanda' },
-            { label: 'Saint Kitts and Nevis', value: 'Saint Kitts and Nevis' },
+            {
+              label: 'Saint Kitts and Nevis',
+              value: 'Saint Kitts and Nevis',
+            },
             { label: 'Saint Lucia', value: 'Saint Lucia' },
             {
               label: 'Saint Vincent and the Grenadines',
@@ -256,9 +262,15 @@ export const ActivityInformationFormData = {
             { label: 'Marshall Islands', value: 'Marshall Islands' },
             { label: 'Micronesia', value: 'Micronesia' },
             { label: 'Nauru', value: 'Nauru' },
-            { label: 'Sao Tome and Principe', value: 'Sao Tome and Principe' },
+            {
+              label: 'Sao Tome and Principe',
+              value: 'Sao Tome and Principe',
+            },
             { label: 'Timor-Leste', value: 'Timor-Leste' },
-            { label: 'USA', value: 'USA' },
+            {
+              label: 'United States of America',
+              value: 'United States of America',
+            },
           ],
         },
 

@@ -55,7 +55,8 @@ export const GetBusinessDetails = () => {
 };
 
 export const businessInfoSchema = Yup.object().shape({
-  establishedSince: Yup.string().required('Established Since is required'),
+  // BET Requirement
+  // establishedSince: Yup.string().required('Established Since is required'),
   natureOfActivity: Yup.string().required('Nature Of Activity is required'),
   currentDailyTransactionsInPkr: Yup.string()
     .required('Current Daily Transactions In Pkr is required')
