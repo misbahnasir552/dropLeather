@@ -64,7 +64,7 @@ export const C10soleProprietorAttachmentsFormData = {
         },
         {
           label: 'NTN certificate',
-          name: 'NTNcertificate',
+          name: 'ntnCertificate',
           type: 'file',
           required: true,
         },
@@ -84,21 +84,21 @@ export const C10soleProprietorAttachmentsFormData = {
         {
           // label: 'Certificate',
           label: 'Proof of source of income',
-          name: 'ProofOfSourceOfIncome',
+          name: 'proofOfSourceOfIncome',
           type: 'file',
           required: true,
         },
         {
           // label: 'Certificate',
           label: 'CRS form',
-          name: 'CRSform',
+          name: 'crsForm',
           type: 'file',
           required: true,
         },
         {
           // label: 'Certificate',
           label: 'FATCA W8 Ben form',
-          name: 'W8Benform',
+          name: 'w8Benform',
           type: 'file',
           required: true,
         },

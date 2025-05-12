@@ -2,12 +2,12 @@ import * as Yup from 'yup';
 
 export const C10soleAttachmentFormInitialValues = {
   validIdentityDocument: null,
-  NTNcertificate: null,
+  ntnCertificate: null,
   soleProprietorshipDeclaration: null,
   accountOpeningRequisition: null,
-  ProofOfSourceOfIncome: null,
-  CRSform: null,
-  W8Benform: null,
+  proofOfSourceOfIncome: null,
+  crsForm: null,
+  w8Benform: null,
   accountMaintainanceCertificateFromYourExternalBank: null,
   optional1: null,
   optional2: null,
