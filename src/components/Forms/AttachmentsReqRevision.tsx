@@ -16,6 +16,7 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { endpointArray } from '@/utils/merchantForms/helper';
 import {
   C5soleProprietorAttachmentsFormData,
+  C10soleProprietorAttachmentsFormData,
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
@@ -35,6 +36,7 @@ import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
 import CustomModal from '../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 import C5soleAttachmentFormSchema from './validations/attachmentForm/c5SoleAttachmentsForm';
+import C10soleAttachmentFormSchema from './validations/attachmentForm/c10SoleAttachmentForm';
 import partnershipAttachmentsFormSchema from './validations/attachmentForm/partnershipAttachmentsForm';
 import pnpAttachmentsFormSchema from './validations/attachmentForm/pnpAttachmentsForm';
 // import type { FieldsData } from './validations/types';
@@ -65,6 +67,7 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
+    limitCategory: any;
     natureOfBusiness: any;
     page: PageItem[];
   };
@@ -98,6 +101,7 @@ const Attachments = () => {
   // >(undefined);
 
   const businessNature = fieldData?.pages?.natureOfBusiness;
+  const limitCategory = fieldData?.pages?.limitCategory;
   // const [isChecked, setIsChecked] = useState(false);
   // const [navRoute, setNavRoute] = useState('');
   console.log('userdatais', userData);
@@ -161,9 +165,18 @@ const Attachments = () => {
   }, [initialValuesState, validationSchemaState]);
 
   useEffect(() => {
-    if (businessNature === 'soleProprietor') {
+    if (
+      businessNature === 'soleProprietor' &&
+      limitCategory === 'C5(limit of max 500k)'
+    ) {
       setValidationSchemaState(C5soleAttachmentFormSchema);
       setAttachmentData(C5soleProprietorAttachmentsFormData?.categories);
+    } else if (
+      businessNature === 'soleProprietor' &&
+      limitCategory === 'C10 (limit above than 500k)'
+    ) {
+      setValidationSchemaState(C10soleAttachmentFormSchema);
+      setAttachmentData(C10soleProprietorAttachmentsFormData?.categories);
     } else if (businessNature === 'partnership') {
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData?.categories);
