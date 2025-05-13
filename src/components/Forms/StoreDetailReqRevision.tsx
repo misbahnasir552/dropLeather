@@ -21,7 +21,7 @@ import useCurrentTab from '@/hooks/useCurrentTab';
 // import type { AddStoreInfo } from '@/interfaces/interface';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
-import { storeFields } from '@/utils/fields/storeDetailsFields';
+// import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 import { storeDetailsFormData } from '@/utils/onboardingForms/storeDetails';
@@ -499,22 +499,24 @@ const AddStoreReqRevision = () => {
     console.log('store type is', checkboxValue);
   }, [checkboxValue]);
 
-  const updatedStoreFields = storeFields.map((field: any) => {
-    if (field.name === 'region') {
-      return {
-        ...field,
-        options: regions,
-      };
-    }
-    if (field.name === 'category') {
-      return {
-        ...field,
-        options: storeCategories, // Set the fetched regions as options for 'region'
-      };
-    }
+  const updatedStoreFields = storeDetailsFormData.categories.map(
+    (field: any) => {
+      if (field.name === 'region') {
+        return {
+          ...field,
+          options: regions,
+        };
+      }
+      if (field.name === 'category') {
+        return {
+          ...field,
+          options: storeCategories, // Set the fetched regions as options for 'region'
+        };
+      }
 
-    return field;
-  });
+      return field;
+    },
+  );
 
   console.log('updated store fields,', updatedStoreFields);
 
@@ -824,9 +826,7 @@ const AddStoreReqRevision = () => {
                             return (
                               <FormLayoutDynamic
                                 key={itemIndex}
-                                heading={
-                                  item.categoryName || 'Unknown Category'
-                                }
+                                heading={item.categoryName || ''}
                               >
                                 {item?.fields?.length > 0 ? (
                                   item.fields

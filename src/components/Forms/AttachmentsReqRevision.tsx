@@ -101,6 +101,8 @@ const Attachments = () => {
 
   const businessNature = fieldData?.pages?.natureOfBusiness;
   const limitCategory = fieldData?.pages?.limitCategory;
+
+  console.log(businessNature, 'limitCategory', limitCategory);
   // const [isChecked, setIsChecked] = useState(false);
   // const [navRoute, setNavRoute] = useState('');
   console.log('userdatais', userData);
@@ -166,8 +168,9 @@ const Attachments = () => {
   useEffect(() => {
     if (
       businessNature === 'soleProprietor' &&
-      limitCategory === 'C5(limit of max 500k)'
+      limitCategory === 'C5 (limit of max 500k)'
     ) {
+      console.log('attachmnet data is set');
       setValidationSchemaState(C5soleAttachmentFormSchema);
       setAttachmentData(C5soleProprietorAttachmentsFormData?.categories);
     } else if (
@@ -182,9 +185,10 @@ const Attachments = () => {
     } else if (businessNature === 'publicAndPrivateLtd') {
       setValidationSchemaState(pnpAttachmentsFormSchema);
       setAttachmentData(pnpAttachmentsFormData?.categories);
-    } else {
-      setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
+    // else {
+    //   setAttachmentData([]); // Set a default empty state to avoid undefined errors
+    // }
 
     console.log(attachmentData, 'attachments');
 
@@ -193,7 +197,7 @@ const Attachments = () => {
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
     }
-  }, [currentTab, businessNature]);
+  }, [currentTab, businessNature, limitCategory]);
 
   const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
     const shape: Record<string, Yup.AnySchema> = {};
@@ -206,7 +210,7 @@ const Attachments = () => {
 
     if (
       businessNature === 'soleProprietor' &&
-      limitCategory === 'C5(limit of max 500k)'
+      limitCategory === 'C5 (limit of max 500k)'
     ) {
       // Access internal schema fields safely
       schemaFields = (C5soleAttachmentFormSchema as Yup.ObjectSchema<any>)
