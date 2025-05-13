@@ -16,7 +16,8 @@ const SUPPORTED_FORMATS = [
   'application/pdf',
   'image/png',
   'image/jpeg',
-  'application/msword',
+  'application/msword', // .doc
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
 ];
 
 const fileValidation = Yup.mixed()
@@ -43,18 +44,18 @@ const C10soleAttachmentFormSchema = Yup.object().shape({
   validIdentityDocument: fileValidation.required(
     'Valid Identity Document is required',
   ),
-  NTNcertificate: fileValidation.required('NTN certificate is required'),
+  ntnCertificate: fileValidation.required('NTN certificate is required'),
   soleProprietorshipDeclaration: fileValidation.required(
     'Sole Proprietorship Declaration is required',
   ),
   accountOpeningRequisition: fileValidation.required(
     'Account Opening Requisition is required',
   ),
-  ProofOfSourceOfIncome: fileValidation.required(
+  proofOfSourceOfIncome: fileValidation.required(
     'Proof of Source of Income is required',
   ),
-  CRSform: fileValidation.required('CRS form is required'),
-  W8Benform: fileValidation.required('FATCA W8 Ben form is required'),
+  crsForm: fileValidation.required('CRS form is required'),
+  w8Benform: fileValidation.required('FATCA W8 Ben form is required'),
   accountMaintainanceCertificateFromYourExternalBank: fileValidation.required(
     'Account Maintainance Certificate is required',
   ),

@@ -12,7 +12,8 @@ const SUPPORTED_FORMATS = [
   'application/pdf',
   'image/png',
   'image/jpeg',
-  'application/msword',
+  'application/msword', // .doc
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document', // .docx
 ];
 
 const C5soleAttachmentFormSchema = Yup.object().shape({
