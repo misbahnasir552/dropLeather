@@ -301,16 +301,11 @@ const SettlementDetailsReqRevision = () => {
 
                   if (
                     matchedField.name === 'bank' &&
-                    businessNature === 'soleProprietor'
+                    businessNature !== 'soleProprietor'
                   ) {
                     return {
                       ...matchedField,
-                      options: [
-                        {
-                          label: 'Easypaisa Bank Limited',
-                          value: 'easypaisaBankLimited',
-                        },
-                      ],
+                      options: [{ label: 'Other Banks', value: 'Other Banks' }],
                       required: matchedField.required || false,
                     };
                   }
