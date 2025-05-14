@@ -198,11 +198,11 @@ const LoginSucessHome = () => {
       description:
         'Get your business online and start accepting digital payments securely and swiftly. Complete a simple sign-up process and get verified to enjoy full access to easypaisa merchant services.',
       routeName: 'business-nature',
-      hide:
-        (userData.onboardingCompleted === true &&
-          userData.onboardingCompleted === false) ||
-        (userData.onboardingCompleted === true &&
-          userData.onboardingCompleted === true),
+      // hide:
+      //   (userData.onboardingCompleted === true &&
+      //     userData.onboardingCompleted === false) ||
+      //   (userData.onboardingCompleted === true &&
+      //     userData.onboardingCompleted === true),
     },
     {
       title: 'Request Revision',
