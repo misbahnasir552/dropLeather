@@ -44,7 +44,7 @@ const BusinessNature = () => {
     },
     {
       value: 'publicAndPrivateLtd',
-      label: 'Public and Private Ltd.',
+      label: 'Public or Private Ltd.',
       endpoint: 'pnpBusinessDetails',
     },
     {

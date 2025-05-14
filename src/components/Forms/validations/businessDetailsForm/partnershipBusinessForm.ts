@@ -72,7 +72,9 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
   // limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   // raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.string(),
+
+  // BET Requirement
+  // establishedSince: Yup.string(),
   // .nullable()
   // .required('Established Since is required'),
   businessMode: Yup.array()
@@ -178,14 +180,16 @@ export const partnershipBusinessDetailsFormSchema = Yup.object().shape({
     .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
     // .matches(/^\d+$/, 'Only numbers are allowed')
     .max(60, 'Cannot be more than 60 letters'),
-  expectedModesOfTransactionsDeliveryChannels: Yup.string()
-    .required('Expected modes of transactions/ delivery channels is required')
-    .matches(/^\d+$/, 'Only Numeric values are allowed'),
-  industrySegment: Yup.string()
-    .required('Industry/Segment is required')
-    .min(3, 'Cannot be less than 3 letters')
-    .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
-    .max(60, 'Cannot be more than 60 letters'),
+  // BET Requirement
+  // expectedModesOfTransactionsDeliveryChannels: Yup.string()
+  //   .required('Expected modes of transactions/ delivery channels is required')
+  //   .matches(/^\d+$/, 'Only Numeric values are allowed'),
+  // BET Requirement
+  // industrySegment: Yup.string()
+  //   .required('Industry/Segment is required')
+  //   .min(3, 'Cannot be less than 3 letters')
+  //   .matches(/^[a-zA-ZÀ-ÿ\s]+$/, 'Only alphabets are allowed')
+  //   .max(60, 'Cannot be more than 60 letters'),
   product: Yup.string().required('Product is required'),
   nationality: Yup.string().required('Nationality is required'),
   natureOfActivity: Yup.array()

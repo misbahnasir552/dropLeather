@@ -1,16 +1,17 @@
 import * as Yup from 'yup';
 
 export const pnpAttachmentsFormInitialValues = {
-  certifiedCopyOfLatestFormAformBOrFormII: null,
-  commencementOfBusinessCertificateForPublicLTD: null,
+  // certifiedCopyOfLatestFormAformBOrFormII: null,
+  // commencementOfBusinessCertificateForPublicLTD: null,
   fatcaForm: null,
-  memorandumOfAssociationAllPagesScan: null,
-  certificateOfIncorporation: null,
+  // memorandumOfAssociationAllPagesScan: null,
+  // certificateOfIncorporation: null,
   boardResolutionAuthorizingAnIndividualDirectorManager: null,
-  certifiedCopyOfForm29AllPagesScans: null,
+  // certifiedCopyOfForm29AllPagesScans: null,
   accountMaintainanceCerificateFromYourExternalBank: null,
   crsEntityForm: null,
   cnicsOfAllDirectorsAuthorizedSignatories: null,
+  w8BenE: null,
   optional1: null,
   optional2: null,
 };
@@ -26,71 +27,71 @@ const SUPPORTED_FORMATS = [
 ];
 
 const pnpAttachmentsFormSchema = Yup.object().shape({
-  certifiedCopyOfLatestFormAformBOrFormII: Yup.mixed()
-    .required('Certified copy of Latest Form A form B or Form II is required')
-    .test(
-      'fileType',
-      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value: any) => {
-        if (!Array.isArray(value)) return false;
+  // certifiedCopyOfLatestFormAformBOrFormII: Yup.mixed()
+  //   .required('Certified copy of Latest Form A form B or Form II is required')
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
 
-        for (const file of value) {
-          if (!(file instanceof File)) return false;
-          if (!SUPPORTED_FORMATS.includes(file.type)) {
-            console.log('Unsupported file type:', file.type);
-            return false;
-          }
-        }
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
 
-        return true;
-      },
-    )
-    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
 
-      for (const file of value) {
-        if (!(file instanceof File)) return false;
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', file.name, file.size);
-          return false;
-        }
-      }
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }),
+  //     return true;
+  //   }),
 
-  commencementOfBusinessCertificateForPublicLTD: Yup.mixed()
-    .required('Commencement of business certificate for Public LTD is required')
-    .test(
-      'fileType',
-      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value: any) => {
-        if (!Array.isArray(value)) return false;
+  // commencementOfBusinessCertificateForPublicLTD: Yup.mixed()
+  //   .required('Commencement of business certificate for Public LTD is required')
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
 
-        for (const file of value) {
-          if (!(file instanceof File)) return false;
-          if (!SUPPORTED_FORMATS.includes(file.type)) {
-            console.log('Unsupported file type:', file.type);
-            return false;
-          }
-        }
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
 
-        return true;
-      },
-    )
-    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
 
-      for (const file of value) {
-        if (!(file instanceof File)) return false;
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', file.name, file.size);
-          return false;
-        }
-      }
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }),
+  //     return true;
+  //   }),
 
   fatcaForm: Yup.mixed()
     .required('FATCA Form is required')
@@ -125,71 +126,71 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       return true;
     }),
 
-  memorandumOfAssociationAllPagesScan: Yup.mixed()
-    .required('Memorandum of Association All Pages Scan is required')
-    .test(
-      'fileType',
-      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value: any) => {
-        if (!Array.isArray(value)) return false;
+  // memorandumOfAssociationAllPagesScan: Yup.mixed()
+  //   .required('Memorandum of Association All Pages Scan is required')
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
 
-        for (const file of value) {
-          if (!(file instanceof File)) return false;
-          if (!SUPPORTED_FORMATS.includes(file.type)) {
-            console.log('Unsupported file type:', file.type);
-            return false;
-          }
-        }
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
 
-        return true;
-      },
-    )
-    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
 
-      for (const file of value) {
-        if (!(file instanceof File)) return false;
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', file.name, file.size);
-          return false;
-        }
-      }
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }),
+  //     return true;
+  //   }),
 
-  certificateOfIncorporation: Yup.mixed()
-    .nullable()
-    .test(
-      'fileType',
-      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value: any) => {
-        if (!Array.isArray(value)) return false;
+  // certificateOfIncorporation: Yup.mixed()
+  //   .nullable()
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
 
-        for (const file of value) {
-          if (!(file instanceof File)) return false;
-          if (!SUPPORTED_FORMATS.includes(file.type)) {
-            console.log('Unsupported file type:', file.type);
-            return false;
-          }
-        }
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
 
-        return true;
-      },
-    )
-    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
 
-      for (const file of value) {
-        if (!(file instanceof File)) return false;
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', file.name, file.size);
-          return false;
-        }
-      }
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }),
+  //     return true;
+  //   }),
 
   boardResolutionAuthorizingAnIndividualDirectorManager: Yup.mixed()
     .nullable()
@@ -224,38 +225,38 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       return true;
     }),
 
-  certifiedCopyOfForm29AllPagesScans: Yup.mixed()
-    .nullable()
-    .test(
-      'fileType',
-      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
-      (value: any) => {
-        if (!Array.isArray(value)) return false;
+  // certifiedCopyOfForm29AllPagesScans: Yup.mixed()
+  //   .nullable()
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
 
-        for (const file of value) {
-          if (!(file instanceof File)) return false;
-          if (!SUPPORTED_FORMATS.includes(file.type)) {
-            console.log('Unsupported file type:', file.type);
-            return false;
-          }
-        }
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
 
-        return true;
-      },
-    )
-    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
 
-      for (const file of value) {
-        if (!(file instanceof File)) return false;
-        if (file.size > MAX_FILE_SIZE) {
-          console.log('File too large:', file.name, file.size);
-          return false;
-        }
-      }
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
 
-      return true;
-    }),
+  //     return true;
+  //   }),
 
   accountMaintainanceCerificateFromYourExternalBank: Yup.mixed()
     .nullable()
@@ -354,6 +355,40 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
 
       return true;
     }),
+
+  w8BenE: Yup.mixed()
+    .required('W8 Ben E Form is required')
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+
   optional1: Yup.mixed()
     .test(
       'fileType',
