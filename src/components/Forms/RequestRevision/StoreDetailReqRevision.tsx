@@ -12,8 +12,12 @@ import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 // import M7 from '@/components/UI/Headings/M7';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 // import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
@@ -28,11 +32,6 @@ import {
   storeDetailsInitialValues,
   storeDetailsSchema,
 } from '@/validations/merchant/onBoarding/storeDetails';
-
-import DateInputNew from '../UI/Inputs/DateInputNew';
-import DropdownNew from '../UI/Inputs/DropDownNew';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 // import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
 // import DisabledInput from './DisabledStoreComponent';
 // import type { FieldsData } from './validations/types';

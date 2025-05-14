@@ -5,40 +5,38 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
-import * as Yup from 'yup';
 
+// import * as Yup from 'yup';
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import C5soleAttachmentFormSchema from '@/components/Forms/validations/attachmentForm/c5SoleAttachmentsForm';
+import partnershipAttachmentsFormSchema from '@/components/Forms/validations/attachmentForm/partnershipAttachmentsForm';
+import pnpAttachmentsFormSchema from '@/components/Forms/validations/attachmentForm/pnpAttachmentsForm';
 import Button from '@/components/UI/Button/PrimaryButton';
-import { useAppSelector } from '@/hooks/redux';
-import useCurrentTab from '@/hooks/useCurrentTab';
-import { convertSlugToTitle } from '@/services/urlService/slugServices';
-import { endpointArray } from '@/utils/merchantForms/helper';
-import {
-  C5soleProprietorAttachmentsFormData,
-  C10soleProprietorAttachmentsFormData,
-  partnershipAttachmentsFormData,
-  pnpAttachmentsFormData,
-} from '@/utils/onboardingForms/attachments';
 // import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
 // import { buildValidationSchema } from './validationsOLD/helper';
 // import {
 //   partnershipAttachmentsFormData,
 //   soleProprietorAttachmentsFormData,
 // } from '@/utils/onboardingForms/attachments';
-import { AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
-
-import CorporateFileInput from '../UI/Inputs/CorporateFileInput';
-// import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
-// import DropdownInput from '../UI/Inputs/DropdownInput';
-// import ImageInput from "../UI/Inputs/ImageInput";
-// import Input from '../UI/Inputs/Input';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import C5soleAttachmentFormSchema from './validations/attachmentForm/c5SoleAttachmentsForm';
-import C10soleAttachmentFormSchema from './validations/attachmentForm/c10SoleAttachmentForm';
-import partnershipAttachmentsFormSchema from './validations/attachmentForm/partnershipAttachmentsForm';
-import pnpAttachmentsFormSchema from './validations/attachmentForm/pnpAttachmentsForm';
+// import { AttachmentFormInfoSchema } from '@/components/Forms/validations/merchant/onBoarding/attachmentInfo';
+import CorporateFileInput from '@/components/UI/Inputs/CorporateFileInput';
+// import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
+// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+// import ImageInput from "@/components/UI/Inputs/ImageInput";
+// import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
+import { useAppSelector } from '@/hooks/redux';
+import useCurrentTab from '@/hooks/useCurrentTab';
+import { convertSlugToTitle } from '@/services/urlService/slugServices';
+import { endpointArray } from '@/utils/merchantForms/helper';
+import {
+  C5soleProprietorAttachmentsFormData,
+  partnershipAttachmentsFormData,
+  pnpAttachmentsFormData,
+} from '@/utils/onboardingForms/attachments';
+// import { AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
 // import type { FieldsData } from './validations/types';
 
 interface Field {
@@ -67,7 +65,6 @@ interface PageItem {
 
 interface FieldsData {
   pages: {
-    limitCategory: any;
     natureOfBusiness: any;
     page: PageItem[];
   };
@@ -101,7 +98,6 @@ const Attachments = () => {
   // >(undefined);
 
   const businessNature = fieldData?.pages?.natureOfBusiness;
-  const limitCategory = fieldData?.pages?.limitCategory;
   // const [isChecked, setIsChecked] = useState(false);
   // const [navRoute, setNavRoute] = useState('');
   console.log('userdatais', userData);
@@ -165,18 +161,9 @@ const Attachments = () => {
   }, [initialValuesState, validationSchemaState]);
 
   useEffect(() => {
-    if (
-      businessNature === 'soleProprietor' &&
-      limitCategory === 'C5(limit of max 500k)'
-    ) {
+    if (businessNature === 'soleProprietor') {
       setValidationSchemaState(C5soleAttachmentFormSchema);
       setAttachmentData(C5soleProprietorAttachmentsFormData?.categories);
-    } else if (
-      businessNature === 'soleProprietor' &&
-      limitCategory === 'C10 (limit above than 500k)'
-    ) {
-      setValidationSchemaState(C10soleAttachmentFormSchema);
-      setAttachmentData(C10soleProprietorAttachmentsFormData?.categories);
     } else if (businessNature === 'partnership') {
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData?.categories);
@@ -196,32 +183,32 @@ const Attachments = () => {
     }
   }, [currentTab, businessNature]);
 
-  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
-    const shape: Record<string, Yup.AnySchema> = {};
+  // const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+  //   const shape: Record<string, Yup.AnySchema> = {};
 
-    // Access internal schema fields safely
-    const schemaFields = (AttachmentFormInfoSchema as Yup.ObjectSchema<any>)
-      .fields;
+  //   // Access internal schema fields safely
+  //   const schemaFields = (AttachmentFormInfoSchema as Yup.ObjectSchema<any>)
+  //     .fields;
 
-    mappedData.forEach((section: any) => {
-      section.categories.forEach((category: any) => {
-        category.fields.forEach((field: any) => {
-          const schemaField = schemaFields?.[field.name];
+  //   mappedData.forEach((section: any) => {
+  //     section.categories.forEach((category: any) => {
+  //       category.fields.forEach((field: any) => {
+  //         const schemaField = schemaFields?.[field.name];
 
-          // Ensure schemaField is not a Yup.Reference
-          if (
-            schemaField &&
-            typeof (schemaField as any).validate === 'function'
-          ) {
-            shape[field.name] = schemaField as Yup.AnySchema;
-          }
-        });
-      });
-    });
+  //         // Ensure schemaField is not a Yup.Reference
+  //         if (
+  //           schemaField &&
+  //           typeof (schemaField as any).validate === 'function'
+  //         ) {
+  //           shape[field.name] = schemaField as Yup.AnySchema;
+  //         }
+  //       });
+  //     });
+  //   });
 
-    console.log('✅ Dynamic schema includes:', Object.keys(shape));
-    return Yup.object().shape(shape);
-  };
+  //   console.log('✅ Dynamic schema includes:', Object.keys(shape));
+  //   return Yup.object().shape(shape);
+  // };
 
   // const ActivityFormInfoInitialValues = GetActivityInfoDetails();
   useEffect(() => {
@@ -311,11 +298,11 @@ const Attachments = () => {
 
       setInitialValuesState(initialValues);
 
-      if (mappedData.length > 0) {
-        const validationSchema =
-          buildValidationSchemaFromMappedFields(mappedData);
-        setValidationSchemaState(validationSchema);
-      }
+      // if (mappedData.length > 0) {
+      //   const validationSchema =
+      //     // buildValidationSchemaFromMappedFields(mappedData);
+      //   // setValidationSchemaState(validationSchema);
+      // }
     }
   }, [currentTab, fieldData]);
 

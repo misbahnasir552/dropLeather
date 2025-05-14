@@ -13,6 +13,8 @@ import {
   AttachmentFormInfoInitialValues,
   AttachmentFormInfoSchema,
 } from '@/validations/merchant/onBoarding/attachmentInfo';
+// import { AttachmentFormInfoInitialValues } from '@/validations/merchant/onBoarding/attachmentInfo';
+// import { AttachmentFormInfoInitialValues, AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
 
 function Reversal() {
   const [selectedFiles, setSelectedFiles] = useState<Array<File | null>>(

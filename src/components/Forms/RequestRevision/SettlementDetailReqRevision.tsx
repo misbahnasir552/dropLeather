@@ -7,9 +7,14 @@ import { BarLoader } from 'react-spinners';
 import * as Yup from 'yup';
 
 import apiClient from '@/api/apiClient';
+import settlementDetailsSchema from '@/components/Forms/validations/settlementForm';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import ImageInput from '@/components/UI/Inputs/ImageInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import { setLogout } from '@/redux/features/authSlice';
@@ -20,12 +25,6 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-
-import DropdownInput from '../UI/Inputs/DropdownInput';
-import ImageInput from '../UI/Inputs/ImageInput';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import settlementDetailsSchema from './validations/settlementForm';
 
 interface Field {
   required: boolean;

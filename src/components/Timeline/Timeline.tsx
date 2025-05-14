@@ -26,11 +26,11 @@ import {
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 
-// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
-import ActivityInformation from '../Forms/ActivityInformation';
 import AttachmentsForm from '../Forms/Attachments';
+// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+import ActivityInformation from '../Forms/Onboarding/ActivityInformation';
 // import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
-import BusinessInformation from '../Forms/BusinessDetails';
+import BusinessInformation from '../Forms/Onboarding/BusinessDetails';
 import SettlementDetailsStatic from '../Forms/SettlementDetails';
 
 interface Tab {

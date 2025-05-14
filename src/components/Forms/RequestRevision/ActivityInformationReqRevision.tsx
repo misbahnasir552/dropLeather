@@ -8,12 +8,18 @@ import * as Yup from 'yup';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import activityInformationFormSchema from '@/components/Forms/validations/activityInformationForm';
 import Button from '@/components/UI/Button/PrimaryButton';
+import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 // import H6 from "@/components/UI/Headings/H6";
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 // import FormWrapper from "@/components/UI/Wrappers/FormLayout";
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import {
@@ -28,13 +34,6 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { setActivityForm } from "@/redux/features/formSlices/onBoardingForms";
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-
-import CheckboxInput from '../UI/Inputs/CheckboxInput';
-import DisabledField from '../UI/Inputs/DisabledField';
-import DropdownNew from '../UI/Inputs/DropDownNew';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import activityInformationFormSchema from './validations/activityInformationForm';
 // import type { FieldsData } from './validations/types';
 
 interface Field {
@@ -443,7 +442,6 @@ const ActivityInformationReqRevision = () => {
               { label: 'Algeria', value: 'Algeria' },
               { label: 'Andorra', value: 'Andorra' },
               { label: 'Angola', value: 'Angola' },
-              { label: 'Antigua', value: 'Antigua' },
               { label: 'Argentina', value: 'Argentina' },
               { label: 'Armenia', value: 'Armenia' },
               { label: 'Australia', value: 'Australia' },
@@ -453,7 +451,6 @@ const ActivityInformationReqRevision = () => {
               { label: 'Bahrain', value: 'Bahrain' },
               { label: 'Bangladesh', value: 'Bangladesh' },
               { label: 'Barbados', value: 'Barbados' },
-              { label: 'Barbuda', value: 'Barbuda' },
               { label: 'Belarus', value: 'Belarus' },
               { label: 'Belgium', value: 'Belgium' },
               { label: 'Belize', value: 'Belize' },
@@ -571,7 +568,6 @@ const ActivityInformationReqRevision = () => {
               { label: 'North Macedonia', value: 'North Macedonia' },
               { label: 'Norway', value: 'Norway' },
               { label: 'Oman', value: 'Oman' },
-              { label: 'Palau', value: 'Palau' },
               { label: 'Pakistan', value: 'Pakistan' },
               { label: 'Palestine', value: 'Palestine' },
               { label: 'Panama', value: 'Panama' },
@@ -650,10 +646,7 @@ const ActivityInformationReqRevision = () => {
                 value: 'Sao Tome and Principe',
               },
               { label: 'Timor-Leste', value: 'Timor-Leste' },
-              {
-                label: 'United States of America',
-                value: 'United States of America',
-              },
+              { label: 'USA', value: 'USA' },
             ],
           },
         ],

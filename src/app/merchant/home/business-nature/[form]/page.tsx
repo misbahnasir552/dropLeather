@@ -2,12 +2,12 @@
 
 import React from 'react';
 
-// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
-import ActivityInformation from '@/components/Forms/ActivityInformation';
 import Attachments from '@/components/Forms/Attachments';
-import BusinessInformation from '@/components/Forms/BusinessDetails';
 // import Checklist from '@/components/Forms/Checklist';
 import IntegrationForm from '@/components/Forms/IntegrationForm';
+// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+import ActivityInformation from '@/components/Forms/Onboarding/ActivityInformation';
+import BusinessInformation from '@/components/Forms/Onboarding/BusinessDetails';
 import ReviewForm from '@/components/Forms/ReviewForm';
 import SettlementDetails from '@/components/Forms/SettlementDetails';
 import StoreDetails from '@/components/Forms/StoreDetails';

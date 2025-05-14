@@ -21,22 +21,22 @@ import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessD
 // import { BarLoader } from 'react-spinners';
 import { soleBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
 
-import DateInputNew from '../UI/Inputs/DateInputNew';
-import DropdownNew from '../UI/Inputs/DropDownNew';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import DateInputNew from '../../UI/Inputs/DateInputNew';
+import DropdownNew from '../../UI/Inputs/DropDownNew';
+import CustomModal from '../../UI/Modal/CustomModal';
+import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
 import {
   partnershipBusinessDetailsFormInitialValues,
   partnershipBusinessDetailsFormSchema,
-} from './validations/businessDetailsForm/partnershipBusinessForm';
+} from '../validations/businessDetailsForm/partnershipBusinessForm';
 import {
   pnpLtdBusinessDetailsFormInitialValues,
   pnpLtdBusinessDetailsFormSchema,
-} from './validations/businessDetailsForm/pnpLtdBusinessForm';
+} from '../validations/businessDetailsForm/pnpLtdBusinessForm';
 import {
   soleBusinessDetailsFormInitialValues,
   soleBusinessDetailsFormSchema,
-} from './validations/businessDetailsForm/soleBusinessForm';
+} from '../validations/businessDetailsForm/soleBusinessForm';
 
 const BusinessInformation = () => {
   const [formData, setFormData] = useState(

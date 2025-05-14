@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
+// import B3 from '../UI/Body/B3';
+import Button from '@/components/UI/Button/PrimaryButton';
 // import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
@@ -15,9 +17,6 @@ import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
 import { useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
-
-// import B3 from '../UI/Body/B3';
-import Button from '../UI/Button/PrimaryButton';
 
 interface IRevieFormData {
   isEditable: boolean;

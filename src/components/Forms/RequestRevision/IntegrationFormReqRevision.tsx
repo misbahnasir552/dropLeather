@@ -7,9 +7,16 @@ import * as Yup from 'yup';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import integrationFormSchema from '@/components/Forms/validations/integartionForm';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
+// import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
+// import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+// import DropdownNew from '../UI/Inputs/DropDownNew';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+// import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import { setLogout } from '@/redux/features/authSlice';
@@ -17,14 +24,6 @@ import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
-
-// import CheckboxItem from '../UI/Inputs/CheckboxItem';
-// import DateInputNew from '../UI/Inputs/DateInputNew';
-// import DropdownNew from '../UI/Inputs/DropDownNew';
-import CustomModal from '../UI/Modal/CustomModal';
-// import DropdownInput from '../UI/Inputs/DropdownInput';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import integrationFormSchema from './validations/integartionForm';
 // import { buildValidationSchema } from './validations/integrationSchema';
 // import type { FieldsData } from './validations/types';
 

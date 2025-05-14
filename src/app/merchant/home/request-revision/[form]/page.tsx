@@ -2,22 +2,16 @@
 
 import React from 'react';
 
-import ActivityInformationReqRevision from '@/components/Forms/ActivityInformationReqRevision';
-// import ApplicationFormStatic from '@/components/Forms/ApplicationFormStatic';
-// import ApplicationForm from '@/components/Forms/ApplicationForm';
-// import Attachments from '@/components/Forms/Attachments';
-import AttachmentsReqRevision from '@/components/Forms/AttachmentsReqRevision';
-import BusinessInformationReqRevision from '@/components/Forms/BusinessDetailsReqRevision';
-// import Checklist from '@/components/Forms/Checklist';
-// import CorporateAttachmentForm from '@/components/Forms/CorporateAttachments';
-// import CorporateReviewForm from '@/components/Forms/CorporateReviewForm';
-import IntegrationFormReqRevision from '@/components/Forms/IntegrationFormReqRevision';
+import ActivityInformationReqRevision from '@/components/Forms/RequestRevision/ActivityInformationReqRevision';
+import AttachmentsReqRevision from '@/components/Forms/RequestRevision/AttachmentsReqRevision';
+import BusinessInformationReqRevision from '@/components/Forms/RequestRevision/BusinessDetailsReqRevision';
+import IntegrationFormReqRevision from '@/components/Forms/RequestRevision/IntegrationFormReqRevision';
 // import ReviewForm from '@/components/Forms/ReviewForm';
-import ReviewFormReqRevision from '@/components/Forms/ReviewFormReqRevision';
+import ReviewFormReqRevision from '@/components/Forms/RequestRevision/ReviewFormReqRevision';
 // import ReviewForm from '@/components/Forms/ReviewForm';
-import SettlementDetailsReqRevision from '@/components/Forms/SettlementDetailReqRevision';
+import SettlementDetailsReqRevision from '@/components/Forms/RequestRevision/SettlementDetailReqRevision';
 // import { useAppSelector } from "@/hooks/redux";
-import StoreDetailReqRevision from '@/components/Forms/StoreDetailReqRevision';
+import StoreDetailReqRevision from '@/components/Forms/RequestRevision/StoreDetailReqRevision';
 // import LivePicture from '@/components/LivePhotoCapture/PhotoCapture';
 import H6 from '@/components/UI/Headings/H6';
 // import { useAppSelector } from '@/hooks/redux';

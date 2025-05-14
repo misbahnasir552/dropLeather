@@ -2,7 +2,7 @@
 
 // import { useRouter } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
@@ -30,12 +30,14 @@ const LoginSucessHome = () => {
     null,
   );
 
+  console.log(setTitle);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   // const [route, setRoute] = useState<any>();
-  const [data, setData] = useState<any>();
+
   // const router = useRouter();
-  console.log(data);
+  // console.log(data);
   // if (userData?.temp) {
   //   router.push('/merchant/home/reset-password');
   // }
@@ -91,90 +93,6 @@ const LoginSucessHome = () => {
   //   }
   //   console.log('route to ', route);
   // };
-
-  const fetchData = async () => {
-    console.log('fetch data');
-
-    try {
-      const response = await apiClient.get(
-        `merchant/getdetails/${userData?.email}`,
-        // {
-        //   params: {
-        //     username:
-        //   }
-        // }
-      );
-
-      setData(response.data);
-      // if (response?.data.responseCode !== '009') {
-      //   setShowModal(true);
-      //   setTitle('Network Issue');
-      //   setDescription(response.data.responseDescription);
-      // }
-
-      // const pageStatuses = [
-      //   {
-      //     routeName: '/merchant/home/business-nature/activity-information',
-      //     status: response?.data?.activityInformation?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/business-details',
-      //     status: response?.data?.businessDetails?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/settlement-details',
-      //     status: response?.data?.settlementDetails?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/integration/',
-      //     status: response?.data?.integration?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/attachments',
-      //     status: response?.data?.merchantDocuments?.documentStatus,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/review-form',
-      //     status: response?.data?.applicationForm?.documentStatus,
-      //   },
-      // ];
-      // console.log('pageStatuses ', pageStatuses);
-
-      // determineNextRoute(pageStatuses);
-
-      if (response) {
-        try {
-          const businessType =
-            response?.data?.activityInformation?.businessNature;
-          console.log(businessType);
-
-          const fieldsResponse = await apiClient.get(
-            `/merchant/getPageInfo`,
-
-            {
-              params: {
-                natureOfBusiness: businessType,
-              },
-            },
-          );
-          console.log('FIELDS DATA fieldsResponse Corporate: ', fieldsResponse);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (e: any) {
-      console.log(e, 'error fetching');
-      setTitle(e.code);
-      setDescription(e.message);
-      setShowModal(true);
-    } finally {
-      // setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fixedTabOrder = [
     'activity-information',

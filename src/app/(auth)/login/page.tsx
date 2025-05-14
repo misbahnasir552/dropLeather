@@ -31,42 +31,9 @@ const NewLogin = () => {
   const [showModal, setShowModal] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const session = null;
-  const jwt = Cookies.get('jwt');
   const [isLoading, setIsLoading] = useState(false);
 
-  const fetchUserDetails = async (email: string) => {
-    try {
-      if (userData?.email && jwt) {
-        const getDetailResponse = await apiClient.get(
-          `merchant/getdetails/${email}`,
-
-          //   {
-          //   params: {
-          //     username: email
-          //   }
-          // }
-        );
-        if (getDetailResponse?.data?.responseCode === '009') {
-          router.push('/merchant/home');
-        } else if (getDetailResponse?.data?.responseCode === '000') {
-          setTitle('Failed to fetch records');
-          setDescription('Unable to get positive response');
-          setShowModal(true);
-        } else {
-          setTitle('Failed to fetch records');
-          setDescription('Some Network Issue');
-          setShowModal(true);
-        }
-        console.log(isLoading);
-      }
-    } catch (error) {
-      console.error('Error fetching details:', error);
-      setTitle('Network Error');
-      setDescription('Error fetching merchant details. Please try again!');
-      setShowModal(true);
-    }
-  };
-
+  console.log(isLoading);
   if (session) {
     throw new Error('session error');
   }
@@ -82,9 +49,6 @@ const NewLogin = () => {
 
       if (loginResponse) {
         dispatch(loginSuccess(loginResponse));
-      }
-      if (userData.email && userData.userType !== 'Corporate') {
-        fetchUserDetails(userData.email);
       }
     }, [values, errors, loginResponse, dispatch, userData.email]);
 
@@ -152,7 +116,7 @@ const NewLogin = () => {
               expires: 1,
               path: '/',
             });
-            // dispatch(clearApplicants());
+
             router.push('/merchant/home');
           } else if (response?.data?.responseCode == '010') {
             router.push(`/reset-password?email=${credentials.username}`);

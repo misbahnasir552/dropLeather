@@ -2,37 +2,37 @@
 
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import activityInformationFormSchema, {
+  activityInformationFormInitialValues,
+} from '@/components/Forms/validations/activityInformationForm';
 import Button from '@/components/UI/Button/PrimaryButton';
+// import CheckboxInput from '../UI/Inputs/CheckboxInput';
+import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 // import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DisabledField from '@/components/UI/Inputs/DisabledField';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import type { ActivityFormInfo } from '@/interfaces/interface';
-import { convertSlugToTitle } from '@/services/urlService/slugServices';
+// import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 import { ActivityInformationFormData } from '@/utils/onboardingForms/activityInformation';
-
-import CheckboxInput from '../UI/Inputs/CheckboxInput';
-import CheckboxItem from '../UI/Inputs/CheckboxItem';
-import DisabledField from '../UI/Inputs/DisabledField';
-import DropdownNew from '../UI/Inputs/DropDownNew';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
-import activityInformationFormSchema, {
-  activityInformationFormInitialValues,
-} from './validations/activityInformationForm';
-import { buildValidationSchema } from './validationsOLD/helper';
-import type { FieldsData } from './validationsOLD/types';
+// import { buildValidationSchema } from './validationsOLD/helper';
+// import type { FieldsData } from './validationsOLD/types';
 
 const ActivityInformation = () => {
   const userData = useAppSelector((state: any) => state.auth);
-  const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
+  // const fieldData: FieldsData = useAppSelector((state: any) => state.fields);
   const [formData, setFormData] = useState(
     ActivityInformationFormData.categories,
   );
@@ -44,10 +44,10 @@ const ActivityInformation = () => {
   console.log('FORM DATA ', formData);
 
   // const [isChecked, setChecked] = useState(false);
-  const [filteredData, setFilteredData] = useState<any[]>();
-  const [pageTitle, setPageTitle] = useState('');
-  const [initialValuesState, setInitialValuesState] = useState<any>();
-  const [validationSchemaState, setValidationSchemaState] = useState<any>();
+  // const [filteredData, setFilteredData] = useState<any[]>();
+  // const [pageTitle, setPageTitle] = useState('');
+  // const [initialValuesState, setInitialValuesState] = useState<any>();
+  // const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const { currentTab } = useCurrentTab();
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
@@ -56,52 +56,44 @@ const ActivityInformation = () => {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  console.log(
-    'userdatais',
-    setDescription,
-    setTitle,
-    userData,
-    filteredData,
-    validationSchemaState,
-    setFormData,
-  );
+  console.log('userdatais', setDescription, setTitle, userData, setFormData);
   const { apiSecret } = userData;
   const router = useRouter();
   console.log('selected value checkbox input: ', selectedCheckValue);
 
-  useEffect(() => {
-    const initialValues: { [key: string]: any } = {};
-    console.log('Field DATA:::', fieldData);
-    if (currentTab) {
-      const title = convertSlugToTitle(currentTab);
-      setPageTitle(title);
-      console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
-      const fData = fieldData.pages?.page?.filter((item) => {
-        console.log(item.name, 'ITEM NAME');
-        return convertSlugToTitle(item.name) === title;
-        // return item.name;
-      });
-      setFilteredData(fData);
-      console.log('FDATAAAA:', fData);
+  // useEffect(() => {
+  //   const initialValues: { [key: string]: any } = {};
+  //   // console.log('Field DATA:::', fieldData);
+  //   if (currentTab) {
+  //     const title = convertSlugToTitle(currentTab);
+  //     setPageTitle(title);
+  //     console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
+  //     const fData = fieldData.pages?.page?.filter((item) => {
+  //       console.log(item.name, 'ITEM NAME');
+  //       return convertSlugToTitle(item.name) === title;
+  //       // return item.name;
+  //     });
+  //     setFilteredData(fData);
+  //     console.log('FDATAAAA:', fData);
 
-      fData?.forEach((item) => {
-        // if (item.name === "Activity Information") {
-        item.categories.forEach((category) => {
-          category.fields.forEach((field) => {
-            if (field?.type !== 'checkItem') {
-              initialValues[field.name] = '';
-            }
-          });
-        });
-        setInitialValuesState(initialValues);
-        // }
-      });
-      const validationSchema = buildValidationSchema(fData);
-      console.log('Vaidation schema result', validationSchema);
+  //     fData?.forEach((item) => {
+  //       // if (item.name === "Activity Information") {
+  //       item.categories.forEach((category) => {
+  //         category.fields.forEach((field) => {
+  //           if (field?.type !== 'checkItem') {
+  //             initialValues[field.name] = '';
+  //           }
+  //         });
+  //       });
+  //       setInitialValuesState(initialValues);
+  //       // }
+  //     });
+  //     const validationSchema = buildValidationSchema(fData);
+  //     console.log('Vaidation schema result', validationSchema);
 
-      setValidationSchemaState(validationSchema);
-    }
-  }, [currentTab]);
+  //     setValidationSchemaState(validationSchema);
+  //   }
+  // }, [currentTab]);
 
   const handleCheckboxChange = (name: string, formik: any) => {
     const newChecked = !isChecked;
@@ -116,7 +108,7 @@ const ActivityInformation = () => {
     }
   };
 
-  console.log('INITAIL VALUES STATE', initialValuesState);
+  // console.log('INITAIL VALUES STATE', initialValuesState);
   // if (!initialValuesState || !validationSchemaState || !filteredData) {
   //   return (
   //     <div className="flex w-full flex-col justify-center">
@@ -306,9 +298,9 @@ const ActivityInformation = () => {
       >
         {(formik) => (
           <Form className="flex flex-col gap-5">
-            <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
+            {/* <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
               {pageTitle}
-            </div>
+            </div> */}
 
             <div className="flex flex-col justify-end gap-9">
               {formData?.map((item: any, index: any) => (
