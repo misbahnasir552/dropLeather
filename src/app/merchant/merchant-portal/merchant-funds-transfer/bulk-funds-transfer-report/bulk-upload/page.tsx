@@ -12,6 +12,7 @@ import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
+import { generateAESEncryption } from '@/utils/helper';
 import {
   bulkUploadInitialValues,
   bulkUploadSchema,
@@ -69,7 +70,17 @@ function BulkFileUpload() {
       // setShowModal(true);
     }
   };
+  const viewSampleFile = () => {
+    const EncryptedFile = generateAESEncryption(
+      'SampleBulkFundsTransferFile.xlsx',
+    );
+    const EncryptedEmail = generateAESEncryption(
+      'samplebulkdocuments@gmail.com',
+    );
+    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmail}&type=merchant`;
 
+    window.open(downloadUrl, '_blank');
+  };
   return (
     <div className="flex flex-col gap-6 pt-12">
       {showModal && (
@@ -118,6 +129,12 @@ function BulkFileUpload() {
                     icon: AttachmentsIcon,
                   }}
                 />
+              </div>{' '}
+              <div
+                onClick={viewSampleFile}
+                className="mt-2  flex cursor-pointer justify-end text-primary-base underline"
+              >
+                View Sample File
               </div>
             </FormLayout>
             <div className="flex w-full justify-end gap-6 pb-9">

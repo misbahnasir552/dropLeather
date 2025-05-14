@@ -12,7 +12,7 @@ import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { loginSuccess } from '@/redux/features/authSlice';
-import { clearApplicants } from '@/redux/features/formSlices/onBoardingForms';
+// import { clearApplicants } from '@/redux/features/formSlices/onBoardingForms';
 
 const OtpLogin = () => {
   const [apierror, setApierror] = useState('');
@@ -70,7 +70,7 @@ const OtpLogin = () => {
           expires: 1,
           path: '/',
         });
-        dispatch(clearApplicants());
+        // dispatch(clearApplicants());
         router.push('/merchant/home');
       } else if (response?.data?.responseCode == '010') {
         router.push(`/reset-password?email=${credentials.username}`);

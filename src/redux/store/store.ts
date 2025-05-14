@@ -14,7 +14,6 @@ import storage from 'redux-persist/lib/storage';
 
 import adminAuthReducer from '@/redux/features/adminSlices/adminLoginSlice';
 import corporateAccountDetailsReducer from '@/redux/features/adminSlices/corporateSlices/corporateAccountDetailsSlice';
-import corporateJourneyTypeReducer from '@/redux/features/adminSlices/corporateSlices/corporateJourneyTypeSlice';
 import updateUserReducer from '@/redux/features/adminSlices/updateUserSlice/updateUserSlice';
 import authReducer from '@/redux/features/authSlice';
 import additionalFormReducer from '@/redux/features/formSlices/additionalFormSlice';
@@ -22,7 +21,6 @@ import onBoardingFormsReducer from '@/redux/features/formSlices/onBoardingForms'
 import signupReducer from '@/redux/features/signUpSlice';
 
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
-import apiErrorReducer from '../features/errorSlices/errorSlice';
 import fieldReducer from '../features/formSlices/fieldSlice';
 import lastTabReducer from '../features/formSlices/lastTabSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
@@ -49,11 +47,10 @@ const persistConfig = {
     'corporateAccountDetails',
     'updateUser',
     'addBeneficiary',
-    'corporateJourneyType',
+
     // 'session',
     'loginCredentials',
     'transferFunds',
-    'apiError',
   ],
 };
 
@@ -71,12 +68,11 @@ const rootReducer = combineReducers({
   adminAuth: adminAuthReducer,
   updateUser: updateUserReducer,
   addBeneficiary: addBeneficiaryReducer,
-  corporateJourneyType: corporateJourneyTypeReducer,
+
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
   lastTab: lastTabReducer,
   transferFunds: transferFundsReducer,
-  apiError: apiErrorReducer,
 });
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);

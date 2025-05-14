@@ -8,13 +8,13 @@ import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 
-import ActivityInformationReqRevision from '../Forms/ActivityInformationReqRevision';
-import AttachmentsReqRevision from '../Forms/AttachmentsReqRevision';
-import BusinessInformationReqRevision from '../Forms/BusinessDetailsReqRevision';
-import IntegrationFormReqRevision from '../Forms/IntegrationFormReqRevision';
-import ReviewFormReqRevision from '../Forms/ReviewFormReqRevision';
-import SettlementDetailsReqRevision from '../Forms/SettlementDetailReqRevision';
-import StoreDetailReqRevision from '../Forms/StoreDetailReqRevision';
+import ActivityInformationReqRevision from '../Forms/RequestRevision/ActivityInformationReqRevision';
+import AttachmentsReqRevision from '../Forms/RequestRevision/AttachmentsReqRevision';
+import BusinessInformationReqRevision from '../Forms/RequestRevision/BusinessDetailsReqRevision';
+import IntegrationFormReqRevision from '../Forms/RequestRevision/IntegrationFormReqRevision';
+import ReviewFormReqRevision from '../Forms/RequestRevision/ReviewFormReqRevision';
+import SettlementDetailsReqRevision from '../Forms/RequestRevision/SettlementDetailReqRevision';
+import StoreDetailReqRevision from '../Forms/RequestRevision/StoreDetailReqRevision';
 import { ReviewFormIcon } from './CorporateTimeline/TimelineIcons/TimelineIcons';
 import {
   ActivityInformationIcon,

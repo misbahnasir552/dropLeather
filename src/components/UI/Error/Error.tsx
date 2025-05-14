@@ -2,16 +2,18 @@
 
 import React from 'react';
 
-import { useAppSelector } from '@/hooks/redux';
+interface ApiErrorProps {
+  apiError?: string;
+}
 
-const ApiError = () => {
-  const apiError = useAppSelector((state: any) => state.apiError);
-
+const ApiError: React.FC<ApiErrorProps> = ({ apiError }) => {
   if (!apiError) return null;
 
   return (
-    <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+    // <div className='flex flex-col bg-secondary-500 w-full'>
+    <div className="flex w-full justify-start  px-3 pt-[8px] text-xs text-danger-base">
       {apiError}
+      {/* </div> */}
     </div>
   );
 };

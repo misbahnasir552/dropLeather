@@ -2,7 +2,7 @@
 
 // import { useRouter } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
@@ -30,12 +30,14 @@ const LoginSucessHome = () => {
     null,
   );
 
+  console.log(setTitle);
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   // const [route, setRoute] = useState<any>();
-  const [data, setData] = useState<any>();
+
   // const router = useRouter();
-  console.log(data);
+  // console.log(data);
   // if (userData?.temp) {
   //   router.push('/merchant/home/reset-password');
   // }
@@ -91,90 +93,6 @@ const LoginSucessHome = () => {
   //   }
   //   console.log('route to ', route);
   // };
-
-  const fetchData = async () => {
-    console.log('fetch data');
-
-    try {
-      const response = await apiClient.get(
-        `merchant/getdetails/${userData?.email}`,
-        // {
-        //   params: {
-        //     username:
-        //   }
-        // }
-      );
-
-      setData(response.data);
-      // if (response?.data.responseCode !== '009') {
-      //   setShowModal(true);
-      //   setTitle('Network Issue');
-      //   setDescription(response.data.responseDescription);
-      // }
-
-      // const pageStatuses = [
-      //   {
-      //     routeName: '/merchant/home/business-nature/activity-information',
-      //     status: response?.data?.activityInformation?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/business-details',
-      //     status: response?.data?.businessDetails?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/settlement-details',
-      //     status: response?.data?.settlementDetails?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/integration/',
-      //     status: response?.data?.integration?.status,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/attachments',
-      //     status: response?.data?.merchantDocuments?.documentStatus,
-      //   },
-      //   {
-      //     routeName: '/merchant/home/business-nature/review-form',
-      //     status: response?.data?.applicationForm?.documentStatus,
-      //   },
-      // ];
-      // console.log('pageStatuses ', pageStatuses);
-
-      // determineNextRoute(pageStatuses);
-
-      if (response) {
-        try {
-          const businessType =
-            response?.data?.activityInformation?.businessNature;
-          console.log(businessType);
-
-          const fieldsResponse = await apiClient.get(
-            `/merchant/getPageInfo`,
-
-            {
-              params: {
-                natureOfBusiness: businessType,
-              },
-            },
-          );
-          console.log('FIELDS DATA fieldsResponse Corporate: ', fieldsResponse);
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    } catch (e: any) {
-      console.log(e, 'error fetching');
-      setTitle(e.code);
-      setDescription(e.message);
-      setShowModal(true);
-    } finally {
-      // setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const fixedTabOrder = [
     'activity-information',
@@ -274,26 +192,11 @@ const LoginSucessHome = () => {
     }
   };
 
-  // const PendingMerchantCardData = [
-  //   {
-  //     title: 'Sandbox Integrations',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-  //   {
-  //     title: 'Merchant Onboarding',
-  //     description:
-  //       'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
-  //     routeName: 'business-nature',
-  //   },
-  // ];
-
   const LoginCardData = [
     {
       title: 'Merchant Onboarding',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Get your business online and start accepting digital payments securely and swiftly. Complete a simple sign-up process and get verified to enjoy full access to easypaisa merchant services.',
       routeName: 'business-nature',
       hide:
         (userData.onboardingCompleted === true &&
@@ -303,7 +206,8 @@ const LoginSucessHome = () => {
     },
     {
       title: 'Request Revision',
-      description: 'All you need is to select...',
+      description:
+        'We’ve reviewed your onboarding details and need a few corrections or additional documents to proceed. Please revise the highlighted sections to complete your registration process.',
       // routeName: '/merchant/home/request-revision',
       hide:
         (userData.onboardingCompleted === false &&
@@ -313,9 +217,9 @@ const LoginSucessHome = () => {
       onClick: handleRequestRevisionClick,
     },
     {
-      title: 'Continue to My Dashboard',
+      title: 'Merchant Dashboard',
       description:
-        'All you need is to select payment mode of your integration need and follow step by step integration guide to begin testing ',
+        'Monitor transactions, track earnings, download reports, and manage your business profile with ease.',
       routeName: '/merchant/merchant-portal/home/',
       hide:
         (userData.onboardingCompleted === false &&
@@ -353,17 +257,7 @@ const LoginSucessHome = () => {
           </p>
         </div>
         <div className="flex gap-5 sm:max-md:flex-col sm:max-md:gap-6">
-          {// data?.applicationFormStatus === 'PENDING'
-          //   ? PendingMerchantCardData.map((item, index) => (
-          //       <LoginCard
-          //         key={index}
-          //         title={item.title}
-          //         description={item.description}
-          //         routeName={item.routeName}
-          //       />
-          //     ))
-          //   :
-          LoginCardData?.map((item, index) => (
+          {LoginCardData?.map((item, index) => (
             <LoginCard
               key={index}
               title={item.title}
