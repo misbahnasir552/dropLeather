@@ -119,7 +119,9 @@ const C5soleAttachmentFormSchema = Yup.object().shape({
     }),
 
   certificate: Yup.mixed()
-    .required('Certificate is required')
+    .required(
+      'Account maintenance certificate from your external bank is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
