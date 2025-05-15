@@ -157,15 +157,10 @@ const SettlementDetails = () => {
             }
 
             // Step 2: Restrict bank options if sole proprietor
-            if (field.name === 'bank' && businessNature === 'soleProprietor') {
+            if (field.name === 'bank' && businessNature !== 'soleProprietor') {
               return {
                 ...field,
-                options: [
-                  {
-                    label: 'Easypaisa Bank Limited',
-                    value: 'easypaisaBankLimited',
-                  },
-                ],
+                options: [{ label: 'Other Banks', value: 'Other Banks' }],
               };
             }
 

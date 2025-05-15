@@ -136,14 +136,47 @@ export const partnershipAttachmentsFormData = {
       categoryName: 'Upload Documents(What would you like to integrate)',
       fields: [
         {
-          label: 'CNICs of all partners and beneficial owners',
-          name: 'cnicsOfAllPartnersAndBeneficialOwners',
+          label:
+            'Copy of the applicable valid identity document of all partners,beneficial owner and authorized signatory',
+          name: 'validIdentityDocument',
+          type: 'file',
+          required: true,
+        },
+        // {
+        //   label: 'CNICs of all partners and beneficial owners',
+        //   name: 'cnicsOfAllPartnersAndBeneficialOwners',
+        //   type: 'file',
+        //   required: true,
+        // },
+        {
+          label: 'Attested Copy of Partnership Deed signed by All Partners',
+          name: 'attestedCopyOfPartnershipDeedignedByAllPartners',
           type: 'file',
           required: true,
         },
         {
-          label: 'Attested Copy of Partnership Deed signed by All Partners',
-          name: 'attestedCopyOfPartnershipDeedignedByAllPartners',
+          label:
+            'Attested Registration Certificate (Form C) With Registrar of Firms',
+          name: 'attestedRegistrationCertificateWithRegistrarofFirms',
+          type: 'file',
+          required: true,
+        },
+        {
+          label:
+            'Authority letter, in original, signed by all partners for opening and operating the account',
+          name: 'authorityLetter',
+          type: 'file',
+          required: true,
+        },
+        {
+          label: 'CRS Entity Form',
+          name: 'crsEntityForm',
+          type: 'file',
+          required: true,
+        },
+        {
+          label: 'W8 BEN E',
+          name: 'w8BenE',
           type: 'file',
           required: true,
         },
@@ -153,13 +186,6 @@ export const partnershipAttachmentsFormData = {
           type: 'file',
           required: true,
         },
-        {
-          label: 'Attested Registration Certificate With Registrar of Firms',
-          name: 'attestedRegistrationCertificateWithRegistrarofFirms',
-          type: 'file',
-          required: true,
-        },
-
         {
           label: 'Other',
           name: 'other',
@@ -193,49 +219,49 @@ export const pnpAttachmentsFormData = {
     {
       categoryName: 'Upload Documents(What would you like to integrate)',
       fields: [
-        {
-          label: 'Certified copy of Latest Form A form B or Form II',
-          name: 'certifiedCopyOfLatestFormAformBOrFormII',
-          type: 'file',
-          required: true,
-        },
-        {
-          label: 'Commencement of business certificate for Public LTD',
-          name: 'commencementOfBusinessCertificateForPublicLTD',
-          type: 'file',
-          required: true,
-        },
+        // {
+        //   label: 'Certified copy of Latest Form A form B or Form II',
+        //   name: 'certifiedCopyOfLatestFormAformBOrFormII',
+        //   type: 'file',
+        //   required: true,
+        // },
+        // {
+        //   label: 'Commencement of business certificate for Public LTD',
+        //   name: 'commencementOfBusinessCertificateForPublicLTD',
+        //   type: 'file',
+        //   required: true,
+        // },
         {
           label: 'FATCA Form',
           name: 'fatcaForm',
           type: 'file',
           required: true,
         },
-        {
-          label: 'Memorandum of Association All Pages Scan',
-          name: 'memorandumOfAssociationAllPagesScan',
-          type: 'file',
-          required: true,
-        },
+        // {
+        //   label: 'Memorandum of Association All Pages Scan',
+        //   name: 'memorandumOfAssociationAllPagesScan',
+        //   type: 'file',
+        //   required: true,
+        // },
 
-        {
-          label: 'Certificate of Incorporation',
-          name: 'certificateOfIncorporation',
-          type: 'file',
-          required: false,
-        },
+        // {
+        //   label: 'Certificate of Incorporation',
+        //   name: 'certificateOfIncorporation',
+        //   type: 'file',
+        //   required: false,
+        // },
         {
           label: 'Board Resolution authorizing an individual director manager',
           name: 'boardResolutionAuthorizingAnIndividualDirectorManager',
           type: 'file',
           required: false,
         },
-        {
-          label: 'Certified Copy of Form 2 9 All pages scans',
-          name: 'certifiedCopyOfForm29AllPagesScans',
-          type: 'file',
-          required: false,
-        },
+        // {
+        //   label: 'Certified Copy of Form 2 9 All pages scans',
+        //   name: 'certifiedCopyOfForm29AllPagesScans',
+        //   type: 'file',
+        //   required: false,
+        // },
         {
           label: 'Account Maintainance Cerificate From Your External Bank',
           name: 'accountMaintainanceCerificateFromYourExternalBank',
@@ -253,6 +279,12 @@ export const pnpAttachmentsFormData = {
           name: 'cnicsOfAllDirectorsAuthorizedSignatories',
           type: 'file',
           required: false,
+        },
+        {
+          label: 'W8 BEN E',
+          name: 'w8BenE',
+          type: 'file',
+          required: true,
         },
         {
           // label: 'Certificate',

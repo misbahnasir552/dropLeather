@@ -1,12 +1,12 @@
 'use client';
 
-import { Form, Formik } from 'formik';
 // import type { StaticImageData } from 'next/image';
+import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
+import * as Yup from 'yup';
 
-// import * as Yup from 'yup';
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import C5soleAttachmentFormSchema from '@/components/Forms/validations/attachmentForm/c5SoleAttachmentsForm';
@@ -36,6 +36,8 @@ import {
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
+
+import C10soleAttachmentFormSchema from '../validations/attachmentForm/c10SoleAttachmentForm';
 // import { AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
 // import type { FieldsData } from './validations/types';
 
@@ -66,6 +68,7 @@ interface PageItem {
 interface FieldsData {
   pages: {
     natureOfBusiness: any;
+    limitCategory: any;
     page: PageItem[];
   };
 }
@@ -98,6 +101,9 @@ const Attachments = () => {
   // >(undefined);
 
   const businessNature = fieldData?.pages?.natureOfBusiness;
+  const limitCategory = fieldData?.pages?.limitCategory;
+
+  console.log(businessNature, 'limitCategory', limitCategory);
   // const [isChecked, setIsChecked] = useState(false);
   // const [navRoute, setNavRoute] = useState('');
   console.log('userdatais', userData);
@@ -161,7 +167,11 @@ const Attachments = () => {
   }, [initialValuesState, validationSchemaState]);
 
   useEffect(() => {
-    if (businessNature === 'soleProprietor') {
+    if (
+      businessNature === 'soleProprietor' &&
+      limitCategory === 'C5 (limit of max 500k)'
+    ) {
+      console.log('attachmnet data is set');
       setValidationSchemaState(C5soleAttachmentFormSchema);
       setAttachmentData(C5soleProprietorAttachmentsFormData?.categories);
     } else if (businessNature === 'partnership') {
@@ -170,9 +180,10 @@ const Attachments = () => {
     } else if (businessNature === 'publicAndPrivateLtd') {
       setValidationSchemaState(pnpAttachmentsFormSchema);
       setAttachmentData(pnpAttachmentsFormData?.categories);
-    } else {
-      setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
+    // else {
+    //   setAttachmentData([]); // Set a default empty state to avoid undefined errors
+    // }
 
     console.log(attachmentData, 'attachments');
 
@@ -181,36 +192,59 @@ const Attachments = () => {
       setPageTitle(title);
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
     }
-  }, [currentTab, businessNature]);
+  }, [currentTab, businessNature, limitCategory]);
 
-  // const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
-  //   const shape: Record<string, Yup.AnySchema> = {};
+  let schemaFields: {
+    [x: string]:
+      | Yup.Reference<unknown>
+      | Yup.ISchema<any, Yup.AnyObject, any, any>;
+  };
 
-  //   // Access internal schema fields safely
-  //   const schemaFields = (AttachmentFormInfoSchema as Yup.ObjectSchema<any>)
-  //     .fields;
+  if (
+    businessNature === 'soleProprietor' &&
+    limitCategory === 'C5 (limit of max 500k)'
+  ) {
+    // Access internal schema fields safely
+    schemaFields = (C5soleAttachmentFormSchema as Yup.ObjectSchema<any>).fields;
+  } else if (
+    businessNature === 'soleProprietor' &&
+    limitCategory === 'C10 (limit above than 500k)'
+  ) {
+    // Access internal schema fields safely
+    schemaFields = (C10soleAttachmentFormSchema as Yup.ObjectSchema<any>)
+      .fields;
+  } else if (businessNature === 'partnership') {
+    // Access internal schema fields safely
+    schemaFields = (partnershipAttachmentsFormSchema as Yup.ObjectSchema<any>)
+      .fields;
+  } else if (businessNature === 'publicAndPrivateLtd') {
+    // Access internal schema fields safely
+    schemaFields = (pnpAttachmentsFormSchema as Yup.ObjectSchema<any>).fields;
+  }
 
-  //   mappedData.forEach((section: any) => {
-  //     section.categories.forEach((category: any) => {
-  //       category.fields.forEach((field: any) => {
-  //         const schemaField = schemaFields?.[field.name];
+  const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
+    const shape: Record<string, Yup.AnySchema> = {};
 
-  //         // Ensure schemaField is not a Yup.Reference
-  //         if (
-  //           schemaField &&
-  //           typeof (schemaField as any).validate === 'function'
-  //         ) {
-  //           shape[field.name] = schemaField as Yup.AnySchema;
-  //         }
-  //       });
-  //     });
-  //   });
+    mappedData.forEach((section: any) => {
+      section.categories.forEach((category: any) => {
+        category.fields.forEach((field: any) => {
+          const schemaField = schemaFields?.[field.name];
 
-  //   console.log('✅ Dynamic schema includes:', Object.keys(shape));
-  //   return Yup.object().shape(shape);
-  // };
+          // Ensure schemaField is not a Yup.Reference
+          if (
+            schemaField &&
+            typeof (schemaField as any).validate === 'function'
+          ) {
+            shape[field.name] = schemaField as Yup.AnySchema;
+          }
+        });
+      });
+    });
 
-  // const ActivityFormInfoInitialValues = GetActivityInfoDetails();
+    console.log('✅ Dynamic schema includes:', Object.keys(shape));
+    return Yup.object().shape(shape);
+  };
+
   useEffect(() => {
     const initialValues: { [key: string]: any } = {};
     console.log('Field DATA:::', fieldData);
@@ -298,11 +332,11 @@ const Attachments = () => {
 
       setInitialValuesState(initialValues);
 
-      // if (mappedData.length > 0) {
-      //   const validationSchema =
-      //     // buildValidationSchemaFromMappedFields(mappedData);
-      //   // setValidationSchemaState(validationSchema);
-      // }
+      if (mappedData.length > 0) {
+        const validationSchema =
+          buildValidationSchemaFromMappedFields(mappedData);
+        setValidationSchemaState(validationSchema);
+      }
     }
   }, [currentTab, fieldData]);
 

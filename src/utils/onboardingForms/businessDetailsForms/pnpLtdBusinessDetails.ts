@@ -66,12 +66,14 @@ export const pnpLtdBusinessDetailsFormData = {
         //   ],
         //   required: true,
         // },
-        {
-          name: 'establishedSince',
-          label: 'Established Since',
-          type: 'date',
-          required: false,
-        },
+
+        // BET Requirement
+        // {
+        //   name: 'establishedSince',
+        //   label: 'Established Since',
+        //   type: 'date',
+        //   required: false,
+        // },
       ],
     },
     {
@@ -246,18 +248,19 @@ export const pnpLtdBusinessDetailsFormData = {
           type: 'text',
           required: true,
         },
-        {
-          name: 'expectedModesOfTransactionsDeliveryChannels',
-          label: 'Expected modes of transactions/ delivery channels',
-          type: 'text',
-          required: true,
-        },
-        {
-          name: 'industrySegment',
-          label: 'Industry/Segment',
-          type: 'text',
-          required: true,
-        },
+        // BET Requirement
+        // {
+        //   name: 'expectedModesOfTransactionsDeliveryChannels',
+        //   label: 'Expected modes of transactions/ delivery channels',
+        //   type: 'text',
+        //   required: true,
+        // },
+        // {
+        //   name: 'industrySegment',
+        //   label: 'Industry/Segment',
+        //   type: 'text',
+        //   required: true,
+        // },
         {
           name: 'product',
           label: 'Product',

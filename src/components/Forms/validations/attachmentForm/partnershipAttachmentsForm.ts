@@ -1,9 +1,13 @@
 import * as Yup from 'yup';
 
 export const partnershipAttachmentsFormInitialValues = {
-  cnicsOfAllPartnersAndBeneficialOwners: null,
+  validIdentityDocument: null,
+  // cnicsOfAllPartnersAndBeneficialOwners: null,
   attestedCopyOfPartnershipDeedignedByAllPartners: null,
+  authorityLetter: null,
+  crsEntityForm: null,
   accountMaintainanceCertificateFromYourExternalBank: null,
+  w8BenE: null,
   attestedRegistrationCertificateWithRegistrarofFirms: null,
   other: null,
   optional1: null,
@@ -21,8 +25,43 @@ const SUPPORTED_FORMATS = [
 ];
 
 const partnershipAttachmentsFormSchema = Yup.object().shape({
-  cnicsOfAllPartnersAndBeneficialOwners: Yup.mixed()
-    .required('CNICs of all partners and beneficial owners are required')
+  // cnicsOfAllPartnersAndBeneficialOwners: Yup.mixed()
+  //   .required('CNICs of all partners and beneficial owners are required')
+  //   .test(
+  //     'fileType',
+  //     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+  //     (value: any) => {
+  //       if (!Array.isArray(value)) return false;
+
+  //       for (const file of value) {
+  //         if (!(file instanceof File)) return false;
+  //         if (!SUPPORTED_FORMATS.includes(file.type)) {
+  //           console.log('Unsupported file type:', file.type);
+  //           return false;
+  //         }
+  //       }
+
+  //       return true;
+  //     },
+  //   )
+  //   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+  //     if (!Array.isArray(value)) return false;
+
+  //     for (const file of value) {
+  //       if (!(file instanceof File)) return false;
+  //       if (file.size > MAX_FILE_SIZE) {
+  //         console.log('File too large:', file.name, file.size);
+  //         return false;
+  //       }
+  //     }
+
+  //     return true;
+  //   }),
+
+  validIdentityDocument: Yup.mixed()
+    .required(
+      'Copy of the applicable valid identity document of all partners is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
@@ -58,6 +97,107 @@ const partnershipAttachmentsFormSchema = Yup.object().shape({
     .required(
       'Attested Copy of Partnership Deed signed by All Partners is required',
     )
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+
+  authorityLetter: Yup.mixed()
+    .required(
+      'Authority letter, in original, signed by all partners is required',
+    )
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+
+  crsEntityForm: Yup.mixed()
+    .required('CRS entity form is required')
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!Array.isArray(value)) return false;
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!Array.isArray(value)) return false;
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+
+  w8BenE: Yup.mixed()
+    .required('W8 BEN E form is required')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',

@@ -25,6 +25,7 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 // import { storeFields } from '@/utils/fields/storeDetailsFields';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
+import { SettlementDetailsFormData } from '@/utils/onboardingForms/settlementDetails';
 
 interface Field {
   required: boolean;
@@ -106,54 +107,54 @@ const SettlementDetailsReqRevision = () => {
   const [inputApiError, setInputApiError] = useState('');
   const businessNature = fieldsData?.pages?.natureOfBusiness;
 
-  const SettlementDetailsFormData = {
-    pageName: 'Settlement Details',
-    categories: [
-      {
-        categoryName:
-          'Settlement Details(Select the account you would like to have)',
-        fields: [
-          {
-            name: 'bank',
-            label: 'Bank',
-            type: 'checkBoxInput',
-            required: 'true',
-            options: [
-              {
-                label: 'Easypaisa Bank Limited',
-                value: 'easypaisaBankLimited',
-              },
-              { label: 'Other Banks', value: 'Other Banks' },
-            ],
-          },
-          {
-            name: 'bankName',
-            label: 'Bank Name',
-            type: 'dropdown',
-            required: 'true',
-            // options: [
-            //   { label: 'Bank Name1', value: 'Bank Name1' },
-            //   { label: 'Bank Name2', value: 'Bank Name2' },
-            // ],
-          },
+  // const SettlementDetailsFormData = {
+  //   pageName: 'Settlement Details',
+  //   categories: [
+  //     {
+  //       categoryName:
+  //         'Settlement Details(Select the account you would like to have)',
+  //       fields: [
+  //         {
+  //           name: 'bank',
+  //           label: 'Bank',
+  //           type: 'checkBoxInput',
+  //           required: 'true',
+  //           options: [
+  //             {
+  //               label: 'Easypaisa Bank Limited',
+  //               value: 'easypaisaBankLimited',
+  //             },
+  //             { label: 'Other Banks', value: 'Other Banks' },
+  //           ],
+  //         },
+  //         {
+  //           name: 'bankName',
+  //           label: 'Bank Name',
+  //           type: 'dropdown',
+  //           required: 'true',
+  //           // options: [
+  //           //   { label: 'Bank Name1', value: 'Bank Name1' },
+  //           //   { label: 'Bank Name2', value: 'Bank Name2' },
+  //           // ],
+  //         },
 
-          {
-            name: 'accountNumber',
-            label: 'Account Number',
-            type: 'text',
-            required: 'true',
-          },
-          {
-            name: 'accountTitle',
-            label: 'Account Title',
-            type: 'imageInput',
-            required: 'true',
-            image: 'Fetch Title',
-          },
-        ],
-      },
-    ],
-  };
+  //         {
+  //           name: 'accountNumber',
+  //           label: 'Account Number',
+  //           type: 'text',
+  //           required: 'true',
+  //         },
+  //         {
+  //           name: 'accountTitle',
+  //           label: 'Account Title',
+  //           type: 'imageInput',
+  //           required: 'true',
+  //           image: 'Fetch Title',
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
 
   const buildValidationSchemaFromMappedFields = (mappedData: any[]) => {
     const shape: Record<string, Yup.AnySchema> = {};
@@ -300,16 +301,11 @@ const SettlementDetailsReqRevision = () => {
 
                   if (
                     matchedField.name === 'bank' &&
-                    businessNature === 'soleProprietor'
+                    businessNature !== 'soleProprietor'
                   ) {
                     return {
                       ...matchedField,
-                      options: [
-                        {
-                          label: 'Easypaisa Bank Limited',
-                          value: 'easypaisaBankLimited',
-                        },
-                      ],
+                      options: [{ label: 'Other Banks', value: 'Other Banks' }],
                       required: matchedField.required || false,
                     };
                   }

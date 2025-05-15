@@ -60,7 +60,8 @@ export const soleBusinessDetailsFormSchema = Yup.object().shape({
   limitCategory: Yup.string().required('Limit Category is required'),
   natureofBusiness: Yup.string().required('Nature of Business is required'),
   // raastEnabled: Yup.string().required('Raast Enabled is required'),
-  establishedSince: Yup.date().nullable(),
+  // BET Requirement
+  // establishedSince: Yup.date().nullable(),
   businessMode: Yup.array()
     .min(1, 'Please select at least one Business Mode')
     .required('Business Mode is required'),
