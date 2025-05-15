@@ -20,22 +20,6 @@ type TLogin = {
   onboardingCompleted: boolean;
 };
 
-type TAdminLogin = {
-  // user: TLoginUser | null;
-  apiKey: string | undefined;
-  apiSecret: string | undefined;
-  email: null | undefined | string;
-  jwt: string | undefined;
-  managerMobile: string | undefined;
-  expiry: string | undefined;
-  loading: boolean;
-  success: boolean;
-  isAuthenticated: boolean;
-  profileType: string | undefined;
-  name: string | undefined;
-  pages: [] | undefined;
-  adminRole: string | undefined;
-};
 type TCredentialsLogin = {
   username: string | undefined;
   password: string | undefined;
@@ -56,31 +40,6 @@ type TMerchantDetails = {
 type TFundsTransfer = {
   isAuthenticated: boolean;
   navbarRoute?: string;
-};
-type TCorporateAccountDetails = {
-  accountTitle: null | undefined | string;
-  applicantName: null | undefined | string;
-  corporateEntity: null | undefined | string;
-  emailAddress: null | undefined | string;
-  mobileNumber: string | undefined;
-  requestStatus: string | undefined;
-  ticketId: string | undefined;
-  loading: boolean;
-  success: boolean;
-  isAuthenticated: boolean;
-};
-
-type TUpdateUser = {
-  category: null | undefined | string;
-  // email: null | undefined | string;
-  firstName: string | undefined;
-  lastName: string | undefined;
-  role: string | undefined;
-  profileName: string | undefined;
-  // requestStatus: string | undefined;
-  loading: boolean;
-  success: boolean;
-  isAuthenticated: boolean;
 };
 
 type TMerchantIntegration = {
