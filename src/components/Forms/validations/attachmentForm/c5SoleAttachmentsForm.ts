@@ -120,7 +120,7 @@ const C5soleAttachmentFormSchema = Yup.object().shape({
 
   certificate: Yup.mixed()
     .required(
-      'Account maintenance certificate from your external bank is required',
+      'Account maintainance certificate from your external bank is required',
     )
     .test(
       'fileType',
