@@ -192,7 +192,9 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
   //   }),
 
   boardResolutionAuthorizingAnIndividualDirectorManager: Yup.mixed()
-    .nullable()
+    .required(
+      'Board Resolution Authorizing An Individual DirectorManager is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
@@ -257,7 +259,9 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
   //   }),
 
   accountMaintainanceCerificateFromYourExternalBank: Yup.mixed()
-    .required('Account Maintainance Certificate From Your External Bank')
+    .required(
+      'Account Maintainance Certificate From Your External Bank is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
@@ -289,7 +293,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       return true;
     }),
   crsEntityForm: Yup.mixed()
-    .nullable()
+    .required('CRS Entity Form is required')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
@@ -322,7 +326,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
     }),
 
   cnicsOfAllDirectorsAuthorizedSignatories: Yup.mixed()
-    .nullable()
+    .required('CNICs Of All Directors Authorized Signatories is required')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',

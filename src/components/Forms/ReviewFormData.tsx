@@ -31,41 +31,9 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
 
-  // const options = [
-  //   {
-  //     value: 'soleProprietor',
-  //     label: 'Sole-Proprietorship',
-  //     endpoint: 'soleBusinessDetails',
-  //   },
-  //   {
-  //     value: 'publicAndPrivateLtd',
-  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
-  //     endpoint: 'pnpBusinessDetails',
-  //   },
-  //   {
-  //     value: 'partnership',
-  //     label:
-  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
-  //     endpoint: 'partnershipBusinessDetails',
-  //   },
-  //   {
-  //     value: 'g2p',
-  //     label: 'Government Accounts / Autonomous Body',
-  //     endpoint: 'otherBusinessDetails',
-  //   },
-  //   {
-  //     value: 'ngoNpoCharities',
-  //     label:
-  //       'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
-  //     endpoint: 'nncBusinessDetails',
-  //   },
-  // ];
-=======
   const [type, setType] = useState('');
->>>>>>> origin/main
 
   console.log('onboarding ', onboardingData);
 
