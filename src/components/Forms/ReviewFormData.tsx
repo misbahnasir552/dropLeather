@@ -24,14 +24,9 @@ interface IRevieFormData {
   isEditable: boolean;
   merchant: boolean;
   onboardingData: any;
-  businessNatureType?: any;
 }
 
-function ReviewFormData({
-  isEditable,
-  onboardingData,
-  businessNatureType,
-}: IRevieFormData) {
+function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   console.log('reviewformonboardingdata', onboardingData);
   const userData = useAppSelector((state: any) => state.auth);
 
@@ -39,38 +34,7 @@ function ReviewFormData({
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
-  // const options = [
-  //   {
-  //     value: 'soleProprietor',
-  //     label: 'Sole-Proprietorship',
-  //     endpoint: 'soleBusinessDetails',
-  //   },
-  //   {
-  //     value: 'publicAndPrivateLtd',
-  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
-  //     endpoint: 'pnpBusinessDetails',
-  //   },
-  //   {
-  //     value: 'partnership',
-  //     label:
-  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
-  //     endpoint: 'partnershipBusinessDetails',
-  //   },
-  //   {
-  //     value: 'g2p',
-  //     label: 'Government Accounts / Autonomous Body',
-  //     endpoint: 'otherBusinessDetails',
-  //   },
-  //   {
-  //     value: 'ngoNpoCharities',
-  //     label:
-  //       'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
-  //     endpoint: 'nncBusinessDetails',
-  //   },
-  // ];
-
   console.log('onboarding ', onboardingData);
-  console.log('businessnaturetype', businessNatureType);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
