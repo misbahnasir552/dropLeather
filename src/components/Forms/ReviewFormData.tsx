@@ -1,15 +1,12 @@
 'use client';
 
 // import Image from 'next/image';
-
-// import DownloadIcon from '@/assets/icons/Download-Table-Icon.svg';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-// import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
-import SuccessModal from '@/components/UI/Modal/CustomModal';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
@@ -25,20 +22,16 @@ interface IRevieFormData {
   isEditable: boolean;
   merchant: boolean;
   onboardingData: any;
-  businessNatureType?: any;
 }
 
-function ReviewFormData({
-  isEditable,
-  onboardingData,
-  businessNatureType,
-}: IRevieFormData) {
+function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   console.log('reviewformonboardingdata', onboardingData);
   const userData = useAppSelector((state: any) => state.auth);
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+<<<<<<< HEAD
   const [loading, setLoading] = useState(false);
 
   // const options = [
@@ -70,9 +63,11 @@ function ReviewFormData({
   //     endpoint: 'nncBusinessDetails',
   //   },
   // ];
+=======
+  const [type, setType] = useState('');
+>>>>>>> origin/main
 
   console.log('onboarding ', onboardingData);
-  console.log('businessnaturetype', businessNatureType);
 
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -99,6 +94,12 @@ function ReviewFormData({
         setShowModal(true);
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
+      } else if (response.data.responseCode === '000') {
+        // success case
+        setType('error');
+        setShowModal(true);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
       } else {
         setTitle('Failed Submission');
         setDescription(`Please, try again later!`);
@@ -108,6 +109,7 @@ function ReviewFormData({
       console.log(response);
       // resetForm();
     } catch (e: any) {
+      setType('error');
       setTitle(e.code);
       setDescription(e.message);
       setLoading(false);
@@ -121,12 +123,13 @@ function ReviewFormData({
 
   return (
     <>
-      <SuccessModal
+      <CustomModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
         routeName={logOut}
+        type={type}
         // routeName={route}
       />
       {loading && <OvalLoading />}

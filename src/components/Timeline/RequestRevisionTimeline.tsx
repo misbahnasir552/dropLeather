@@ -247,46 +247,49 @@ const RequestRevisionTimeline: React.FC = () => {
   }));
 
   return (
-    <div className="mx-4 flex flex-col justify-between py-2">
-      <div className="flex w-full justify-center overflow-auto px-4">
-        <div className="flex gap-x-20">
-          {' '}
-          {finalTabs.map((tab, index) => (
-            <React.Fragment key={index}>
-              <div className="flex flex-col items-center">
-                <Link
-                  href={
-                    tab.status === 'Completed'
-                      ? `/merchant/home/request-revision/${tab.name}`
-                      : '#'
-                  }
-                  className={`${
-                    tab.status === 'Completed'
-                      ? 'cursor-pointer'
-                      : 'cursor-not-allowed opacity-50'
-                  }`}
-                >
-                  <div className="flex justify-center px-[14px] pb-[8px]">
-                    <div
-                      className={`flex w-max rounded-lg border-[1px] ${
-                        tab.name === activeTab
-                          ? 'border-border-green'
-                          : tab.status === 'Completed'
-                          ? 'border-secondary-base bg-screen-grey'
-                          : 'border-border-light'
-                      } p-[12px]`}
-                    >
-                      {tab.svg}
-                    </div>
+    <div className="flex flex-col justify-between py-2">
+      <div className="flex w-full justify-between overflow-auto px-4">
+        {finalTabs.map((tab, index) => (
+          <React.Fragment key={index}>
+            <div className="flex flex-col">
+              <Link
+                href={
+                  tab.status === 'Completed'
+                    ? `/merchant/home/request-revision/${tab.name}`
+                    : '#'
+                }
+                className={`${
+                  tab.status === 'Completed'
+                    ? 'cursor-pointer'
+                    : 'cursor-not-allowed opacity-50'
+                }`}
+              >
+                <div className="flex justify-center px-[14px] pb-[8px]">
+                  <div
+                    className={`flex w-max rounded-lg border-[1px] ${
+                      tab.name === activeTab
+                        ? 'border-border-green'
+                        : tab.status === 'Completed'
+                        ? 'border-secondary-base bg-screen-grey'
+                        : 'border-border-light'
+                    } p-[12px]`}
+                  >
+                    {tab.svg}
                   </div>
-                  <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
-                    {tab.label}
-                  </div>
-                </Link>
+                </div>
+                <div className="flex w-full justify-center text-center text-xs font-semibold leading-[14px] text-secondary-base">
+                  {tab.label}
+                </div>
+              </Link>
+            </div>
+
+            {index < finalTabs.length - 1 && (
+              <div className="w-full py-[24px]">
+                <div className="h-[1px] w-full bg-border-light"></div>
               </div>
-            </React.Fragment>
-          ))}
-        </div>
+            )}
+          </React.Fragment>
+        ))}
       </div>
     </div>
   );

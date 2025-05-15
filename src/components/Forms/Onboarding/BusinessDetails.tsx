@@ -204,42 +204,44 @@ const BusinessInformation = () => {
         //   );
         // }
       });
-      if (selectedDropDownValue === 'High Risk Business / Person') {
+      if (
+        selectedDropDownValue === '' ||
+        selectedDropDownValue === undefined ||
+        selectedDropDownValue === 'No'
+      ) {
+        // Exclude both income and risk-type fields
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+            field.name !== 'currentSalaryIncome' &&
+            field.name !== 'highRiskType' &&
+            field.name !== 'mediumRiskType' &&
+            field.name !== 'lowRiskType',
         );
-      }
-
-      if (selectedDropDownValue === 'No') {
+      } else if (selectedDropDownValue === 'Yes') {
+        // Show income field only, exclude all risk-type dropdowns
         updatedFields = category.fields.filter(
-          (field: any) => field.name !== 'currentSalaryIncome',
+          (field: any) =>
+            field.name !== 'highRiskType' &&
+            field.name !== 'mediumRiskType' &&
+            field.name !== 'lowRiskType',
+        );
+      } else if (selectedDropDownValue === 'High Risk Business / Person') {
+        // Show highRiskType, hide others
+        updatedFields = category.fields.filter(
+          (field: any) =>
+            field.name !== 'mediumRiskType' && field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
+        // Show mediumRiskType, hide others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+            field.name !== 'highRiskType' && field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+        // Show lowRiskType, hide others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'mediumRiskType' && field.name !== 'highRiskType',
-        );
-      } else if (
-        selectedDropDownValue === 'No' ||
-        selectedDropDownValue === '' ||
-        selectedDropDownValue === undefined
-      ) {
-        console.log('in no');
-        updatedFields = category.fields.filter(
-          (field: any) =>
-            // field.name !== 'mediumRiskType' &&
-            // field.name !== 'highRiskType' &&
-            // field.name !== 'lowRiskType',
-            field.name !== 'mediumRiskType' &&
-            field.name !== 'highRiskType' &&
-            field.name !== 'lowRiskType' &&
-            field.name !== 'currentSalaryIncome',
+            field.name !== 'highRiskType' && field.name !== 'mediumRiskType',
         );
       }
 
