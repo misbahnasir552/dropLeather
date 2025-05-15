@@ -34,7 +34,7 @@ const Layout = ({ children }: any) => {
 
     refreshToken();
 
-    const interval = setInterval(refreshToken, 15 * 60 * 1000);
+    const interval = setInterval(refreshToken, 4 * 60 * 1000);
 
     return () => clearInterval(interval);
   }, []);

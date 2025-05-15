@@ -1,16 +1,12 @@
 'use client';
 
 // import Image from 'next/image';
-
-// import DownloadIcon from '@/assets/icons/Download-Table-Icon.svg';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
-// import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
 import CustomModal from '@/components/UI/Modal/CustomModal';
-// import SuccessModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
