@@ -338,13 +338,7 @@ function ViewProductQR() {
                     <Button
                       label="Search"
                       type="submit"
-                      className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
-                    />
-                    <Button
-                      label={exportLoading ? 'Exporting' : 'Export'}
-                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                      onClickHandler={fetchExportedRecords} // Export button click handler
-                      disable={exportLoading}
+                      className="button-primary h-9 w-[120px] px-3 py-[20px] text-sm"
                     />
                     <Button
                       label="Reset"
@@ -359,7 +353,13 @@ function ViewProductQR() {
                         handleReset(formik);
                         setFilteredParams(undefined);
                       }}
-                      className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
+                      className="button-secondary h-9 w-[120px] px-2 py-[20px] text-xs leading-tight"
+                    />
+                    <Button
+                      label={exportLoading ? 'Exporting' : 'Export'}
+                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                      onClickHandler={fetchExportedRecords} // Export button click handler
+                      disable={exportLoading}
                     />
                   </div>
                 </Form>
