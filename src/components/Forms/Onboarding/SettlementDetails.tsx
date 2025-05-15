@@ -17,14 +17,14 @@ import { generateMD5Hash } from '@/utils/helper';
 // import { BarLoader } from 'react-spinners';
 import { SettlementDetailsFormData } from '@/utils/onboardingForms/settlementDetails';
 
-import DropdownInput from '../UI/Inputs/DropdownInput';
-import ImageInput from '../UI/Inputs/ImageInput';
-import CustomModal from '../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import DropdownInput from '../../UI/Inputs/DropdownInput';
+import ImageInput from '../../UI/Inputs/ImageInput';
+import CustomModal from '../../UI/Modal/CustomModal';
+import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
 // import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
 import settlementDetailsSchema, {
   settlementDetailsInitialValues,
-} from './validations/settlementForm';
+} from '../validations/settlementForm';
 
 // interface Field {
 //   name: string;

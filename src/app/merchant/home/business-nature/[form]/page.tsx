@@ -2,15 +2,15 @@
 
 import React from 'react';
 
-import Attachments from '@/components/Forms/Attachments';
-// import Checklist from '@/components/Forms/Checklist';
-import IntegrationForm from '@/components/Forms/IntegrationForm';
 // import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
 import ActivityInformation from '@/components/Forms/Onboarding/ActivityInformation';
+import Attachments from '@/components/Forms/Onboarding/Attachments';
 import BusinessInformation from '@/components/Forms/Onboarding/BusinessDetails';
+// import Checklist from '@/components/Forms/Checklist';
+import IntegrationForm from '@/components/Forms/Onboarding/IntegrationForm';
+import SettlementDetails from '@/components/Forms/Onboarding/SettlementDetails';
+import StoreDetails from '@/components/Forms/Onboarding/StoreDetails';
 import ReviewForm from '@/components/Forms/ReviewForm';
-import SettlementDetails from '@/components/Forms/SettlementDetails';
-import StoreDetails from '@/components/Forms/StoreDetails';
 // import LivePicture from '@/components/LivePhotoCapture/PhotoCapture';
 import H6 from '@/components/UI/Headings/H6';
 // import { useAppSelector } from '@/hooks/redux';

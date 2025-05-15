@@ -27,10 +27,10 @@ import {
   storeDetailsSchema,
 } from '@/validations/merchant/onBoarding/storeDetails';
 
-import DateInputNew from '../UI/Inputs/DateInputNew';
-import DropdownNew from '../UI/Inputs/DropDownNew';
+import DateInputNew from '../../UI/Inputs/DateInputNew';
+import DropdownNew from '../../UI/Inputs/DropDownNew';
 // import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
-import DisabledInput from './DisabledStoreComponent';
+import DisabledInput from '../DisabledStoreComponent';
 // import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 
 const AddStore = () => {
@@ -407,68 +407,6 @@ const AddStore = () => {
                                 </React.Fragment>
                               ),
                             )}
-                            {/* {updatedStoreFields.map(
-                              ({ label, name, type, options }: any) => (
-                                <div
-                                  key={name}
-                                  className={`flex flex-col gap-2 ${
-                                    type === 'checkbox' ? 'col-span-2' : ''
-                                  }`}
-                                >
-                                  {type === 'checkbox' && (
-                                    <CheckboxInput
-                                      setSelectedCheckValue={
-                                        setSelectedCheckValue
-                                      }
-                                      name={name}
-                                      options={options}
-                                      isMulti={true}
-                                      form={formik}
-                                      // onValueChange={handleCheckboxValueChange}
-                                      // touched={formik.touched[name as keyof t/ypeof formik.touched]}
-                                      layout="flex-row"
-                                    />
-                                  )}
-
-                                  {type === 'dropdown' && (
-                                    <DropdownInput
-                                      label={label}
-                                      name={name}
-                                      options={options}
-                                      formik={formik}
-                                      // error={
-                                      //   formik.errors[
-                                      //   name as keyof typeof formik.errors
-                                      //   ]
-                                      // }
-                                      // touched={
-                                      //   formik.touched[
-                                      //   name as keyof typeof formik.touched
-                                      //   ]
-                                      // }
-                                    />
-                                  )}
-
-                                  {type === 'text' && (
-                                    <Input
-                                      label={label}
-                                      type="text"
-                                      name={name}
-                                      // error={
-                                      //   formik.errors[
-                                      //   name as keyof typeof formik.errors
-                                      //   ]
-                                      // }
-                                      // touched={
-                                      //   formik.touched[
-                                      //   name as keyof typeof formik.touched
-                                      //   ]
-                                      // }
-                                    />
-                                  )}
-                                </div>
-                              ),
-                            )} */}
                           </div>
                           <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
                             {apierror}

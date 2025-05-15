@@ -17,12 +17,12 @@ import { endpointArray } from '@/utils/merchantForms/helper';
 // import type { FieldsData, Page } from './validationsOLD/types';
 import { IntegrationFormData } from '@/utils/onboardingForms/integrationInfo';
 
-import CustomModal from '../UI/Modal/CustomModal';
+import CustomModal from '../../UI/Modal/CustomModal';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
-import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
+import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
 import integrationFormSchema, {
   integrationFormInitialValues,
-} from './validations/integartionForm';
+} from '../validations/integartionForm';
 // import type { FieldsData, Page } from './validations/types';
 // import settlementDetailsSchema,{settlementDetailsInitialValues} from './validations/settlementForm';
 

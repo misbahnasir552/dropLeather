@@ -13,16 +13,6 @@ const Layout = ({ children }: any) => {
   useEffect(() => {
     const refreshToken = async () => {
       try {
-        // const response=  await apiClient.post('auth/refreshJwt',
-        //   // await apiClient.post('auth/refreshJwt', requestBody, {
-
-        //     headers: {
-        //       // Authorization: `Bearer ${userData.jwt}`,
-        //       Username: "kjskj"
-        //       // userData?.email,
-        //     ,
-        //   });
-
         const response: any = await apiClient.post(
           'auth/refreshJwt',
           {},
@@ -42,13 +32,10 @@ const Layout = ({ children }: any) => {
       }
     };
 
-    // Call once on mount
     refreshToken();
 
-    // Set interval for 15 minutes
     const interval = setInterval(refreshToken, 15 * 60 * 1000);
 
-    // Cleanup on unmount
     return () => clearInterval(interval);
   }, []);
 
