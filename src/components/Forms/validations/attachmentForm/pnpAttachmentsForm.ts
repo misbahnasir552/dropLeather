@@ -259,7 +259,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
   //   }),
 
   accountMaintainanceCerificateFromYourExternalBank: Yup.mixed()
-    .nullable()
+    .required('Account Maintainance Certificate From Your External Bank')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',

@@ -17,6 +17,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
 import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
 
+import OvalLoading from '../Loader/OvalLoading';
 // import B3 from '../UI/Body/B3';
 import Button from '../UI/Button/PrimaryButton';
 
@@ -38,6 +39,7 @@ function ReviewFormData({
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // const options = [
   //   {
@@ -85,6 +87,7 @@ function ReviewFormData({
     // setIsSubmitting(true);
     console.log('user data ', userData);
 
+    setLoading(true);
     try {
       const response = await apiClient.get(`merchant/markApplicationForm`, {
         params: { email: userData?.email },
@@ -92,13 +95,14 @@ function ReviewFormData({
 
       if (response.data.responseCode === '009') {
         // success case
-
+        setLoading(false);
         setShowModal(true);
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
       } else {
         setTitle('Failed Submission');
         setDescription(`Please, try again later!`);
+        setLoading(false);
       }
 
       console.log(response);
@@ -106,8 +110,10 @@ function ReviewFormData({
     } catch (e: any) {
       setTitle(e.code);
       setDescription(e.message);
+      setLoading(false);
       setShowModal(true);
     } finally {
+      setLoading(false);
       // setIsSubmitting(false);
       // setShowModal(true);
     }
@@ -123,6 +129,7 @@ function ReviewFormData({
         routeName={logOut}
         // routeName={route}
       />
+      {loading && <OvalLoading />}
       {onboardingData?.pages.map((page: any) => (
         <ReviewFormLayout key={page.pageName}>
           <ReviewFormMetaData

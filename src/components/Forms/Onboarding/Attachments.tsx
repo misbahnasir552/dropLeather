@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
@@ -48,6 +49,7 @@ const Attachments = () => {
   const [initialValuesState, setInitialValuesState] = useState<any>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [apierror, setApierror] = useState('');
+  const [loading, setLoading] = useState(false);
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature,
   );
@@ -171,7 +173,7 @@ const Attachments = () => {
 
         // formData.append('status', 'Completed');
         console.log('FORM DATAA', formData);
-
+        setLoading(true);
         try {
           const response: any = await apiClient.post(
             `merchant/saveMerchantDocuments`,
@@ -192,6 +194,7 @@ const Attachments = () => {
             if (nextTab) {
               router.push(`/merchant/home/business-nature/${nextTab}`);
             } else {
+              setLoading(false);
               console.log(
                 'Form submission completed, no more tabs to navigate.',
               );
@@ -199,6 +202,7 @@ const Attachments = () => {
           } else if (response?.data?.responseCode === '000') {
             console.log('no');
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
           }
           // else {
           //   setTitle('Error Occured');
@@ -207,12 +211,14 @@ const Attachments = () => {
           // }
           // return;
         } catch (e: any) {
+          setLoading(false);
           console.log('Error in submitting dynamic form', e);
           setTitle('Network Failed');
           setDescription('Network failed! Please try again later.');
           setShowModal(true);
         } finally {
           setSubmitting(false);
+          setLoading(false);
         }
       }
     }
@@ -226,6 +232,7 @@ const Attachments = () => {
         show={showModal}
         setShowModal={setShowModal}
       />
+      {loading && <OvalLoading />}
       {initialValuesState && validationSchemaState ? (
         <Formik
           initialValues={initialValuesState}
@@ -286,6 +293,7 @@ const Attachments = () => {
                     <Button
                       label={`Next`}
                       type="submit"
+                      disable={loading}
                       className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
                     />
                   </div>
