@@ -780,7 +780,28 @@ const BusinessInformationReqRevision = () => {
 
           let updatedFields = category.fields;
 
-          if (selectedDropDownValue === 'High Risk Business / Person') {
+          if (
+            selectedDropDownValue === '' ||
+            selectedDropDownValue === undefined ||
+            selectedDropDownValue === 'No'
+          ) {
+            // Exclude both income and risk-type fields
+            updatedFields = category.fields.filter(
+              (field: any) =>
+                field !== 'Current Salary / Income' &&
+                field !== 'High Risk Type' &&
+                field !== 'Medium Risk Type' &&
+                field !== 'Low Risk Type',
+            );
+          } else if (selectedDropDownValue === 'Yes') {
+            // Show income field only, exclude all risk-type dropdowns
+            updatedFields = category.fields.filter(
+              (field: any) =>
+                field !== 'High Risk Type' &&
+                field !== 'Medium Risk Type' &&
+                field !== 'Low Risk Type',
+            );
+          } else if (selectedDropDownValue === 'High Risk Business / Person') {
             updatedFields = category.fields.filter(
               (field: any) =>
                 field !== 'Low Risk Type' && field !== 'Medium Risk Type',
@@ -796,14 +817,6 @@ const BusinessInformationReqRevision = () => {
             updatedFields = category.fields.filter(
               (field: any) =>
                 field !== 'Medium Risk Type' && field !== 'High Risk Type',
-            );
-          } else if (
-            selectedDropDownValue === 'No' ||
-            selectedDropDownValue === '' ||
-            selectedDropDownValue === undefined
-          ) {
-            updatedFields = category.fields.filter(
-              (field: any) => field !== 'Current Salary',
             );
           }
 
@@ -1085,9 +1098,9 @@ const BusinessInformationReqRevision = () => {
         onSubmit={onSubmit}
       >
         {(formik) => (
-          <div className="flex flex-col pb-[120px]">
+          <div className="flex flex-col">
             <Form className="flex flex-col gap-5">
-              <div className="hidden px-[24px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
+              <div className="hidden px-[24px] pb-[4px] pt-[32px] text-sm font-semibold leading-5 text-secondary-600 sm:max-md:block">
                 {pageTitle}
               </div>
               <div className="flex flex-col gap-9">
