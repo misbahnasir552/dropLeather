@@ -26,7 +26,6 @@ import CorporateFileInput from '../../UI/Inputs/CorporateFileInput';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 // import ImageInput from "../UI/Inputs/ImageInput";
 // import Input from '../UI/Inputs/Input';
-import CustomModal from '../../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
 import C5soleAttachmentFormSchema, {
   C5soleAttachmentFormInitialValues,
@@ -69,10 +68,6 @@ const Attachments = () => {
   const [attachmentData, setAttachmentData] = useState<any[]>();
   // const dispatch = useAppDispatch();
   const userData = useAppSelector((state: any) => state.auth);
-
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
 
   const formData = new FormData();
   console.log(filteredData, 'filtered data from attachmentsssssssssss');
@@ -212,10 +207,7 @@ const Attachments = () => {
           // return;
         } catch (e: any) {
           setLoading(false);
-          console.log('Error in submitting dynamic form', e);
-          setTitle('Network Failed');
-          setDescription('Network failed! Please try again later.');
-          setShowModal(true);
+          setApierror(e?.message);
         } finally {
           setSubmitting(false);
           setLoading(false);
@@ -226,12 +218,6 @@ const Attachments = () => {
 
   return (
     <div>
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-      />
       {loading && <OvalLoading />}
       {initialValuesState && validationSchemaState ? (
         <Formik
