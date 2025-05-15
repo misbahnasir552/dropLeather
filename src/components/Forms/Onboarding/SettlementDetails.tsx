@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
@@ -95,6 +96,7 @@ const SettlementDetails = () => {
   const [description, setDescription] = useState('');
   const [bankName, setBankName] = useState('');
   const [inputApiError, setInputApiError] = useState('');
+  const [loading, setLoading] = useState(false);
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature.businessNature,
   );
@@ -253,6 +255,7 @@ const SettlementDetails = () => {
     };
 
     const md5Hash = generateMD5Hash(mdRequest);
+    setLoading(true);
     try {
       const response: any = await apiClient.post(
         `merchant/settlementdetails`,
@@ -277,17 +280,20 @@ const SettlementDetails = () => {
         router.push('/merchant/home/business-nature/attachments');
       } else if (response?.data?.responseCode === '000') {
         setApierror(response?.data?.responseMessage);
+        setLoading(false);
         // setTitle('Error Occured');
         // setDescription(response?.data?.responseDescription);
         // setShowModal(true);
       } else {
         setApierror(response?.data?.responseMessage);
+        setLoading(false);
         // setTitle('Error Occured');
         // setDescription(response?.data?.responseDescription);
         // setShowModal(true);
       }
     } catch (e: any) {
       setApierror(e?.data?.message);
+      setLoading(false);
       console.log(e, 'Error');
     }
     setSubmitting(false);
@@ -304,6 +310,7 @@ const SettlementDetails = () => {
         // routeName={attachRoute}
         // routeName="/merchant/home"
       />
+      {loading && <OvalLoading />}
       <Formik
         initialValues={settlementDetailsInitialValues}
         validationSchema={settlementDetailsSchema}

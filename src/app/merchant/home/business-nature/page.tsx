@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
+import OvalLoading from '@/components/Loader/OvalLoading';
 // import apiClient from '@/api/apiClient';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
@@ -115,6 +116,7 @@ const BusinessNature = () => {
 
   return (
     <>
+      {isSubmitting && <OvalLoading />}
       <SuccessModal
         title={title}
         description={description}
