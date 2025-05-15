@@ -23,12 +23,14 @@ const SUPPORTED_FORMATS = [
 ];
 
 const fileValidation = Yup.mixed()
-  .required('This file is required')
+  .test('required', 'This file is required', (value: any) => {
+    return Array.isArray(value) && value.length > 0;
+  })
   .test(
     'fileType',
     'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
     (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!Array.isArray(value) || value.length === 0) return true; // Skip if required check fails
       return value.every(
         (file: any) =>
           file instanceof File && SUPPORTED_FORMATS.includes(file.type),
@@ -36,7 +38,7 @@ const fileValidation = Yup.mixed()
     },
   )
   .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-    if (!Array.isArray(value)) return false;
+    if (!Array.isArray(value) || value.length === 0) return true; // Skip if required check fails
     return value.every(
       (file: any) => file instanceof File && file.size <= MAX_FILE_SIZE,
     );
@@ -63,11 +65,12 @@ const C10soleAttachmentFormSchema = Yup.object().shape({
   ),
 
   optional1: Yup.mixed()
+    .nullable()
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -81,7 +84,7 @@ const C10soleAttachmentFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -95,12 +98,12 @@ const C10soleAttachmentFormSchema = Yup.object().shape({
     }),
 
   optional2: Yup.mixed()
-
+    .nullable()
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -114,7 +117,7 @@ const C10soleAttachmentFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;

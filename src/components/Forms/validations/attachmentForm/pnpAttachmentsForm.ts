@@ -99,7 +99,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -113,7 +113,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -125,7 +125,6 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
 
       return true;
     }),
-
   // memorandumOfAssociationAllPagesScan: Yup.mixed()
   //   .required('Memorandum of Association All Pages Scan is required')
   //   .test(
@@ -193,12 +192,14 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
   //   }),
 
   boardResolutionAuthorizingAnIndividualDirectorManager: Yup.mixed()
-    .nullable()
+    .required(
+      'Board Resolution Authorizing An Individual DirectorManager is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -212,7 +213,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -224,7 +225,6 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
 
       return true;
     }),
-
   // certifiedCopyOfForm29AllPagesScans: Yup.mixed()
   //   .nullable()
   //   .test(
@@ -259,12 +259,14 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
   //   }),
 
   accountMaintainanceCerificateFromYourExternalBank: Yup.mixed()
-    .nullable()
+    .required(
+      'Account Maintainance Certificate From Your External Bank is required',
+    )
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -278,7 +280,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -291,12 +293,12 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       return true;
     }),
   crsEntityForm: Yup.mixed()
-    .nullable()
+    .required('CRS Entity Form is required')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -310,7 +312,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -324,12 +326,12 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
     }),
 
   cnicsOfAllDirectorsAuthorizedSignatories: Yup.mixed()
-    .nullable()
+    .required('CNICs Of All Directors Authorized Signatories is required')
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -343,7 +345,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -362,7 +364,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -376,7 +378,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -390,11 +392,12 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
     }),
 
   optional1: Yup.mixed()
+    .nullable()
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -408,7 +411,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;
@@ -422,12 +425,12 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
     }),
 
   optional2: Yup.mixed()
-
+    .nullable()
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
       (value: any) => {
-        if (!Array.isArray(value)) return false;
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
         for (const file of value) {
           if (!(file instanceof File)) return false;
@@ -441,7 +444,7 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
       },
     )
     .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
-      if (!Array.isArray(value)) return false;
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
 
       for (const file of value) {
         if (!(file instanceof File)) return false;

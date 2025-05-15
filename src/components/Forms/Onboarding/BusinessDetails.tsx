@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
@@ -77,6 +78,7 @@ const BusinessInformation = () => {
   const [lowRiskType, setLowRiskType] = useState([]);
   const [mediumRiskType, setMediumRiskType] = useState([]);
   const [highRiskType, setHighRiskType] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     console.log('nature of business got', setDescription, setTitle);
   }, []);
@@ -202,42 +204,44 @@ const BusinessInformation = () => {
         //   );
         // }
       });
-      if (selectedDropDownValue === 'High Risk Business / Person') {
+      if (
+        selectedDropDownValue === '' ||
+        selectedDropDownValue === undefined ||
+        selectedDropDownValue === 'No'
+      ) {
+        // Exclude both income and risk-type fields
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'lowRiskType' && field.name !== 'mediumRiskType',
+            field.name !== 'currentSalaryIncome' &&
+            field.name !== 'highRiskType' &&
+            field.name !== 'mediumRiskType' &&
+            field.name !== 'lowRiskType',
         );
-      }
-
-      if (selectedDropDownValue === 'No') {
+      } else if (selectedDropDownValue === 'Yes') {
+        // Show income field only, exclude all risk-type dropdowns
         updatedFields = category.fields.filter(
-          (field: any) => field.name !== 'currentSalaryIncome',
+          (field: any) =>
+            field.name !== 'highRiskType' &&
+            field.name !== 'mediumRiskType' &&
+            field.name !== 'lowRiskType',
+        );
+      } else if (selectedDropDownValue === 'High Risk Business / Person') {
+        // Show highRiskType, hide others
+        updatedFields = category.fields.filter(
+          (field: any) =>
+            field.name !== 'mediumRiskType' && field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
+        // Show mediumRiskType, hide others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'lowRiskType' && field.name !== 'highRiskType',
+            field.name !== 'highRiskType' && field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+        // Show lowRiskType, hide others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'mediumRiskType' && field.name !== 'highRiskType',
-        );
-      } else if (
-        selectedDropDownValue === 'No' ||
-        selectedDropDownValue === '' ||
-        selectedDropDownValue === undefined
-      ) {
-        console.log('in no');
-        updatedFields = category.fields.filter(
-          (field: any) =>
-            // field.name !== 'mediumRiskType' &&
-            // field.name !== 'highRiskType' &&
-            // field.name !== 'lowRiskType',
-            field.name !== 'mediumRiskType' &&
-            field.name !== 'highRiskType' &&
-            field.name !== 'lowRiskType' &&
-            field.name !== 'currentSalaryIncome',
+            field.name !== 'highRiskType' && field.name !== 'mediumRiskType',
         );
       }
 
@@ -382,7 +386,7 @@ const BusinessInformation = () => {
 
       const md5Hash = generateMD5Hash(mdRequest);
       console.log('Signature', md5Hash);
-
+      setLoading(true);
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(
@@ -416,6 +420,7 @@ const BusinessInformation = () => {
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
           }
           // else {
           //   setTitle('Error Occured');
@@ -425,18 +430,21 @@ const BusinessInformation = () => {
         }
       } catch (e: any) {
         setApierror(e.message);
+        setLoading(false);
         // console.log('Error in submitting dynamic form', e);
         // setTitle('Network Failed');
         // setDescription('Network failed! Please try again later.');
         // setShowModal(true);
       } finally {
         setSubmitting(false);
+        setLoading(false);
       }
     }
   };
   // console.log(checkboxData);
   return (
     <div className="flex flex-col gap-5">
+      {loading && <OvalLoading />}
       <CustomModal
         title={title}
         description={description}

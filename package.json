@@ -39,6 +39,7 @@
     "react-device-detect": "^2.2.3",
     "react-dom": "^18.2.0",
     "react-form-stepper": "^2.0.3",
+    "react-loader-spinner": "^6.1.6",
     "react-redux": "^9.0.4",
     "react-spinners": "^0.14.1",
     "react-table": "^7.8.0",

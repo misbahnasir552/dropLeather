@@ -9,6 +9,7 @@ import apiClient from '@/api/apiClient';
 import activityInformationFormSchema, {
   activityInformationFormInitialValues,
 } from '@/components/Forms/validations/activityInformationForm';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 // import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
@@ -53,6 +54,7 @@ const ActivityInformation = () => {
     string | undefined | string[]
   >(undefined);
   const [isChecked, setChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -214,6 +216,7 @@ const ActivityInformation = () => {
         request: transformedData,
         signature: md5Hash,
       };
+      setLoading(true);
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(currentEndpoint, requestBody, {
@@ -238,6 +241,7 @@ const ActivityInformation = () => {
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
             // setTitle('Error Occured');
             // setDescription(response?.data?.responseDescription);
             // setShowModal(true);
@@ -258,12 +262,14 @@ const ActivityInformation = () => {
         }
       } catch (e: any) {
         setApierror(e?.message);
+        setLoading(false);
         // console.log('Error in submitting dynamic form', e);
         // console.error('Network Failed');
         // setDescription('Network failed! Please try again later.');
         // setShowModal(true);
       } finally {
         setSubmitting(false);
+        setLoading(false);
       }
     }
   };
@@ -283,6 +289,7 @@ const ActivityInformation = () => {
 
   return (
     <>
+      {loading && <OvalLoading />}
       <CustomModal
         title={title}
         description={description}
