@@ -9,7 +9,8 @@ import { useState } from 'react';
 import apiClient from '@/api/apiClient';
 // import FileIcon from '@/assets/icons/FileIcon.svg';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
-import SuccessModal from '@/components/UI/Modal/CustomModal';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+// import SuccessModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
 import ReviewFormLayout from '@/components/UI/Wrappers/ReviewFormLayout';
 import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
@@ -33,6 +34,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [type, setType] = useState('');
 
   console.log('onboarding ', onboardingData);
 
@@ -60,6 +62,12 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
         setShowModal(true);
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
+      } else if (response.data.responseCode === '000') {
+        // success case
+        setType('error');
+        setShowModal(true);
+        setTitle(response?.data?.responseMessage);
+        setDescription(response?.data?.responseDescription);
       } else {
         setTitle('Failed Submission');
         setDescription(`Please, try again later!`);
@@ -68,6 +76,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
       console.log(response);
       // resetForm();
     } catch (e: any) {
+      setType('error');
       setTitle(e.code);
       setDescription(e.message);
       setShowModal(true);
@@ -79,12 +88,13 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
 
   return (
     <>
-      <SuccessModal
+      <CustomModal
         title={title}
         description={description}
         show={showModal}
         setShowModal={setShowModal}
         routeName={logOut}
+        type={type}
         // routeName={route}
       />
       {onboardingData?.pages.map((page: any) => (

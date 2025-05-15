@@ -23,7 +23,7 @@ function ReviewForm() {
 
         if (response?.data.responseCode === '009') {
           setOnboardingData(response?.data);
-        } else if (response?.data?.responseMessage === '000') {
+        } else if (response?.data?.responseCode === '000') {
           setApierror(response?.data?.responseMessage);
         } else {
           setApierror('an unexpected error occcured');
@@ -44,13 +44,10 @@ function ReviewForm() {
         REVIEW FORM{' '}
       </div>
       <div className="flex flex-col gap-9 pb-[120px]">
-        {/* <div>hiiiiiiiiiii</div> */}
         {apierror == '' ? (
           <ReviewFormData
             onboardingData={onboardingData}
-            // businessNatureType={businessNatureActivity}
             isEditable={false}
-            // isEditable={true}
             merchant={false}
           />
         ) : (
