@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 // import AddIcon from '@/assets/icons/Add.svg';
 // import Breadcrumb from '@/components/BreadCrumb/BreadCrumb';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -40,6 +41,7 @@ const AddStore = () => {
   const [isAddFormVisible, setIsAddFormVisible] = useState(true);
   const [isStoreAdded, setIsStoreAdded] = useState(false);
   const [showButton, setShowButton] = useState(false);
+  const [loading, setLoading] = useState(false);
   // const [newStoreFields, setNewStoreFields] = useState<any>([]);
   const [selectedCheckValue, setSelectedCheckValue] = useState<
     string | undefined | string[]
@@ -237,7 +239,7 @@ const AddStore = () => {
 
       const md5Hash = generateMD5Hash(mdRequest);
       console.log('Signature', md5Hash);
-
+      setLoading(true);
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(
@@ -260,12 +262,14 @@ const AddStore = () => {
             if (nextTab) {
               router.push(`/merchant/home/business-nature/${nextTab}`);
             } else {
+              setLoading(false);
               console.log(
                 'Form submission completed, no more tabs to navigate.',
               );
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
           } else {
             // setTitle('Error Occured');
             // setDescription(response?.data?.responseDescription);
@@ -274,12 +278,14 @@ const AddStore = () => {
         }
       } catch (e: any) {
         setApierror(e.message);
+        setLoading(false);
         // console.log('Error in submitting dynamic form', e);
         // setTitle('Network Failed');
         // setDescription('Network failed! Please try again later.');
         // setShowModal(true);
       } finally {
         setSubmitting(false);
+        setLoading(false);
       }
     }
   };
@@ -293,6 +299,7 @@ const AddStore = () => {
       />
       <div className="flex flex-col gap-4 bg-screen-grey px-[290px] py-[60px]">
         <>
+          {loading && <OvalLoading />}
           <Formik
             initialValues={storeDetailsInitialValues}
             validationSchema={storeDetailsSchema}

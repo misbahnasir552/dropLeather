@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
@@ -77,6 +78,7 @@ const BusinessInformation = () => {
   const [lowRiskType, setLowRiskType] = useState([]);
   const [mediumRiskType, setMediumRiskType] = useState([]);
   const [highRiskType, setHighRiskType] = useState([]);
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     console.log('nature of business got', setDescription, setTitle);
   }, []);
@@ -384,7 +386,7 @@ const BusinessInformation = () => {
 
       const md5Hash = generateMD5Hash(mdRequest);
       console.log('Signature', md5Hash);
-
+      setLoading(true);
       try {
         if (currentEndpoint) {
           const response = await apiClient.post(
@@ -418,6 +420,7 @@ const BusinessInformation = () => {
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
           }
           // else {
           //   setTitle('Error Occured');
@@ -427,18 +430,21 @@ const BusinessInformation = () => {
         }
       } catch (e: any) {
         setApierror(e.message);
+        setLoading(false);
         // console.log('Error in submitting dynamic form', e);
         // setTitle('Network Failed');
         // setDescription('Network failed! Please try again later.');
         // setShowModal(true);
       } finally {
         setSubmitting(false);
+        setLoading(false);
       }
     }
   };
   // console.log(checkboxData);
   return (
     <div className="flex flex-col gap-5">
+      {loading && <OvalLoading />}
       <CustomModal
         title={title}
         description={description}

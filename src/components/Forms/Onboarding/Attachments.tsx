@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
@@ -25,7 +26,6 @@ import CorporateFileInput from '../../UI/Inputs/CorporateFileInput';
 // import DropdownInput from '../UI/Inputs/DropdownInput';
 // import ImageInput from "../UI/Inputs/ImageInput";
 // import Input from '../UI/Inputs/Input';
-import CustomModal from '../../UI/Modal/CustomModal';
 import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
 import C5soleAttachmentFormSchema, {
   C5soleAttachmentFormInitialValues,
@@ -48,6 +48,7 @@ const Attachments = () => {
   const [initialValuesState, setInitialValuesState] = useState<any>();
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [apierror, setApierror] = useState('');
+  const [loading, setLoading] = useState(false);
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature,
   );
@@ -67,10 +68,6 @@ const Attachments = () => {
   const [attachmentData, setAttachmentData] = useState<any[]>();
   // const dispatch = useAppDispatch();
   const userData = useAppSelector((state: any) => state.auth);
-
-  const [showModal, setShowModal] = useState(false);
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
 
   const formData = new FormData();
   console.log(filteredData, 'filtered data from attachmentsssssssssss');
@@ -171,7 +168,7 @@ const Attachments = () => {
 
         // formData.append('status', 'Completed');
         console.log('FORM DATAA', formData);
-
+        setLoading(true);
         try {
           const response: any = await apiClient.post(
             `merchant/saveMerchantDocuments`,
@@ -192,6 +189,7 @@ const Attachments = () => {
             if (nextTab) {
               router.push(`/merchant/home/business-nature/${nextTab}`);
             } else {
+              setLoading(false);
               console.log(
                 'Form submission completed, no more tabs to navigate.',
               );
@@ -199,6 +197,7 @@ const Attachments = () => {
           } else if (response?.data?.responseCode === '000') {
             console.log('no');
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
           }
           // else {
           //   setTitle('Error Occured');
@@ -207,12 +206,11 @@ const Attachments = () => {
           // }
           // return;
         } catch (e: any) {
-          console.log('Error in submitting dynamic form', e);
-          setTitle('Network Failed');
-          setDescription('Network failed! Please try again later.');
-          setShowModal(true);
+          setLoading(false);
+          setApierror(e?.message);
         } finally {
           setSubmitting(false);
+          setLoading(false);
         }
       }
     }
@@ -220,12 +218,7 @@ const Attachments = () => {
 
   return (
     <div>
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-      />
+      {loading && <OvalLoading />}
       {initialValuesState && validationSchemaState ? (
         <Formik
           initialValues={initialValuesState}
@@ -286,6 +279,7 @@ const Attachments = () => {
                     <Button
                       label={`Next`}
                       type="submit"
+                      disable={loading}
                       className={`button-primary w-[260px] px-4 py-[19px] text-sm leading-tight transition duration-300`}
                     />
                   </div>

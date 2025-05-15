@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
@@ -51,6 +52,7 @@ function IntegrationForm() {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [loading, setLoading] = useState(false);
 
   // useEffect(() => {
   //   setFormData(IntegrationFormData);
@@ -127,7 +129,7 @@ function IntegrationForm() {
         ...transformedRequest,
         apisecret: apiSecret,
       };
-
+      setLoading(true);
       const md5Hash = generateMD5Hash(mdRequest);
       try {
         if (currentEndpoint) {
@@ -157,13 +159,16 @@ function IntegrationForm() {
               console.log(
                 'Form submission completed, no more tabs to navigate.',
               );
+              setLoading(false);
             }
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
+            setLoading(false);
             // setTitle('Error Occured');
             // setDescription(response?.data?.responseDescription);
             // setShowModal(true);
           } else {
+            setLoading(false);
             setTitle('Error Occured');
             setDescription(response?.data?.responseDescription);
             setShowModal(true);
@@ -179,10 +184,12 @@ function IntegrationForm() {
       } catch (e: any) {
         console.log('Error in submitting dynamic form', e);
         setApierror(e.message);
+        setLoading(false);
         // setTitle('Network Failed');
         // setDescription('Network failed! Please try again later.');
         // setShowModal(true);
       } finally {
+        setLoading(false);
         setSubmitting(false);
       }
     }
@@ -199,6 +206,7 @@ function IntegrationForm() {
         // routeName="/merchant/home"
       />
       {/* <div>     {formData?.pageName}</div> */}
+      {loading && <OvalLoading />}
       <Formik
         initialValues={integrationFormInitialValues}
         validationSchema={integrationFormSchema}

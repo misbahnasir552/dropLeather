@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 
 import arrowRight from '@/assets/icons/arrow-right.svg';
 import arrowRightWhite from '@/assets/icons/arrow-rightWhite.svg';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import type { ILoginCard } from '@/interfaces/interface';
 // import apiClient from '@/api/apiClient';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
@@ -22,11 +23,13 @@ export default function LoginCard({
 
   const router = useRouter();
   const [isHovered, setIsHovered] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClick = async (type: any) => {
     console.log(type, 'type');
 
     if (routeName) {
+      setLoading(true);
       console.log('route name is', routeName);
       router.push(routeName);
     } else {
@@ -39,6 +42,7 @@ export default function LoginCard({
   };
   return (
     <>
+      {loading && <OvalLoading />}
       <div
         className={`group flex w-[270px] rounded-lg border-[0.5px] border-border-light bg-screen-grey px-5 py-6 duration-300 ease-out hover:cursor-pointer hover:bg-primary-base sm:max-md:w-full`}
         onMouseEnter={() => setIsHovered(true)}

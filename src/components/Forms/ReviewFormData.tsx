@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
 import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
 
+import OvalLoading from '../Loader/OvalLoading';
 // import B3 from '../UI/Body/B3';
 import Button from '../UI/Button/PrimaryButton';
 
@@ -30,7 +31,41 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+<<<<<<< HEAD
+  const [loading, setLoading] = useState(false);
+
+  // const options = [
+  //   {
+  //     value: 'soleProprietor',
+  //     label: 'Sole-Proprietorship',
+  //     endpoint: 'soleBusinessDetails',
+  //   },
+  //   {
+  //     value: 'publicAndPrivateLtd',
+  //     label: 'Private Limited / Public Limited / SMC - Private Limited',
+  //     endpoint: 'pnpBusinessDetails',
+  //   },
+  //   {
+  //     value: 'partnership',
+  //     label:
+  //       'Partnership (Registered / Unregistered) / Limited Liability Partnerships',
+  //     endpoint: 'partnershipBusinessDetails',
+  //   },
+  //   {
+  //     value: 'g2p',
+  //     label: 'Government Accounts / Autonomous Body',
+  //     endpoint: 'otherBusinessDetails',
+  //   },
+  //   {
+  //     value: 'ngoNpoCharities',
+  //     label:
+  //       'NGO / INGO / Trust / Club / Societies and Associations Limited by Guarantee',
+  //     endpoint: 'nncBusinessDetails',
+  //   },
+  // ];
+=======
   const [type, setType] = useState('');
+>>>>>>> origin/main
 
   console.log('onboarding ', onboardingData);
 
@@ -47,6 +82,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
     // setIsSubmitting(true);
     console.log('user data ', userData);
 
+    setLoading(true);
     try {
       const response = await apiClient.get(`merchant/markApplicationForm`, {
         params: { email: userData?.email },
@@ -54,7 +90,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
 
       if (response.data.responseCode === '009') {
         // success case
-
+        setLoading(false);
         setShowModal(true);
         setTitle(response?.data?.responseMessage);
         setDescription(response?.data?.responseDescription);
@@ -67,6 +103,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
       } else {
         setTitle('Failed Submission');
         setDescription(`Please, try again later!`);
+        setLoading(false);
       }
 
       console.log(response);
@@ -75,8 +112,10 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
       setType('error');
       setTitle(e.code);
       setDescription(e.message);
+      setLoading(false);
       setShowModal(true);
     } finally {
+      setLoading(false);
       // setIsSubmitting(false);
       // setShowModal(true);
     }
@@ -93,6 +132,7 @@ function ReviewFormData({ isEditable, onboardingData }: IRevieFormData) {
         type={type}
         // routeName={route}
       />
+      {loading && <OvalLoading />}
       {onboardingData?.pages.map((page: any) => (
         <ReviewFormLayout key={page.pageName}>
           <ReviewFormMetaData
