@@ -45,7 +45,7 @@ function ViewProductQR() {
   const [qrAmount, setQrAmount] = useState('');
   const [qrString, setQrString] = useState('');
   const [exportError, setExportError] = useState('');
-  const [exportLoading, setExportLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const viewProductQrTableHeadings: string[] = [
     // 'Product Name',
     'Amount (Rs.)',
@@ -240,7 +240,7 @@ function ViewProductQR() {
   const fetchExportedRecords = async () => {
     setExportError('');
     try {
-      setExportLoading(true);
+      setIsLoading(true);
       const response = await apiClient.get(
         `/merchantportal/searchExportDynamicQr?email=${userData?.email}`,
         {
@@ -263,7 +263,7 @@ function ViewProductQR() {
       setExportError(e?.message);
       // setShowModal(true);
     } finally {
-      setExportLoading(false);
+      setIsLoading(false);
     }
   };
   return (
@@ -288,7 +288,7 @@ function ViewProductQR() {
               // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
             />
           )}
-          {exportLoading && <OvalLoading />}
+          {isLoading && <OvalLoading />}
           {imageUrl && showModal && (
             <QRModal
               title={storeName}
@@ -361,7 +361,7 @@ function ViewProductQR() {
                       label={'Export'}
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={fetchExportedRecords} // Export button click handler
-                      disable={exportLoading}
+                      disable={isLoading}
                     />
                   </div>
                 </Form>
