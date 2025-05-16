@@ -32,7 +32,7 @@ const DropdownInput = ({
       name,
       options.find((opt: any) => opt.label === label)?.value,
     );
-
+    console.log('formik,', formik?.values?.[name]);
     setToggle(false);
   };
 

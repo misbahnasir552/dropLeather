@@ -103,7 +103,7 @@ export const generateMD5Hash = (bodyRequest: any) => {
   const body = convertObjectToUpperCase(bodyRequest);
   const bodyString = JSON.stringify(body);
   const hash = CryptoJS.MD5(bodyString).toString();
-
+  console.log('my body signature', body);
   return hash;
 };
 
