@@ -207,7 +207,7 @@ const BusinessInformation = () => {
         selectedDropDownValue === undefined ||
         selectedDropDownValue === 'No'
       ) {
-        // Exclude both income and risk-type fields
+        // Hide income and all risk types
         updatedFields = category.fields.filter(
           (field: any) =>
             field.name !== 'currentSalaryIncome' &&
@@ -216,7 +216,7 @@ const BusinessInformation = () => {
             field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Yes') {
-        // Show income field only, exclude all risk-type dropdowns
+        // Show only income field, hide all risk types
         updatedFields = category.fields.filter(
           (field: any) =>
             field.name !== 'highRiskType' &&
@@ -224,22 +224,28 @@ const BusinessInformation = () => {
             field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'High Risk Business / Person') {
-        // Show highRiskType, hide others
+        // Show only highRiskType, hide income and others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'mediumRiskType' && field.name !== 'lowRiskType',
+            field.name !== 'currentSalaryIncome' &&
+            field.name !== 'mediumRiskType' &&
+            field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Medium Risk Business / Person') {
-        // Show mediumRiskType, hide others
+        // Show only mediumRiskType, hide income and others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'highRiskType' && field.name !== 'lowRiskType',
+            field.name !== 'currentSalaryIncome' &&
+            field.name !== 'highRiskType' &&
+            field.name !== 'lowRiskType',
         );
       } else if (selectedDropDownValue === 'Low Risk Business / Person') {
-        // Show lowRiskType, hide others
+        // Show only lowRiskType, hide income and others
         updatedFields = category.fields.filter(
           (field: any) =>
-            field.name !== 'highRiskType' && field.name !== 'mediumRiskType',
+            field.name !== 'currentSalaryIncome' &&
+            field.name !== 'highRiskType' &&
+            field.name !== 'mediumRiskType',
         );
       }
 
