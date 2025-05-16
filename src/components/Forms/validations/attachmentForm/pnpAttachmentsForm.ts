@@ -14,6 +14,8 @@ export const pnpAttachmentsFormInitialValues = {
   w8BenE: null,
   optional1: null,
   optional2: null,
+  optional3: null,
+  optional4: null,
 };
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
@@ -426,6 +428,72 @@ const pnpAttachmentsFormSchema = Yup.object().shape({
 
   optional2: Yup.mixed()
     .nullable()
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  optional3: Yup.mixed()
+    .nullable() // null is perfectly fine
+    .notRequired()
+    .test(
+      'fileType',
+      'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',
+      (value: any) => {
+        if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
+
+        for (const file of value) {
+          if (!(file instanceof File)) return false;
+          if (!SUPPORTED_FORMATS.includes(file.type)) {
+            console.log('Unsupported file type:', file.type);
+            return false;
+          }
+        }
+
+        return true;
+      },
+    )
+    .test('fileSize', 'File size must not exceed 10MB.', (value: any) => {
+      if (!value || !Array.isArray(value) || value.length === 0) return true; // Let required() handle this
+
+      for (const file of value) {
+        if (!(file instanceof File)) return false;
+        if (file.size > MAX_FILE_SIZE) {
+          console.log('File too large:', file.name, file.size);
+          return false;
+        }
+      }
+
+      return true;
+    }),
+  optional4: Yup.mixed()
+    .nullable() // null is perfectly fine
+    .notRequired()
     .test(
       'fileType',
       'Unsupported file format. Allowed formats are: pdf, png, jpeg, doc.',

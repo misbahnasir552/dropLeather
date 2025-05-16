@@ -300,6 +300,18 @@ export const pnpAttachmentsFormData = {
           type: 'file',
           required: false,
         },
+        {
+          label: 'Optional',
+          name: 'optional3',
+          type: 'file',
+          required: false,
+        },
+        {
+          label: 'Optional',
+          name: 'optional4',
+          type: 'file',
+          required: false,
+        },
       ],
     },
   ],
