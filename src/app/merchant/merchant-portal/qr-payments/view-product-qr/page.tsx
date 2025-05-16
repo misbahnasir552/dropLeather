@@ -10,6 +10,7 @@ import OvalLoading from '@/components/Loader/OvalLoading';
 import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
+import ApiError from '@/components/UI/Error/Error';
 import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
@@ -44,7 +45,6 @@ function ViewProductQR() {
   const [expirationTime, setExpirationTime] = useState('');
   const [qrAmount, setQrAmount] = useState('');
   const [qrString, setQrString] = useState('');
-  const [exportError, setExportError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const viewProductQrTableHeadings: string[] = [
     // 'Product Name',
@@ -238,7 +238,7 @@ function ViewProductQR() {
     fetchRecords();
   }, [filteredParams, pageNumber]);
   const fetchExportedRecords = async () => {
-    setExportError('');
+    setApierror('');
     try {
       setIsLoading(true);
       const response = await apiClient.get(
@@ -251,16 +251,16 @@ function ViewProductQR() {
       );
       if (response?.data?.responseCode === '009') {
         if (response?.data?.dynamicQrResponse?.length === 0) {
-          setExportError('No Data Available for Export');
+          setApierror('No Data Available for Export');
         }
         exportToExcel(response?.data?.dynamicQrResponse);
       } else if (response?.data?.responseCode === '000') {
-        setExportError(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
       } else {
-        setExportError(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      setExportError(e?.message);
+      setApierror(e?.message);
       // setShowModal(true);
     } finally {
       setIsLoading(false);
@@ -367,11 +367,7 @@ function ViewProductQR() {
                 </Form>
               )}
             </Formik>
-            {exportError && (
-              <div className="flex w-full justify-start px-3 pt-[16px] text-xs text-danger-base">
-                {exportError}
-              </div>
-            )}
+            <ApiError apiError={apierror} />
           </MerchantFormLayout>
         </div>
         {apierror && (
