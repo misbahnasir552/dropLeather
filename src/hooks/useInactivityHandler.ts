@@ -101,8 +101,6 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef } from 'react';
 
 import apiClient from '@/api/apiClient';
-import { setAdminLogout } from '@/redux/features/adminSlices/adminLoginSlice';
-import { setcorporateAccountDetailEmpty } from '@/redux/features/adminSlices/corporateSlices/corporateAccountDetailsSlice';
 import { setLogout } from '@/redux/features/authSlice';
 import { clearCredentials } from '@/redux/features/corporateSlices/loginCredentials';
 import { resetFields } from '@/redux/features/formSlices/fieldSlice';
@@ -172,10 +170,8 @@ const useInactivityHandler = () => {
           alert('Session expired due to inactivity. Please log in again.');
 
           // Handle logout actions
-          dispatch(setAdminLogout());
           dispatch(resetForms());
           dispatch(clearCredentials());
-          dispatch(setcorporateAccountDetailEmpty());
           router.push('/admin-auth/login');
         } else {
           console.log('ADMIN PORTAL TEST 3');

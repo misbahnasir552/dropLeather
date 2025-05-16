@@ -12,9 +12,6 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import adminAuthReducer from '@/redux/features/adminSlices/adminLoginSlice';
-import corporateAccountDetailsReducer from '@/redux/features/adminSlices/corporateSlices/corporateAccountDetailsSlice';
-import updateUserReducer from '@/redux/features/adminSlices/updateUserSlice/updateUserSlice';
 import authReducer from '@/redux/features/authSlice';
 import additionalFormReducer from '@/redux/features/formSlices/additionalFormSlice';
 import onBoardingFormsReducer from '@/redux/features/formSlices/onBoardingForms';
@@ -43,9 +40,6 @@ const persistConfig = {
     'merchantIntegration',
     'fundsTransfer',
     'fields',
-    'adminAuth',
-    'corporateAccountDetails',
-    'updateUser',
     'addBeneficiary',
 
     // 'session',
@@ -61,14 +55,10 @@ const rootReducer = combineReducers({
   additionalForm: additionalFormReducer,
   onBoardingForms: onBoardingFormsReducer,
   merchantDetails: merchantDetailsReducer,
-  corporateAccountDetails: corporateAccountDetailsReducer,
   merchantIntegration: merchantIntegrationReducer,
   fundsTransfer: fundsTransferReducer,
   fields: fieldReducer,
-  adminAuth: adminAuthReducer,
-  updateUser: updateUserReducer,
   addBeneficiary: addBeneficiaryReducer,
-
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,
   lastTab: lastTabReducer,
