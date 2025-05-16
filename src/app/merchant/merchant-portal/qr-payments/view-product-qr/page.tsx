@@ -6,6 +6,7 @@ import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -287,6 +288,7 @@ function ViewProductQR() {
               // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
             />
           )}
+          {exportLoading && <OvalLoading />}
           {imageUrl && showModal && (
             <QRModal
               title={storeName}
@@ -356,7 +358,7 @@ function ViewProductQR() {
                       className="button-secondary h-9 w-[120px] px-2 py-[20px] text-xs leading-tight"
                     />
                     <Button
-                      label={exportLoading ? 'Exporting' : 'Export'}
+                      label={'Export'}
                       className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
                       onClickHandler={fetchExportedRecords} // Export button click handler
                       disable={exportLoading}
