@@ -14,8 +14,12 @@ const Pagination = ({
   onPrev,
 }: PaginationProps) => {
   return (
-    <div className="flex items-center justify-between">
-      {totalPages > 1 ? (
+    <div
+      className={`flex items-center ${
+        totalPages > 1 ? 'justify-between' : 'justify-center'
+      }`}
+    >
+      {totalPages > 1 && (
         <button
           onClick={onPrev}
           disabled={pageNumber + 1 === 1}
@@ -27,15 +31,13 @@ const Pagination = ({
         >
           Previous
         </button>
-      ) : (
-        <div className="w-28" /> // Keeps spacing consistent when button is hidden
       )}
 
       <span>
         Page {pageNumber + 1} of {totalPages}
       </span>
 
-      {totalPages > 1 ? (
+      {totalPages > 1 && (
         <button
           onClick={onNext}
           disabled={pageNumber + 1 === totalPages}
@@ -47,8 +49,6 @@ const Pagination = ({
         >
           Next
         </button>
-      ) : (
-        <div className="w-28" />
       )}
     </div>
   );
