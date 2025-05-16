@@ -6,9 +6,11 @@ import { BarLoader } from 'react-spinners';
 import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
 import Pagination from '@/components/Pagination/Pagination';
 import IconTable from '@/components/Table/WithoutCheckMarksTable/WithImageTable/IconTable';
 import Button from '@/components/UI/Button/PrimaryButton';
+import ApiError from '@/components/UI/Error/Error';
 import H4 from '@/components/UI/Headings/H4';
 import Input from '@/components/UI/Inputs/Input';
 import CustomModal from '@/components/UI/Modal/CustomModal';
@@ -43,8 +45,7 @@ function ViewProductQR() {
   const [expirationTime, setExpirationTime] = useState('');
   const [qrAmount, setQrAmount] = useState('');
   const [qrString, setQrString] = useState('');
-  const [exportError, setExportError] = useState('');
-  const [exportLoading, setExportLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const viewProductQrTableHeadings: string[] = [
     // 'Product Name',
     'Amount (Rs.)',
@@ -237,9 +238,9 @@ function ViewProductQR() {
     fetchRecords();
   }, [filteredParams, pageNumber]);
   const fetchExportedRecords = async () => {
-    setExportError('');
+    setApierror('');
     try {
-      setExportLoading(true);
+      setIsLoading(true);
       const response = await apiClient.get(
         `/merchantportal/searchExportDynamicQr?email=${userData?.email}`,
         {
@@ -250,19 +251,19 @@ function ViewProductQR() {
       );
       if (response?.data?.responseCode === '009') {
         if (response?.data?.dynamicQrResponse?.length === 0) {
-          setExportError('No Data Available for Export');
+          setApierror('No Data Available for Export');
         }
         exportToExcel(response?.data?.dynamicQrResponse);
       } else if (response?.data?.responseCode === '000') {
-        setExportError(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
       } else {
-        setExportError(response?.data?.responseDescription);
+        setApierror(response?.data?.responseDescription);
       }
     } catch (e: any) {
-      setExportError(e?.message);
+      setApierror(e?.message);
       // setShowModal(true);
     } finally {
-      setExportLoading(false);
+      setIsLoading(false);
     }
   };
   return (
@@ -287,6 +288,7 @@ function ViewProductQR() {
               // routeName="/merchant/merchant-portal/configuration/add-transaction-point/"
             />
           )}
+          {isLoading && <OvalLoading />}
           {imageUrl && showModal && (
             <QRModal
               title={storeName}
@@ -338,13 +340,7 @@ function ViewProductQR() {
                     <Button
                       label="Search"
                       type="submit"
-                      className="button-primary h-9 w-[120px] px-3 py-[19px] text-sm"
-                    />
-                    <Button
-                      label={exportLoading ? 'Exporting' : 'Export'}
-                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
-                      onClickHandler={fetchExportedRecords} // Export button click handler
-                      disable={exportLoading}
+                      className="button-primary h-9 w-[120px] px-3 py-[20px] text-sm"
                     />
                     <Button
                       label="Reset"
@@ -359,17 +355,19 @@ function ViewProductQR() {
                         handleReset(formik);
                         setFilteredParams(undefined);
                       }}
-                      className="button-secondary h-9 w-[120px] px-2 py-[11px] text-xs leading-tight"
+                      className="button-secondary h-9 w-[120px] px-2 py-[20px] text-xs leading-tight"
+                    />
+                    <Button
+                      label={'Export'}
+                      className="button-secondary w-[120px] px-2 py-[11px] text-xs leading-tight transition duration-300"
+                      onClickHandler={fetchExportedRecords} // Export button click handler
+                      disable={isLoading}
                     />
                   </div>
                 </Form>
               )}
             </Formik>
-            {exportError && (
-              <div className="flex w-full justify-start px-3 pt-[16px] text-xs text-danger-base">
-                {exportError}
-              </div>
-            )}
+            <ApiError apiError={apierror} />
           </MerchantFormLayout>
         </div>
         {apierror && (

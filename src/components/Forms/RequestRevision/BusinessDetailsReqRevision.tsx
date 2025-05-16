@@ -785,7 +785,7 @@ const BusinessInformationReqRevision = () => {
             selectedDropDownValue === undefined ||
             selectedDropDownValue === 'No'
           ) {
-            // Exclude both income and risk-type fields
+            // Hide income and all risk-type fields
             updatedFields = category.fields.filter(
               (field: any) =>
                 field !== 'Current Salary / Income' &&
@@ -794,7 +794,7 @@ const BusinessInformationReqRevision = () => {
                 field !== 'Low Risk Type',
             );
           } else if (selectedDropDownValue === 'Yes') {
-            // Show income field only, exclude all risk-type dropdowns
+            // Show income field only, hide all risk-type fields
             updatedFields = category.fields.filter(
               (field: any) =>
                 field !== 'High Risk Type' &&
@@ -802,21 +802,30 @@ const BusinessInformationReqRevision = () => {
                 field !== 'Low Risk Type',
             );
           } else if (selectedDropDownValue === 'High Risk Business / Person') {
+            // Show only High Risk Type, hide income and other risk types
             updatedFields = category.fields.filter(
               (field: any) =>
-                field !== 'Low Risk Type' && field !== 'Medium Risk Type',
+                field !== 'Current Salary / Income' &&
+                field !== 'Medium Risk Type' &&
+                field !== 'Low Risk Type',
             );
           } else if (
             selectedDropDownValue === 'Medium Risk Business / Person'
           ) {
+            // Show only Medium Risk Type, hide income and other risk types
             updatedFields = category.fields.filter(
               (field: any) =>
-                field !== 'Low Risk Type' && field !== 'High Risk Type',
+                field !== 'Current Salary / Income' &&
+                field !== 'High Risk Type' &&
+                field !== 'Low Risk Type',
             );
           } else if (selectedDropDownValue === 'Low Risk Business / Person') {
+            // Show only Low Risk Type, hide income and other risk types
             updatedFields = category.fields.filter(
               (field: any) =>
-                field !== 'Medium Risk Type' && field !== 'High Risk Type',
+                field !== 'Current Salary / Income' &&
+                field !== 'High Risk Type' &&
+                field !== 'Medium Risk Type',
             );
           }
 
