@@ -14,7 +14,8 @@ import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch } from '@/hooks/redux';
 import { addFormData } from '@/redux/features/signUpSlice';
-import { generateAESEncryption } from '@/utils/helper';
+import { downloadEncryptedFile } from '@/utils/helper';
+// import { generateAESEncryption } from '@/utils/helper';
 import {
   signUpInitialValues,
   signUpSchema,
@@ -46,17 +47,6 @@ const PersonalInfo = () => {
     // if (isSubmitted) return; // Preventing multiple calls
     setIsSubmitted(true);
     setIsLoading(true);
-
-    // if (!isChecked) {
-    //   console.log('here in checked ');
-    //   setApierror(
-    //     'You must agree to the terms and conditions to proceed. Please check the box to continue.',
-    //   );
-    //   setIsSubmitted(false);
-    //   setIsLoading(false);
-    //   setSubmitting(false);
-    //   return;
-    // }
 
     try {
       const response = await apiClient.post('merchant/register/inquire', {
@@ -109,16 +99,23 @@ const PersonalInfo = () => {
     }
   };
 
-  const handleTermsAndConditionsChange = () => {
-    const EncryptedFile = generateAESEncryption(
-      'Online Payment Services Agreement.pdf',
-    );
-    const EncryptedEmmail = generateAESEncryption(
-      'termsandconditions@gmail.com',
-    );
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+  // const handleTermsAndConditionsChange = () => {
+  //   const EncryptedFile = generateAESEncryption(
+  //     'Online Payment Services Agreement.pdf',
+  //   );
+  //   const EncryptedEmmail = generateAESEncryption(
+  //     'termsandconditions@gmail.com',
+  //   );
+  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
 
-    window.open(downloadUrl, '_blank');
+  //   window.open(downloadUrl, '_blank');
+  // };
+
+  const handleTermsAndConditionsChange = () => {
+    downloadEncryptedFile({
+      filename: 'Online Payment Services Agreement.pdf',
+      email: 'termsandconditions@gmail.com',
+    });
   };
 
   return (

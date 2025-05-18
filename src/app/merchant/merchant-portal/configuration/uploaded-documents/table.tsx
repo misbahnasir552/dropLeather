@@ -5,16 +5,24 @@ import React from 'react';
 
 import eyeIcon from '@/assets/icons/eye.svg';
 import H7 from '@/components/UI/Headings/H7';
-import { generateAESEncryption } from '@/utils/helper';
+import { downloadEncryptedFile } from '@/utils/helper';
 
 const DocumentTable = ({ documents }: any) => {
-  const handleDownload = (filename: any, email: any, type: any) => {
-    const EncryptedFile = generateAESEncryption(filename);
-    const EncryptedEmmail = generateAESEncryption(email);
-    // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${type}`;
+  // const handleDownload = (filename: any, email: any, type: any) => {
+  //   const EncryptedFile = generateAESEncryption(filename);
+  //   const EncryptedEmmail = generateAESEncryption(email);
+  //   // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
+  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${type}`;
 
-    window.open(downloadUrl, '_blank');
+  //   window.open(downloadUrl, '_blank');
+  // };
+
+  const handleDownload = (filename: any, email: any, type: any) => {
+    downloadEncryptedFile({
+      filename,
+      email,
+      type,
+    });
   };
 
   return (

@@ -152,3 +152,20 @@ export const formatDateTime = (isoDateString: string) => {
     return '';
   }
 };
+
+export const downloadEncryptedFile = ({
+  filename,
+  email,
+  type = 'merchant',
+}: {
+  filename: string;
+  email: string;
+  type?: string;
+}) => {
+  const EncryptedFile = generateAESEncryption(filename);
+  const EncryptedEmail = generateAESEncryption(email);
+
+  const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmail}&type=${type}`;
+
+  window.open(downloadUrl, '_blank');
+};

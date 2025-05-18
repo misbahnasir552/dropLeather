@@ -19,7 +19,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
 import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
 import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
-import { generateAESEncryption, generateMD5Hash } from '@/utils/helper';
+import { downloadEncryptedFile, generateMD5Hash } from '@/utils/helper';
 import {
   addBeneficiaryInitialValues,
   addBeneficiarySchema,
@@ -197,17 +197,25 @@ function AddBeneficiary() {
     //   setShowModal(true);
     // }
   };
-  const handleTermsAndConditionsChange = () => {
-    const EncryptedFile = generateAESEncryption(
-      'Online Payment Services Agreement.pdf',
-    );
-    const EncryptedEmmail = generateAESEncryption(
-      'termsandconditions@gmail.com',
-    );
-    // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
+  // const handleTermsAndConditionsChange = () => {
+  //   const EncryptedFile = generateAESEncryption(
+  //     'Online Payment Services Agreement.pdf',
+  //   );
+  //   const EncryptedEmmail = generateAESEncryption(
+  //     'termsandconditions@gmail.com',
+  //   );
+  //   // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
+  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
 
-    window.open(downloadUrl, '_blank');
+  //   window.open(downloadUrl, '_blank');
+  // };
+
+  const handleTermsAndConditionsChange = () => {
+    downloadEncryptedFile({
+      filename: 'Online Payment Services Agreement.pdf',
+      email: 'termsandconditions@gmail.com',
+      type: 'merchant',
+    });
   };
   return (
     <div className="flex flex-col gap-6">

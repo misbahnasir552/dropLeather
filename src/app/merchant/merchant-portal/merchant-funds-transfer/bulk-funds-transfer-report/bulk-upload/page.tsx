@@ -12,7 +12,8 @@ import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppSelector } from '@/hooks/redux';
-import { generateAESEncryption } from '@/utils/helper';
+// import { generateAESEncryption } from '@/utils/helper';
+import { downloadEncryptedFile } from '@/utils/helper';
 import {
   bulkUploadInitialValues,
   bulkUploadSchema,
@@ -70,16 +71,26 @@ function BulkFileUpload() {
       // setShowModal(true);
     }
   };
-  const viewSampleFile = () => {
-    const EncryptedFile = generateAESEncryption(
-      'SampleBulkFundsTransferFile.xlsx',
-    );
-    const EncryptedEmail = generateAESEncryption(
-      'samplebulkdocuments@gmail.com',
-    );
-    const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmail}&type=merchant`;
 
-    window.open(downloadUrl, '_blank');
+  // DO NOT REMOVE
+  // const viewSampleFile = () => {
+  //   const EncryptedFile = generateAESEncryption(
+  //     'SampleBulkFundsTransferFile.xlsx',
+  //   );
+  //   const EncryptedEmail = generateAESEncryption(
+  //     'samplebulkdocuments@gmail.com',
+  //   );
+  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmail}&type=merchant`;
+
+  //   window.open(downloadUrl, '_blank');
+  // };
+
+  const viewSampleFile = () => {
+    downloadEncryptedFile({
+      filename: 'SampleBulkFundsTransferFile.xlsx',
+      email: 'samplebulkdocuments@gmail.com',
+      type: 'merchant',
+    });
   };
   return (
     <div className="flex flex-col gap-6 pt-12">
