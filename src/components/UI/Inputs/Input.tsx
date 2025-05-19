@@ -6,12 +6,9 @@ import React, { useState } from 'react';
 
 // import { useField } from 'formik';
 import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
+import H6 from '@/components/UI/Headings/H6';
 // import H7 from '@/components/UI/Headings/H7';
 import type { IInput } from '@/interfaces/interface';
-
-import H6 from '../Headings/H6';
-
-// import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
 
 const Input = ({
   desclaimer,

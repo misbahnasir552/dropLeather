@@ -194,8 +194,6 @@ export default FileInput;
 // import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
 // import H6 from '@/components/UI/Headings/H6';
 
-// import M7 from '../Headings/M7';
-
 // export interface IFileInput {
 //   index?: any;
 //   className?: string;

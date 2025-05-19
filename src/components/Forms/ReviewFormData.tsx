@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import OvalLoading from '@/components/Loader/OvalLoading';
+import Button from '@/components/UI/Button/PrimaryButton';
 import ReviewInput from '@/components/UI/Inputs/ReviewInput';
 import CustomModal from '@/components/UI/Modal/CustomModal';
 import ReviewFormDataGrid from '@/components/UI/Wrappers/ReviewFormDataGrid';
@@ -13,10 +15,6 @@ import ReviewFormMetaData from '@/components/UI/Wrappers/ReviewFormMetaData';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setLogout } from '@/redux/features/authSlice';
 import { resetForms } from '@/redux/features/formSlices/onBoardingForms';
-
-import OvalLoading from '../Loader/OvalLoading';
-// import B3 from '../UI/Body/B3';
-import Button from '../UI/Button/PrimaryButton';
 
 interface IRevieFormData {
   isEditable: boolean;

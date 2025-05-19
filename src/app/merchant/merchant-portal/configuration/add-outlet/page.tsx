@@ -4,6 +4,7 @@ import { Form, Formik } from 'formik';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import { categories } from '@/app/merchant/merchant-portal/qr-payments/utils/utils';
 import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import Button from '@/components/UI/Button/PrimaryButton';
 import BulkRegisterInput from '@/components/UI/Inputs/BulkRegisterInput';
@@ -22,7 +23,6 @@ import {
   addOutletsSchema,
 } from '@/validations/merchant/transactions/addOutlet';
 
-import { categories } from '../../qr-payments/utils/utils';
 import {
   azadKashmirCities,
   federalCities,

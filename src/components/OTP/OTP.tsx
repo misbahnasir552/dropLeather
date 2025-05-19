@@ -5,10 +5,9 @@ import type { Dispatch, KeyboardEvent, SetStateAction } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import H7 from '@/components/UI/Headings/H7';
 import { useAppSelector } from '@/hooks/redux';
 import useCounter from '@/hooks/useCounter';
-
-import H7 from '../UI/Headings/H7';
 
 function OTP({
   numberOfDigits = 6,

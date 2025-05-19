@@ -3,9 +3,6 @@ import './globals.css';
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
-// import ApiClientProvider from '@/services/providers/ApiClientProvider';
-// import store from '../store';
-// import SessionMonitor from '@/components/Session/SessionMonitor';
 import ReduxProvider from '@/services/providers/ReduxProvider';
 
 const SFProDisplay = localFont({

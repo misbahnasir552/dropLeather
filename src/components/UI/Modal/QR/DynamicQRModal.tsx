@@ -6,13 +6,11 @@ import type { MouseEvent } from 'react';
 import React from 'react';
 
 import closeIcon from '@/assets/icons/close-icon.svg';
+import B1 from '@/components/UI/Body/B1';
 import Button from '@/components/UI/Button/PrimaryButton';
-
-import B1 from '../../Body/B1';
-import H1 from '../../Headings/H1';
-import H3 from '../../Headings/H3';
-import H6 from '../../Headings/H6';
-// import H2 from '../../Headings/H2';
+import H1 from '@/components/UI/Headings/H1';
+import H3 from '@/components/UI/Headings/H3';
+import H6 from '@/components/UI/Headings/H6';
 
 interface QRModalProps {
   title: string;

@@ -6,10 +6,9 @@ import { Field } from 'formik';
 import React from 'react';
 
 import apiClient from '@/api/apiClient';
+import B3 from '@/components/UI/Body/B3';
 import { useAppSelector } from '@/hooks/redux';
 import { generateMD5Hash } from '@/utils/helper';
-
-import B3 from '../Body/B3';
 
 interface IInput {
   name: string;
