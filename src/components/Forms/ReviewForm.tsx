@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import ReviewFormData from '@/components/Forms/ReviewFormData';
+import ApiError from '@/components/UI/Error/Error';
 import { useAppSelector } from '@/hooks/redux';
 
 function ReviewForm() {
@@ -30,7 +31,7 @@ function ReviewForm() {
         }
         // console.log(data, "view/get details Data");
       } catch (e: any) {
-        setApierror(e);
+        setApierror(e?.message);
         console.log(e, 'error fetching');
       }
     };
@@ -51,7 +52,8 @@ function ReviewForm() {
             merchant={false}
           />
         ) : (
-          <div>{apierror}</div>
+          <ApiError apiError={apierror} />
+          // <div>{apierror}</div>
         )}
       </div>
     </div>

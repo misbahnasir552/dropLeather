@@ -13,15 +13,14 @@ import H6 from '@/components/UI/Headings/H6';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
-import { generateMD5Hash } from '@/utils/helper';
-// import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
-// import {
-//   setBusinessEndpoint,
-//   setBusinessNature,
-//   setMerchantEntity,
-// } from '@/redux/features/formSlices/onBoardingForms';
+import {
+  // setBusinessEndpoint,
+  setBusinessNature,
+  // setMerchantEntity,
+} from '@/redux/features/formSlices/onBoardingForms';
+import { generateMD5Hash } from '@/utils/helper';
 import {
   businessNatureInitialValues,
   businessNatureSchema,
@@ -32,7 +31,7 @@ import SuccessModal from '../../../../components/UI/Modal/CustomModal';
 const BusinessNature = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   // const [selectedOption, setSelectedOption] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -139,6 +138,9 @@ const BusinessNature = () => {
       console.log('here i am');
       if (response?.data?.responseCode === '009') {
         router.push('/merchant/home/business-nature/activity-information');
+        // values.businessTypeNature = businessType;
+
+        dispatch(setBusinessNature(values));
       } else if (response?.data?.responseCode === '000') {
         setApierror(response?.data?.responseMessage);
         setIsSubmitting(false);
