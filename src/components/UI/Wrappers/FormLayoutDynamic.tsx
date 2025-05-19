@@ -1,7 +1,7 @@
 // import type { ReactNode } from 'react';
 import React from 'react';
 
-import H6 from '../Headings/H6';
+import H6 from '@/components/UI/Headings/H6';
 
 const FormLayoutDynamic = ({
   children,

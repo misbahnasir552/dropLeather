@@ -3,10 +3,9 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 
+import B1 from '@/components/UI/Body/B1';
+import H4 from '@/components/UI/Headings/H4';
 import type { ICardProps } from '@/interfaces/interface';
-
-import B1 from '../Body/B1';
-import H4 from '../Headings/H4';
 
 const Card = ({ logo, label, description }: ICardProps) => {
   const [isCardHovered, setIsCardHovered] = useState(false);

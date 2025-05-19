@@ -6,11 +6,10 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import arrowDown from '@/assets/icons/arrow-down.svg';
 import upperArrow from '@/assets/icons/upperArrow.svg';
+import B3 from '@/components/UI/Body/B3';
+import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
+import H6 from '@/components/UI/Headings/H6';
 import type { IDropdownInput } from '@/interfaces/interface';
-
-import B3 from '../Body/B3';
-import FormikErrorMessage from '../Formik/ErrorHandling/FormikErrorMessage';
-import H6 from '../Headings/H6';
 
 const DropdownInput = ({
   asterik = false,

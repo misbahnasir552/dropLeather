@@ -11,7 +11,6 @@ import activityInformationFormSchema, {
 } from '@/components/Forms/validations/activityInformationForm';
 import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
-// import CheckboxInput from '../UI/Inputs/CheckboxInput';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';
 // import CheckboxItem from '@/components/UI/Inputs/CheckboxItem';

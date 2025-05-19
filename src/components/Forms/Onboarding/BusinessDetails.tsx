@@ -6,10 +6,26 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
 import apiClient from '@/api/apiClient';
+import {
+  partnershipBusinessDetailsFormInitialValues,
+  partnershipBusinessDetailsFormSchema,
+} from '@/components/Forms/validations/businessDetailsForm/partnershipBusinessForm';
+import {
+  pnpLtdBusinessDetailsFormInitialValues,
+  pnpLtdBusinessDetailsFormSchema,
+} from '@/components/Forms/validations/businessDetailsForm/pnpLtdBusinessForm';
+import {
+  soleBusinessDetailsFormInitialValues,
+  soleBusinessDetailsFormSchema,
+} from '@/components/Forms/validations/businessDetailsForm/soleBusinessForm';
 import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import type { AddStoreInfo } from '@/interfaces/interface';
@@ -21,23 +37,6 @@ import { partnershipBusinessDetailsFormData } from '@/utils/onboardingForms/busi
 import { pnpLtdBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/pnpLtdBusinessDetails';
 // import { BarLoader } from 'react-spinners';
 import { soleBusinessDetailsFormData } from '@/utils/onboardingForms/businessDetailsForms/soleBusinessDetails';
-
-import DateInputNew from '../../UI/Inputs/DateInputNew';
-import DropdownNew from '../../UI/Inputs/DropDownNew';
-import CustomModal from '../../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
-import {
-  partnershipBusinessDetailsFormInitialValues,
-  partnershipBusinessDetailsFormSchema,
-} from '../validations/businessDetailsForm/partnershipBusinessForm';
-import {
-  pnpLtdBusinessDetailsFormInitialValues,
-  pnpLtdBusinessDetailsFormSchema,
-} from '../validations/businessDetailsForm/pnpLtdBusinessForm';
-import {
-  soleBusinessDetailsFormInitialValues,
-  soleBusinessDetailsFormSchema,
-} from '../validations/businessDetailsForm/soleBusinessForm';
 
 const BusinessInformation = () => {
   const [formData, setFormData] = useState(

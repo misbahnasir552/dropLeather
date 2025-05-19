@@ -8,12 +8,11 @@ import apiClient from '@/api/apiClient';
 // import locationIcon from '@/assets/icons/location-icon.svg';
 import mailIcon from '@/assets/icons/mail-inbox-app-icon.svg';
 import telephoneIcon from '@/assets/icons/number-icon.svg';
+import MerchantPortalProfileTable from '@/components/Table/MerchantPortalProfileTable';
 import H1 from '@/components/UI/Headings/H1';
+import H6 from '@/components/UI/Headings/H6';
+import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppSelector } from '@/hooks/redux';
-
-import MerchantPortalProfileTable from '../Table/MerchantPortalProfileTable';
-import H6 from '../UI/Headings/H6';
-import CustomModal from '../UI/Modal/CustomModal';
 
 const MerchantProfile = ({ isApproved }: { isApproved?: boolean }) => {
   const userData = useAppSelector((state: any) => state.auth);

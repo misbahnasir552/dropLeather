@@ -4,17 +4,17 @@ import { useDispatch } from 'react-redux';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
+import ActivityInformationReqRevision from '@/components/Forms/RequestRevision/ActivityInformationReqRevision';
+import AttachmentsReqRevision from '@/components/Forms/RequestRevision/AttachmentsReqRevision';
+import BusinessInformationReqRevision from '@/components/Forms/RequestRevision/BusinessDetailsReqRevision';
+import IntegrationFormReqRevision from '@/components/Forms/RequestRevision/IntegrationFormReqRevision';
+import ReviewFormReqRevision from '@/components/Forms/RequestRevision/ReviewFormReqRevision';
+import SettlementDetailsReqRevision from '@/components/Forms/RequestRevision/SettlementDetailReqRevision';
+import StoreDetailReqRevision from '@/components/Forms/RequestRevision/StoreDetailReqRevision';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 
-import ActivityInformationReqRevision from '../Forms/RequestRevision/ActivityInformationReqRevision';
-import AttachmentsReqRevision from '../Forms/RequestRevision/AttachmentsReqRevision';
-import BusinessInformationReqRevision from '../Forms/RequestRevision/BusinessDetailsReqRevision';
-import IntegrationFormReqRevision from '../Forms/RequestRevision/IntegrationFormReqRevision';
-import ReviewFormReqRevision from '../Forms/RequestRevision/ReviewFormReqRevision';
-import SettlementDetailsReqRevision from '../Forms/RequestRevision/SettlementDetailReqRevision';
-import StoreDetailReqRevision from '../Forms/RequestRevision/StoreDetailReqRevision';
 import { ReviewFormIcon } from './CorporateTimeline/TimelineIcons/TimelineIcons';
 import {
   ActivityInformationIcon,

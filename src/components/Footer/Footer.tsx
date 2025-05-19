@@ -4,9 +4,8 @@ import React from 'react';
 import emailIcon from '@/assets/icons/email-icon.svg';
 import Logo from '@/assets/icons/logo.svg';
 import phoneIcon from '@/assets/icons/phone-icon.svg';
-
-import B1 from '../UI/Body/B1';
-import H4 from '../UI/Headings/H4';
+import B1 from '@/components/UI/Body/B1';
+import H4 from '@/components/UI/Headings/H4';
 
 const Footer = () => {
   return (

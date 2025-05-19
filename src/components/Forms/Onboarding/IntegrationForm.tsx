@@ -6,10 +6,15 @@ import React, { useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import integrationFormSchema, {
+  integrationFormInitialValues,
+} from '@/components/Forms/validations/integartionForm';
 import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 // import { convertSlugToTitle } from '@/services/urlService/slugServices';
@@ -17,13 +22,6 @@ import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 // import type { FieldsData, Page } from './validationsOLD/types';
 import { IntegrationFormData } from '@/utils/onboardingForms/integrationInfo';
-
-import CustomModal from '../../UI/Modal/CustomModal';
-// import DropdownInput from '../UI/Inputs/DropdownInput';
-import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
-import integrationFormSchema, {
-  integrationFormInitialValues,
-} from '../validations/integartionForm';
 // import type { FieldsData, Page } from './validations/types';
 // import settlementDetailsSchema,{settlementDetailsInitialValues} from './validations/settlementForm';
 

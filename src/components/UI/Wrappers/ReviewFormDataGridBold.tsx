@@ -1,9 +1,7 @@
 import React from 'react';
 
+import H8 from '@/components/UI/Headings/H8';
 import type { IReviewFormDataGrid } from '@/interfaces/interface';
-
-// import H7 from '@/components/UI/Headings/H7';
-import H8 from '../Headings/H8';
 
 function ReviewFormDataGridBold({ children, heading }: IReviewFormDataGrid) {
   return (
