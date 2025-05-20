@@ -357,11 +357,6 @@ export interface IDropdownInput {
 
 export interface BusinessNatureForm {
   businessNature: string;
-  // corporateProducts: string;
-  // managedDisbursementProducts: string;
-  // othersProducts: string;
-  // selfServeProducts: string;
-  // chequeBookRequired: string;
 }
 
 export interface ApprovalDecisionForm {

@@ -156,7 +156,7 @@ const BusinessInformation = () => {
       setInitialValuesState(partnershipBusinessDetailsFormInitialValues);
       setValidationSchemaState(partnershipBusinessDetailsFormSchema);
       setBusinessDetailsData(partnershipBusinessDetailsFormData?.categories);
-    } else if (businessNature?.businessNature === 'publicAndPrivateLtd') {
+    } else if (businessNature?.businessNature === 'publicOrPrivateLtd') {
       setInitialValuesState(pnpLtdBusinessDetailsFormInitialValues);
       setValidationSchemaState(pnpLtdBusinessDetailsFormSchema);
       setBusinessDetailsData(pnpLtdBusinessDetailsFormData?.categories);
@@ -366,7 +366,7 @@ const BusinessInformation = () => {
             ? soleBusinessDetailsFormData?.categories ?? []
             : businessNature?.businessNature === 'partnership'
             ? partnershipBusinessDetailsFormData?.categories ?? []
-            : businessNature?.businessNature === 'publicAndPrivateLtd'
+            : businessNature?.businessNature === 'publicOrPrivateLtd'
             ? pnpLtdBusinessDetailsFormData?.categories ?? []
             : []
           ).map((category) => ({

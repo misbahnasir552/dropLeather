@@ -17,6 +17,7 @@ import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
 import { setBusinessNature } from '@/redux/features/formSlices/onBoardingForms';
+import { businessNatureOptions } from '@/utils/dropdown-list/businessNature';
 import { generateMD5Hash } from '@/utils/helper';
 import {
   businessNatureInitialValues,
@@ -36,24 +37,7 @@ const BusinessNature = () => {
   const userData = useAppSelector((state) => state.auth);
   const [apierror, setApierror] = useState('');
 
-  const options = [
-    {
-      value: 'soleProprietor',
-      label: 'Sole Proprietorship',
-    },
-    {
-      value: 'publicAndPrivateLtd',
-      label: 'Public or Private Ltd.',
-    },
-    {
-      value: 'partnership',
-      label: 'Partnership',
-    },
-  ];
-
   useEffect(() => {
-    // fetchData();
-
     const handleResize = () => {
       // setWindowSize({
       //   width: window.innerWidth,
@@ -73,7 +57,7 @@ const BusinessNature = () => {
     console.log('BUSINESS NATURE LOGS', values);
     setIsSubmitting(true);
     console.log('business nature', values.businessNature);
-    const selectedOption = options.find(
+    const selectedOption = businessNatureOptions.find(
       (option) => option.value === values.businessNature,
     );
 
@@ -179,7 +163,7 @@ const BusinessNature = () => {
                       formik={formik}
                       error={formik.errors.businessNature}
                       touched={formik.touched.businessNature}
-                      options={options}
+                      options={businessNatureOptions}
                     />
                     <ApiError apiError={apierror} />
                   </>

@@ -176,7 +176,7 @@ const Attachments = () => {
     } else if (businessNature === 'partnership') {
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData?.categories);
-    } else if (businessNature === 'publicAndPrivateLtd') {
+    } else if (businessNature === 'publicOrPrivateLtd') {
       setValidationSchemaState(pnpAttachmentsFormSchema);
       setAttachmentData(pnpAttachmentsFormData?.categories);
     }
@@ -216,7 +216,7 @@ const Attachments = () => {
     // Access internal schema fields safely
     schemaFields = (partnershipAttachmentsFormSchema as Yup.ObjectSchema<any>)
       .fields;
-  } else if (businessNature === 'publicAndPrivateLtd') {
+  } else if (businessNature === 'publicOrPrivateLtd') {
     // Access internal schema fields safely
     schemaFields = (pnpAttachmentsFormSchema as Yup.ObjectSchema<any>).fields;
   }

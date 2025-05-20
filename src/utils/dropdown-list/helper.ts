@@ -16,32 +16,6 @@ export const purposeAccountArray: TSelect[] = [
   { value: 'Other', text: 'Other' },
 ];
 
-export const businessTypeArray: TSelect[] = [
-  { value: 'Sole Proprietor', text: 'Sole Proprietor' },
-  { value: 'Public & Private Ltd', text: 'Public & Private Ltd' },
-  { value: 'Partnership', text: 'Partnership' },
-  { value: 'Other', text: 'Other' },
-  { value: 'Trusts', text: 'Trusts' },
-  {
-    value: 'Club, Societies, Associations',
-    text: 'Club, Societies, Associations',
-  },
-  { value: 'NGO, NPO, Charities', text: 'NGO, NPO, Charities' },
-];
-
-export const businessNatureArray: TSelect[] = [
-  { value: 'Insurance Payments ', text: 'Insurance Payments' },
-  { value: 'Public & Private Ltd', text: 'Public & Private Ltd' },
-  { value: 'Partnership', text: 'Partnership' },
-  { value: 'Other', text: 'Other' },
-  { value: 'Trusts', text: 'Trusts' },
-  {
-    value: 'Club, Societies, Associations',
-    text: 'Club, Societies, Associations',
-  },
-  { value: 'NGO, NPO, Charities', text: 'NGO, NPO, Charities' },
-];
-
 export const monthOptions = [
   { label: 'January', value: '01' },
   { label: 'February', value: '02' },

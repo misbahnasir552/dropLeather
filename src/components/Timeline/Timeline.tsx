@@ -9,6 +9,14 @@ import React, {
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
+import {
+  ActivityInformationIcon,
+  AttachmentsIcon,
+  BusinessDetailsIcon,
+  // IntegrationsIcon,
+  ReviewFormIcon,
+  SettlementDetailsIcon,
+} from '@/assets/icons/TimelineIcons/Timelineicons';
 // import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
 import ActivityInformation from '@/components/Forms/Onboarding/ActivityInformation';
 import AttachmentsForm from '@/components/Forms/Onboarding/Attachments';
@@ -21,14 +29,6 @@ import StoreDetails from '@/components/Forms/Onboarding/StoreDetails';
 // DO NOT REMOVE COMMENTED CODE
 // import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
 import ReviewForm from '@/components/Forms/ReviewForm';
-import {
-  ActivityInformationIcon,
-  AttachmentsIcon,
-  BusinessDetailsIcon,
-  // IntegrationsIcon,
-  ReviewFormIcon,
-  SettlementDetailsIcon,
-} from '@/components/Timeline/TimelineIcons/Timelineicons';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 
