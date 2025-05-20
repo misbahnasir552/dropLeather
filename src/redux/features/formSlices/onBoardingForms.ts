@@ -11,15 +11,6 @@ import type {
 const initialState: any = {
   businessNature: '',
   limitCategory: '',
-  corporateProducts: '',
-  managedDisbursementProducts: '',
-  othersProducts: '',
-  selfServeProducts: '',
-  chequeBookRequired: '',
-  soleName: '',
-  corporateEntity: '',
-  corporateChecklistStatus: '',
-  CorporateAttachmentsStatus: '',
 };
 
 // Define the slice
@@ -39,15 +30,6 @@ const onBoardingFormSlice = createSlice({
 
       state.limitCategory = action.payload;
       // state.businessEndpoint = action.payload;
-    },
-    setBusinessEndpoint: (state, action: PayloadAction<string>) => {
-      state.businessEndpoint = action.payload;
-    },
-    setMerchantEntity: (state, action: PayloadAction<string>) => {
-      state.corporateEntity = action.payload;
-    },
-    setSoleName: (state, action: PayloadAction<string>) => {
-      state.soleName = action.payload;
     },
     setBusinessForm: (
       state,
@@ -98,16 +80,12 @@ const onBoardingFormSlice = createSlice({
 export const {
   setBusinessNature,
   setLimitCategory,
-  setSoleName,
-  setMerchantEntity,
-
   setAttachmentForm,
   setBusinessForm,
   setSettlementForm,
   setIntegrationForm,
   resetForms,
   setLogoutOnboarding,
-  setBusinessEndpoint,
 } = onBoardingFormSlice.actions;
 
 // Export reducer

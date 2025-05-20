@@ -197,18 +197,6 @@ function AddBeneficiary() {
     //   setShowModal(true);
     // }
   };
-  // const handleTermsAndConditionsChange = () => {
-  //   const EncryptedFile = generateAESEncryption(
-  //     'Online Payment Services Agreement.pdf',
-  //   );
-  //   const EncryptedEmmail = generateAESEncryption(
-  //     'termsandconditions@gmail.com',
-  //   );
-  //   // const downloadUrl = `https://api-gateway-opsprod.easypaisa.com.pk/corporate/downloadCorporateFile?filename=${filename}&email=${email}&type=${type}`;
-  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
-
-  //   window.open(downloadUrl, '_blank');
-  // };
 
   const handleTermsAndConditionsChange = () => {
     downloadEncryptedFile({

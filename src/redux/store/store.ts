@@ -13,17 +13,13 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import authReducer from '@/redux/features/authSlice';
-import additionalFormReducer from '@/redux/features/formSlices/additionalFormSlice';
 import onBoardingFormsReducer from '@/redux/features/formSlices/onBoardingForms';
 import signupReducer from '@/redux/features/signUpSlice';
 
 import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
-import fieldReducer from '../features/formSlices/fieldSlice';
 import lastTabReducer from '../features/formSlices/lastTabSlice';
 import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
 import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
-import merchantDetailsReducer from '../features/merchantSlice/merchantDetails';
-import merchantIntegrationReducer from '../features/merchantSlice/merchantIntegration';
 import transferFundsReducer from '../features/merchantSlice/transferFunds';
 // import sessionSliceReducer from '../features/sessionSlice/sessionSlice';
 
@@ -34,12 +30,8 @@ const persistConfig = {
     'user',
     'signup',
     'auth',
-    'additionalForm',
     'onBoardingForms',
-    'merchantDetails',
-    'merchantIntegration',
     'fundsTransfer',
-    'fields',
     'addBeneficiary',
 
     // 'session',
@@ -52,12 +44,8 @@ const rootReducer = combineReducers({
   auth: authReducer,
   // user: userReducer,
   signup: signupReducer,
-  additionalForm: additionalFormReducer,
   onBoardingForms: onBoardingFormsReducer,
-  merchantDetails: merchantDetailsReducer,
-  merchantIntegration: merchantIntegrationReducer,
   fundsTransfer: fundsTransferReducer,
-  fields: fieldReducer,
   addBeneficiary: addBeneficiaryReducer,
   // session: sessionSliceReducer,
   loginCredentials: loginCredentialsReducer,

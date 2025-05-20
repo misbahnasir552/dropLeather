@@ -15,11 +15,7 @@ import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
-import {
-  // setBusinessEndpoint,
-  setBusinessNature,
-  // setMerchantEntity,
-} from '@/redux/features/formSlices/onBoardingForms';
+import { setBusinessNature } from '@/redux/features/formSlices/onBoardingForms';
 import { generateMD5Hash } from '@/utils/helper';
 import {
   businessNatureInitialValues,
