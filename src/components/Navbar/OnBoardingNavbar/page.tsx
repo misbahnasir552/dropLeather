@@ -12,6 +12,13 @@ import CloseIcon from '@/assets/icons/close-icon-nav.svg';
 // import downSmall from '@/assets/icons/downSmall.svg';
 import Logo from '@/assets/icons/logo.svg';
 import Menu from '@/assets/icons/menu-button.svg';
+import NavMobileMenu from '@/components/Navbar/MobileView/NavMobileMenu';
+import NavMobileSubMenu from '@/components/Navbar/MobileView/NavMobileSubMenu';
+import {
+  getDropDownMenu,
+  getNavMenu,
+  getOnBoardingNavMenu,
+} from '@/components/Navbar/Utils/utils';
 import Button from '@/components/UI/Button/PrimaryButton';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
@@ -19,14 +26,6 @@ import { setLogout } from '@/redux/features/authSlice';
 import { clearCredentials } from '@/redux/features/corporateSlices/loginCredentials';
 import { resetFields } from '@/redux/features/formSlices/fieldSlice';
 import { setLogoutOnboarding } from '@/redux/features/formSlices/onBoardingForms';
-
-import NavMobileMenu from '../MobileView/NavMobileMenu';
-import NavMobileSubMenu from '../MobileView/NavMobileSubMenu';
-import {
-  getDropDownMenu,
-  getNavMenu,
-  getOnBoardingNavMenu,
-} from '../Utils/utils';
 
 const Navbar = () => {
   const userData = useAppSelector((state: any) => state.auth);

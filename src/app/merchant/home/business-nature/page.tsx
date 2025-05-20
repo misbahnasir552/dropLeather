@@ -11,6 +11,7 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import ApiError from '@/components/UI/Error/Error';
 import H6 from '@/components/UI/Headings/H6';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -21,8 +22,6 @@ import {
   businessNatureInitialValues,
   businessNatureSchema,
 } from '@/validations/merchant/onBoarding/businessNatureSchema';
-
-import SuccessModal from '../../../../components/UI/Modal/CustomModal';
 
 const BusinessNature = () => {
   const router = useRouter();

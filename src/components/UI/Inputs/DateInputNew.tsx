@@ -3,9 +3,8 @@
 import React from 'react';
 
 import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
+import H7 from '@/components/UI/Headings/H7';
 import type { IDate } from '@/interfaces/interface';
-
-import H7 from '../Headings/H7';
 
 const DateInputNew = ({
   label,

@@ -3,9 +3,8 @@
 // import Image from 'next/image';
 import React from 'react';
 
+import B3 from '@/components/UI/Body/B3';
 import H7 from '@/components/UI/Headings/H7';
-
-import B3 from '../UI/Body/B3';
 
 const ReversalReportTable = ({ tableHeadings, tableData }: any) => {
   console.log('table Data', tableData);

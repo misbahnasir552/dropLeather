@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
 import C5soleAttachmentFormSchema from '@/components/Forms/validations/attachmentForm/c5SoleAttachmentsForm';
+import C10soleAttachmentFormSchema from '@/components/Forms/validations/attachmentForm/c10SoleAttachmentForm';
 import partnershipAttachmentsFormSchema from '@/components/Forms/validations/attachmentForm/partnershipAttachmentsForm';
 import pnpAttachmentsFormSchema from '@/components/Forms/validations/attachmentForm/pnpAttachmentsForm';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -36,8 +37,6 @@ import {
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
-
-import C10soleAttachmentFormSchema from '../validations/attachmentForm/c10SoleAttachmentForm';
 // import { AttachmentFormInfoSchema } from '@/validations/merchant/onBoarding/attachmentInfo';
 // import type { FieldsData } from './validations/types';
 

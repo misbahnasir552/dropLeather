@@ -1,9 +1,8 @@
 // import type { ReactNode } from 'react';
 import React from 'react';
 
+import H6 from '@/components/UI/Headings/H6';
 import type { IFormLayout } from '@/interfaces/interface';
-
-import H6 from '../Headings/H6';
 
 const FormLayout = ({ children, formHeading }: IFormLayout) => {
   return (

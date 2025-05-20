@@ -8,13 +8,12 @@ import React, { useState } from 'react';
 import apiClient from '@/api/apiClient';
 import closeIcon from '@/assets/icons/close-icon.svg';
 import ScanImage from '@/assets/images/Scan.png';
+import B1 from '@/components/UI/Body/B1';
 import Button from '@/components/UI/Button/PrimaryButton';
+import H1 from '@/components/UI/Headings/H1';
+import H6 from '@/components/UI/Headings/H6';
 import { useAppSelector } from '@/hooks/redux';
 import { generateMD5Hash } from '@/utils/helper';
-
-import B1 from '../../Body/B1';
-import H1 from '../../Headings/H1';
-import H6 from '../../Headings/H6';
 
 interface QRModalProps {
   title: string;

@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+// import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
+import DisabledInput from '@/components/Forms/DisabledStoreComponent';
 import OvalLoading from '@/components/Loader/OvalLoading';
 // import AddIcon from '@/assets/icons/Add.svg';
 // import Breadcrumb from '@/components/BreadCrumb/BreadCrumb';
@@ -13,6 +15,8 @@ import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
 // import M7 from '@/components/UI/Headings/M7';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import DateInputNew from '@/components/UI/Inputs/DateInputNew';
+import DropdownNew from '@/components/UI/Inputs/DropDownNew';
 // import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import Input from '@/components/UI/Inputs/Input';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
@@ -27,12 +31,6 @@ import {
   storeDetailsInitialValues,
   storeDetailsSchema,
 } from '@/validations/merchant/onBoarding/storeDetails';
-
-import DateInputNew from '../../UI/Inputs/DateInputNew';
-import DropdownNew from '../../UI/Inputs/DropDownNew';
-// import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
-import DisabledInput from '../DisabledStoreComponent';
-// import FormLayoutDynamic from '../UI/Wrappers/FormLayoutDynamic';
 
 const AddStore = () => {
   const { currentTab } = useCurrentTab();

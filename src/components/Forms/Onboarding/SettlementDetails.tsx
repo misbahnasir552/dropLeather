@@ -6,10 +6,18 @@ import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+// import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
+import settlementDetailsSchema, {
+  settlementDetailsInitialValues,
+} from '@/components/Forms/validations/settlementForm';
 import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
+import DropdownInput from '@/components/UI/Inputs/DropdownInput';
+import ImageInput from '@/components/UI/Inputs/ImageInput';
 import Input from '@/components/UI/Inputs/Input';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setSettlementForm } from '@/redux/features/formSlices/onBoardingForms';
@@ -17,15 +25,6 @@ import { convertSlugToTitle } from '@/services/urlService/slugServices';
 import { generateMD5Hash } from '@/utils/helper';
 // import { BarLoader } from 'react-spinners';
 import { SettlementDetailsFormData } from '@/utils/onboardingForms/settlementDetails';
-
-import DropdownInput from '../../UI/Inputs/DropdownInput';
-import ImageInput from '../../UI/Inputs/ImageInput';
-import CustomModal from '../../UI/Modal/CustomModal';
-import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
-// import { SettlementFormInfoSchema } from '@/validations/merchant/onBoarding/settlementInfo';
-import settlementDetailsSchema, {
-  settlementDetailsInitialValues,
-} from '../validations/settlementForm';
 
 // interface Field {
 //   name: string;

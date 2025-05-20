@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 
+import ConfigurationDropDown from '@/components/Navbar/NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
 import {
   getAccountSettingsDropDownMenu,
   getConfigurationDropDownMenu,
@@ -12,8 +13,6 @@ import {
 } from '@/components/Navbar/Utils/utils';
 import B2 from '@/components/UI/Body/B2';
 import { useAppSelector } from '@/hooks/redux';
-
-import ConfigurationDropDown from '../NavDropDowns/MerchantPortalNav/ConfigurationDropDown';
 
 const MerchantPortalNavbar = () => {
   const [hoveredMenu, setHoveredMenu] = useState<string | null>(null);

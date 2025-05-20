@@ -8,9 +8,9 @@ import AttachmentsIcon from '@/assets/icons/Attachments.svg';
 import CrossIcon from '@/assets/icons/Cross.svg';
 import B3 from '@/components/UI/Body/B3';
 import FormikErrorMessage from '@/components/UI/Formik/ErrorHandling/FormikErrorMessage';
-
 // import H6 from '@/components/UI/Headings/H6';
-import M7 from '../Headings/M7';
+import M7 from '@/components/UI/Headings/M7';
+
 import type { IDocumentUploadInput } from './DocumentUploadMultipleFiles';
 // import { error } from 'console';
 

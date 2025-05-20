@@ -1,9 +1,8 @@
 import React from 'react';
 
+import B1 from '@/components/UI/Body/B1';
 import H1 from '@/components/UI/Headings/H1';
 import type { IHeaderProps } from '@/interfaces/interface';
-
-import B1 from '../UI/Body/B1';
 
 function Header({ title, description, centerTitle }: IHeaderProps) {
   const titleCase = centerTitle ? 'text-center w-full' : 'text-start';

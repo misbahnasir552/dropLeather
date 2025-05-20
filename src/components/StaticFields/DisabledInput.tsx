@@ -1,7 +1,7 @@
 import React from 'react';
 
-import H6 from '../UI/Headings/H6';
-import H7 from '../UI/Headings/H7';
+import H6 from '@/components/UI/Headings/H6';
+import H7 from '@/components/UI/Headings/H7';
 
 interface DisabledInputProps {
   data: any;

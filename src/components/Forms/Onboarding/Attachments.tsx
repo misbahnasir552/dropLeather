@@ -7,8 +7,22 @@ import React, { useEffect, useState } from 'react';
 
 // import { BarLoader } from 'react-spinners';
 import apiClient from '@/api/apiClient';
+import C5soleAttachmentFormSchema, {
+  C5soleAttachmentFormInitialValues,
+} from '@/components/Forms/validations/attachmentForm/c5SoleAttachmentsForm';
+import C10soleAttachmentFormSchema, {
+  C10soleAttachmentFormInitialValues,
+} from '@/components/Forms/validations/attachmentForm/c10SoleAttachmentForm';
+import partnershipAttachmentsFormSchema, {
+  partnershipAttachmentsFormInitialValues,
+} from '@/components/Forms/validations/attachmentForm/partnershipAttachmentsForm';
+import pnpAttachmentsFormSchema, {
+  pnpAttachmentsFormInitialValues,
+} from '@/components/Forms/validations/attachmentForm/pnpAttachmentsForm';
 import OvalLoading from '@/components/Loader/OvalLoading';
 import Button from '@/components/UI/Button/PrimaryButton';
+import CorporateFileInput from '@/components/UI/Inputs/CorporateFileInput';
+import FormLayoutDynamic from '@/components/UI/Wrappers/FormLayoutDynamic';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { convertSlugToTitle } from '@/services/urlService/slugServices';
@@ -20,25 +34,6 @@ import {
   partnershipAttachmentsFormData,
   pnpAttachmentsFormData,
 } from '@/utils/onboardingForms/attachments';
-
-import CorporateFileInput from '../../UI/Inputs/CorporateFileInput';
-// import BulkRegisterInput from '../UI/Inputs/BulkRegisterInput';
-// import DropdownInput from '../UI/Inputs/DropdownInput';
-// import ImageInput from "../UI/Inputs/ImageInput";
-// import Input from '../UI/Inputs/Input';
-import FormLayoutDynamic from '../../UI/Wrappers/FormLayoutDynamic';
-import C5soleAttachmentFormSchema, {
-  C5soleAttachmentFormInitialValues,
-} from '../validations/attachmentForm/c5SoleAttachmentsForm';
-import C10soleAttachmentFormSchema, {
-  C10soleAttachmentFormInitialValues,
-} from '../validations/attachmentForm/c10SoleAttachmentForm';
-import partnershipAttachmentsFormSchema, {
-  partnershipAttachmentsFormInitialValues,
-} from '../validations/attachmentForm/partnershipAttachmentsForm';
-import pnpAttachmentsFormSchema, {
-  pnpAttachmentsFormInitialValues,
-} from '../validations/attachmentForm/pnpAttachmentsForm';
 
 const Attachments = () => {
   // const fieldsData = useAppSelector((state: any) => state.fields);

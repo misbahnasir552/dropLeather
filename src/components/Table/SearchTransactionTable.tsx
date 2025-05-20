@@ -7,11 +7,10 @@ import apiClient from '@/api/apiClient';
 import ReversalIcon from '@/assets/icons/reverseIcon.png';
 import B3 from '@/components/UI/Body/B3';
 import H7 from '@/components/UI/Headings/H7';
+import CustomModal from '@/components/UI/Modal/CustomModal';
+import ErrorModal from '@/components/UI/Modal/ErrorModal';
 import { useAppSelector } from '@/hooks/redux';
 import { generateMD5Hash } from '@/utils/helper';
-
-import CustomModal from '../UI/Modal/CustomModal';
-import ErrorModal from '../UI/Modal/ErrorModal';
 
 const SearchTransactionTable = ({ tableHeadings, tableData }: any) => {
   const userData = useAppSelector((state: { auth: any }) => state.auth);

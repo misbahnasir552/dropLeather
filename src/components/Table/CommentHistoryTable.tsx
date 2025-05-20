@@ -1,8 +1,7 @@
 'use client';
 
 import B3 from '@/components/UI/Body/B3';
-
-import H7 from '../UI/Headings/H7';
+import H7 from '@/components/UI/Headings/H7';
 
 function CommentHistoryTable({ data }: any) {
   const tableHeadings: string[] = ['Comment Date', 'Comment By', 'Comments'];

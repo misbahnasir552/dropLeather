@@ -13,14 +13,14 @@ import {
 import storage from 'redux-persist/lib/storage';
 
 import authReducer from '@/redux/features/authSlice';
+import loginCredentialsReducer from '@/redux/features/corporateSlices/loginCredentials';
+// import fieldReducer from '@/redux/features/formSlices/fieldSlice';
+import lastTabReducer from '@/redux/features/formSlices/lastTabSlice';
 import onBoardingFormsReducer from '@/redux/features/formSlices/onBoardingForms';
+import addBeneficiaryReducer from '@/redux/features/merchantSlice/addBeneficiary';
+import fundsTransferReducer from '@/redux/features/merchantSlice/FundsTransfer';
+import transferFundsReducer from '@/redux/features/merchantSlice/transferFunds';
 import signupReducer from '@/redux/features/signUpSlice';
-
-import loginCredentialsReducer from '../features/corporateSlices/loginCredentials';
-import lastTabReducer from '../features/formSlices/lastTabSlice';
-import addBeneficiaryReducer from '../features/merchantSlice/addBeneficiary';
-import fundsTransferReducer from '../features/merchantSlice/FundsTransfer';
-import transferFundsReducer from '../features/merchantSlice/transferFunds';
 // import sessionSliceReducer from '../features/sessionSlice/sessionSlice';
 
 const persistConfig = {

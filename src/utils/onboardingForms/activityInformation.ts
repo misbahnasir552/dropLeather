@@ -1,4 +1,4 @@
-import { countryList } from '../dropdown-list/countryList';
+import { countryList } from '@/utils/dropdown-list/countryList';
 
 export const ActivityInformationFormData = {
   pageName: 'Activity Information',
