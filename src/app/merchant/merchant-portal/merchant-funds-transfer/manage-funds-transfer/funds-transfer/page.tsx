@@ -16,8 +16,6 @@ import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { transferFundsData } from '@/redux/features/merchantSlice/transferFunds';
-// import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
-// import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
 import { generateMD5Hash } from '@/utils/helper';
 import {
   fundsTransferInitialValues,

@@ -180,18 +180,6 @@ function FundsTranfer() {
                     value: `${option.mobileNumber}`,
                   }))}
                 />
-
-                {/* <DropdownInput
-                  label="Beneficiary Bank"
-                  name={'beneficiaryBank'}
-                  error={formik.errors.beneficiaryBank}
-                  touched={formik.touched.beneficiaryBank}
-                  formik={formik}
-                  options={bankAccountsDTO.map((option: BankAccountDTO) => ({
-                    label: option.bankName,
-                    value: option.bankPrefix,
-                  }))}
-                /> */}
                 <Input
                   label="Transfer Amount"
                   name={'transferAmount'}
