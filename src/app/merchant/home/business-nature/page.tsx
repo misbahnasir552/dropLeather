@@ -14,15 +14,11 @@ import DropdownInput from '@/components/UI/Inputs/DropdownInput';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import FormWrapper from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
-import { useAppSelector } from '@/hooks/redux';
-import { generateMD5Hash } from '@/utils/helper';
-// import { useAppDispatch } from '@/hooks/redux';
+import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 // import { setPageData } from '@/redux/features/formSlices/fieldSlice';
-// import {
-//   setBusinessEndpoint,
-//   setBusinessNature,
-//   setMerchantEntity,
-// } from '@/redux/features/formSlices/onBoardingForms';
+import { setBusinessNature } from '@/redux/features/formSlices/onBoardingForms';
+import { businessNatureOptions } from '@/utils/dropdown-list/businessNature';
+import { generateMD5Hash } from '@/utils/helper';
 import {
   businessNatureInitialValues,
   businessNatureSchema,
@@ -31,7 +27,7 @@ import {
 const BusinessNature = () => {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   // const [selectedOption, setSelectedOption] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
@@ -41,24 +37,7 @@ const BusinessNature = () => {
   const userData = useAppSelector((state) => state.auth);
   const [apierror, setApierror] = useState('');
 
-  const options = [
-    {
-      value: 'soleProprietor',
-      label: 'Sole Proprietorship',
-    },
-    {
-      value: 'publicAndPrivateLtd',
-      label: 'Public or Private Ltd.',
-    },
-    {
-      value: 'partnership',
-      label: 'Partnership',
-    },
-  ];
-
   useEffect(() => {
-    // fetchData();
-
     const handleResize = () => {
       // setWindowSize({
       //   width: window.innerWidth,
@@ -78,7 +57,7 @@ const BusinessNature = () => {
     console.log('BUSINESS NATURE LOGS', values);
     setIsSubmitting(true);
     console.log('business nature', values.businessNature);
-    const selectedOption = options.find(
+    const selectedOption = businessNatureOptions.find(
       (option) => option.value === values.businessNature,
     );
 
@@ -138,6 +117,9 @@ const BusinessNature = () => {
       console.log('here i am');
       if (response?.data?.responseCode === '009') {
         router.push('/merchant/home/business-nature/activity-information');
+        // values.businessTypeNature = businessType;
+
+        dispatch(setBusinessNature(values));
       } else if (response?.data?.responseCode === '000') {
         setApierror(response?.data?.responseMessage);
         setIsSubmitting(false);
@@ -181,7 +163,7 @@ const BusinessNature = () => {
                       formik={formik}
                       error={formik.errors.businessNature}
                       touched={formik.touched.businessNature}
-                      options={options}
+                      options={businessNatureOptions}
                     />
                     <ApiError apiError={apierror} />
                   </>

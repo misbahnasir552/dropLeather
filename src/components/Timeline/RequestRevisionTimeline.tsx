@@ -15,14 +15,14 @@ import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
 
-import { ReviewFormIcon } from './CorporateTimeline/TimelineIcons/TimelineIcons';
 import {
   ActivityInformationIcon,
   AttachmentsIcon,
   BusinessDetailsIcon,
   IntegrationsIcon,
   SettlementDetailsIcon,
-} from './TimelineIcons/Timelineicons';
+} from '../../assets/icons/TimelineIcons/Timelineicons';
+import { ReviewFormIcon } from './CorporateTimeline/TimelineIcons/TimelineIcons';
 
 interface Tab {
   name: string;

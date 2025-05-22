@@ -62,40 +62,6 @@ const ActivityInformation = () => {
   const router = useRouter();
   console.log('selected value checkbox input: ', selectedCheckValue);
 
-  // useEffect(() => {
-  //   const initialValues: { [key: string]: any } = {};
-  //   // console.log('Field DATA:::', fieldData);
-  //   if (currentTab) {
-  //     const title = convertSlugToTitle(currentTab);
-  //     setPageTitle(title);
-  //     console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
-  //     const fData = fieldData.pages?.page?.filter((item) => {
-  //       console.log(item.name, 'ITEM NAME');
-  //       return convertSlugToTitle(item.name) === title;
-  //       // return item.name;
-  //     });
-  //     setFilteredData(fData);
-  //     console.log('FDATAAAA:', fData);
-
-  //     fData?.forEach((item) => {
-  //       // if (item.name === "Activity Information") {
-  //       item.categories.forEach((category) => {
-  //         category.fields.forEach((field) => {
-  //           if (field?.type !== 'checkItem') {
-  //             initialValues[field.name] = '';
-  //           }
-  //         });
-  //       });
-  //       setInitialValuesState(initialValues);
-  //       // }
-  //     });
-  //     const validationSchema = buildValidationSchema(fData);
-  //     console.log('Vaidation schema result', validationSchema);
-
-  //     setValidationSchemaState(validationSchema);
-  //   }
-  // }, [currentTab]);
-
   const handleCheckboxChange = (name: string, formik: any) => {
     const newChecked = !isChecked;
     console.log(newChecked, 'NEW CHECKED', isChecked, 'ISCHECKED');
@@ -108,64 +74,6 @@ const ActivityInformation = () => {
       formik.setFieldValue(name, '');
     }
   };
-
-  // console.log('INITAIL VALUES STATE', initialValuesState);
-  // if (!initialValuesState || !validationSchemaState || !filteredData) {
-  //   return (
-  //     <div className="flex w-full flex-col justify-center">
-  //       <BarLoader color="#21B25F" />
-  //     </div>
-  //   );
-  // }
-  // const saveAndContinue = async (
-  //   values: ActivityFormInfo,
-  //   { setSubmitting }: any,
-  // ) => {
-  //   try {
-  //     const response: any = await apiClient.post(
-  //       `merchant/activity/${userData.email}`,
-  //       {
-  //         // businessNature: formData?.businessNature?.businessTypeNature,
-  //         managerMobile: userData.managerMobile,
-  //         fatherName: values.fatherName,
-  //         businessName: values.businessName,
-  //         nameOfBusinessOwner: values.businessOwner,
-  //         legalNameOfBusiness: values.legalName,
-  //         dateOfIncorporation: values.incorporationDate,
-  //         ntnNumber: values.ntnNumber,
-  //         purposeOfAccount: values.purposeOfAccount,
-  //         emailAddress: values.emailAddress,
-  //         city: values.city,
-  //         businessAddress: values.businessAddress,
-  //         correspondenceAddress: values.correspondenceAddress,
-  //         primaryPhoneNumber: values.primaryPhoneNumber,
-  //         otherPhoneNumber: values.otherPhoneNumber,
-  //         status: 'partial',
-  //         terrorFinancing: values.terrorFinancing,
-  //         politicallyExposed: values.politicallyExposed,
-  //         accountHolder: values.accountHolder,
-  //         gender: values.gender,
-  //         citizenship: values.citizenship,
-  //         countryOfResidency: values.residency,
-  //       },
-  //       {
-  //         headers: { Authorization: `Bearer ${userData.jwt}` },
-  //       },
-  //     );
-
-  //     if (response.data.responseCode === '000') {
-  //       console.log(response, 'Activity Information');
-  //       router.push('/business-details');
-  //     } else {
-  //       router.push('/login');
-  //       console.log('Data submission failure');
-  //     }
-  //   } catch (e) {
-  //     console.log(e, 'Error');
-  //   }
-
-  //   setSubmitting(false);
-  // };
 
   const onSubmit = async (values: any, { setSubmitting }: any) => {
     console.log('activity valuesssssssssssss', values);
@@ -241,15 +149,7 @@ const ActivityInformation = () => {
           } else if (response?.data?.responseCode === '000') {
             setApierror(response?.data?.responseMessage);
             setLoading(false);
-            // setTitle('Error Occured');
-            // setDescription(response?.data?.responseDescription);
-            // setShowModal(true);
           }
-          //  else {
-          //   setTitle('Error Occured');
-          //   setDescription(response?.data?.responseDescription);
-          //   setShowModal(true);
-          // }
         }
 
         // Navigate to the next tab after successful submission

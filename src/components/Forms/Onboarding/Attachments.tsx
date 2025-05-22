@@ -96,13 +96,11 @@ const Attachments = () => {
       setInitialValuesState(partnershipAttachmentsFormInitialValues);
       setValidationSchemaState(partnershipAttachmentsFormSchema);
       setAttachmentData(partnershipAttachmentsFormData.categories);
-    } else if (businessNature?.businessNature === 'publicAndPrivateLtd') {
+    } else if (businessNature?.businessNature === 'publicOrPrivateLtd') {
       setInitialValuesState(pnpAttachmentsFormInitialValues);
       setValidationSchemaState(pnpAttachmentsFormSchema);
       setAttachmentData(pnpAttachmentsFormData.categories);
-    }
-    // publicAndPrivateLtd
-    else {
+    } else {
       setAttachmentData([]); // Set a default empty state to avoid undefined errors
     }
 

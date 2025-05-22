@@ -99,18 +99,6 @@ const PersonalInfo = () => {
     }
   };
 
-  // const handleTermsAndConditionsChange = () => {
-  //   const EncryptedFile = generateAESEncryption(
-  //     'Online Payment Services Agreement.pdf',
-  //   );
-  //   const EncryptedEmmail = generateAESEncryption(
-  //     'termsandconditions@gmail.com',
-  //   );
-  //   const downloadUrl = `http://api-gateway-opsdev.telenorbank.pk/corporate/downloadCorporateFile?filename=${EncryptedFile}&email=${EncryptedEmmail}&type=${'merchant'}`;
-
-  //   window.open(downloadUrl, '_blank');
-  // };
-
   const handleTermsAndConditionsChange = () => {
     downloadEncryptedFile({
       filename: 'Online Payment Services Agreement.pdf',

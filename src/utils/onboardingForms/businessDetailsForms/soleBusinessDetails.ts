@@ -1,3 +1,5 @@
+import { businessNatureOptions } from '@/utils/dropdown-list/businessNature';
+
 export const soleBusinessDetailsFormData = {
   pageName: 'Business Details',
   categories: [
@@ -8,19 +10,7 @@ export const soleBusinessDetailsFormData = {
           name: 'accountBusinessDocumentationType',
           label: 'Account/Business Documentation Type',
           type: 'dropdown',
-          options: [
-            { label: 'Sole Proprietor', value: 'Sole Proprietor' },
-            {
-              label: 'Public and Private Ltd.',
-              value: 'Public and Private Ltd.',
-            },
-            { label: 'Partnership', value: 'Partnership' },
-            // DO NOT REMOVE CODE BELOW
-            // { label: 'Other', value: 'Other' },
-            // { label: 'Trusts', value: 'Trusts' },
-            // { label: 'Clubs,Societies', value: 'Clubs,Societies' },
-            // { label: 'NGO,NPO,Charities', value: 'NGO,NPO,Charities' },
-          ],
+          options: [businessNatureOptions],
           required: true,
         },
         {

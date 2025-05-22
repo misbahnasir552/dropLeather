@@ -41,15 +41,3 @@ type TFundsTransfer = {
   isAuthenticated: boolean;
   navbarRoute?: string;
 };
-
-type TMerchantIntegration = {
-  dap: string | null | undefined;
-  employee: string | null | undefined;
-  cif: string | null | undefined;
-  aml: string | null | undefined;
-  internalId: string | null | undefined;
-  suspendAccount: string | null | undefined;
-  emailStatus: string | null | undefined;
-  accountTitle: string | null | undefined;
-  sellerCode: string | null | undefined;
-};

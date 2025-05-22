@@ -339,28 +339,6 @@ const CheckboxInput: React.FC<ICheckboxInput> = ({
                   </div>
                 )}
               </div>
-
-              {form?.values[name] === 'corporatePortal' &&
-                option.value === 'corporatePortal' && (
-                  <>
-                    <div className="my-2 w-full border-t-[0.5px] border-border-dark"></div>
-
-                    <p className="text-sm font-medium text-secondary-base">
-                      An easypaisa Corporate Account is required to get access
-                      to the following easypaisa Corporate Products and
-                      Services:
-                    </p>
-                    <ol className="ml-5 list-decimal text-sm font-medium text-secondary-base ">
-                      <li>Self-Serve Salary & Bulk Disbursement Portal</li>
-                      <li>Managed Salary & Bulk Disbursements</li>
-                      <li>Corporate Current Account</li>
-                      <li>Corporate Savings Account</li>
-                      <li>Payment Collection from Easypaisa App</li>
-                      <li>Bulk Disbursement API</li>
-                      <li>Online Payment Gateway</li>
-                    </ol>
-                  </>
-                )}
             </label>
           ),
         )}

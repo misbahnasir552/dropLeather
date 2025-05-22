@@ -33,17 +33,6 @@ export interface ILayouts {
   children: React.ReactNode;
 }
 
-export interface ChangeAccountRequest {
-  typeOfRequest: string;
-  requestLabel: string;
-  uploads: Array<File | null>; // Accepts an array of nullable File objects
-  corporateProducts: string;
-  managedDisbursementProducts: string;
-  othersProducts: string;
-  selfServeProducts: string;
-  chequeBookRequired: string;
-}
-
 export interface IButton {
   label: string;
   type?: 'button' | 'submit';
@@ -244,21 +233,6 @@ export interface IFormPageProps {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
 }
 
-export interface AdditionalFormInfo {
-  nomineeName: string;
-  nomineeCNIC: string;
-  relationShipWithHolder: string;
-  nomineeContactNumber: string;
-  companyPostalAddress: string;
-  authorisedSignatoryName: string;
-  designationOfAuthorisedSignatory: string;
-  cnicOfAuthorisedSignatory: string;
-  mobileNumberOfAuthorisedSignatory: string;
-  landLineNumberOfAuthorizedSignatory: string;
-  companyRegistrationAddress: string;
-  status?: string;
-}
-
 export interface SettlementFormInfo {
   accounts: string;
   // hasBankAccount?: boolean;
@@ -275,12 +249,6 @@ export interface AttachmentFormInfo {
   cnicFront: File | null;
   cnicBack: File | null;
   // status?: string;
-}
-
-export interface CorporateDocumentsInfo {
-  boForm: File | null;
-  cddForm: File | null;
-  eddForm: File | null;
 }
 
 export interface BusinessFormInfo {
@@ -389,11 +357,6 @@ export interface IDropdownInput {
 
 export interface BusinessNatureForm {
   businessNature: string;
-  // corporateProducts: string;
-  // managedDisbursementProducts: string;
-  // othersProducts: string;
-  // selfServeProducts: string;
-  // chequeBookRequired: string;
 }
 
 export interface ApprovalDecisionForm {
@@ -475,128 +438,11 @@ export interface AddTransactionPointForm {
   letterHeadImage: File | null;
 }
 
-export interface CaptureTransactionForm {
-  CardNumber: string;
-  MerchantName: string;
-  OrderId: string;
-  SellerCode: string;
-}
-
-export interface DeLinkAccountReportForm {
-  CustomerMobile: string;
-  TokenNumber: string;
-  StoreName: string;
-}
-
 export interface MerchantPortalHomePage {
   graphType: string;
   graphDuration: string;
   from: string;
   to: string;
-}
-
-export interface ApplicationFormInfo {
-  // accountTitle: string;
-  // businessNtnNumber: string;
-  // requiredBusiness: string;
-  // applicantFullName: string;
-  // fatherFullName: string;
-  // dateOfBirth: string;
-  // gender: string;
-  // typeOfIdentification: string;
-  // identificationNumber: string;
-  // mobileAccountNumber: string;
-  // contactNumber: string;
-  // city: string;
-  // mailingAddress: string;
-  // relationship: string;
-  // fullName: string;
-  // typeOfIdentificationNextOfKin: string;
-  // identificationNumberNextOfKin: string;
-  // contactNumberNextOfKin: string;
-  // addressNextOfKin: string;
-  // primaryNationality: string;
-  // secondaryNationality: string;
-  // passportNumber: string;
-  // taxpayerIdentificationNumber: string;
-  // residentStatusInPakistan: string;
-  // isUsCitizen: string;
-  // bornCityUs: string;
-  // haveUsAddress: string;
-  // hasAssigningAuthorityForSignatory: string;
-  // hasAssigningAuthorityForStandingInstructions: string;
-  // taxResidencyCountry: string;
-  // taxJurisdictionForResidency: string;
-  // taxJurisdictionForTin: string;
-  // taxIdentificationNumber: string;
-  // noTinReason: string;
-  // status: string;
-  // countryCode: string;
-  // hasAssigningAuthority: string;
-  // hasStandingInstructions: string;
-  // homeAddressOther: string;
-  // taxJurisdiction: string;
-  // taxTinJurisdiction: string;
-  // homeAddress: string;
-  // identificationNumberCnic: string;
-  // address: string;
-
-  applicantFullName: string;
-  fatherFullName: string;
-  dateOfBirth: string;
-  gender: string;
-  identificationNumberCnic: string;
-  mobileAccountNumber: string;
-  contactNumber: string;
-  city: string;
-  mailingAddress: string;
-  relationship: string;
-  fullName: string;
-  identificationNumberNextOfKin: string;
-  contactNumberNextOfKin: string;
-  addressNextOfKin: string;
-  primaryNationality: string;
-  secondaryNationality: string;
-  // passportNumber: string;
-  taxpayerIdentificationNumber: string;
-  residentStatusInPakistan: string;
-  isUsCitizen: string;
-  bornCityUs: string;
-  haveUsAddress: string;
-  hasAssigningAuthorityForSignatory: string;
-  hasAssigningAuthorityForStandingInstructions: string;
-  taxResidencyCountry: string;
-  taxJurisdictionForResidency: string;
-  taxJurisdictionForTin: string;
-  taxIdentificationNumber: string;
-  noTinReason: string;
-  accountTitle: string;
-  businessNtnNumber: string;
-  requiredBusiness: string;
-  homeAddressOther: string;
-  contactNumberOtherThanPakistan: string;
-}
-
-export interface CorporateAttachmentFormInfo {
-  photograph: File | null;
-  tenancyAgreement: File | null;
-  utilityBill: File | null;
-  cnicPassport: File | null;
-  salesTaxCertificate: File | null;
-  status?: string;
-}
-
-export interface CorporateChecklistForm {
-  cddForm: File | null;
-  kycForm: File | null;
-  crsEntityOrganization: File | null;
-  beneficialOwnerCertificateForCorporate: File | null;
-  fatcaW8benE: File | null;
-  corporateAccountRequestLetter?: File | null;
-  undertaking: File | null;
-  fw8ben: File | null;
-  operatingAuthorityDocument: File | null;
-  crsIndividualTaxResidencySelfCertificate: File | null;
 }
 
 export interface StepType {
@@ -654,10 +500,3 @@ export const stepsData: StepType[] = [
     active: false,
   },
 ];
-
-// export interface checklistStatusInfo {
-//   corporateChecklistStatus: string;
-// }
-// export interface attachmentStatusInfo {
-//   corporateAttachmentStatus: string;
-// }

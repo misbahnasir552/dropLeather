@@ -6,11 +6,6 @@ import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
 import ArrowTimeline from '@/assets/icons/Arrow-timeline.svg';
-// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
-// import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
-// import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
-// import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
-import ReviewForm from '@/components/Forms/ReviewForm';
 // import SettlementDetails from '@/components/Forms/SettlementDetailsOLD';
 import {
   ActivityInformationIcon,
@@ -19,7 +14,12 @@ import {
   IntegrationsIcon,
   ReviewFormIcon,
   SettlementDetailsIcon,
-} from '@/components/Timeline/TimelineIcons/Timelineicons';
+} from '@/assets/icons/TimelineIcons/Timelineicons';
+// import ActivityInformation from '@/components/Forms/ActivityInformationOLD';
+// import AttachmentsForm from '@/components/Forms/AttachmentsOLD';
+// import BusinessInformation from '@/components/Forms/BusinessDetailsOLD';
+// import IntegrationForm from '@/components/Forms/IntegrationFormOLD';
+import ReviewForm from '@/components/Forms/ReviewForm';
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 

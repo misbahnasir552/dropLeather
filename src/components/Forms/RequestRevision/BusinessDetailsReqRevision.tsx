@@ -708,7 +708,7 @@ const BusinessInformationReqRevision = () => {
       schemaFields = (
         partnershipBusinessDetailsFormSchema as Yup.ObjectSchema<any>
       ).fields;
-    } else if (businessNature === 'publicAndPrivateLtd') {
+    } else if (businessNature === 'publicOrPrivateLtd') {
       // Access internal schema fields safely
       schemaFields = (pnpLtdBusinessDetailsFormSchema as Yup.ObjectSchema<any>)
         .fields;
@@ -741,7 +741,7 @@ const BusinessInformationReqRevision = () => {
       setBusinessDetailsFormData(
         partnershipBusinessDetailsFormData?.categories,
       );
-    } else if (businessNature === 'publicAndPrivateLtd') {
+    } else if (businessNature === 'publicOrPrivateLtd') {
       setBusinessDetailsFormData(pnpLtdBusinessDetailsFormData?.categories);
     } else {
       setBusinessDetailsFormData([]); // Set a default empty state to avoid undefined errors

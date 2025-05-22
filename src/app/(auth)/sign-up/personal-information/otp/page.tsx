@@ -1,6 +1,5 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
 import React, { useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
@@ -25,12 +24,10 @@ const OtpInputWithValidation = () => {
   const [route, setRoute] = useState('');
   const signUpForm = useAppSelector((state: any) => state.signup);
   const dispatch = useAppDispatch();
-  const option = useSearchParams().get('option');
 
   const isOtpComplete = () => {
     const isEmailOtpFilled = emailOtp.every((digit) => digit !== '');
-    const isSmsOtpFilled =
-      option === 'corporatePortal' || smsOtp.every((digit) => digit !== '');
+    const isSmsOtpFilled = smsOtp.every((digit) => digit !== '');
 
     return isEmailOtpFilled && isSmsOtpFilled;
   };
@@ -114,18 +111,7 @@ const OtpInputWithValidation = () => {
       <div className="flex flex-col gap-6 pb-[52px]">
         <HeaderWrapper
           heading={'Enter One Time Password (OTP)'}
-          // description={`We've sent verification on your email address (${
-          //   signUpForm.email
-          // }) and your mobile number (${replaceCountryCodeWithZero(
-          //   signUpForm?.managerMobile,
-          // )})`}
-          description={`We've sent verification to your email address (${
-            signUpForm.email
-          })${
-            option !== 'corporatePortal'
-              ? ` and your mobile number (${signUpForm?.managerMobile})`
-              : ''
-          }`}
+          description={`We've sent a verification to your email address (${signUpForm.email}) and mobile number (${signUpForm?.managerMobile}).`}
           show={true}
         />
         <FormLayout>
@@ -136,14 +122,12 @@ const OtpInputWithValidation = () => {
               otp={emailOtp}
               medium="email"
             />
-            {option !== 'corporatePortal' && (
-              <OTP
-                description="Enter SMS OTP here"
-                setOtp={setSmsOtp}
-                otp={smsOtp}
-                medium="sms"
-              />
-            )}
+            <OTP
+              description="Enter SMS OTP here"
+              setOtp={setSmsOtp}
+              otp={smsOtp}
+              medium="sms"
+            />
             <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
             </div>
