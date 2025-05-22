@@ -2,7 +2,7 @@
 
 import { Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BarLoader } from 'react-spinners';
 
 import apiClient from '@/api/apiClient';
@@ -17,8 +17,6 @@ import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { addBeneficiaryData } from '@/redux/features/merchantSlice/addBeneficiary';
-import type { BankAccountDTO } from '@/utils/dropdown-list/bankList';
-import { bankAccountsDTO } from '@/utils/dropdown-list/bankList';
 import { downloadEncryptedFile, generateMD5Hash } from '@/utils/helper';
 import {
   addBeneficiaryInitialValues,
@@ -28,13 +26,13 @@ import {
 function AddBeneficiary() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-
   const userData = useAppSelector((state: any) => state.auth);
   const [isChecked, setIsChecked] = useState(false);
   const [checkedError, setCheckedError] = useState<string>('');
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [apierror, setApierror] = useState('');
+  const [bankName, setBankName] = useState<any[]>([]);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const handleCheckboxChange = () => {
     setCheckedError('');
@@ -217,6 +215,29 @@ function AddBeneficiary() {
       type: 'merchant',
     });
   };
+  const getBankNames = async () => {
+    try {
+      const response: any = await apiClient.get(`merchant/getBankNames`);
+      if (response.data.responseCode === '009') {
+        setBankName(
+          response?.data?.bankNames?.map((item: any) => ({
+            label: item.label,
+            value: item.value,
+          })),
+        );
+      } else if (response?.data?.responseCode === '000') {
+        setApierror(response?.data?.responseDescription);
+      } else {
+        setApierror(response?.data?.responseMessage);
+      }
+    } catch (e: any) {
+      setApierror(e?.message);
+    }
+  };
+  useEffect(() => {
+    getBankNames();
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
       {isLoading && <BarLoader color="#21B25F" />}
@@ -257,10 +278,7 @@ function AddBeneficiary() {
                   error={formik.errors.bankName}
                   touched={formik.touched.bankName}
                   formik={formik}
-                  options={bankAccountsDTO.map((option: BankAccountDTO) => ({
-                    label: option.bankName,
-                    value: option.bankPrefix,
-                  }))}
+                  options={bankName || []}
                 />
                 <Input
                   label="Account Number"
