@@ -50,7 +50,7 @@ export const storeDetailsFormData = {
           type: 'dropdown',
           show: ['Online', 'Retail'],
           required: true,
-          options: [cityList],
+          options: cityList,
         },
         {
           label: 'Store Category',
