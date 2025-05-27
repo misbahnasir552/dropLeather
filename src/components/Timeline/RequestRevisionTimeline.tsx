@@ -159,11 +159,11 @@ const RequestRevisionTimeline: React.FC = () => {
       try {
         const response = await apiClient.get(
           `merchant/fieldsForRevision?email=${userData?.email}`,
-          {
-            headers: {
-              Authorization: `Bearer ${userData.email}`,
-            },
-          },
+          // {
+          //   headers: {
+          //     Authorization: `Bearer ${userData.email}`,
+          //   },
+          // },
         );
         if (response?.data) {
           setData(response?.data);
