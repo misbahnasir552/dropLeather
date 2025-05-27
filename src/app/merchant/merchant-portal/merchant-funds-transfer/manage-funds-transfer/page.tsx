@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
-import FundsTransferTable from '@/components/Table/FundsTranferTable';
+import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -354,9 +354,9 @@ function ManageFundsTransfer() {
             </div>
           ) : beneficiaryFilteredData?.length > 0 ? (
             <div className="flex flex-col gap-3">
-              <FundsTransferTable
-                tableHeadings={tableHeadings}
-                tableData={beneficiaryFilteredData}
+              <DynamicRecordsTable
+                heading={tableHeadings}
+                response={beneficiaryFilteredData}
               />
               <Pagination
                 pageNumber={pageNumber}

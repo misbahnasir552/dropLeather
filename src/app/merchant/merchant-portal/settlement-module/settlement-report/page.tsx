@@ -8,7 +8,6 @@ import * as XLSX from 'xlsx';
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
 import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
-import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';

@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
-import FundsTransferTable from '@/components/Table/FundsTranferTable';
+import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
 import DropdownInput from '@/components/UI/Inputs/DropdownInput';
@@ -286,9 +286,9 @@ function BulkReversalReport() {
                   </div>
                 ) : response && response?.length > 0 ? (
                   <>
-                    <FundsTransferTable
-                      tableHeadings={bulkTableHeadings}
-                      tableData={bulktableData}
+                    <DynamicRecordsTable
+                      heading={bulkTableHeadings}
+                      response={bulktableData}
                     />
                     <Pagination
                       pageNumber={pageNumber}

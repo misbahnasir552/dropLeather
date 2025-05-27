@@ -75,6 +75,7 @@ function DynamicRecordsTable({
                                   value === 'Rejected By BET' ||
                                   value === 'Rejected By RM')) ||
                               value === 'Failure' ||
+                              value === 'FAILURE' ||
                               value === 'FAILED' ||
                               value === 'Failed'
                             ? 'text-danger-base'
@@ -114,6 +115,10 @@ function DynamicRecordsTable({
                           ? 'Requested Revision by Telenor Bank'
                           : value === 'Requested Revision By BET'
                           ? 'Requested Revision by EasyPaisa'
+                          : value === 'SUCCESS'
+                          ? 'Success'
+                          : value === 'FAILED'
+                          ? 'Failed'
                           : value}
                       </B3>
                     )}
