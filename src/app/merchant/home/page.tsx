@@ -25,7 +25,8 @@ const LoginSucessHome = () => {
 
   const [showModal, setShowModal] = useState(false);
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [description] = useState('');
+  const [apierror, setApierror] = useState('');
   const [reqRevisiondata, setReqRevisionData] = useState<MerchantData | null>(
     null,
   );
@@ -104,11 +105,13 @@ const LoginSucessHome = () => {
 
   const handleRequestRevisionClick = async () => {
     try {
+      console.log('hello');
       const response = await apiClient.get(
         `/merchant/fieldsForRevision?email=${userData.email}`,
       );
 
-      if (response?.data) {
+      console.log('responseeeee', response);
+      if (response?.data?.responseCode === '009') {
         setReqRevisionData(response.data);
         console.log('Request revision data:', reqRevisiondata);
         dispatch(setPageData(response.data));
@@ -184,11 +187,15 @@ const LoginSucessHome = () => {
           // Fallback in case no pages are found
           router.push('/merchant/home');
         }
+      } else {
+        setApierror(response?.data?.responseMessage);
       }
     } catch (error: any) {
       console.error('Error requesting revision:', error);
-      setDescription(error);
-      setShowModal(true);
+      console.log('responseeeee', error);
+      setApierror(error.message);
+      // setDescription(error);
+      // setShowModal(true);
     }
   };
 
@@ -266,6 +273,9 @@ const LoginSucessHome = () => {
               onClick={item.onClick}
             /> // type={item.type} // onClickHandler={handleNavigate} /> ))
           ))}
+        </div>
+        <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+          {apierror}
         </div>
       </div>
     </>

@@ -65,7 +65,8 @@ function DynamicRecordsTable({
                             (value === 'Approved' ||
                               value === 'Approved By BET' ||
                               value === 'Approved By RM')) ||
-                          value === 'Success'
+                          value === 'Success' ||
+                          value === 'SUCCESS'
                             ? 'text-primary-base'
                             : ((key === 'status' ||
                                 key === 'requestStatus' ||
@@ -73,7 +74,9 @@ function DynamicRecordsTable({
                                 (value === 'Rejected' ||
                                   value === 'Rejected By BET' ||
                                   value === 'Rejected By RM')) ||
-                              value === 'Failure'
+                              value === 'Failure' ||
+                              value === 'FAILED' ||
+                              value === 'Failed'
                             ? 'text-danger-base'
                             : (key === 'status' ||
                                 key === 'requestStatus' ||
