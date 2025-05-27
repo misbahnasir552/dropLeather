@@ -11,7 +11,7 @@ function DynamicRecordsTable({
   heading,
 }: {
   response: any;
-  title: string;
+  title?: string;
   heading: string[];
   onApprove?: (profileName: string) => void;
 }) {

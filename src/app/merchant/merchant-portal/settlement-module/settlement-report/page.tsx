@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 
 import apiClient from '@/api/apiClient';
 import Pagination from '@/components/Pagination/Pagination';
+import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
 import FundsTransferTable from '@/components/Table/FundsTranferTable';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H7 from '@/components/UI/Headings/H7';
@@ -253,9 +254,9 @@ function SettlementReport() {
           <>
             {settlementFilteredData?.length > 0 ? (
               <div className="flex flex-col gap-3 pt-[40px]">
-                <FundsTransferTable
-                  tableHeadings={settlementTransactionHistoryTableHeadings}
-                  tableData={settlementFilteredData}
+                <DynamicRecordsTable
+                  heading={settlementTransactionHistoryTableHeadings}
+                  response={settlementFilteredData}
                 />
                 <Pagination
                   pageNumber={pageNumber}
