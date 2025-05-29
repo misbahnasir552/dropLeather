@@ -11,7 +11,7 @@ function DynamicRecordsTable({
   heading,
 }: {
   response: any;
-  title: string;
+  title?: string;
   heading: string[];
   onApprove?: (profileName: string) => void;
 }) {
@@ -65,7 +65,8 @@ function DynamicRecordsTable({
                             (value === 'Approved' ||
                               value === 'Approved By BET' ||
                               value === 'Approved By RM')) ||
-                          value === 'Success'
+                          value === 'Success' ||
+                          value === 'SUCCESS'
                             ? 'text-primary-base'
                             : ((key === 'status' ||
                                 key === 'requestStatus' ||
@@ -73,7 +74,10 @@ function DynamicRecordsTable({
                                 (value === 'Rejected' ||
                                   value === 'Rejected By BET' ||
                                   value === 'Rejected By RM')) ||
-                              value === 'Failure'
+                              value === 'Failure' ||
+                              value === 'FAILURE' ||
+                              value === 'FAILED' ||
+                              value === 'Failed'
                             ? 'text-danger-base'
                             : (key === 'status' ||
                                 key === 'requestStatus' ||
@@ -111,6 +115,10 @@ function DynamicRecordsTable({
                           ? 'Requested Revision by Telenor Bank'
                           : value === 'Requested Revision By BET'
                           ? 'Requested Revision by EasyPaisa'
+                          : value === 'SUCCESS'
+                          ? 'Success'
+                          : value === 'FAILED'
+                          ? 'Failed'
                           : value}
                       </B3>
                     )}

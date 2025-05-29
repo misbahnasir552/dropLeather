@@ -44,6 +44,7 @@ const Attachments = () => {
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [apierror, setApierror] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showField, setShowField] = useState(false);
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature,
   );
@@ -53,6 +54,7 @@ const Attachments = () => {
     Array(5).fill(null),
   );
 
+  const [newLabel, setNewLabel] = useState('');
   console.log(
     'businessNature',
     businessNature.businessNature,
@@ -112,7 +114,6 @@ const Attachments = () => {
       console.log(title, 'TITLE SLUG', currentTab, 'Curren Tab');
     }
   }, [currentTab, businessNature]);
-
   const onSubmit = async (
     // values: AttachmentFormInfo,
     values: any,
@@ -208,7 +209,23 @@ const Attachments = () => {
       }
     }
   };
+  // Add a new field with a custom label
+  const handleAddField = () => {
+    if (!newLabel?.trim()) return;
+    setShowField(false);
+    const newField: any = {
+      label: newLabel,
+      name: newLabel?.toLowerCase()?.replace(/\s+/g, '_'),
+      type: 'file',
+      required: false,
+    };
 
+    // Add to the first category of first page
+    const updatedData: any = [...(attachmentData ?? [])];
+    updatedData[0]?.fields?.push(newField);
+    setAttachmentData(updatedData);
+    setNewLabel('');
+  };
   return (
     <div>
       {loading && <OvalLoading />}
@@ -216,6 +233,7 @@ const Attachments = () => {
         <Formik
           initialValues={initialValuesState}
           validationSchema={validationSchemaState}
+          enableReinitialize
           onSubmit={onSubmit}
         >
           {(formik) => (
@@ -241,7 +259,7 @@ const Attachments = () => {
                           heading={item.categoryName}
                         >
                           {/* <FormLayoutDynamic key={item} heading={item.categoryName}> */}
-                          {item.fields.map((field: any, fieldIndex: any) => {
+                          {item?.fields?.map((field: any, fieldIndex: any) => {
                             return field?.type === 'file' ? (
                               <CorporateFileInput
                                 asterik={field.required}
@@ -256,6 +274,40 @@ const Attachments = () => {
                               <p key={fieldIndex}>nothing to show</p>
                             );
                           })}
+                          {/* Input to add new field */}
+
+                          {showField ? (
+                            <div className="flex flex-col gap-4">
+                              <input
+                                type="text"
+                                placeholder="Enter Field Label"
+                                value={newLabel}
+                                className="w-full rounded-lg border border-border-light p-4 focus-within:border-primary-base hover:border-primary-base hover:shadow-sm focus:shadow-sm focus:outline-none"
+                                onChange={(e) => setNewLabel(e.target.value)}
+                              />
+                              {/* <button onClick={handleAddField}>Add Field</button> */}
+                              <div className="flex justify-end gap-4">
+                                <Button
+                                  label={`Save`}
+                                  onClickHandler={handleAddField}
+                                  className="button-primary px-4  py-[12px] text-sm leading-tight transition duration-300"
+                                />
+                                <Button
+                                  label={`Cancel`}
+                                  onClickHandler={() => setShowField(false)}
+                                  className="button-primary px-4  py-[12px] text-sm leading-tight transition duration-300"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end">
+                              <Button
+                                label={`Add More Documents`}
+                                onClickHandler={() => setShowField(true)}
+                                className="button-primary px-4 py-[12px] text-sm leading-tight transition duration-300"
+                              />
+                            </div>
+                          )}
                         </FormLayoutDynamic>
                       </React.Fragment>
                     ))}
