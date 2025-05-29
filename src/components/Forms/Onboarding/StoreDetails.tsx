@@ -1,11 +1,13 @@
 'use client';
 
 import { Form, Formik } from 'formik';
+import Image from 'next/image';
 // import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 import apiClient from '@/api/apiClient';
+import AddIcon from '@/assets/icons/Add.svg';
 // import DisabledInput from '@/components/UI/Inputs/DisabledStoreComponent.tsx/DisabledStoreComponent';
 import DisabledInput from '@/components/Forms/DisabledStoreComponent';
 import OvalLoading from '@/components/Loader/OvalLoading';
@@ -13,6 +15,7 @@ import OvalLoading from '@/components/Loader/OvalLoading';
 // import Breadcrumb from '@/components/BreadCrumb/BreadCrumb';
 import Button from '@/components/UI/Button/PrimaryButton';
 import H6 from '@/components/UI/Headings/H6';
+import M7 from '@/components/UI/Headings/M7';
 // import M7 from '@/components/UI/Headings/M7';
 import CheckboxInput from '@/components/UI/Inputs/CheckboxInput';
 import DateInputNew from '@/components/UI/Inputs/DateInputNew';
@@ -33,6 +36,7 @@ import {
 } from '@/validations/merchant/onBoarding/storeDetails';
 
 const AddStore = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
   const { currentTab } = useCurrentTab();
   const userData = useAppSelector((state: any) => state.auth);
   const [addStoresValues, setAddStoresValues] = useState<AddStoreInfo[]>([]);
@@ -323,108 +327,123 @@ const AddStore = () => {
                 <div className="flex flex-col gap-4">
                   {isAddFormVisible && (
                     <>
-                      <div className="mt-4 h-[1px] w-full bg-border-light"></div>
-                      <div className="flex w-full items-center justify-between">
-                        <H6>Store Type</H6>
-                        {addStoresValues.length > 0 && (
-                          <div onClick={() => setIsAddFormVisible(false)}>
-                            <H6 textColor="text-danger-base">Cancel</H6>
-                          </div>
-                        )}
+                      {/* <div className="mt-4 h-[1px] w-full bg-border-light"></div> */}
+                      <div className="rounded-lg border-[1px] border-border-light bg-screen-white px-5 py-[21px]">
+                        <div className="flex items-center">
+                          <M7>Add Store</M7>
+                          <Image
+                            src={AddIcon}
+                            alt="plus-icon"
+                            className="cursor-pointer"
+                            onClick={() => setShowAddForm(true)}
+                          />
+                        </div>
                       </div>
-                      <Form>
+                      {showAddForm && (
                         <>
-                          {/* <div className=""> */}
-                          <div>
-                            {updatedStoreFields?.map(
-                              (item: any, index: any) => (
-                                <React.Fragment key={index}>
-                                  {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
-                                  <div
-                                    // className="grid grid-cols-2 gap-6"
-
-                                    className={`grid ${
-                                      item.fields?.name === 'storeType'
-                                        ? 'grid-cols-1'
-                                        : 'grid-cols-2 gap-6'
-                                    }`}
-                                  >
-                                    {/* <FormLayoutDynamic key={item} heading={item.categoryName}> */}
-                                    {item.fields.map(
-                                      (field: any, fieldIndex: any) => {
-                                        return field.type === 'text' ? (
-                                          <Input
-                                            key={fieldIndex}
-                                            label={field.label}
-                                            name={field.name}
-                                            type={field.type}
-                                            formik={formik}
-                                            asterik={field.required}
-                                            error={
-                                              field.validation?.errorMessage
-                                            }
-                                          />
-                                        ) : field?.type ===
-                                          'checkBoxInputMulti' ? (
-                                          <CheckboxInput
-                                            key={fieldIndex}
-                                            isMulti
-                                            // layout='flex-row'
-                                            name={field.name}
-                                            options={field.options}
-                                            form={formik}
-                                            error={
-                                              field.validation?.errorMessage
-                                            }
-                                            setSelectedCheckValue={
-                                              setSelectedCheckValue
-                                            }
-                                          />
-                                        ) : field?.type === 'dropdown' ? (
-                                          <DropdownNew
-                                            asterik={field.required}
-                                            key={fieldIndex} // Add a key prop to DropdownInput as well
-                                            label={field.label}
-                                            name={field?.name}
-                                            options={field.options}
-                                            formik={formik}
-                                            // error={field.validation.errorMessage}
-                                          />
-                                        ) : field?.type === 'date' ? (
-                                          <DateInputNew
-                                            asterik={field.required}
-                                            key={fieldIndex}
-                                            formik={formik}
-                                            label={field.label}
-                                            name={field.name}
-                                            // error={field.validation.errorMessage}
-                                          />
-                                        ) : (
-                                          <p key={fieldIndex}>
-                                            nothing to show
-                                          </p>
-                                        );
-                                      },
-                                    )}
-                                  </div>
-                                  {/* </FormLayoutDynamic> */}
-                                  {/* // ))} */}
-                                </React.Fragment>
-                              ),
+                          <div className="flex w-full items-center justify-between">
+                            <H6>Store Type</H6>
+                            {addStoresValues.length > 0 && (
+                              <div onClick={() => setIsAddFormVisible(false)}>
+                                <H6 textColor="text-danger-base">Cancel</H6>
+                              </div>
                             )}
                           </div>
-                          <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
-                            {apierror}
-                          </div>
-                          <div className="flex w-full justify-end pt-5">
-                            <Button
-                              label="Save"
-                              type="submit"
-                              className="button-primary w-[271px] py-[19px] text-sm leading-tight transition duration-300"
-                            />
-                          </div>
+                          <Form>
+                            <>
+                              {/* <div className=""> */}
+                              <div>
+                                {updatedStoreFields?.map(
+                                  (item: any, index: any) => (
+                                    <React.Fragment key={index}>
+                                      {/* {item?.categories?.map((category:any, categoryIndex:any) => ( */}
+                                      <div
+                                        // className="grid grid-cols-2 gap-6"
+
+                                        className={`grid ${
+                                          item.fields?.name === 'storeType'
+                                            ? 'grid-cols-1'
+                                            : 'grid-cols-2 gap-6'
+                                        }`}
+                                      >
+                                        {/* <FormLayoutDynamic key={item} heading={item.categoryName}> */}
+                                        {item.fields.map(
+                                          (field: any, fieldIndex: any) => {
+                                            return field.type === 'text' ? (
+                                              <Input
+                                                key={fieldIndex}
+                                                label={field.label}
+                                                name={field.name}
+                                                type={field.type}
+                                                formik={formik}
+                                                asterik={field.required}
+                                                error={
+                                                  field.validation?.errorMessage
+                                                }
+                                              />
+                                            ) : field?.type ===
+                                              'checkBoxInputMulti' ? (
+                                              <CheckboxInput
+                                                key={fieldIndex}
+                                                isMulti
+                                                // layout='flex-row'
+                                                name={field.name}
+                                                options={field.options}
+                                                form={formik}
+                                                error={
+                                                  field.validation?.errorMessage
+                                                }
+                                                setSelectedCheckValue={
+                                                  setSelectedCheckValue
+                                                }
+                                              />
+                                            ) : field?.type === 'dropdown' ? (
+                                              <DropdownNew
+                                                asterik={field.required}
+                                                key={fieldIndex} // Add a key prop to DropdownInput as well
+                                                label={field.label}
+                                                name={field?.name}
+                                                options={field.options}
+                                                formik={formik}
+                                                // error={field.validation.errorMessage}
+                                              />
+                                            ) : field?.type === 'date' ? (
+                                              <DateInputNew
+                                                asterik={field.required}
+                                                key={fieldIndex}
+                                                formik={formik}
+                                                label={field.label}
+                                                name={field.name}
+                                                // error={field.validation.errorMessage}
+                                              />
+                                            ) : (
+                                              <p key={fieldIndex}>
+                                                nothing to show
+                                              </p>
+                                            );
+                                          },
+                                        )}
+                                      </div>
+                                      {/* </FormLayoutDynamic> */}
+                                      {/* // ))} */}
+                                    </React.Fragment>
+                                  ),
+                                )}
+                              </div>
+                              <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+                                {apierror}
+                              </div>
+                              <div className="flex w-full justify-end pt-5">
+                                <Button
+                                  label="Save"
+                                  type="submit"
+                                  className="button-primary w-[271px] py-[19px] text-sm leading-tight transition duration-300"
+                                />
+                              </div>
+                            </>
+                          </Form>
                         </>
-                      </Form>
+                      )}
                     </>
                   )}
                   {addStoresValues.length > 0 && (
