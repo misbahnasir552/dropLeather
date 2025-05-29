@@ -44,6 +44,7 @@ const Attachments = () => {
   const [validationSchemaState, setValidationSchemaState] = useState<any>();
   const [apierror, setApierror] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showField, setShowField] = useState(false);
   const businessNature = useAppSelector(
     (state: any) => state.onBoardingForms.businessNature,
   );
@@ -211,12 +212,12 @@ const Attachments = () => {
   // Add a new field with a custom label
   const handleAddField = () => {
     if (!newLabel?.trim()) return;
-
+    setShowField(false);
     const newField: any = {
       label: newLabel,
       name: newLabel?.toLowerCase()?.replace(/\s+/g, '_'),
       type: 'file',
-      required: true,
+      required: false,
     };
 
     // Add to the first category of first page
@@ -274,21 +275,39 @@ const Attachments = () => {
                             );
                           })}
                           {/* Input to add new field */}
-                          <div className="flex items-center justify-between gap-4">
-                            <input
-                              type="text"
-                              placeholder="Add Document label"
-                              value={newLabel}
-                              className="w-[80%] rounded-lg border border-border-light p-4 focus-within:border-primary-base hover:border-primary-base hover:shadow-sm focus:shadow-sm focus:outline-none"
-                              onChange={(e) => setNewLabel(e.target.value)}
-                            />
-                            {/* <button onClick={handleAddField}>Add Field</button> */}
-                            <Button
-                              label={`Add More Documents`}
-                              onClickHandler={handleAddField}
-                              className="button-primary px-4 py-[12px] text-sm leading-tight transition duration-300"
-                            />
-                          </div>
+
+                          {showField ? (
+                            <div className="flex flex-col gap-4">
+                              <input
+                                type="text"
+                                placeholder="Enter Field Label"
+                                value={newLabel}
+                                className="w-full rounded-lg border border-border-light p-4 focus-within:border-primary-base hover:border-primary-base hover:shadow-sm focus:shadow-sm focus:outline-none"
+                                onChange={(e) => setNewLabel(e.target.value)}
+                              />
+                              {/* <button onClick={handleAddField}>Add Field</button> */}
+                              <div className="flex justify-end gap-4">
+                                <Button
+                                  label={`Save`}
+                                  onClickHandler={handleAddField}
+                                  className="button-primary px-4  py-[12px] text-sm leading-tight transition duration-300"
+                                />
+                                <Button
+                                  label={`Cancel`}
+                                  onClickHandler={() => setShowField(false)}
+                                  className="button-primary px-4  py-[12px] text-sm leading-tight transition duration-300"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end">
+                              <Button
+                                label={`Add More Documents`}
+                                onClickHandler={() => setShowField(true)}
+                                className="button-primary px-4 py-[12px] text-sm leading-tight transition duration-300"
+                              />
+                            </div>
+                          )}
                         </FormLayoutDynamic>
                       </React.Fragment>
                     ))}
