@@ -130,7 +130,7 @@ export const ActivityInformationFormData = {
           label: 'City',
           type: 'dropdown',
           required: true,
-          options: [cityList],
+          options: cityList,
         },
         {
           name: 'businessAddress',
