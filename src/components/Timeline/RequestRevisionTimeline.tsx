@@ -14,6 +14,7 @@ import StoreDetailReqRevision from '@/components/Forms/RequestRevision/StoreDeta
 import { useAppSelector } from '@/hooks/redux';
 import useCurrentTab from '@/hooks/useCurrentTab';
 import { setIsLastTab } from '@/redux/features/formSlices/lastTabSlice';
+import { generateMD5Hash } from '@/utils/helper';
 
 import {
   ActivityInformationIcon,
@@ -33,7 +34,9 @@ interface Tab {
 }
 
 interface UserData {
+  jwt: any;
   email: string;
+  apiSecret: any;
 }
 
 interface MerchantData {
@@ -154,16 +157,35 @@ const RequestRevisionTimeline: React.FC = () => {
 
   const dispatch = useDispatch();
 
+  const currentTimestamp = new Date().toISOString();
+  const { apiSecret } = userData;
+  const username = userData?.email;
+
+  const mdRequest = {
+    currentTimestamp,
+    apiSecret,
+    username,
+  };
+
+  const md5Hash = generateMD5Hash(mdRequest);
+  console.log('mdRequest', mdRequest);
+
   useEffect(() => {
     const getDetails = async () => {
       try {
         const response = await apiClient.get(
           `merchant/fieldsForRevision?email=${userData?.email}`,
-          // {
-          //   headers: {
-          //     Authorization: `Bearer ${userData.email}`,
-          //   },
-          // },
+          {
+            params: {
+              username,
+              timestamp: currentTimestamp,
+              signature: md5Hash,
+            },
+            headers: {
+              Authorization: `Bearer ${userData.jwt}`,
+              // Username: userData?.email,
+            },
+          },
         );
         if (response?.data) {
           setData(response?.data);
