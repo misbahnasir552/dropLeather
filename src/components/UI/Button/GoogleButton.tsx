@@ -6,7 +6,7 @@ import React from 'react';
 import { ClockLoader } from 'react-spinners';
 
 // import GoogleIcon from "@/assets/icons/GoogleIcon.png"
-import GoogleIcon from '@/assets/icons/googleIcon.svg';
+import GoogleIcon from '@/assets/icons/GoogleIcon.svg';
 import type { IButton } from '@/interfaces/interface';
 
 const Button = ({
