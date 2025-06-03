@@ -104,6 +104,7 @@ export const generateMD5Hash = (bodyRequest: any) => {
   const bodyString = JSON.stringify(body);
   const hash = CryptoJS.MD5(bodyString).toString();
   console.log('my body signature', body);
+  console.log('my bodyString signature', bodyString);
   return hash;
 };
 

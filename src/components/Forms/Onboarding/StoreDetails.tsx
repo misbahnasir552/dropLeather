@@ -30,6 +30,7 @@ import type { AddStoreInfo } from '@/interfaces/interface';
 import { generateMD5Hash } from '@/utils/helper';
 import { endpointArray } from '@/utils/merchantForms/helper';
 import { storeDetailsFormData } from '@/utils/onboardingForms/storeDetails';
+// import DynamicRecordsTable from '@/components/Table/DynamicRecordsTable';
 import {
   storeDetailsInitialValues,
   storeDetailsSchema,
@@ -68,6 +69,17 @@ const AddStore = () => {
   //   setCheckboxValue(value); // Update the parent state with the new value
   //   setSelectedCheckValue(value);
   // };
+  // const storeTableHeadings: string[] = [
+  //   'Store Type',
+  //   'Store Name',
+  //   'Street Address',
+  //   'City',
+  //   'Store Category',
+  //   'Country Code',
+  //   'State',
+  //   'POS Country Code',
+
+  // ];
 
   const addAnotherStore = () => {
     console.log('here');

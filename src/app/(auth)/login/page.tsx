@@ -1,21 +1,26 @@
 'use client';
 
 import { Form, Formik, useFormikContext } from 'formik';
-import Cookies from 'js-cookie';
+import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
-import apiClient from '@/api/apiClient';
+import emailIcon from '@/assets/icons/emailIcon.svg';
 import eye from '@/assets/icons/eye.svg';
+import padlockIcon from '@/assets/icons/padlockIcon.svg';
+import loginbg from '@/assets/images/loginBg222222.png';
+import peopleImg from '@/assets/images/people.png';
+import starImg from '@/assets/images/starsImg.png';
+import GoogleButton from '@/components/UI/Button/GoogleButton';
 import Button from '@/components/UI/Button/PrimaryButton';
 import ApiError from '@/components/UI/Error/Error';
+import H4 from '@/components/UI/Headings/H4';
+import H5 from '@/components/UI/Headings/H5';
+import H7 from '@/components/UI/Headings/H7';
 import Input from '@/components/UI/Inputs/Input';
-import CustomModal from '@/components/UI/Modal/CustomModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { LoginForm } from '@/interfaces/interface';
 import { loginSuccess } from '@/redux/features/authSlice';
-import { setLoginCredentials } from '@/redux/features/corporateSlices/loginCredentials';
 import loginSchema, {
   loginInitialValues,
 } from '@/validations/merchant/onBoarding/loginSchema';
@@ -23,20 +28,10 @@ import loginSchema, {
 const NewLogin = () => {
   const userData = useAppSelector((state: any) => state.auth);
   const dispatch = useAppDispatch();
-  const router = useRouter();
   const [loginResponse] = useState<Partial<TLogin>>();
   const [apierror, setApierror] = useState('');
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [showModal, setShowModal] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const session = null;
-  const [isLoading, setIsLoading] = useState(false);
 
-  console.log(isLoading);
-  if (session) {
-    throw new Error('session error');
-  }
+  // const [isSubmitting, setIsSubmitting] = useState(false);
 
   const AccessFormikValues = () => {
     const { values, errors } = useFormikContext<LoginForm>();
@@ -55,179 +50,181 @@ const NewLogin = () => {
     return null;
   };
 
-  const onSubmit = async (values: LoginForm, { setSubmitting }: any) => {
-    setIsSubmitting(true); // Disable the button immediately after submission
-    try {
-      const loginResponse: any = await apiClient.get('auth/sendLoginOtp', {
-        params: {
-          channel: 'merchant',
-          userType: 'merchant',
-          actionType: 'login',
-        },
-        headers: {
-          username: values.Username,
-          password: values.Password,
-        },
-      });
-
-      if (loginResponse?.data?.responseCode === '000') {
-        const credentials = {
-          username: values.Username,
-          password: values.Password,
-          email: loginResponse?.data?.email,
-          mobileNumber: loginResponse?.data?.mobileNumber,
-        };
-        dispatch(setLoginCredentials(credentials));
-
-        // OTP CODE
-        try {
-          setIsLoading(true);
-          const response: any = await apiClient.post(
-            'auth/login',
-            {},
-            {
-              params: {
-                channel: 'merchant',
-              },
-              headers: {
-                username: credentials.username,
-                password: credentials.password,
-                otp: '123123',
-                messageOtp: '123123',
-                // otp: emailOtp.join(''),
-                // messageOtp: smsOtp.join(''),
-              },
-            },
-          );
-
-          console.log('LOGIN API response TESTTT:', response);
-
-          if (response?.data?.responseCode === '000') {
-            dispatch(loginSuccess(response?.data));
-            Cookies.set('jwt', response?.data?.jwt, {
-              expires: 1,
-              path: '/',
-            });
-            Cookies.set('browser_number', response?.data?.apiSecret, {
-              expires: 1,
-              path: '/',
-            });
-            Cookies.set('username', response?.data?.email, {
-              expires: 1,
-              path: '/',
-            });
-
-            router.push('/merchant/home');
-          } else if (response?.data?.responseCode == '010') {
-            router.push(`/reset-password?email=${credentials.username}`);
-          } else {
-            setApierror(response?.data?.responseMessage);
-            throw new Error('Login failed');
-          }
-        } catch (e: any) {
-          console.log(e);
-          setTitle(e.code);
-          setDescription(e.message);
-        } finally {
-          setIsLoading(false);
-        }
-
-        // router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
-        router.push('/merchant/home');
-
-        // router.push(`/loginOtp?expiry=${loginResponse?.data?.expirationTime}`);
-      } else if (loginResponse?.data?.responseCode === '009') {
-        // dispatch(setApiError("mnjs"));
-        setApierror(loginResponse?.data?.responseMessage);
-      } else if (loginResponse?.data?.responseCode === '010') {
-        setApierror(loginResponse?.data?.responseMessage);
-      } else {
-        setTitle(loginResponse?.data?.responseMessage);
-        setDescription(loginResponse?.data?.responseMessage);
-        setShowModal(true);
-      }
-    } catch (error: any) {
-      setApierror(error?.message);
-    } finally {
-      setSubmitting(false);
-      setIsSubmitting(false); // Re-enable the button after response
-    }
+  const onSubmit = async () => {
+    // setIsSubmitting(true); // Disable the button immediately after submission
   };
 
   return (
-    <>
-      <CustomModal
-        title={title}
-        description={description}
-        show={showModal}
-        setShowModal={setShowModal}
-      />
-      <span className="flex w-full justify-center pb-8 text-[40px] font-semibold text-secondary-base sm:max-md:text-[32px]">
-        Login to your account
-      </span>
-      <Formik
-        initialValues={loginInitialValues}
-        validationSchema={loginSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => (
-          <Form className="flex flex-col items-center">
-            <div className="mb-6 flex w-full flex-col">
-              {/* <ApiError/> */}
-              <Input
-                label="Username or Email"
-                name="Username"
-                type="text"
-                error={formik.errors.Username}
-                touched={formik.touched.Username}
-              />
-            </div>
-            <Input
-              name="Password"
-              label="Password"
-              type="password"
-              error={formik.errors.Password}
-              touched={formik.touched.Password}
-              hasImage={true}
-              image={eye}
+    <div className="flex">
+      <div className="left div flex h-screen w-[26%] flex-col px-[38px] py-[60px]">
+        <div>
+          <div className="flex w-full justify-start text-[40px] font-semibold text-secondary-base sm:max-md:text-[32px]">
+            Logo
+          </div>
+          <H7 className="flex w-full justify-start pb-[30px] text-[50px] text-primary-50 sm:max-md:text-[32px]">
+            Welcome Back.
+          </H7>
+          {/* <H1>hi</H1> */}
+          <div className="flex pb-[20px]">
+            <GoogleButton
+              label="Sign in with Google"
+              type="submit"
+              // isDisabled={!formik.isValid || isSubmitting} // Disable button when submitting or invalid form
+              className={`button-primary flex w-full justify-center  px-3 py-[12px] text-sm leading-tight transition duration-300`}
             />
-            {/* <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
+          </div>
+          <div className="flex w-full items-center gap-4 py-1 ">
+            <div className="h-[0.79px] grow bg-border-light " />
+            <span className="text-sm text-neutral-grey-base">OR</span>
+            <div className="h-[0.79px] grow bg-border-light" />
+          </div>
+
+          <Formik
+            initialValues={loginInitialValues}
+            validationSchema={loginSchema}
+            onSubmit={onSubmit}
+          >
+            {(formik) => (
+              <Form className="flex flex-col items-center">
+                <div className="flex w-full flex-col gap-5">
+                  {/* <ApiError/> */}
+                  <Input
+                    label="Email"
+                    placeholder={'Enter your email'}
+                    name="Username"
+                    type="text"
+                    required={true}
+                    error={formik.errors.Username}
+                    touched={formik.touched.Username}
+                    icon={emailIcon}
+                    hasImage={true}
+                  />
+                  <Input
+                    name="Password"
+                    placeholder={'Enter your password'}
+                    label="Password"
+                    type="password"
+                    error={formik.errors.Password}
+                    touched={formik.touched.Password}
+                    required={true}
+                    hasImage={true}
+                    icon={padlockIcon}
+                    image={eye}
+                  />
+                </div>
+
+                {/* <div className="flex w-full justify-start px-3 pt-[8px] text-xs text-danger-base">
               {apierror}
             </div> */}
-            {/* <div> */}
+                {/* <div> */}
 
-            <ApiError apiError={apierror} />
-            {/* </div> */}
+                <ApiError apiError={apierror} />
+                {/* </div> */}
 
-            <AccessFormikValues />
-            <Button
-              label="Login"
-              type="submit"
-              isDisabled={!formik.isValid || isSubmitting} // Disable button when submitting or invalid form
-              className={`button-primary mt-8 w-[270px] px-3 py-[19px] text-sm leading-tight transition duration-300`}
+                <AccessFormikValues />
+                <div className="flex w-full justify-end py-[18px]">
+                  <Link
+                    href={'/forgot-password'}
+                    className="relative inline-block text-neutral-blue-base"
+                  >
+                    Forget your Password?
+                  </Link>
+                </div>
+
+                <Button
+                  label="Login"
+                  type="submit"
+                  isDisabled={true}
+                  // isDisabled={!formik.isValid || isSubmitting} // Disable button when submitting or invalid form
+                  className={`button-primary w-full leading-tight transition duration-300`}
+                />
+              </Form>
+            )}
+          </Formik>
+
+          <div className="flex justify-center pb-6 pt-5 text-sm font-normal leading-tight">
+            Don't have a DropLeather account yet? &nbsp;
+            <Link
+              href={'/sign-up'}
+              className="text-primary-base relative inline-block"
+            >
+              Sign Up
+            </Link>
+          </div>
+          <H4>
+            DropLeather, Inc., 11025 Westlake Dr Charlotte, North Carolina
+            28273, support@dropleather.com.This site is protected by Cloudflare
+            Turnstile. The Cloudflare Privacy Policy and Terms of Service apply.
+          </H4>
+
+          {/* <span className="flex justify-center pt-6 text-sm font-normal leading-tight">
+
+        </span> */}
+        </div>
+      </div>
+      <div className="Right div w-[74%]">
+        <div className="bg-primary-900 relative flex h-screen w-full justify-start px-[192px] py-[207px] align-middle sm:max-md:px-[24px]">
+          <div className="h-full">
+            <Image
+              src={loginbg}
+              alt="bottomLeftElipse"
+              fill
+              style={{ objectFit: 'cover' }}
+              className="absolute inset-0"
+              priority
+              quality={75}
             />
-          </Form>
-        )}
-      </Formik>
+          </div>
+          <div className="z-5 relative">
+            <H7
+              className="border-border-light  text-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
+              textColor="text-neutral-white-base"
+            >
+              You Design the Brand
+              <br />
+              We Deliver the Goods.
+            </H7>
+            <H5 textColor="text-neutral-white-base">
+              Join 500+ brands building premium leather lines without inventory.{' '}
+              <br />
+              With DropLeather, your brand launches fast — no middlemen, no
+              stock, just sales.
+            </H5>
+            <div className="flex flex-row gap-4">
+              <Image
+                src={peopleImg}
+                alt="bottomLeftElipse"
+                // fill
+                width={341}
+                height={38}
+                style={{ objectFit: 'cover' }}
+                // className="absolute inset-0"
+                priority
+                quality={100}
+              />
+              <div className="flex flex-col items-start justify-center">
+                <div className="flex flex-row">
+                  <Image
+                    src={starImg}
+                    alt="bottomLeftElipse"
+                    // fill
+                    width={90}
+                    height={18}
+                    style={{ objectFit: 'cover' }}
+                    // className="absolute inset-0"
+                    priority
+                    quality={100}
+                  />
+                  <H5 textColor="text-neutral-white-base">&nbsp;4.9 / 5</H5>
+                </div>
 
-      <span className="flex justify-center pt-6 text-sm font-normal leading-tight">
-        Don't have an account? &nbsp;
-        <Link
-          href={'/sign-up'}
-          className="relative inline-block text-primary-base"
-        >
-          Create an account
-        </Link>
-      </span>
-      <span className="flex justify-center pt-6 text-sm font-normal leading-tight">
-        <Link
-          href={'/forgot-password'}
-          className="relative inline-block text-primary-base"
-        >
-          Forgot Password
-        </Link>
-      </span>
-    </>
+                <H5 textColor="text-neutral-white-base">from 200+reviews</H5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

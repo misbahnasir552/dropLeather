@@ -14,7 +14,7 @@ import storage from 'redux-persist/lib/storage';
 
 import authReducer from '@/redux/features/authSlice';
 import loginCredentialsReducer from '@/redux/features/corporateSlices/loginCredentials';
-// import fieldReducer from '@/redux/features/formSlices/fieldSlice';
+import fieldReducer from '@/redux/features/formSlices/fieldSlice';
 import lastTabReducer from '@/redux/features/formSlices/lastTabSlice';
 import onBoardingFormsReducer from '@/redux/features/formSlices/onBoardingForms';
 import addBeneficiaryReducer from '@/redux/features/merchantSlice/addBeneficiary';
@@ -33,6 +33,7 @@ const persistConfig = {
     'onBoardingForms',
     'fundsTransfer',
     'addBeneficiary',
+    'fields',
 
     // 'session',
     'loginCredentials',
@@ -51,6 +52,7 @@ const rootReducer = combineReducers({
   loginCredentials: loginCredentialsReducer,
   lastTab: lastTabReducer,
   transferFunds: transferFundsReducer,
+  fields: fieldReducer,
 });
 
 const persistedReducer = persistReducer<any>(persistConfig, rootReducer);

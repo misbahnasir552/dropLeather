@@ -9,6 +9,7 @@ import LoginCard from '@/components/UI/Card/LoginCard/LoginCard';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { setPageData } from '@/redux/features/formSlices/fieldSlice';
+import { generateMD5Hash } from '@/utils/helper';
 
 interface MerchantData {
   activityInformation?: { status: string };
@@ -103,11 +104,35 @@ const LoginSucessHome = () => {
     'integration',
   ];
 
+  const currentTimestamp = new Date().toISOString();
+  const { apiSecret } = userData;
+  const username = userData?.email;
+
+  const mdRequest = {
+    currentTimestamp,
+    apiSecret,
+    username,
+  };
+
+  const md5Hash = generateMD5Hash(mdRequest);
+  console.log('mdRequest', mdRequest);
+
   const handleRequestRevisionClick = async () => {
     try {
       console.log('hello');
       const response = await apiClient.get(
         `/merchant/fieldsForRevision?email=${userData.email}`,
+        {
+          params: {
+            username,
+            timestamp: currentTimestamp,
+            signature: md5Hash,
+          },
+          headers: {
+            Authorization: `Bearer ${userData.jwt}`,
+            // Username: userData?.email,
+          },
+        },
       );
 
       console.log('responseeeee', response);

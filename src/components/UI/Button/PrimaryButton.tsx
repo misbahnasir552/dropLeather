@@ -2,9 +2,11 @@
 
 import { useRouter } from 'next/navigation';
 import React from 'react';
-import { ClockLoader } from 'react-spinners';
 
+// import { ClockLoader } from 'react-spinners';
 import type { IButton } from '@/interfaces/interface';
+
+import H6 from '../Headings/H6';
 
 const Button = ({
   label,
@@ -31,19 +33,22 @@ const Button = ({
     <button
       data-label={label}
       type={type}
-      className={`${
+      className={` h-[35px] rounded-lg  ${
         isDisabled || disable
-          ? 'hover:none bg-neutral-black-300'
-          : 'cursor-pointer bg-primary-base'
+          ? 'hover:none bg-neutral-grey-100'
+          : 'cursor-pointer bg-neutral-black-base '
       } ${className}`}
       disabled={isDisabled || disable}
       onClick={handleClick}
     >
-      <div className="flex w-full items-center justify-center gap-2">
+      <H6
+        className="flex w-full items-center justify-center gap-2 text-[15px]"
+        textColor="text-neutral-grey-base"
+      >
         {label}
         {/* <B1 textColor='text-screen-white'>{label}</B1> */}
-        {isDisabled && <ClockLoader color="#FFFFFF" size={14} />}
-      </div>
+        {/* {isDisabled && <ClockLoader color="#FFFFFF" size={14} />} */}
+      </H6>
     </button>
   );
 };

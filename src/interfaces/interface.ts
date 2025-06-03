@@ -74,6 +74,8 @@ export interface IInputPrimary {
 }
 
 export interface IInput {
+  icon?: StaticImageData | string;
+  required?: boolean;
   desclaimer?: string;
   asterik?: boolean;
   name: string;

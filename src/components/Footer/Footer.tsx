@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 
-import emailIcon from '@/assets/icons/email-icon.svg';
+// import emailIcon from '@/assets/icons/email-icon.svg';
 import Logo from '@/assets/icons/logo.svg';
 import phoneIcon from '@/assets/icons/phone-icon.svg';
 import B1 from '@/components/UI/Body/B1';
@@ -27,7 +27,7 @@ const Footer = () => {
         <div className="flex w-1/3 flex-col gap-6 sm:max-md:w-full">
           <H4>Contact us</H4>
           <div className="flex gap-3">
-            <Image src={emailIcon} alt="email" height={20} width={20} />
+            {/* <Image src={emailIcon} alt="email" height={20} width={20} /> */}
             <B1 classes="w-full">businesspartnersupport@telenorbank.pk</B1>
           </div>
           <div className="flex gap-3">

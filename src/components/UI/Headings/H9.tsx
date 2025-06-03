@@ -2,7 +2,7 @@ import React from 'react';
 
 import type { IHeadingElementProps } from '@/interfaces/interface';
 
-const H7 = ({
+const H9 = ({
   // medium = false,
   children,
   textColor,
@@ -10,7 +10,7 @@ const H7 = ({
 }: IHeadingElementProps) => {
   return (
     <div
-      className={`font-bold leading-[66px] ${className} ${
+      className={`font-black leading-tight ${className} ${
         textColor || `text-secondary-base`
       }`}
     >
@@ -19,4 +19,4 @@ const H7 = ({
   );
 };
 
-export default H7;
+export default H9;

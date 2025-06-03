@@ -2,32 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-}
-
-@layer utilities {
-  .button-primary {
-    @apply flex place-items-center text-neutral-white-base font-semibold rounded-lg hover:bg-primary-600;
-  }
-  .button-secondary {
-    @apply border-primary-base bg-neutral-white-base border-[2px] flex place-items-center text-secondary-base font-semibold rounded-lg hover:text-primary-base;
-  }
-  .heading-primary {
-    @apply font-semibold text-5xl text-secondary-base leading-tight  ;
-}
-}
 
 
-.floating-input > input::placeholder {
-  /* color: transparent; */
+
+
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Thin.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
 }
 
-.floating-input > input:focus,
-.floating-input > input:not(:placeholder-shown) {
-  @apply pt-8;
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Light.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
 }
 
-.floating-input > input:focus ~ label,
-.floating-input > input:not(:placeholder-shown) ~ label {
-  @apply opacity-75 scale-75 -translate-y-3 translate-x-1;
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
 }
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Medium.otf') format('opentype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Semibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-Black.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+}
+
+/* Italics */
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-RegularItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-LightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'DegularDisplay';
+  src: url('/fonts/DegularDisplay-BoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+/* ... add more italic styles if needed */

@@ -3,16 +3,16 @@ import React from 'react';
 import type { IHeadingElementProps } from '@/interfaces/interface';
 
 const H4 = ({
-  medium = false,
+  // medium = false,
   children,
   textColor,
   className,
 }: IHeadingElementProps) => {
   return (
     <div
-      className={`text-2xl sm:max-md:text-base ${
-        medium ? 'font-medium' : 'font-semibold'
-      } leading-tight ${className} ${textColor || `text-secondary-base`}`}
+      className={`font-normal leading-tight ${className} ${
+        textColor || `text-secondary-base`
+      }`}
     >
       {children}
     </div>
