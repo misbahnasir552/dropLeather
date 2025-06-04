@@ -12,8 +12,9 @@ import trustPilotIcon from '@/assets/icons/apps/trustpilot.svg';
 import emailIcon from '@/assets/icons/emailIcon.svg';
 import eye from '@/assets/icons/eye.svg';
 import padlockIcon from '@/assets/icons/padlockIcon.svg';
-import loginbg from '@/assets/images/loginBg222222.png';
 import peopleImg from '@/assets/images/people.svg';
+// import loginbg from '@/assets/images/loginBg222222.png';
+import signUpBg from '@/assets/images/signUpBg.svg';
 import starImg from '@/assets/images/starsImg.png';
 import GoogleButton from '@/components/UI/Button/GoogleButton';
 import Button from '@/components/UI/Button/PrimaryButton';
@@ -192,7 +193,7 @@ const SignUp = () => {
         <div className="bg-primary-900 relative flex h-screen w-full justify-start px-[192px] py-[207px] align-middle sm:max-md:px-[24px]">
           <div className="h-full">
             <Image
-              src={loginbg}
+              src={signUpBg}
               alt="bottomLeftElipse"
               fill
               style={{ objectFit: 'cover' }}
@@ -205,7 +206,7 @@ const SignUp = () => {
             <div className="flex flex-col gap-8">
               <div>
                 <H7
-                  className="border-border-light  text-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
+                  className="border-border-light text-[66px] leading-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
                   textColor="text-neutral-white-base"
                 >
                   You Design the Brand

@@ -202,7 +202,7 @@ const NewLogin = () => {
             <div className="flex flex-col gap-8">
               <div>
                 <H7
-                  className="border-border-light  text-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
+                  className="border-border-light  text-[66px]  leading-[66px] sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
                   textColor="text-neutral-white-base"
                 >
                   You Design the Brand
