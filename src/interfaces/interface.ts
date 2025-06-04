@@ -79,7 +79,7 @@ export interface IInput {
   desclaimer?: string;
   asterik?: boolean;
   name: string;
-  label: string;
+  label?: string;
   subString?: string;
   type?: string;
   className?: string;

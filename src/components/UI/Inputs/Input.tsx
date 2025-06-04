@@ -43,20 +43,23 @@ const Input = ({
 
   return (
     <div className="flex w-full flex-col gap-[10px]">
-      <label
-        htmlFor={label}
-        className="pointer-events-none h-full origin-left text-base font-light leading-tight text-secondary-base transition-all duration-100 ease-in-out"
-      >
-        <div className="flex flex-row gap-1">
-          {`${label} ${subString || ''}`}{' '}
-          {required && (
-            <>
-              <H3 textColor="text-danger-base">*</H3>
-              <span>(Required)</span>
-            </>
-          )}
-        </div>
-      </label>
+      {label && (
+        <label
+          htmlFor={label}
+          className="pointer-events-none h-full origin-left text-base font-light leading-tight text-secondary-base transition-all duration-100 ease-in-out"
+        >
+          <div className="flex flex-row gap-1">
+            {`${label} ${subString || ''}`}{' '}
+            {required && (
+              <>
+                <H3 textColor="text-danger-base">*</H3>
+                <span>(Required)</span>
+              </>
+            )}
+          </div>
+        </label>
+      )}
+
       <div
         // className={`floating-input relative w-full rounded-lg border border-border-light focus-within:border-primary-base hover:border-primary-base hover:shadow-sm focus:shadow-sm focus:outline-none ${
         className={` relative w-full rounded-lg border-[0.79px] border-neutral-white-100  hover:shadow-sm focus:shadow-sm focus:outline-none ${

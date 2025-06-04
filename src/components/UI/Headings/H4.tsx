@@ -11,7 +11,7 @@ const H4 = ({
   return (
     <div
       className={`font-normal leading-tight ${className} ${
-        textColor || `text-secondary-base`
+        textColor || `text-neutral-black-base`
       }`}
     >
       {children}
