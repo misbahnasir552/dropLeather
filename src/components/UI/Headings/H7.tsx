@@ -10,9 +10,7 @@ const H7 = ({
 }: IHeadingElementProps) => {
   return (
     <div
-      className={`font-bold leading-[66px] ${className} ${
-        textColor || `text-secondary-base`
-      }`}
+      className={`font-bold ${className} ${textColor || `text-secondary-base`}`}
     >
       {children}
     </div>

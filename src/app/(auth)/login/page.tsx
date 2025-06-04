@@ -150,14 +150,14 @@ const NewLogin = () => {
             )}
           </Formik>
 
-          <div className="flex items-center justify-center pb-6 pt-5  ">
+          <span className="flex items-center justify-center pb-6 pt-5  ">
             <H5 className="text-sm" textColor="text-neutral-grey-200">
               Don't have a DropLeather account yet? &nbsp;
             </H5>
             <Link href={'/sign-up'}>
               <H7 className="flex text-sm leading-3 underline">Sign Up</H7>
             </Link>
-          </div>
+          </span>
           <H4 className="text-sm">
             DropLeather, Inc., 11025 Westlake Dr Charlotte, North Carolina
             28273,
