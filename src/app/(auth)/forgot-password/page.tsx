@@ -25,6 +25,7 @@ import H5 from '@/components/UI/Headings/H5';
 // import H6 from '@/components/UI/Headings/H6';
 import H7 from '@/components/UI/Headings/H7';
 import Input from '@/components/UI/Inputs/Input';
+import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import type { LoginForm } from '@/interfaces/interface';
 import { loginSuccess } from '@/redux/features/authSlice';
@@ -64,9 +65,9 @@ const ForgotPassword = () => {
   return (
     <div className="flex w-full">
       {/* <div className="left div flex  w-[26%] flex-col px-[38px] pt-[60px] pb-[291px] bg-tertiary-700"> */}
-      <div className="flex h-screen w-[27%] flex-col justify-between px-[38px] pt-[60px]">
+      <FormLayout>
+        {' '}
         {/* <div className="left div flex min-h-screen w-[26%] flex-col px-[38px] pt-[60px] pb-[291px] bg-tertiary-700 overflow-hidden"> */}
-
         <div className="">
           <div className="flex w-full justify-start text-[40px] font-semibold text-secondary-base sm:max-md:text-[32px]">
             Logo
@@ -159,8 +160,8 @@ const ForgotPassword = () => {
 
         </span> */}
         </div>
-      </div>
-      <div className="Right div w-[73%]">
+      </FormLayout>
+      <div className="Right div w-[73%] xs:max-xl:hidden">
         <div className="bg-primary-900 relative flex h-screen w-full justify-start px-[192px] py-[207px] align-middle sm:max-md:px-[24px]">
           <div className="h-full">
             <Image
