@@ -6,7 +6,9 @@ import React, { useState } from 'react';
 import apiClient from '@/api/apiClient';
 import OTP from '@/components/OTP/OTP';
 import Button from '@/components/UI/Button/PrimaryButton';
+// import SuccessModal from '@/components/UI/Modal/CustomModal';
 import SuccessModal from '@/components/UI/Modal/CustomModal';
+// import SuccessModal from '@/components/UI/'
 import FormLayout from '@/components/UI/Wrappers/FormLayout';
 import HeaderWrapper from '@/components/UI/Wrappers/HeaderWrapper';
 

@@ -5,17 +5,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
+import capteraIcon from '@/assets/icons/apps/capterra.svg';
+import g2Icon from '@/assets/icons/apps/G2.svg';
+import shopifyIcon from '@/assets/icons/apps/shopify.svg';
+import trustPilotIcon from '@/assets/icons/apps/trustpilot.svg';
 import emailIcon from '@/assets/icons/emailIcon.svg';
 import eye from '@/assets/icons/eye.svg';
 import padlockIcon from '@/assets/icons/padlockIcon.svg';
 import loginbg from '@/assets/images/loginBg222222.png';
-import peopleImg from '@/assets/images/people.png';
+import peopleImg from '@/assets/images/people.svg';
 import starImg from '@/assets/images/starsImg.png';
 import GoogleButton from '@/components/UI/Button/GoogleButton';
 import Button from '@/components/UI/Button/PrimaryButton';
 import ApiError from '@/components/UI/Error/Error';
 import H4 from '@/components/UI/Headings/H4';
 import H5 from '@/components/UI/Headings/H5';
+import H6 from '@/components/UI/Headings/H6';
 import H7 from '@/components/UI/Headings/H7';
 import Input from '@/components/UI/Inputs/Input';
 import { useAppDispatch, useAppSelector } from '@/hooks/redux';
@@ -55,13 +60,16 @@ const NewLogin = () => {
   };
 
   return (
-    <div className="flex">
-      <div className="left div flex h-screen w-[26%] flex-col px-[38px] py-[60px]">
-        <div>
+    <div className="flex w-full">
+      {/* <div className="left div flex  w-[26%] flex-col px-[38px] pt-[60px] pb-[291px] bg-tertiary-700"> */}
+      <div className="flex h-screen w-[26%] flex-col justify-between px-[38px] pt-[60px]">
+        {/* <div className="left div flex min-h-screen w-[26%] flex-col px-[38px] pt-[60px] pb-[291px] bg-tertiary-700 overflow-hidden"> */}
+
+        <div className="">
           <div className="flex w-full justify-start text-[40px] font-semibold text-secondary-base sm:max-md:text-[32px]">
             Logo
           </div>
-          <H7 className="flex w-full justify-start pb-[30px] text-[50px] text-primary-50 sm:max-md:text-[32px]">
+          <H7 className="flex w-full justify-start pb-[30px] pt-[40px] text-[50px] text-primary-50 sm:max-md:text-[32px]">
             Welcome Back.
           </H7>
           {/* <H1>hi</H1> */}
@@ -73,7 +81,7 @@ const NewLogin = () => {
               className={`button-primary flex w-full justify-center  px-3 py-[12px] text-sm leading-tight transition duration-300`}
             />
           </div>
-          <div className="flex w-full items-center gap-4 py-1 ">
+          <div className="flex w-full items-center gap-4 pb-[14px] pt-1">
             <div className="h-[0.79px] grow bg-border-light " />
             <span className="text-sm text-neutral-grey-base">OR</span>
             <div className="h-[0.79px] grow bg-border-light" />
@@ -142,19 +150,34 @@ const NewLogin = () => {
             )}
           </Formik>
 
-          <div className="flex justify-center pb-6 pt-5 text-sm font-normal leading-tight">
-            Don't have a DropLeather account yet? &nbsp;
-            <Link
-              href={'/sign-up'}
-              className="text-primary-base relative inline-block"
-            >
-              Sign Up
+          <div className="flex items-center justify-center pb-6 pt-5  ">
+            <H5 className="text-sm" textColor="text-neutral-grey-200">
+              Don't have a DropLeather account yet? &nbsp;
+            </H5>
+            <Link href={'/sign-up'}>
+              <H7 className="flex text-sm leading-3 underline">Sign Up</H7>
             </Link>
           </div>
-          <H4>
+          <H4 className="text-sm">
             DropLeather, Inc., 11025 Westlake Dr Charlotte, North Carolina
-            28273, support@dropleather.com.This site is protected by Cloudflare
-            Turnstile. The Cloudflare Privacy Policy and Terms of Service apply.
+            28273,
+            <H6 className="inline-block">support@dropleather.com.</H6> This site
+            is protected by Cloudflare Turnstile.
+            <br /> The Cloudflare{' '}
+            <H6
+              className="inline-block underline"
+              textColor="text-neutral-blue-base"
+            >
+              Privacy Policy{' '}
+            </H6>{' '}
+            and{' '}
+            <H6
+              className="inline-block underline"
+              textColor="text-neutral-blue-base"
+            >
+              Terms of Service
+            </H6>{' '}
+            apply.
           </H4>
 
           {/* <span className="flex justify-center pt-6 text-sm font-normal leading-tight">
@@ -175,50 +198,97 @@ const NewLogin = () => {
               quality={75}
             />
           </div>
-          <div className="z-5 relative">
-            <H7
-              className="border-border-light  text-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
-              textColor="text-neutral-white-base"
-            >
-              You Design the Brand
-              <br />
-              We Deliver the Goods.
-            </H7>
-            <H5 textColor="text-neutral-white-base">
-              Join 500+ brands building premium leather lines without inventory.{' '}
-              <br />
-              With DropLeather, your brand launches fast — no middlemen, no
-              stock, just sales.
-            </H5>
-            <div className="flex flex-row gap-4">
-              <Image
-                src={peopleImg}
-                alt="bottomLeftElipse"
-                // fill
-                width={341}
-                height={38}
-                style={{ objectFit: 'cover' }}
-                // className="absolute inset-0"
-                priority
-                quality={100}
-              />
-              <div className="flex flex-col items-start justify-center">
-                <div className="flex flex-row">
-                  <Image
-                    src={starImg}
-                    alt="bottomLeftElipse"
-                    // fill
-                    width={90}
-                    height={18}
-                    style={{ objectFit: 'cover' }}
-                    // className="absolute inset-0"
-                    priority
-                    quality={100}
-                  />
-                  <H5 textColor="text-neutral-white-base">&nbsp;4.9 / 5</H5>
-                </div>
+          <div className="z-5 relative h-max">
+            <div className="flex flex-col gap-8">
+              <div>
+                <H7
+                  className="border-border-light  text-[66px]  sm:max-md:w-full sm:max-md:px-[20px] sm:max-md:py-8"
+                  textColor="text-neutral-white-base"
+                >
+                  You Design the Brand
+                  <br />
+                  We Deliver the Goods.
+                </H7>
+                <H5 textColor="text-neutral-white-base">
+                  Join 500+ brands building premium leather lines without
+                  inventory. <br />
+                  With DropLeather, your brand launches fast — no middlemen, no
+                  stock, just sales.
+                </H5>
+              </div>
+              {/* People div */}
+              <div className="flex flex-row gap-4">
+                <Image
+                  src={peopleImg}
+                  alt="bottomLeftElipse"
+                  // fill
+                  width={341}
+                  height={38}
+                  style={{ objectFit: 'cover' }}
+                  // className="absolute inset-0"
+                  priority
+                  quality={100}
+                />
+                <div className="flex flex-col items-start justify-center">
+                  <div className="flex flex-row">
+                    <Image
+                      src={starImg}
+                      alt="bottomLeftElipse"
+                      // fill
+                      width={90}
+                      height={18}
+                      style={{ objectFit: 'cover' }}
+                      // className="absolute inset-0"
+                      priority
+                      quality={100}
+                    />
+                    <H5 textColor="text-neutral-white-base">&nbsp;4.9 / 5</H5>
+                  </div>
 
-                <H5 textColor="text-neutral-white-base">from 200+reviews</H5>
+                  <H5 textColor="text-neutral-white-base">from 200+reviews</H5>
+                </div>
+              </div>
+              <div className="flex w-full gap-6">
+                <Image
+                  src={shopifyIcon}
+                  alt="bottomLeftElipse"
+                  width={80}
+                  height={38}
+                  style={{ objectFit: 'cover' }}
+                  // className="absolute inset-0"
+                  priority
+                  quality={75}
+                />
+                <Image
+                  src={trustPilotIcon}
+                  alt="bottomLeftElipse"
+                  width={80}
+                  height={38}
+                  style={{ objectFit: 'cover' }}
+                  // className="absolute inset-0"
+                  priority
+                  quality={75}
+                />
+                <Image
+                  src={g2Icon}
+                  alt="bottomLeftElipse"
+                  width={80}
+                  height={38}
+                  style={{ objectFit: 'cover' }}
+                  // className="absolute inset-0"
+                  priority
+                  quality={75}
+                />
+                <Image
+                  src={capteraIcon}
+                  alt="bottomLeftElipse"
+                  width={80}
+                  height={38}
+                  style={{ objectFit: 'cover' }}
+                  // className="absolute inset-0"
+                  priority
+                  quality={75}
+                />
               </div>
             </div>
           </div>

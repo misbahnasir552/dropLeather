@@ -1,11 +1,11 @@
 'use client';
 
-import Home from '@/components/Content/Home/Home';
+import NewLogin from './(auth)/login/page';
 
 export default function HomePage() {
   return (
     <main>
-      <Home />
+      <NewLogin />
     </main>
   );
 }
