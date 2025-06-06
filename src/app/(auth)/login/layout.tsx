@@ -22,7 +22,7 @@ const LoginLayout = ({ children }: { children: React.ReactNode }) => {
     //   </div>
     // </div>
 
-    <div className="flex h-screen">{children}</div>
+    <div className="">{children}</div>
   );
 };
 

@@ -127,8 +127,8 @@ module.exports = {
       },
       border: {
         light: '#ADAFB3',
-        dark: '#D0D0D0',
-        green: '#21B25F',
+        dark: '#000000',
+        blue: '#005AFF',
       },
       neutral: {
         black: {
@@ -162,6 +162,7 @@ module.exports = {
         },
         blue: {
           base: '#0074FF',
+          100: '#005AFF',
         },
       },
     },

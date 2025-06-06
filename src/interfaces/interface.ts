@@ -179,7 +179,7 @@ export interface IDropdownProps {
 }
 export interface ICardProps {
   label: string;
-  logo: { image1: StaticImageData; image2: StaticImageData };
+  logo: StaticImageData;
   className?: string;
   children?: React.ReactNode;
   description?: string;
